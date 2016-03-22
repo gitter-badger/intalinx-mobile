@@ -1,7 +1,7 @@
 <ion-menu [content]="content" class="menu">
   <ion-content>
     <ion-list no-lines>
-      <ion-card>
+      <ion-card secondary>
         <ion-item>
           <ion-avatar item-left>
             <img src={{user.userAvatar}}>
@@ -12,7 +12,7 @@
       </ion-card>
       
       <button ion-item *ngFor="#item of menus" (click)="openPage(item)">
-        <ion-icon name={{item.titleIcon}} item-left></ion-icon>{{item.title}}
+        <ion-icon name={{item.titleIcon}} item-left primary></ion-icon>{{item.title}}
       </button>
     </ion-list>
   </ion-content>
