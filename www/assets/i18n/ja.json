@@ -1,19 +1,26 @@
 {
-  "app" : {
-    "title" : "ブログ",
-    "action": {
-      "edit": "編集",
-      "delete": "削除"
-    },
-    "portal" : {
-        "title" : "ポータル"
-    },
-    "login" : {
-        "title" : "ログイン",
-        "loginId" : "ログインID",
-        "password" : "パスワード",
-        "rememberMe" : "ログインしたままにする",
-        "login" : "ログイン"
+    "app": {
+        "title": "ブログ",
+        "action": {
+            "edit": "編集",
+            "delete": "削除",
+            "save": "保存"
+        },
+        "portal": {
+            "title": "ポータル"
+        },
+        "login": {
+            "title": "ログイン",
+            "loginId": "ログインID",
+            "password": "パスワード",
+            "rememberMe": "ログインしたままにする",
+            "login": "ログイン"
+        },
+        "profile": {
+            "title": "プロファイル",
+            "currentPassword": "現在のパスワード",
+            "newPassword": "パスワード",
+            "confirmPassword": "パスワード確認"
+        }
     }
-  }
 }
