@@ -3,11 +3,16 @@
 .nav-menu {
     order: 1;
 }
+
 .menu {
     ion-card {
         margin-left: 0px;
         margin-right: 0px;
         margin-top: 0px;
+        * {
+            color: map-get($colors, light);
+            background-color: map-get($colors, primary);
+        }
     }
     ion-avatar img {
         max-width: 10rem;
