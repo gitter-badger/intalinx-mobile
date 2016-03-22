@@ -12,7 +12,7 @@
         "title" : "ログイン",
         "loginId" : "ログインID",
         "password" : "パスワード",
-        "rememberMe" : "ログインしたままにする",
+        "rememberMe" : "ログインしたままにする。",
         "login" : "ログイン"
     }
   }
