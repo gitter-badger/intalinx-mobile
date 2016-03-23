@@ -24,15 +24,15 @@ export class ProfilePage {
         this.userService = userService;
 
         this.user = {
-            oldPassword: "",
+            loginId: "",
+            currentPassword: "",
             newPassword: "",
-            confirmNewPassword: ""
+            confirmPassword: ""
         }
     }
 
     updateProfile() {
         if (this.userService.updateProfile(this.user)) {
-            console.log(this.nav.pop);
             this.nav.pop();
         }
     }
