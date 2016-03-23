@@ -1,6 +1,8 @@
 import {Page, NavController, NavParams} from 'ionic-angular';
 import {Component} from 'angular2/core';
 
+import {TranslatePipe} from 'ng2-translate/ng2-translate';
+
 import {BlogService} from '../../../providers/blog/blog-service/blog-service';
 import {AddCommentPage} from '../comment/add'; 
 
