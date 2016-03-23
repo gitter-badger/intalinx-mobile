@@ -12,6 +12,7 @@
     {
         "titleIcon": "settings",
         "title": "プロファイル",
-        "componentsId": "profile"
+        "componentsId": "profile",
+        "isPush": true
     }
 ]

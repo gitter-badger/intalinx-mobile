@@ -139,4 +139,8 @@ export class BlogService {
                 });
         });
     }
+    
+    saveComment(comment) {
+        return true;
+    }
 }
