@@ -1,13 +1,9 @@
 {
     "app": {
-        "title": "博客",
         "action": {
             "edit": "编辑",
             "delete": "删除",
             "save": "保存"
-        },
-        "subPages": {
-            "detail": "博客详情"
         },
         "portal": {
             "title": "主页"
@@ -24,6 +20,15 @@
             "currentPassword": "现在的密码",
             "newPassword": "设置新密码",
             "confirmPassword": "确认新密码"
+        },
+        "blog": {
+            "title": "博客",
+            "detail": "博客详情",
+            "comment": {
+                "add": "发表评论",
+                "content": "评论内容",
+                "reply": "提交"
+            }
         }
     }
 }

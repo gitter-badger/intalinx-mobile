@@ -1,13 +1,9 @@
 {
     "app": {
-        "title": "Blog",
         "action": {
             "edit": "Edit",
             "delete": "Delete",
             "save": "Save"
-        },
-        "subPages": {
-            "detail": "Detail Info"
         },
         "portal": {
             "title": "Portal"
@@ -24,6 +20,15 @@
             "currentPassword": "Current password",
             "newPassword": "New password",
             "confirmPassword": "Verify password"
+        },
+        "blog": {
+            "title": "Blog",
+            "detail": "Detail Info",
+            "comment": {
+                "add": "Add Comment",
+                "content": "Comment Content",
+                "reply": "Reply"
+            }
         }
     }
 }

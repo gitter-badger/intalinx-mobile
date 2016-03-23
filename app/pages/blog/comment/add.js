@@ -27,7 +27,7 @@ export class AddCommentPage {
 
         this.comment = {
             id: this.id,
-            comment: ""
+            content: ""
         }
     }
 
