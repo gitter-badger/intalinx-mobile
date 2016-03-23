@@ -1,7 +1,13 @@
-.login {
-    .text-center {
-        text-align: center;
+.login-navbar {
+    .toolbar-background {
+        background-color: #FFFFFF;
+        border: 0px;
     }
+    .logo {
+        padding-left: 2rem;
+    }
+}
+.login {
     .remember-me {
         height: 73px;
     }

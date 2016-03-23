@@ -1,10 +1,9 @@
-<ion-navbar *navbar>
-    <ion-title>{{ "app.login.title" | translate }}</ion-title>
+<ion-navbar *navbar class="login-navbar">
+    <div class="logo">
+        <h3 primary>IntaLin<b primary-text>X</b></h3>
+    </div>
 </ion-navbar>
 <ion-content padding  class="login">
-    <div class="text-center">
-        <h1>IntaLin<b primary>XCloud</b></h1>
-    </div>
     <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
         <ion-item>
             <ion-label floating id="loginId">{{ "app.login.loginId" | translate }}</ion-label>
