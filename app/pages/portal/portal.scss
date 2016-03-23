@@ -10,14 +10,17 @@
         margin-right: 0px;
         margin-top: 0px;
         * {
-            color: map-get($colors, light);
-            background-color: map-get($colors, primary);
+            color: $primary-color-text;
+            background-color: $primary-color;
         }
     }
     ion-avatar img {
         max-width: 10rem;
         max-height: 10rem;
         border-radius: 10rem;
+    }
+    button ion-label{
+        color: $primary-text-color;
     }
 }
 .portal {
