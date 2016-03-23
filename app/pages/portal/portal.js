@@ -5,6 +5,7 @@ import {AppsService} from '../../providers/apps-service/apps-service';
 import {UserService} from '../../providers/user-service/user-service'; 
 
 import {BlogIndexPage} from '../blog/index/index';
+import {ProfilePage} from '../profile/profile';
 
 /*
   Generated class for the PortalPage page.
@@ -33,7 +34,8 @@ export class PortalPage {
     
     this.components = {
         "portal": PortalPage,
-        "blog" : BlogIndexPage
+        "blog" : BlogIndexPage,
+        "profile" : ProfilePage
     }
     
     if (!this.app.showMenu) {
@@ -51,7 +53,11 @@ export class PortalPage {
   
   showMenu(that) {
       return function(menu) {
-          that.nav.setRoot(that.components[menu.componentsId]);
+          if (menu.isPush) {
+              that.nav.push(that.components[menu.componentsId]);
+          } else {
+              that.nav.setRoot(that.components[menu.componentsId]);
+          }
       }
   }
 }

@@ -44,5 +44,9 @@ export class UserService {
         });
     });
   }
+  
+  updateProfile(profile) {
+      return true;
+  }
 }
 
