@@ -20,11 +20,23 @@
 // Both iOS and MD colors can be further customized if colors
 // are different per mode.
 
+// from : http://www.materialpalette.com/purple/deep-orange
+$primary-color-dark:   #7B1FA2;
+$primary-color:        #A054E3;
+$primary-color-light:  #E1BEE7;
+$primary-color-text:   #FFFFFF;
+$accent-color:         #FF5722;
+$primary-text-color:   #212121;
+$secondary-text-color: #727272;
+$divider-color:        #B6B6B6;
+$danger-color:         #F44336;
+
 $colors: (
-  primary:    #9C27B0,
-  secondary:  #F44336,
-  danger:     #f53d3d,
-  light:      #f4f4f4,
-  dark:       #222,
-  favorite:   #69BB7B
+  primary:    $primary-color,
+  secondary:  $accent-color,
+  danger:     $danger-color,
+  light:      $primary-color-light,
+  dark:       $primary-color-dark,
+  favorite:   $accent-color,
+  primary-text: $primary-text-color
 );

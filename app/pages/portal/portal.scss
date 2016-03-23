@@ -1,5 +1,17 @@
 @import "../pages/blog/index/index";
 
+ion-navbar {
+    .bar-button-default {
+        color: $primary-color-text;
+    }
+    .toolbar-title {
+        color: $primary-color-text;
+    }
+    .toolbar-background {
+        background-color: $primary-color;
+    }
+}
+
 .nav-menu {
     order: 1;
 }
@@ -9,15 +21,19 @@
         margin-left: 0px;
         margin-right: 0px;
         margin-top: 0px;
+        border-radius: 0px;
         * {
-            color: map-get($colors, light);
-            background-color: map-get($colors, primary);
+            color: $primary-color-text;
+            background-color: $primary-color;
         }
     }
     ion-avatar img {
         max-width: 10rem;
         max-height: 10rem;
         border-radius: 10rem;
+    }
+    button ion-label{
+        color: $primary-text-color;
     }
 }
 .portal {
@@ -26,6 +42,7 @@
     }
 }
 .biznavi-badge {
+    background-color: $accent-color;
     position: relative;
     left: -10px;
     top: -5px;
