@@ -28,6 +28,7 @@ export class DetailPage {
         this.params = params;
         this.id = this.params.get("id");
         this.blogService = blogService;
+        
         // this.blog = new Blog("", "お待ちください。");
         this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
             this.title = data.CommunityOutput.title;
@@ -37,6 +38,7 @@ export class DetailPage {
 
         this.blogService.getReplyContentListByCommunityID(this.id).then(data => {
             this.comments = data;
+            this.commentCount = data.length;
         });
     }
     
