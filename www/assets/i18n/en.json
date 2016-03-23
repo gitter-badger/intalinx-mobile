@@ -1,0 +1,26 @@
+{
+    "app": {
+        "title": "Blog",
+        "action": {
+            "edit": "Edit",
+            "delete": "Delete",
+            "save": "Save"
+        },
+        "portal": {
+            "title": "Portal"
+        },
+        "login": {
+            "title": "Login",
+            "loginId": "Account",
+            "password": "Password",
+            "rememberMe": "Remember me",
+            "login": "Login"
+        },
+        "profile": {
+            "title": "Profile",
+            "currentPassword": "Current password",
+            "newPassword": "New password",
+            "confirmPassword": "Verify password"
+        }
+    }
+}
