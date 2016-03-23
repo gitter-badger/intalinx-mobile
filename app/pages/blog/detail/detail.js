@@ -12,7 +12,8 @@ import {AddCommentPage} from '../comment/add';
 */
 @Page({
     templateUrl: 'build/pages/blog/detail/detail.html',
-    providers: [BlogService]
+    providers: [BlogService],
+    pipes: [TranslatePipe]
 })
 export class DetailPage {
 

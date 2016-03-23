@@ -6,6 +6,9 @@
             "delete": "删除",
             "save": "保存"
         },
+        "subPages": {
+            "detail": "博客详情"
+        },
         "portal": {
             "title": "主页"
         },

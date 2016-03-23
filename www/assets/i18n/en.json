@@ -6,6 +6,9 @@
             "delete": "Delete",
             "save": "Save"
         },
+        "subPage": {
+            "detail": "Detail Info"
+        },
         "portal": {
             "title": "Portal"
         },
