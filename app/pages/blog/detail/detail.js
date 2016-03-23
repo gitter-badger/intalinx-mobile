@@ -4,7 +4,7 @@ import {Component} from 'angular2/core';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
 import {BlogService} from '../../../providers/blog/blog-service/blog-service';
-import {AddCommentPage} from '../comment/add'; 
+import {AddCommentPage} from '../add-comment/add-comment'; 
 
 /*
   Generated class for the DetailPage page.

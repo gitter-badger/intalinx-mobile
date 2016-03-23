@@ -6,15 +6,21 @@ import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
 import {BlogService} from '../../../providers/blog/blog-service/blog-service';
 
+/*
+  Generated class for the AddCommentPage page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+*/
 @Page({
-    templateUrl: 'build/pages/blog/comment/add.html',
-    providers: [
+  templateUrl: 'build/pages/blog/add-comment/add-comment.html',
+	providers: [
         BlogService
     ],
     pipes: [TranslatePipe]
 })
 export class AddCommentPage {
-    static get parameters() {
+ static get parameters() {
         return [[NavController], [NavParams], [BlogService]];
     }
 
