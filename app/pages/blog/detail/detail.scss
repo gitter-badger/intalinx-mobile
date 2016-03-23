@@ -37,6 +37,7 @@ $padding-bottom: 16px;
     padding-left: $padding-left;
     padding-bottom: $padding-bottom;
   }
+  
   .comment {
     .author {
       color: #666;
@@ -45,15 +46,21 @@ $padding-bottom: 16px;
       border: 0px;
     }
     ion-card {
-      margin: 2px;
+        margin: 2px;
+        ion-card-content {
+            white-space: normal;
+        }
     }
     .avatar {
-      font-size: 3em;
+      font-size: 2em;
       color: #eee;
     }
-
   }
   .toolbar {
     position: inherit;
+  }
+  .button-fab {
+      position: fixed;
+      opacity: 0.9; 
   }
 }
