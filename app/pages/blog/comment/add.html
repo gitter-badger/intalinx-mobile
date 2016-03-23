@@ -1,0 +1,12 @@
+<ion-navbar *navbar>
+    <ion-title>{{ "app.common.comment" | translate }}{{ "app.action.add" | translate }}</ion-title>
+</ion-navbar>
+<ion-content padding class="add-comment">
+    <form #addCommentForm="ngForm" (ngSubmit)="saveComment(addCommentForm)">
+        <div class="title">{{title}}</div>
+        <ion-item>
+            <ion-textarea placeholder="comment" class="comment" [(ngModel)]="comment.comment"></ion-textarea>
+        </ion-item>
+        <button full type="submit">{{ "app.common.comment" | translate }}</button>
+    </form>
+</ion-content>

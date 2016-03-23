@@ -5,7 +5,6 @@ import {NgForm} from 'angular2/common';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
 import {UserService} from '../../providers/user-service/user-service';
-import {PortalPage} from '../portal/portal';
 
 @Page({
     templateUrl: 'build/pages/profile/profile.html',

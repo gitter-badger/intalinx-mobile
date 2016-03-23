@@ -1,7 +1,8 @@
 import {Page, NavController, NavParams} from 'ionic-angular';
 import {Component} from 'angular2/core';
 
-import {BlogService} from '../../../providers/blog/blog-service/blog-service'; 
+import {BlogService} from '../../../providers/blog/blog-service/blog-service';
+import {AddCommentPage} from '../comment/add'; 
 
 /*
   Generated class for the DetailPage page.
@@ -33,6 +34,13 @@ export class DetailPage {
 
         this.blogService.getReplyContentListByCommunityID(this.id).then(data => {
             this.comments = data;
+        });
+    }
+    
+    addComment() {
+        this.nav.push(AddCommentPage, {
+            "id": this.id,
+            "title": this.title
         });
     }
 }
