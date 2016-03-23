@@ -1,6 +1,8 @@
 import {Page, NavController, NavParams} from 'ionic-angular';
 import {Component} from 'angular2/core';
 
+import {BlogService} from '../../../providers/blog/blog-service/blog-service'; 
+
 /*
   Generated class for the DetailPage page.
 
@@ -8,42 +10,30 @@ import {Component} from 'angular2/core';
   Ionic pages and navigation.
 */
 @Page({
-  templateUrl: 'build/pages/blog/detail/detail.html',
+    templateUrl: 'build/pages/blog/detail/detail.html',
+    providers: [BlogService]
 })
 export class DetailPage {
 
-  static get parameters() {
-    return [[NavController], [NavParams]];
-  }
-
-  constructor(nav, params) {
-
-    this.params = params;
-    this.id = this.params.get("id");
-    this.blog = {
-      title : "音泰思グループの皆様へ、IntaLinxへようこそ！",
-      contents: `グループの皆様へ
-IntaLinxへようこそ！
-
-このプラットフォームを使って、グループ間の交流をどんどん広げて行きたいと思います。
-
-業務ナビを使って、業務の可視化、改善して行くと同時に、お知らせやブローグ機能を使って
-ノーハウをどんどん広げて行きましょう。
-
-継続的に成果を出して行きましょう。
-
-よろしくお願いします。
-<a href='www.baidu.com'>baidu</a>`
+    static get parameters() {
+        return [[NavController], [NavParams], [BlogService]];
     }
-    this.comments = [
-      {
-        title : "test1",
-        contents: "<a href='www.baidu.com'>baidu</a>"
-      },
-      {
-        title : "test2",
-        contents: "<a href='www.baidu.com'>baidu</a>"
-      },
-    ]
-  }
+
+    constructor(nav, params, blogService) {
+        this.nav = nav;
+        this.params = params;
+        this.id = this.params.get("id");
+        this.blogService = blogService;
+        // this.blog = new Blog("", "お待ちください。");
+        this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
+            this.title = data.CommunityOutput.title;
+            this.content = data.CommunityOutput.content;
+            this.createDate = data.CommunityOutput.createDate;//.substring(0, 7);
+        });
+
+        this.blogService.getReplyContentListByCommunityID(this.id).then(data => {
+            this.comments = data;
+        });
+    }
 }
+

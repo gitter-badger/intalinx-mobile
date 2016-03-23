@@ -13,13 +13,23 @@
     </ion-title>
 </ion-navbar>
 <ion-content padding class="blog-index">
-  <ion-list>
+  <!--<ion-list>
     <ion-item *ngFor="#blog of blogs" (click)="openDetail(blog)">
       <ion-thumbnail item-left>
         <ion-icon name="person" class="avatar"></ion-icon>
       </ion-thumbnail>
       <h2>{{blog.title}}</h2>
       <p>{{blog.summary}}</p>
+      <button clear item-right>View</button>
+    </ion-item>
+  </ion-list>-->
+  <ion-list>
+    <ion-item *ngFor="#community of communityListForTop" (click)="openDetail(community)">
+      <ion-thumbnail item-left>
+        <ion-icon name="person" class="avatar"></ion-icon>
+      </ion-thumbnail>
+      <h2>{{community.title}}</h2>
+      <p>{{community.newReplyFlag}}</p>
       <button clear item-right>View</button>
     </ion-item>
   </ion-list>

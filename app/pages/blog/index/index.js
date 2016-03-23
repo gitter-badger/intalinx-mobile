@@ -26,14 +26,17 @@ export class BlogIndexPage {
         this.nav = nav;
         this.blogService = blogService;
         
-        this.blogService.load().then(data => {
-            this.blogs = data;
+        // this.blogService.list().then(data => {
+        //     this.blogs = data;
+        // });
+        this.blogService.getCommunityListForTop().then(data => {
+            this.communityListForTop = data;
         });
     }
 
-    openDetail(blog) {
+    openDetail(community) {
         this.nav.push(DetailPage, {
-            "id": blog.id
+            "id": community.communityID
         });
     }
 }

@@ -1,0 +1,44 @@
+[
+    {
+        "tuple": {
+            "old": {
+                "ReplyContentOutput": {
+                    "replyContentID": "b69d06be-605a-43f0-b039-e707c1ff0edb",
+                    "content": "ありがとうございます。<br />勉強になります。",
+                    "createDate": "2016/02/15 07:53:17",
+                    "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
+                    "userID": "56",
+                    "userName": "丸尾　恭介"
+                }
+            }
+        }
+    },
+    {
+        "tuple": {
+            "old": {
+                "ReplyContentOutput": {
+                    "replyContentID": "14cb5d8d-44e5-481c-9e5b-5a0cf71c8823",
+                    "content": "<font size=\"6\">「<span style=\"color: #252525; font-family: 'ＭＳ 明朝', serif; font-size: 15.3333px;\"><font size=\"3\">人間関係の重要さを見くびってはならない</font>。</span>」</font><br />この言葉が大事ですね。<br />正しい事を言っているから大丈夫と勘違いする方々が多いようです。<br /><br />",
+                    "createDate": "2016/02/15 08:35:24",
+                    "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
+                    "userID": "2",
+                    "userName": "譚　玉蜂"
+                }
+            }
+        }
+    },
+    {
+        "tuple": {
+            "old": {
+                "ReplyContentOutput": {
+                    "replyContentID": "eb5818e1-640b-4307-acf8-a6ab6304ceee",
+                    "content": "多様な社会では答えは一つではなくなり、それぞれが答えを持つようになります。<br />従って答えはそれぞれが考えねばならない事になり、それぞれの考えをよく聞く事が大切になります。<br />（なにかで読んだ内容です）",
+                    "createDate": "2016/02/15 17:17:32",
+                    "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
+                    "userID": "1002",
+                    "userName": "田　志輝"
+                }
+            }
+        }
+    }
+]
