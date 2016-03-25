@@ -2,7 +2,13 @@
 
 .blog-index {
     .avatar {
-        font-size: 5em;
-        color: #eee;
+        height: 3em;
+    }
+    .userName {
+    }
+    .communityTime {
+    }
+    .communityTitle {
+        white-space: pre-wrap;
     }
 }
