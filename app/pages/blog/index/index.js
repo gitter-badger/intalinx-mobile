@@ -14,12 +14,12 @@ import {DetailPage} from '../detail/detail';
 */
 @Page({
     templateUrl: 'build/pages/blog/index/index.html',
-    providers: [BlogService,UserService],
+    providers: [BlogService],
     pipes: [TranslatePipe]
 })
 export class BlogIndexPage {
     static get parameters() {
-        return [[NavController], [BlogService], [UserService]];
+        return [[NavController], [BlogService]];
     }
 
     constructor(nav, blogService) {
