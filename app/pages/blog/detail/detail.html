@@ -5,44 +5,47 @@
   Ionic pages and navigation.
 -->
 <ion-navbar *navbar>
-  <ion-title>{{"app.blog.detail" | translate}}</ion-title>
+    <ion-title>{{"app.blog.detail" | translate}}</ion-title>
 </ion-navbar>
 <ion-content class="detail">
-  <div class="title">{{title}}</div>
-  <ion-item class="status">
-    <div class="time" primary clear item-right>
-      {{createDate}}
-    </div>
-    <button primary clear>
-      <ion-icon name="text"></ion-icon>
-      <div>{{commentCount}} Comments</div>
-    </button>
-  </ion-item>
-  <div class="contents" [innerHTML]="content"></div>
-
-  <ion-list>
-    <ion-item class="comment" *ngFor="#comment of comments">
-        <div class="author" item-left>
-          <ion-avatar>
-            <ion-icon name="person" class="avatar"></ion-icon>
-          </ion-avatar>
-          <div class="name">{{comment.tuple.old.ReplyContentOutput.userName}}</div>
-          <div class="time">{{comment.tuple.old.ReplyContentOutput.createDate}}</div>
+    <div class="title">{{title}}</div>
+    <ion-item class="status">
+        <div class="time" primary clear item-right>
+            {{createDate}}
         </div>
-        <ion-card>
-          <ion-card-header>
-            {{comment.tuple.old.ReplyContentOutput.title}}
-          </ion-card-header>
-          <ion-card-content [innerHTML]="comment.tuple.old.ReplyContentOutput.content">
-            <!-- Add card content here! -->
-          </ion-card-content>
-        </ion-card>
+        <button primary clear>
+            <ion-icon name="text"></ion-icon>
+            <div>{{commentCount}} Comments</div>
+        </button>
     </ion-item>
-  </ion-list>
-  <button fab fab-right fab-bottom secondary (click)="addComment()">
-    <ion-icon name="add"></ion-icon>
-  </button>
-  <!--
+    <div class="contents" [innerHTML]="content"></div>
+
+    <ion-list>
+        <ion-item class="comment" *ngFor="#comment of comments">
+            <div class="author" item-left>
+                <ion-avatar>
+                    <ion-icon name="person" class="avatar"></ion-icon>
+                </ion-avatar>
+                <div class="name">{{comment.tuple.old.ReplyContentOutput.userName}}</div>
+                <div class="time">{{comment.tuple.old.ReplyContentOutput.createDate}}</div>
+            </div>
+            <ion-card>
+                <ion-card-header>
+                    {{comment.tuple.old.ReplyContentOutput.title}}
+                </ion-card-header>
+                <ion-card-content [innerHTML]="comment.tuple.old.ReplyContentOutput.content">
+                    <!-- Add card content here! -->
+                </ion-card-content>
+            </ion-card>
+        </ion-item>
+    </ion-list>
+    <ion-infinite-scroll (infinite)="doInfinite($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+    <button fab fab-right fab-bottom secondary (click)="addComment()">
+        <ion-icon name="add"></ion-icon>
+    </button>
+    <!--
 
   <ion-toolbar position="bottom">
 

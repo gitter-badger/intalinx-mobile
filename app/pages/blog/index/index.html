@@ -13,7 +13,7 @@
     </ion-title>
 </ion-navbar>
 <ion-content padding class="blog-index">
-  <!--<ion-list>
+    <!--<ion-list>
     <ion-item *ngFor="#blog of blogs" (click)="openDetail(blog)">
       <ion-thumbnail item-left>
         <ion-icon name="person" class="avatar"></ion-icon>
@@ -23,14 +23,20 @@
       <button clear item-right>View</button>
     </ion-item>
   </ion-list>-->
-  <ion-list>
-    <ion-item *ngFor="#community of communityListForTop" (click)="openDetail(community)">
-      <ion-thumbnail item-left>
-        <ion-icon name="person" class="avatar"></ion-icon>
-      </ion-thumbnail>
-      <h2>{{community.title}}</h2>
-      <p>{{community.newReplyFlag}}</p>
-      <button clear item-right>View</button>
-    </ion-item>
-  </ion-list>
+    <ion-refresher (refresh)="doRefresh($event)">
+        <ion-refresher-content refreshingSpinner="circles"> </ion-refresher-content>
+    </ion-refresher>
+    <ion-list>
+        <ion-item *ngFor="#community of communityListForTop" (click)="openDetail(community)">
+            <ion-thumbnail item-left>
+                <ion-icon name="person" class="avatar"></ion-icon>
+            </ion-thumbnail>
+            <h2>{{community.title}}</h2>
+            <p>{{community.newReplyFlag}}</p>
+            <button clear item-right>View</button>
+        </ion-item>
+    </ion-list>
+    <ion-infinite-scroll (infinite)="doInfinite($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 </ion-content>
