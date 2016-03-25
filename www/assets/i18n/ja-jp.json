@@ -1,0 +1,34 @@
+{
+    "app": {
+        "action": {
+            "edit": "編集",
+            "delete": "削除",
+            "save": "保存"
+        },
+        "portal": {
+            "title": "ポータル"
+        },
+        "login": {
+            "title": "ログイン",
+            "loginId": "ログインID",
+            "password": "パスワード",
+            "rememberMe": "ログインしたままにする",
+            "login": "ログイン"
+        },
+        "profile": {
+            "title": "プロファイル",
+            "currentPassword": "現在のパスワード",
+            "newPassword": "パスワード",
+            "confirmPassword": "パスワード確認"
+        },
+        "blog": {
+            "title": "ブログ",
+            "detail": "ブログ明細",
+            "comment": {
+                "add": "返信追加",
+                "content": "返信内容",
+                "reply": "返信"
+            }
+        }
+    }
+}
