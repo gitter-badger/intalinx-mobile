@@ -25,8 +25,7 @@ export class IntaLinx {
     }
     
     initializeTranslate() {
-        let userLang = navigator.language.split('-')[0];
-        userLang = /(ja|zh-cn)/gi.test(userLang) ? userLang : 'zh-cn';
+        let userLang = navigator.language.toLowerCase();
         this.translate.use(userLang);
     }
 

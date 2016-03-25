@@ -34,24 +34,11 @@
             {{comment.tuple.old.ReplyContentOutput.title}}
           </ion-card-header>
           <ion-card-content [innerHTML]="comment.tuple.old.ReplyContentOutput.content">
-            <!-- Add card content here! -->
           </ion-card-content>
         </ion-card>
     </ion-item>
   </ion-list>
-  <button fab fab-right fab-bottom secondary (click)="addComment()">
-    <ion-icon name="add"></ion-icon>
-  </button>
-  <!--
-
-  <ion-toolbar position="bottom">
-
-
-
-    <button>
-      <ion-icon name="home"></ion-icon>
-      Left Icon
-    </button>
-  </ion-toolbar>
-  -->
 </ion-content>
+<button fab fab-right fab-bottom secondary (click)="addComment()">
+    <ion-icon name="add"></ion-icon>
+</button>
