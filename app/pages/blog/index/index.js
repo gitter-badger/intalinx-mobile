@@ -26,17 +26,74 @@ export class BlogIndexPage {
         this.nav = nav;
         this.blogService = blogService;
 
-        // this.communityListForTopAll = [];
-        // this.blogService.getCommunityListForTop().then(data => {
-        //     this.communityListForTopAll = data;
-        // });
+/*      下記はjsonファイルからデータを取得するソースです。非同期処理の問題があるので、まずコメントにする。対応必要
+
+        this.communityListForTopAll = [];
+        this.blogService.getCommunityListForTop().then(data => {
+            data.forEach(function(element) {
+                var publishDate = new Date(element.publishStartDate.replace("T", " "));
+                var now = new Date();
+                var publishedMinutes = parseInt((now.getTime() - publishDate.getTime()) / (60 * 1000));
+                if (publishedMinutes >= 60 * 24 * 365) {
+                    // 一年前の場合
+                    var years = parseInt(publishedMinutes / (60 * 24 * 365));
+                    element.publishStartDate = years + "年前";
+                } else if (publishedMinutes >= 60 * 24 * 30) {
+                    // 一か月前の場合
+                    var months = parseInt(publishedMinutes / (60 * 24 * 30));
+                    element.publishStartDate = months + "月前";
+                } else if (publishedMinutes >= 60 * 24) {
+                    // 一日前の場合
+                    var days = parseInt(publishedMinutes / (60 * 24));
+                    element.publishStartDate = days + "日前";
+                } else if (publishedMinutes >= 60) {
+                    // 一時間後、一日以内
+                    var hours = parseInt(publishedMinutes / 60);
+                    element.publishStartDate = hours + "時前";
+                } else {
+                    //　一時間以内
+                    element.publishStartDate = publishedMinutes + "分前";
+                }
+            }, this);
+            this.communityListForTopAll = data;
+        });
+*/
+ 
+/* ↓↓↓↓ 下記のソースは　画面のプルアップ時データが追加表示できるような現象が表示するために、まず初期データを設定します。jsonファイルからデータを取得するソースは上記です。  ↓↓↓↓ */    
         this.communityListForTopAll = this.initData();
+        for (var l = 0; l < this.communityListForTopAll.length; l++) {
+            var community = this.communityListForTopAll[l];
+            var publishDate = new Date(community.publishStartDate.replace("T", " "));
+                var now = new Date();
+                var publishedMinutes = parseInt((now.getTime() - publishDate.getTime()) / (60 * 1000));
+                if (publishedMinutes >= 60 * 24 * 365) {
+                    // 一年前の場合
+                    var years = parseInt(publishedMinutes / (60 * 24 * 365));
+                    community.publishStartDate = years + "年前";
+                } else if (publishedMinutes >= 60 * 24 * 30) {
+                    // 一か月前の場合
+                    var months = parseInt(publishedMinutes / (60 * 24 * 30));
+                    community.publishStartDate = months + "月前";
+                } else if (publishedMinutes >= 60 * 24) {
+                    // 一日前の場合
+                    var days = parseInt(publishedMinutes / (60 * 24));
+                    community.publishStartDate = days + "日前";
+                } else if (publishedMinutes >= 60) {
+                    // 一時間後、一日以内
+                    var hours = parseInt(publishedMinutes / 60);
+                    community.publishStartDate = hours + "時前";
+                } else {
+                    //　一時間以内
+                    community.publishStartDate = publishedMinutes + "分前";
+                }
+        }
+/* ↑↑↑↑ 以上   ↑↑↑↑*/
         
         // 初期表示のブログ数
         var firstDisplayCommunityCount = 10;
         // プルアップする時、追加表示のブログ数
         this.secondAddDisplayCommunityCount = 3;
-        
+
         this.communityListForTop = [];
         this.firstDisplayCount = this.communityListForTopAll.length;
 
@@ -60,7 +117,7 @@ export class BlogIndexPage {
 
     doRefresh(refresher) {
 
-        setTimeout(() => {          
+        setTimeout(() => {
             // var object = new BlogIndexPage(this.nav, this.blogService);
             // console.log(object);
             // this.communityListForTop = object.communityListForTop;
@@ -68,7 +125,7 @@ export class BlogIndexPage {
             refresher.complete();
         }, 5000);
     }
-    
+
     doInfinite(infiniteScroll) {
         setTimeout(() => {
             var nextDisplayCount = this.secondAddDisplayCommunityCount;
@@ -84,14 +141,14 @@ export class BlogIndexPage {
             infiniteScroll.complete();
         }, 500);
     }
-    
+
     initData() {
         return [
             {
                 "communityID": "833e705a-11c4-4f2d-9b0f-2097579f7914",
                 "title": "1タイトルcommunity0224",
-                "createUser": "",
-                "publishStartDate": "2016-02-23T19:14:52.0",
+                "createUser": "譚　玉峰",
+                "publishStartDate": "2016-03-25T15:43:52.0",
                 "readStatus": "NOT_READ",
                 "readStatusOrder": "1",
                 "newReplyFlag": "FALSE",
@@ -101,8 +158,8 @@ export class BlogIndexPage {
             {
                 "communityID": "5f90c3e5-febe-4cce-949b-4766b0778443",
                 "title": "2AED講習2回目（リスケ分）",
-                "createUser": "",
-                "publishStartDate": "2016-02-16T16:08:41.0",
+                "createUser": "田　志輝",
+                "publishStartDate": "2016-03-16T16:08:41.0",
                 "readStatus": "NOT_READ",
                 "readStatusOrder": "1",
                 "newReplyFlag": "FALSE",
@@ -112,7 +169,7 @@ export class BlogIndexPage {
             {
                 "communityID": "a5f96af3-3a40-4f2e-9f1b-62f92762fd11",
                 "title": "3【4F朝会】ビジネスマナーの基本-挨拶（2/15）",
-                "createUser": "",
+                "createUser": "段　海嬌",
                 "publishStartDate": "2016-02-16T14:21:56.0",
                 "readStatus": "NOT_READ",
                 "readStatusOrder": "1",
@@ -123,8 +180,8 @@ export class BlogIndexPage {
             {
                 "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
                 "title": "4第５回教育の為のＴＯＣシンポジウム",
-                "createUser": "",
-                "publishStartDate": "2016-02-14T20:32:20.0",
+                "createUser": "西中　芳幸",
+                "publishStartDate": "2015-02-14T20:32:20.0",
                 "readStatus": "NOT_READ",
                 "readStatusOrder": "1",
                 "newReplyFlag": "FALSE",
@@ -132,10 +189,10 @@ export class BlogIndexPage {
                 "isAlreadyExists": "TRUE"
             },
             {
-                "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
-                "title": "5第５回教育の為のＴＯＣシンポジウム",
-                "createUser": "",
-                "publishStartDate": "2016-02-14T20:32:20.0",
+                "communityID": "a5f96af3-3a40-4f2e-9f1b-62f92762fd11",
+                "title": "5【4F朝会】ビジネスマナーの基本-挨拶（2/15）",
+                "createUser": "段　海嬌",
+                "publishStartDate": "2016-02-16T14:21:56.0",
                 "readStatus": "NOT_READ",
                 "readStatusOrder": "1",
                 "newReplyFlag": "FALSE",
@@ -143,10 +200,10 @@ export class BlogIndexPage {
                 "isAlreadyExists": "TRUE"
             },
             {
-                "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
-                "title": "6第５回教育の為のＴＯＣシンポジウム",
-                "createUser": "",
-                "publishStartDate": "2016-02-14T20:32:20.0",
+                "communityID": "a5f96af3-3a40-4f2e-9f1b-62f92762fd11",
+                "title": "6【4F朝会】ビジネスマナーの基本-挨拶（2/15）",
+                "createUser": "段　海嬌",
+                "publishStartDate": "2016-02-16T14:21:56.0",
                 "readStatus": "NOT_READ",
                 "readStatusOrder": "1",
                 "newReplyFlag": "FALSE",
@@ -154,10 +211,10 @@ export class BlogIndexPage {
                 "isAlreadyExists": "TRUE"
             },
             {
-                "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
-                "title": "7第５回教育の為のＴＯＣシンポジウム",
-                "createUser": "",
-                "publishStartDate": "2016-02-14T20:32:20.0",
+                "communityID": "a5f96af3-3a40-4f2e-9f1b-62f92762fd11",
+                "title": "7【4F朝会】ビジネスマナーの基本-挨拶（2/15）",
+                "createUser": "段　海嬌",
+                "publishStartDate": "2016-02-16T14:21:56.0",
                 "readStatus": "NOT_READ",
                 "readStatusOrder": "1",
                 "newReplyFlag": "FALSE",
@@ -165,10 +222,10 @@ export class BlogIndexPage {
                 "isAlreadyExists": "TRUE"
             },
             {
-                "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
-                "title": "8第５回教育の為のＴＯＣシンポジウム",
-                "createUser": "",
-                "publishStartDate": "2016-02-14T20:32:20.0",
+                "communityID": "a5f96af3-3a40-4f2e-9f1b-62f92762fd11",
+                "title": "8【4F朝会】ビジネスマナーの基本-挨拶（2/15）",
+                "createUser": "段　海嬌",
+                "publishStartDate": "2016-02-16T14:21:56.0",
                 "readStatus": "NOT_READ",
                 "readStatusOrder": "1",
                 "newReplyFlag": "FALSE",
@@ -176,10 +233,10 @@ export class BlogIndexPage {
                 "isAlreadyExists": "TRUE"
             },
             {
-                "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
-                "title": "9第５回教育の為のＴＯＣシンポジウム",
-                "createUser": "",
-                "publishStartDate": "2016-02-14T20:32:20.0",
+                "communityID": "a5f96af3-3a40-4f2e-9f1b-62f92762fd11",
+                "title": "9【4F朝会】ビジネスマナーの基本-挨拶（2/15）",
+                "createUser": "段　海嬌",
+                "publishStartDate": "2016-02-16T14:21:56.0",
                 "readStatus": "NOT_READ",
                 "readStatusOrder": "1",
                 "newReplyFlag": "FALSE",
@@ -187,10 +244,10 @@ export class BlogIndexPage {
                 "isAlreadyExists": "TRUE"
             },
             {
-                "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
-                "title": "10第５回教育の為のＴＯＣシンポジウム",
-                "createUser": "",
-                "publishStartDate": "2016-02-14T20:32:20.0",
+                "communityID": "a5f96af3-3a40-4f2e-9f1b-62f92762fd11",
+                "title": "10【4F朝会】ビジネスマナーの基本-挨拶（2/15）",
+                "createUser": "段　海嬌",
+                "publishStartDate": "2016-02-16T14:21:56.0",
                 "readStatus": "NOT_READ",
                 "readStatusOrder": "1",
                 "newReplyFlag": "FALSE",
@@ -198,10 +255,10 @@ export class BlogIndexPage {
                 "isAlreadyExists": "TRUE"
             },
             {
-                "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
-                "title": "11第５回教育の為のＴＯＣシンポジウム",
-                "createUser": "",
-                "publishStartDate": "2016-02-14T20:32:20.0",
+                "communityID": "a5f96af3-3a40-4f2e-9f1b-62f92762fd11",
+                "title": "11【4F朝会】ビジネスマナーの基本-挨拶（2/15）",
+                "createUser": "段　海嬌",
+                "publishStartDate": "2016-02-16T14:21:56.0",
                 "readStatus": "NOT_READ",
                 "readStatusOrder": "1",
                 "newReplyFlag": "FALSE",
@@ -209,10 +266,10 @@ export class BlogIndexPage {
                 "isAlreadyExists": "TRUE"
             },
             {
-                "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
-                "title": "12第５回教育の為のＴＯＣシンポジウム",
-                "createUser": "",
-                "publishStartDate": "2016-02-14T20:32:20.0",
+                "communityID": "a5f96af3-3a40-4f2e-9f1b-62f92762fd11",
+                "title": "12【4F朝会】ビジネスマナーの基本-挨拶（2/15）",
+                "createUser": "段　海嬌",
+                "publishStartDate": "2016-02-16T14:21:56.0",
                 "readStatus": "NOT_READ",
                 "readStatusOrder": "1",
                 "newReplyFlag": "FALSE",
@@ -220,10 +277,10 @@ export class BlogIndexPage {
                 "isAlreadyExists": "TRUE"
             },
             {
-                "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
-                "title": "13第５回教育の為のＴＯＣシンポジウム",
-                "createUser": "",
-                "publishStartDate": "2016-02-14T20:32:20.0",
+                "communityID": "a5f96af3-3a40-4f2e-9f1b-62f92762fd11",
+                "title": "13【4F朝会】ビジネスマナーの基本-挨拶（2/15）",
+                "createUser": "段　海嬌",
+                "publishStartDate": "2016-02-16T14:21:56.0",
                 "readStatus": "NOT_READ",
                 "readStatusOrder": "1",
                 "newReplyFlag": "FALSE",
@@ -231,50 +288,16 @@ export class BlogIndexPage {
                 "isAlreadyExists": "TRUE"
             },
             {
-                "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
-                "title": "14第５回教育の為のＴＯＣシンポジウム",
-                "createUser": "",
-                "publishStartDate": "2016-02-14T20:32:20.0",
-                "readStatus": "NOT_READ",
-                "readStatusOrder": "1",
-                "newReplyFlag": "FALSE",
-                "newReplyFlagOrder": "0",
-                "isAlreadyExists": "TRUE"
-            },
-            {
-                "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
-                "title": "15第５回教育の為のＴＯＣシンポジウム",
-                "createUser": "",
-                "publishStartDate": "2016-02-14T20:32:20.0",
-                "readStatus": "NOT_READ",
-                "readStatusOrder": "1",
-                "newReplyFlag": "FALSE",
-                "newReplyFlagOrder": "0",
-                "isAlreadyExists": "TRUE"
-            },
-            {
-                "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
-                "title": "16第５回教育の為のＴＯＣシンポジウム",
-                "createUser": "",
-                "publishStartDate": "2016-02-14T20:32:20.0",
-                "readStatus": "NOT_READ",
-                "readStatusOrder": "1",
-                "newReplyFlag": "FALSE",
-                "newReplyFlagOrder": "0",
-                "isAlreadyExists": "TRUE"
-            },
-            {
-                "communityID": "a92b4597-d8e5-431b-bf85-41d9f289044d",
-                "title": "17第５回教育の為のＴＯＣシンポジウム",
-                "createUser": "",
-                "publishStartDate": "2016-02-14T20:32:20.0",
+                "communityID": "a5f96af3-3a40-4f2e-9f1b-62f92762fd11",
+                "title": "14【4F朝会】ビジネスマナーの基本-挨拶（2/15）",
+                "createUser": "段　海嬌",
+                "publishStartDate": "2016-02-16T14:21:56.0",
                 "readStatus": "NOT_READ",
                 "readStatusOrder": "1",
                 "newReplyFlag": "FALSE",
                 "newReplyFlagOrder": "0",
                 "isAlreadyExists": "TRUE"
             }
-            
         ];
     }
 }

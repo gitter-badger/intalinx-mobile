@@ -36,11 +36,19 @@ export class DetailPage {
             this.createDate = data.CommunityOutput.createDate;//.substring(0, 7);
         });
 
-        // this.blogService.getReplyContentListByCommunityID(this.id).then(data => {
-        //     this.comments = data;
-        //     this.commentCount = data.length;
-        // });
+/*      下記はjsonファイルからデータを取得するソースです。非同期処理の問題があるので、まずコメントにする。対応必要
+
+        this.commentListForBolgAll = [];
+        this.blogService.getReplyContentListByCommunityID(this.id).then(data => {
+            this.commentListForBolgAll = data;
+            this.commentCount = data.length;
+        });
+*/
+
+/* ↓↓↓↓ 下記のソースは　画面のプルアップ時データが追加表示できるような現象が表示するために、まず初期データを設定します。jsonファイルからデータを取得するソースは上記です。  ↓↓↓↓ */
         this.commentListForBolgAll = this.initData();
+        this.commentCount = this.commentListForBolgAll.length;
+/* ↑↑↑↑ 以上   ↑↑↑↑*/
 
         // 初期表示のコメント数
         var firstDisplayCommentCount = 3;

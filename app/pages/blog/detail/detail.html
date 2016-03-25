@@ -22,19 +22,21 @@
 
     <ion-list>
         <ion-item class="comment" *ngFor="#comment of comments">
-            <div class="author" item-left>
-                <ion-avatar>
-                    <ion-icon name="person" class="avatar"></ion-icon>
+            <!--<div class="author" item-left>
+          <ion-avatar>
+            <ion-icon name="person" class="avatar"></ion-icon>
+          </ion-avatar>-->
+            <ion-item>
+                <!-- こっちは丸形 -->
+                <ion-avatar item-left class="avatar">
+                    <img src="https://www.gstatic.com/android/market/com.pet.wallpaper.cat9/hi-256-0-1d313fdab33d633064e8bd5e4e5ea0846c0bdd54"
+                    />
                 </ion-avatar>
                 <div class="name">{{comment.tuple.old.ReplyContentOutput.userName}}</div>
                 <div class="time">{{comment.tuple.old.ReplyContentOutput.createDate}}</div>
-            </div>
+            </ion-item>
             <ion-card>
-                <ion-card-header>
-                    {{comment.tuple.old.ReplyContentOutput.title}}
-                </ion-card-header>
                 <ion-card-content [innerHTML]="comment.tuple.old.ReplyContentOutput.content">
-                    <!-- Add card content here! -->
                 </ion-card-content>
             </ion-card>
         </ion-item>
@@ -42,19 +44,7 @@
     <ion-infinite-scroll (infinite)="doInfinite($event)">
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
     </ion-infinite-scroll>
-    <button fab fab-right fab-bottom secondary (click)="addComment()">
-        <ion-icon name="add"></ion-icon>
-    </button>
-    <!--
-
-  <ion-toolbar position="bottom">
-
-
-
-    <button>
-      <ion-icon name="home"></ion-icon>
-      Left Icon
-    </button>
-  </ion-toolbar>
-  -->
 </ion-content>
+<button fab fab-right fab-bottom secondary (click)="addComment()">
+    <ion-icon name="add"></ion-icon>
+</button>

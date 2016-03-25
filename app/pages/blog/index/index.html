@@ -15,6 +15,7 @@
 <ion-content padding class="blog-index">
     <!--<ion-list>
     <ion-item *ngFor="#blog of blogs" (click)="openDetail(blog)">
+
       <ion-thumbnail item-left>
         <ion-icon name="person" class="avatar"></ion-icon>
       </ion-thumbnail>
@@ -27,14 +28,21 @@
         <ion-refresher-content refreshingSpinner="circles"> </ion-refresher-content>
     </ion-refresher>
     <ion-list>
-        <ion-item *ngFor="#community of communityListForTop" (click)="openDetail(community)">
-            <ion-thumbnail item-left>
-                <ion-icon name="person" class="avatar"></ion-icon>
+        <button ion-item *ngFor="#community of communityListForTop" (click)="openDetail(community)">
+            <!-- こっちは四角-->
+            <ion-thumbnail item-left class="avatar">
+                <!--<ion-icon name="person" class="avatar"></ion-icon>-->
+                <!-- こっちは丸形　<ion-avatar item-left class="avatar">-->
+                <img src="https://www.gstatic.com/android/market/com.pet.wallpaper.cat9/hi-256-0-1d313fdab33d633064e8bd5e4e5ea0846c0bdd54"
+                />
+                <!--</ion-avatar>-->
             </ion-thumbnail>
-            <h2>{{community.title}}</h2>
-            <p>{{community.newReplyFlag}}</p>
-            <button clear item-right>View</button>
-        </ion-item>
+            <p class="userName">{{community.createUser}}</p>
+            <p class="communityTime">{{community.publishStartDate}}</p>
+            <h2 class="communityTitle">{{community.title}}</h2>
+            <!--<p>{{community.newReplyFlag}}</p>
+      <button clear item-right>VIEW</button>-->
+        </button>
     </ion-list>
     <ion-infinite-scroll (infinite)="doInfinite($event)">
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
