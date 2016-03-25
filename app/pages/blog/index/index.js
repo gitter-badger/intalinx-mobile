@@ -26,7 +26,7 @@ export class BlogIndexPage {
         this.nav = nav;
         this.blogService = blogService;
 
-/*      TODO: 下記はjsonファイルからデータを取得するソースです。非同期処理の問題があるので、まずコメントにする。対応必要
+/*      下記はjsonファイルからデータを取得するソースです。非同期処理の問題があるので、まずコメントにする。対応必要
 
         this.communityListForTopAll = [];
         this.blogService.getCommunityListForTop().then(data => {
@@ -59,7 +59,7 @@ export class BlogIndexPage {
         });
 */
  
-/* ↓↓↓↓ TODO: 下記のソースは　画面のプルアップ時データが追加表示できるような現象が表示するために、まず初期データを設定します。jsonファイルからデータを取得するソースは上記です。  ↓↓↓↓ */    
+/* ↓↓↓↓ 下記のソースは　画面のプルアップ時データが追加表示できるような現象が表示するために、まず初期データを設定します。jsonファイルからデータを取得するソースは上記です。  ↓↓↓↓ */    
         this.communityListForTopAll = this.initData();
         for (var l = 0; l < this.communityListForTopAll.length; l++) {
             var community = this.communityListForTopAll[l];

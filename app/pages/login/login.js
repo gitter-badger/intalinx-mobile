@@ -31,14 +31,10 @@ export class LoginPage {
     }
 
     login() {
-        this.userService.authenticate(this.user)
-        /*
-        .then(data => {
-            alert(data);
+        if (this.userService.authenticate(this.user)) {
             this.nav.setRoot(PortalPage, {
                 "loginId": this.user.loginId
             });
-        })
-        */
+        }
     }
 }

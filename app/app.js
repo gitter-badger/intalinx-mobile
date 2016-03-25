@@ -7,12 +7,7 @@ import {LoginPage} from './pages/login/login';
 
 @App({
     templateUrl: 'build/app.html', //'<ion-nav [root]="rootPage"></ion-nav>',
-    config: {
-        "BASE_URL": "http://192.168.11.29/home/InternalSystem/",
-        "GATEWAY_URL": "com.eibus.web.soap.Gateway.wcp",
-        "PRE_LOGIN_INFO_URL": "com.eibus.sso.web.authentication.PreLoginInfo.wcp",
-        "SAMLART_NAME": "SAMLart",
-    }, 
+    config: {}, //http://ionicframework.com/docs/v2/api/config/Config/
     providers: [
         provide(TranslateLoader, {
             useFactory: (http) => {
@@ -30,15 +25,14 @@ export class IntaLinx {
     }
     
     initializeTranslate() {
-        let userLang = navigator.language.toLowerCase();
+        let userLang = navigator.language.split('-')[0];
+        userLang = /(ja|zh-cn)/gi.test(userLang) ? userLang : 'zh-cn';
         this.translate.use(userLang);
     }
 
     constructor(app, platform, translate, menu) {
         // set up our app
         this.app = app;
-        // TODO: Need to be change with another safety way!
-        this.app.config = this.app._config;
         
         // set up translate
         this.translate = translate;
