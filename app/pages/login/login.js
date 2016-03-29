@@ -24,23 +24,38 @@ export class LoginPage {
     constructor(nav, userService) {
         this.nav = nav;
         this.userService = userService;
-
+        
         this.user = {
             loginId: "",
             password: "",
             rememberMe: false
         }
     }
+    
+    ngOnInit() {
+        // If use already logged on, then redirect to portal page.
+        this.loggedOn();
+    }
+    
+    loggedOn() {
+        this.userService.loggedOn().then(isLoggedOn => {
+            if (isLoggedOn) {
+                this.redirectToPortal();
+            }
+        });
+    }
 
     login() {
         this.userService.authenticate(this.user).then(authenticationResult => {
             if (authenticationResult) {
-                this.nav.setRoot(PortalPage, {
-                    "loginId": this.user.loginId
-                });
+                this.redirectToPortal();
             } else {
                 alert("uid password error")
             }
         });
+    }
+    
+    redirectToPortal() {
+        this.nav.setRoot(PortalPage);
     }
 }

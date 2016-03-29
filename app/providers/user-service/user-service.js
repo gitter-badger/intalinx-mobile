@@ -30,8 +30,8 @@ export class UserService {
         return new Promise(resolve => {
             let url = this.app.config.get("BASE_URL") + this.app.config.get("PRE_LOGIN_INFO_URL");
             this.util.callCordysWebserviceWithUrl(url, null).then(data => {
-                let jsonData = this.util.xml2json(data);
-                this.sso = new SSO(jsonData, this.util);
+                let xmlConfigData = this.util.parseXml(data);
+                this.sso = new SSO(this.util, xmlConfigData);
                 resolve(this.sso);
             });
         });
@@ -44,6 +44,15 @@ export class UserService {
             return Promise.resolve(this.sso);
         }
     }
+    
+    loggedOn() {
+        return new Promise(resolve => {
+            this.getSSO()
+                .then(sso => {
+                    resolve(sso.loggedOn()) ;
+                });
+        });
+    }    
 
     authenticate(user) {
         return new Promise(resolve => {
@@ -102,9 +111,24 @@ class SSO {
 	    }
     }
     
-    constructor(config, util) {
-        this.config = config;
+    constructor(util, config) {
         this.util = util;
+        this.initializeConfig(config);
+    }
+    
+    initializeConfig(config) {
+        let samlArtifactCookieName = this.util.getNodeText(config, ".//*[local-name()='SamlArtifactCookieName']");
+        let baseUrlPath = this.util.getNodeText(config, ".//*[local-name()='BaseUrlPath']");
+        let samlArtifactCookiePath = this.util.getNodeText(config, ".//*[local-name()='SamlArtifactCookiePath']");
+        let checkName = this.util.getNodeText(config, ".//*[local-name()='CheckName']");
+        this.config = {
+            baseUrlPath: baseUrlPath,
+            samlArtifactCookieName: samlArtifactCookieName,
+            samlArtifactCookiePath: samlArtifactCookiePath,
+            checkName: checkName,
+            useSamlCookieArtifact: (!samlArtifactCookieName) ? false : true,
+            useSamlUrlArtifact: (!samlArtifactCookieName) ? true : false,
+        };
     }
     
     authenticate(userId, password) {
@@ -159,14 +183,14 @@ class SSO {
                             "saml": SSO.constants.SAML_NAMESPACE
                         });
                         
-                        var assertions = this.util.selectXMLNode(samlResponse, ".//saml:Assertion");
-                        var authenticationResult = false;
+                        let assertions = this.util.selectXMLNode(samlResponse, ".//saml:Assertion");
+                        let authenticationResult = false;
                         if (assertions != null) {
-                            var samlArtifact = this.util.getNodeText(samlResponse, ".//samlp:AssertionArtifact", null);
+                            let samlArtifact = this.util.getNodeText(samlResponse, ".//samlp:AssertionArtifact", null);
                             if (samlArtifact) {
                                 authenticationResult = true;
-                                if (this.config.PreLoginInfo.SamlArtifactCookieName) {
-                                    this.util.setCookie(this.config.PreLoginInfo.SamlArtifactCookieName._, samlArtifact, null, "/");
+                                if (this.config.useSamlCookieArtifact) {
+                                    this.util.setCookie(this.config.samlArtifactCookieName._, samlArtifact, null, "/");
                                 }
                                 /*
                                 if (sso.useSamlUrlArtifact){
@@ -180,5 +204,21 @@ class SSO {
                 });
             });
         }
+    }
+    
+    loggedOn() {
+        let isLoggedOn = false;
+        if (this.config.useSamlCookieArtifact) {
+            let cookie = this.util.getCookie(this.config.samlArtifactCookieName);
+            isLoggedOn = cookie != null && cookie != "";
+        }
+        // TODO
+        /*
+        if (!isLoggedOn && this.config.useSamlUrlArtifact) {
+            let artifact = BizNaviUtil.getValueFromURL(BizNaviUtil.constants.SAMLART_NAME);
+            isLoggedOn = artifact != null;
+        }
+        */
+        return isLoggedOn;
     }
 }
