@@ -40,6 +40,10 @@ export class Util {
         return XmlUtil.selectXMLNode(object, xpathExpression, namespaces);
     }
     
+    selectXMLNodes(object, xpathExpression, namespaces) {
+        return XmlUtil.selectXMLNodes(object, xpathExpression, namespaces);
+    }
+    
     setXMLNamespaces(object, namespaces) {
         return XmlUtil.setXMLNamespaces(object, namespaces);
     }
