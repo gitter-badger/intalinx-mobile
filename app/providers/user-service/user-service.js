@@ -31,7 +31,7 @@ export class UserService {
             let url = this.app.config.get("BASE_URL") + this.app.config.get("PRE_LOGIN_INFO_URL");
             this.util.callCordysWebserviceWithUrl(url, null).then(data => {
                 let xmlConfigData = this.util.parseXml(data);
-                this.sso = new SSO(this.util, xmlConfigData);
+                this.sso = new SSO(this.util, this.app.config);
                 resolve(this.sso);
             });
         });
@@ -113,22 +113,7 @@ class SSO {
     
     constructor(util, config) {
         this.util = util;
-        this.initializeConfig(config);
-    }
-    
-    initializeConfig(config) {
-        let samlArtifactCookieName = this.util.getNodeText(config, ".//*[local-name()='SamlArtifactCookieName']");
-        let baseUrlPath = this.util.getNodeText(config, ".//*[local-name()='BaseUrlPath']");
-        let samlArtifactCookiePath = this.util.getNodeText(config, ".//*[local-name()='SamlArtifactCookiePath']");
-        let checkName = this.util.getNodeText(config, ".//*[local-name()='CheckName']");
-        this.config = {
-            baseUrlPath: baseUrlPath,
-            samlArtifactCookieName: samlArtifactCookieName,
-            samlArtifactCookiePath: samlArtifactCookiePath,
-            checkName: checkName,
-            useSamlCookieArtifact: (!samlArtifactCookieName) ? false : true,
-            useSamlUrlArtifact: (!samlArtifactCookieName) ? true : false,
-        };
+        this.config = config;
     }
     
     authenticate(userId, password) {
@@ -172,9 +157,7 @@ class SSO {
                     req = this.util.xml2string(samlRequest);
                     
                     this.util.callCordysWebservice(req).then(data => {
-                        
                         let samlResponse = this.util.parseXml(data);
-                        
                         this.util.setXMLNamespaces(samlResponse, {
                             "SOAP": SSO.constants.SOAP_NAMESPACE,
                             "wsse": SSO.constants.WSSE_NAMESPACE,
@@ -185,13 +168,12 @@ class SSO {
                         
                         let assertions = this.util.selectXMLNode(samlResponse, ".//saml:Assertion");
                         let authenticationResult = false;
+                        debugger
                         if (assertions != null) {
                             let samlArtifact = this.util.getNodeText(samlResponse, ".//samlp:AssertionArtifact", null);
                             if (samlArtifact) {
                                 authenticationResult = true;
-                                if (this.config.useSamlCookieArtifact) {
-                                    this.util.setCookie(this.config.samlArtifactCookieName._, samlArtifact, null, "/");
-                                }
+                                this.util.setCookie(this.config.get("SAML_ARTIFACT_COOKIE_NAME"), samlArtifact, null, this.config.get("SAML_ARTIFACT_COOKIE_PATH"));
                                 /*
                                 if (sso.useSamlUrlArtifact){
                                     system.parameters[SAMLART_NAME] = artifact;
@@ -208,10 +190,8 @@ class SSO {
     
     loggedOn() {
         let isLoggedOn = false;
-        if (this.config.useSamlCookieArtifact) {
-            let cookie = this.util.getCookie(this.config.samlArtifactCookieName);
-            isLoggedOn = cookie != null && cookie != "";
-        }
+        let cookie = this.util.getCookie(this.config.get("SAML_ARTIFACT_COOKIE_NAME"));
+        isLoggedOn = cookie != null && cookie != "";
         // TODO
         /*
         if (!isLoggedOn && this.config.useSamlUrlArtifact) {

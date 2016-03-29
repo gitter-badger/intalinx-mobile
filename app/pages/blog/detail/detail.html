@@ -32,11 +32,11 @@
                     <img src="https://www.gstatic.com/android/market/com.pet.wallpaper.cat9/hi-256-0-1d313fdab33d633064e8bd5e4e5ea0846c0bdd54"
                     />
                 </ion-avatar>
-                <div class="name">{{comment.tuple.old.ReplyContentOutput.userName}}</div>
-                <div class="time">{{comment.tuple.old.ReplyContentOutput.createDate}}</div>
+                <div class="name">{{comment.userName}}</div>
+                <div class="time">{{comment.createDate}}</div>
             </ion-item>
             <ion-card>
-                <ion-card-content [innerHTML]="comment.tuple.old.ReplyContentOutput.content">
+                <ion-card-content [innerHTML]="comment.content">
                 </ion-card-content>
             </ion-card>
         </ion-item>
