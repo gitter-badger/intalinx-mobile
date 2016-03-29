@@ -12,6 +12,9 @@ import {LoginPage} from './pages/login/login';
         "GATEWAY_URL": "com.eibus.web.soap.Gateway.wcp",
         "PRE_LOGIN_INFO_URL": "com.eibus.sso.web.authentication.PreLoginInfo.wcp",
         "SAMLART_NAME": "SAMLart",
+        "SAML_ARTIFACT_COOKIE_NAME": "defaultinst_SAMLart",
+        "SAML_ARTIFACT_COOKIE_PATH": "/",
+        "CHECK_NAME": "defaultinst_ct"
     }, 
     providers: [
         provide(TranslateLoader, {

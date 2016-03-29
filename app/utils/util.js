@@ -46,7 +46,9 @@ export class Util {
     
     callCordysWebservice(request) {
         return new Promise(resolve => {
-            let url = this.app.config.get("BASE_URL") + this.app.config.get("GATEWAY_URL");
+            let url = this.app.config.get("BASE_URL") + this.app.config.get("GATEWAY_URL") + 
+                        "?" + this.app.config.get("SAMLART_NAME") + 
+                        this.getCookie(this.app.config.get("SAML_ARTIFACT_COOKIE_NAME"));
             this.http.post(url, request)
                 .map(res => res.text())
                 .subscribe(data => {
