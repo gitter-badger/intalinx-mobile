@@ -1,6 +1,8 @@
 import {Page, IonicApp, NavController, MenuController} from 'ionic-angular';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
+import {Util} from '../../utils/util';
+
 import {AppsService} from '../../providers/apps-service/apps-service'; 
 import {UserService} from '../../providers/user-service/user-service'; 
 
@@ -17,7 +19,8 @@ import {ProfilePage} from '../profile/profile';
   templateUrl: 'build/pages/portal/portal.html',
   providers: [
       AppsService,
-      UserService
+      UserService,
+      Util
   ],
   pipes: [TranslatePipe]
 })

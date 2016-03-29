@@ -5,12 +5,14 @@ import {NgForm} from 'angular2/common';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
 import {UserService} from '../../providers/user-service/user-service';
+import {Util} from '../../utils/util';
 import {PortalPage} from '../portal/portal';
 
 @Page({
     templateUrl: 'build/pages/login/login.html',
     providers: [
-        UserService
+        UserService,
+        Util
     ],
     pipes: [TranslatePipe]
 })
@@ -31,14 +33,14 @@ export class LoginPage {
     }
 
     login() {
-        this.userService.authenticate(this.user)
-        /*
-        .then(data => {
-            alert(data);
-            this.nav.setRoot(PortalPage, {
-                "loginId": this.user.loginId
-            });
-        })
-        */
+        this.userService.authenticate(this.user).then(authenticationResult => {
+            if (authenticationResult) {
+                this.nav.setRoot(PortalPage, {
+                    "loginId": this.user.loginId
+                });
+            } else {
+                alert("uid password error")
+            }
+        });
     }
 }

@@ -2,6 +2,49 @@ export class XmlUtil {
     constructor() {
 
     }
+    
+    static getBrowser() {
+        var ua = window.navigator.userAgent.toLowerCase();
+        var ver = window.navigator.appVersion.toLowerCase();
+        var name = 'unknown';
+
+        if (ua.indexOf("msie") != -1) {
+            if (ver.indexOf("msie 6.") != -1) {
+                name = 'ie6';
+            } else if (ver.indexOf("msie 7.") != -1) {
+                name = 'ie7';
+            } else if (ver.indexOf("msie 8.") != -1) {
+                name = 'ie8';
+            } else if (ver.indexOf("msie 9.") != -1) {
+                name = 'ie9';
+            } else if (ver.indexOf("msie 10.") != -1) {
+                name = 'ie10';
+            } else {
+                name = 'ie';
+            }
+        } else if (ua.indexOf('trident/7') != -1) {
+            name = 'ie11';
+        } else if (ua.indexOf('chrome') != -1) {
+            name = 'chrome';
+        } else if (ua.indexOf('safari') != -1) {
+            name = 'safari';
+        } else if (ua.indexOf('opera') != -1) {
+            name = 'opera';
+        } else if (ua.indexOf('firefox') != -1) {
+            name = 'firefox';
+        }
+        return name;
+    }
+    
+    static isIE() {
+        return XmlUtil.getBrowser().indexOf("ie") >= 0;
+    }
+    
+    static isWebKit() {
+        var ua = window.navigator.userAgent;
+        return ua.indexOf("AppleWebKit") >= 0;
+    }
+    
     static normalize(value, options) {
         if (!!options.normalize) {
             return (value || '').trim();
@@ -116,5 +159,228 @@ export class XmlUtil {
 
         return result;
     }
+    
+    static xml2string(xml) {
+        return new XMLSerializer().serializeToString(xml);
+    }
+    
+    static createNSResolver(xmlDocument) {
+		if (xmlDocument.__namespaces) {
+			return function(prefix) {
+				return xmlDocument.__namespaces[prefix] || null;
+			}
+		}
+		return null;
+	}
+    
+	static createElementNS(xmlDocument, namespaceURI, qualifiedName) {
+		if (XmlUtil.isIE()) {
+			return xmlDocument.createNode(1, qualifiedName, namespaceURI); //NOMBV
+		} else if (XmlUtil.isWebKit()) {
+			var elementNode = xmlDocument.createElementNS(namespaceURI, qualifiedName);
+			// There is a bug in webkit, that after createElementNS is done with xmlns="", then 
+			// the xmlns attribute is not visible anymore while doing cordys.getXML.
+			// See http://code.google.com/p/chromium/issues/detail?id=27598 for more details.
+			if (!namespaceURI) {
+				var namespaceAttr = xmlDocument.createAttribute("xmlns");
+				namespaceAttr.value = "";
+				elementNode.attributes.setNamedItem(namespaceAttr);
+			}
+			return elementNode;
+		} else {
+			return xmlDocument.createElementNS(namespaceURI, qualifiedName);
+		}
+	}
+    
+	static getNodeText(node, xpath, defaultValue, namespaces) {
+		if (node && (node = XmlUtil.selectXMLNode(node, xpath, namespaces))) {
+			return (XmlUtil.getTextContent(node) || defaultValue);
+		}
+		return defaultValue;
+	}
+    
+	static setNodeText(node, xpath, value, namespaces) {
+		if (node && (node = XmlUtil.selectXMLNode(node, xpath, namespaces))) {
+			XmlUtil.setTextContent(node, value);
+			return true;
+		}
+		return false;
+	}
+    
+	static setTextContent(node, textContent) {
+		if (typeof(node) == 'object') {
+			textContent = textContent != null ? textContent : "";
+			var property = 'textContent' in node ? "textContent" : (node.uniqueID ? "innerText" : "text");
+			node[property] = textContent;
+		}
+	}
+	static getTextContent(node) {
+		if (typeof(node) == 'object') {
+			var text = 'textContent' in node ? node.textContent : (node.uniqueID ? node.innerText : node.text); //NOMBV(2)
+		}
+		return text ? text : "";
+	}
+	static setXMLNamespaces(object, namespaces) {
+		if (XmlUtil.isIE()) {
+			var xmlDocument = (object.ownerDocument || object);
+			var res = "";
+			for (var prefix in namespaces) {
+				if (prefix.indexOf("xml") == 0 || !namespaces[prefix]) continue;
+				if (res.length > 0) res += " ";
+				res += "xmlns:" + prefix + "='" + namespaces[prefix] + "'";
+			}
+			xmlDocument.setProperty("SelectionNamespaces", res); //NOMBV
+		} else {
+			var xmlDocument = (object.ownerDocument || object);
+			xmlDocument.__namespaces = namespaces;
+		}
+	}
+	static getXMLNamespaces(object) {
+		if (XmlUtil.isIE()) {
+			var xmlDocument = (object.ownerDocument || object);
+			var documentNamespaces = xmlDocument.getProperty("SelectionNamespaces"); //NOMBV
+			if (documentNamespaces) {
+				//Checking the space after ' of namespace only
+				documentNamespaces = documentNamespaces.replace(/\bxmlns:([^\s]*)\b/g, "$1").split("' ");
+				var namespaces = {};
+				for (var i = 0, length = documentNamespaces.length; i < length; i++) {
+					var xmlns = documentNamespaces[i].split("=");
+					if (!xmlns[0] || !xmlns[1]) continue;
+					var ns = xmlns[1];
+					var endIndex = (i == documentNamespaces.length - 1) ? ns.length - 1 : ns.length;
+					namespaces[xmlns[0]] = ns.slice(1, endIndex);
+				}
+				return namespaces;
+			}
+			return null;
+		} else {
+			var xmlDocument = (object.ownerDocument || object);
+			return (xmlDocument.__namespaces || null);
+		}
+	}
+	static appendXMLNode(fromNode, toNode) {
+		if (XmlUtil.isIE()) {
+			return toNode.appendChild(fromNode); //NOMBV
+		} else {
+			var toNodeDocument = toNode.ownerDocument || toNode;
+			if (fromNode.ownerDocument != toNodeDocument) {
+				fromNode = toNodeDocument.adoptNode(fromNode);
+			}
+			var toNodeDocFragment = toNodeDocument.createDocumentFragment();
+			var newNode = toNodeDocFragment.appendChild(fromNode); //NOMBV
+			toNode.appendChild(toNodeDocFragment); //NOMBV
+			return newNode;
+		}
+	}
+    
+	static selectXMLNode(object, xpathExpression, namespaces) {
+		if (XmlUtil.isIE()) {
+			try {
+				var xmlDocument = (object.ownerDocument || object);
+				var isXSLPattern = (xmlDocument.getProperty("SelectionLanguage") === "XSLPattern");
+				if (isXSLPattern) {
+					xmlDocument.setProperty("SelectionLanguage", "XPath");
+				}
+				if (namespaces) {
+					var savedNamespaces = xmlDocument.getProperty("SelectionNamespaces"); //NOMBV
+					XmlUtil.setXMLNamespaces(xmlDocument, namespaces);
+				}
+				var result = object.selectSingleNode(xpathExpression); //NOMBV
+				if (namespaces) {
+					xmlDocument.setProperty("SelectionNamespaces", savedNamespaces); //NOMBV
+				}
+				if (isXSLPattern) {
+					xmlDocument.setProperty("SelectionLanguage", "XSLPattern");
+				}
+				return result;
+			} catch (e) {}
+		} else {
+			try {
+				var xmlDocument = (object.ownerDocument || object);
+				if (namespaces) {
+					var savedNamespaces = (xmlDocument.__namespaces || null);
+					xmlDocument.__namespaces = namespaces;
+				}
+				var result = xmlDocument.evaluate(xpathExpression, object, XmlUtil.createNSResolver(xmlDocument),
+					XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+				if (namespaces) {
+					xmlDocument.__namespaces = savedNamespaces;
+				}
+				if (result) return result.singleNodeValue;
+				return null;
+			} catch (e) {
+				//var t_error = translate("selectXMLNode: expression ' {0} ' cannot be evaluated.");
+				//throw CordysRoot.Localization.makeCompositeText(t_error, xpathExpression) + e.message;
+			}
+		}
+	}
+    
+	static selectXMLNodes(object, xpathExpression, namespaces) {
+		if (XmlUtil.isIE()) {
+			try {
+				var xmlDocument = (object.ownerDocument || object);
+				var isXSLPattern = (xmlDocument.getProperty("SelectionLanguage") === "XSLPattern");
+				if (isXSLPattern) {
+					xmlDocument.setProperty("SelectionLanguage", "XPath");
+				}
+				if (namespaces) {
+					var savedNamespaces = xmlDocument.getProperty("SelectionNamespaces"); //NOMBV
+					XmlUtil.setXMLNamespaces(xmlDocument, namespaces);
+				}
+				var result = object.selectNodes(xpathExpression); //NOMBV
+				if (namespaces) {
+					xmlDocument.setProperty("SelectionNamespaces", savedNamespaces); //NOMBV
+				}
+				if (isXSLPattern) {
+					xmlDocument.setProperty("SelectionLanguage", "XSLPattern");
+				}
+				return result;
+			} catch (e) {}
+		} else {
+			try {
+				// Wrapper type for the result of cordys.selectXMLNodes()
+				function XMLSelectionList(context, xpathExpression) {
+					this._current = 0;
+					this.context = context;
+					this.expr = xpathExpression;
+					this.length = 0;
+				}
+
+				XMLSelectionList.prototype.item = function(i) {
+					return this[i] || null;
+				};
+				XMLSelectionList.prototype.nextNode = function() {
+					return this[this._current++] || null
+				};
+				XMLSelectionList.prototype.reset = function() {
+					this._current = 0;
+				};
+
+				var result = new XMLSelectionList(object, xpathExpression);
+				var xmlDocument = (object.ownerDocument || object);
+				if (namespaces) {
+					var savedNamespaces = (xmlDocument.__namespaces || null);
+					xmlDocument.__namespaces = namespaces;
+				}
+				var nodeList = xmlDocument.evaluate(xpathExpression, object, XmlUtil.createNSResolver(xmlDocument),
+					XPathResult.ORDERED_NODE_ITERATOR_TYPE, null);
+				var node, nodeIndex = 0;
+				if (node = nodeList.iterateNext()) {
+					do {
+						result[nodeIndex++] = node;
+					} while (node = nodeList.iterateNext())
+					result.length = nodeIndex;
+				}
+				if (namespaces) {
+					xmlDocument.__namespaces = savedNamespaces;
+				}
+				return result;
+			} catch (e) {
+				//var t_error = translate("selectXMLNodes: expression ' {0} ' cannot be evaluated.");
+				//throw CordysRoot.Localization.makeCompositeText(t_error, xpathExpression) + e.message;
+			}
+		}
+	}
+    
 
 }
