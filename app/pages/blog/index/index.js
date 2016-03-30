@@ -22,6 +22,7 @@ import {Util} from '../../../utils/util';
     pipes: [TranslatePipe]
 })
 export class BlogIndexPage {
+
     static get parameters() {
         return [[NavController], [BlogService]];
     }
@@ -30,67 +31,45 @@ export class BlogIndexPage {
         this.nav = nav;
         this.blogService = blogService;
 
-        // this.communityListForTopAll = [];
-        this.blogService.getCommunityListForTop().then(data => {
-            this.communityListForTop = data;
-        });
-
-        // // 初期表示のブログ数
-        // var firstDisplayCommunityCount = 10;
-        // // プルアップする時、追加表示のブログ数
-        // this.secondAddDisplayCommunityCount = 3;
-
-        // this.communityListForTop = [];
-        // this.firstDisplayCount = this.communityListForTopAll.length;
-
-        // this.leftDisplayCount = 0;
-        // if (this.communityListForTopAll.length > firstDisplayCommunityCount) {
-        //     this.firstDisplayCount = firstDisplayCommunityCount;
-        //     this.leftDisplayCount = this.communityListForTopAll.length - firstDisplayCommunityCount;
-        // }
-        // for (var i = 0; i < this.firstDisplayCount; i++) {
-        //     this.communityListForTop.push(this.communityListForTopAll[i]);
-        // }
-        // this.displayedCount = this.firstDisplayCount;
-
+        this.getCommunityListForTop();
     }
-    
+
     openDetail(community) {
         this.nav.push(DetailPage, {
             "id": community.communityID
         });
     }
-   }
 
-    // doRefresh(refresher) {
+    doRefresh(refresher) {
 
-    //     setTimeout(() => {
-    //         // var object = new BlogIndexPage(this.nav, this.blogService);
-    //         // console.log(object);
-    //         // this.communityListForTop = object.communityListForTop;
-    //         this.constructor(this.nav, this.blogService);
-    //         refresher.complete();
-    //     }, 5000);
-    // }
+        setTimeout(() => {
+            // var object = new BlogIndexPage(this.nav, this.blogService);
+            // console.log(object);
+            // this.communityListForTop = object.communityListForTop;
+            // this.constructor(this.nav, this.blogService);
+            this.getCommunityListForTop();
+            refresher.complete();
+        }, 1000);
+    }
 
-    // doInfinite(infiniteScroll) {
-    //     setTimeout(() => {
-    //         var nextDisplayCount = this.secondAddDisplayCommunityCount;
-    //         if (this.leftDisplayCount < this.secondAddDisplayCommunityCount) {
-    //             nextDisplayCount = this.leftDisplayCount;
-    //         }
-    //         for (var i = 0; i < nextDisplayCount; i++) {
-    //             this.communityListForTop.push(this.communityListForTopAll[this.displayedCount]);
-    //             this.leftDisplayCount--;
-    //             this.displayedCount++;
-    //         }
+    doInfinite(infiniteScroll) {
 
-    //         infiniteScroll.complete();
-    //     }, 500);
-    // }
-    
-//     class Blog {
-//     constructor(
-//         public communityID:string,
-//         public name:string) { }
-// }
+        setTimeout(() => {
+            let position = this.communityListForTop.length;
+            this.blogService.getCommunityListForTop(position).then(data => {
+                if (data && data[0]) {
+                    this.communityListForTop = this.communityListForTop.concat(data);
+                }
+                infiniteScroll.complete();
+            });
+        }, 1000);
+
+    }
+
+    getCommunityListForTop() {
+        let position = 0;
+        this.blogService.getCommunityListForTop(position).then(data => {
+            this.communityListForTop = data;
+        });
+    }
+}

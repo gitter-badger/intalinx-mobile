@@ -13,9 +13,9 @@
     </ion-title>
 </ion-navbar>
 <ion-content padding class="blog-index">
-    <!--<ion-refresher (refresh)="doRefresh($event)">
+    <ion-refresher (refresh)="doRefresh($event)">
         <ion-refresher-content refreshingSpinner="circles"> </ion-refresher-content>
-    </ion-refresher>-->
+    </ion-refresher>
     <ion-list>
         <button ion-item *ngFor="#community of communityListForTop" (click)="openDetail(community)">
             <!-- こっちは四角 -->
@@ -34,7 +34,7 @@
       -->
         </button>
     </ion-list>
-    <!--<ion-infinite-scroll (infinite)="doInfinite($event)">
+    <ion-infinite-scroll (infinite)="doInfinite($event)">
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
-    </ion-infinite-scroll>-->
+    </ion-infinite-scroll>
 </ion-content>
