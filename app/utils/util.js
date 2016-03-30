@@ -48,6 +48,14 @@ export class Util {
         return XmlUtil.setXMLNamespaces(object, namespaces);
     }
     
+    getXMLAttribute(elementNode, attributeNamespace, attributeName) {
+        return XmlUtil.getXMLAttribute(elementNode, attributeNamespace, attributeName);
+    }
+    
+    setXMLAttribute(elementNode, attributeNamespace, attributeName, attributeValue) {
+        return XmlUtil.setXMLAttribute(elementNode, attributeNamespace, attributeName, attributeValue);
+    }
+    
     callCordysWebservice(request) {
         return new Promise(resolve => {
             let url = this.app.config.get("BASE_URL") + this.app.config.get("GATEWAY_URL");

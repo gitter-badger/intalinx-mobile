@@ -382,5 +382,46 @@ export class XmlUtil {
 		}
 	}
     
+    static createAttributeNS(object, namespaceURI, qualifiedName) {
+        var xmlDocument = (object.ownerDocument || object);
+        if (XmlUtil.isIE()) {
+            return xmlDocument.createNode(2, qualifiedName, namespaceURI); 
+        } else {
+           return xmlDocument.createAttributeNS(namespaceURI, qualifiedName);
+        }
+    }
+    
+    static getXMLAttribute(elementNode, attributeNamespace, attributeName) {
+        if (XmlUtil.isIE()) {
+            return elementNode.getAttributeNode(attributeName);
+        } else {
+            var nsPrefixIndex = attributeName.indexOf(":");
+			if ( nsPrefixIndex > 0) attributeName = attributeName.substr(nsPrefixIndex+1);
+			return elementNode.getAttributeNodeNS(attributeNamespace, attributeName);
+        }
+    }
+    
+    static setXMLAttribute(elementNode, attributeNamespace, attributeName, attributeValue) {
+        if (XmlUtil.isIE()) {
+            var attributeNode = XmlUtil.createAttributeNS(elementNode.ownerDocument, attributeNamespace, attributeName);
+			attributeNode.nodeValue = attributeValue;
+			return elementNode.setAttributeNode(attributeNode);
+        } else if(XmlUtil.isWebKit()) {
+            var attributeNode = XmlUtil.getXMLAttribute(elementNode, attributeNamespace, attributeName);
+			if(attributeNode)
+			{
+				attributeNode.nodeValue = attributeValue;
+				return attributeNode;
+			}
+			attributeNode = XmlUtil.createAttributeNS(elementNode.ownerDocument, attributeNamespace, attributeName);
+			attributeNode.nodeValue = attributeValue;
+			return elementNode.setAttributeNodeNS(attributeNode);
+        } else {
+            var attributeNode = XmlUtil.createAttributeNS(elementNode.ownerDocument, attributeNamespace, attributeName);
+			attributeNode.nodeValue = attributeValue;
+			return elementNode.setAttributeNodeNS(attributeNode);
+        }
+    }
+    
 
 }
