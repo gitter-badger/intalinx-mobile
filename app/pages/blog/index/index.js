@@ -32,7 +32,10 @@ export class BlogIndexPage {
 
         // this.communityListForTopAll = [];
         this.blogService.getCommunityListForTop().then(data => {
-            this.communityListForTop = data;
+            if(data) {
+                this.cursor = data.cursor
+                this.communityListForTop = data.communities;
+            }
         });
 
         // // 初期表示のブログ数

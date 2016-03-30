@@ -7,12 +7,6 @@ import {BlogService} from '../../../providers/blog/blog-service/blog-service';
 import {AddCommentPage} from '../add-comment/add-comment';
 import {Util} from '../../../utils/util';
 
-/*
-  Generated class for the DetailPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Page({
     templateUrl: 'build/pages/blog/detail/detail.html',
     providers: [BlogService, Util],
@@ -29,6 +23,7 @@ export class DetailPage {
         this.params = params;
         this.id = this.params.get("id");
         this.blogService = blogService;
+        this.reply = "";
 
         // this.blog = new Blog("", "お待ちください。");
         this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
@@ -42,7 +37,6 @@ export class DetailPage {
         this.commentListForBolgAll = [];
         this.blogService.getReplyContentListByCommunityID(this.id).then(data => {
             if (data) {
-                debugger
                 this.comments = data.replyContents;
                 this.commentCount = data.cursor.maxRows;
             }
@@ -73,28 +67,32 @@ export class DetailPage {
 //         this.displayedCount = this.firstDisplayCount;
     }
 
-    doInfinite(infiniteScroll) {
-        setTimeout(() => {
-            // var nextDisplayCount = this.secondAddDisplayCommentCount;
-            // if (this.leftDisplayCount < this.secondAddDisplayCommentCount) {
-            //     nextDisplayCount = this.leftDisplayCount;
-            // }
-            // for (var i = 0; i < nextDisplayCount; i++) {
-            //     this.comments.push(this.commentListForBolgAll[this.displayedCount]);
-            //     this.leftDisplayCount--;
-            //     this.displayedCount++;
-            // }
+    // doInfinite(infiniteScroll) {
+    //     setTimeout(() => {
+    //         // var nextDisplayCount = this.secondAddDisplayCommentCount;
+    //         // if (this.leftDisplayCount < this.secondAddDisplayCommentCount) {
+    //         //     nextDisplayCount = this.leftDisplayCount;
+    //         // }
+    //         // for (var i = 0; i < nextDisplayCount; i++) {
+    //         //     this.comments.push(this.commentListForBolgAll[this.displayedCount]);
+    //         //     this.leftDisplayCount--;
+    //         //     this.displayedCount++;
+    //         // }
 
-            // infiniteScroll.complete();
-        }, 500);
-    }
+    //         // infiniteScroll.complete();
+    //     }, 500);
+    // }
 
     addComment() {
         this.nav.push(AddCommentPage, {
             "id": this.id,
-            "title": this.title
+            "reply": this.reply
         });
     }
+//     onPageWillLeave() {
+//    removeView(){ this.nav.remove(1) }
+//     this.id && this.id.dismiss();
+//   }
 
 }
 
