@@ -7,12 +7,6 @@ import {BlogService} from '../../../providers/blog/blog-service/blog-service';
 import {AddCommentPage} from '../add-comment/add-comment';
 import {Util} from '../../../utils/util';
 
-/*
-  Generated class for the DetailPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Page({
     templateUrl: 'build/pages/blog/detail/detail.html',
     providers: [BlogService, Util],
@@ -29,6 +23,7 @@ export class DetailPage {
         this.params = params;
         this.id = this.params.get("id");
         this.blogService = blogService;
+        this.reply = "";
 
         this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
             this.title = data.title;
@@ -60,7 +55,7 @@ export class DetailPage {
     addComment() {
         this.nav.push(AddCommentPage, {
             "id": this.id,
-            "title": this.title
+            "reply": this.reply
         });
     }
 
