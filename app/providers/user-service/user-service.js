@@ -168,7 +168,6 @@ class SSO {
                         
                         let assertions = this.util.selectXMLNode(samlResponse, ".//saml:Assertion");
                         let authenticationResult = false;
-                        debugger
                         if (assertions != null) {
                             let samlArtifact = this.util.getNodeText(samlResponse, ".//samlp:AssertionArtifact", null);
                             if (samlArtifact) {
