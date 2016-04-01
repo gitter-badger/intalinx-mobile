@@ -15,7 +15,6 @@ import {Util} from '../../../utils/util';
   Ionic pages and navigation.
 */
 
-
 @Page({
     templateUrl: 'build/pages/blog/index/index.html',
     providers: [BlogService, Util],
@@ -41,12 +40,7 @@ export class BlogIndexPage {
     }
 
     doRefresh(refresher) {
-
         setTimeout(() => {
-            // var object = new BlogIndexPage(this.nav, this.blogService);
-            // console.log(object);
-            // this.communityListForTop = object.communityListForTop;
-            // this.constructor(this.nav, this.blogService);
             this.getCommunityListForTop();
             refresher.complete();
         }, 1000);
@@ -56,19 +50,20 @@ export class BlogIndexPage {
 
         setTimeout(() => {
             let position = this.communityListForTop.length;
-            this.blogService.getCommunityListForTop(position).then(data => {
+            let isNeedRegistNotExistsReply = false;
+            this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
                 if (data && data[0]) {
                     this.communityListForTop = this.communityListForTop.concat(data);
                 }
                 infiniteScroll.complete();
             });
         }, 1000);
-
     }
 
     getCommunityListForTop() {
         let position = 0;
-        this.blogService.getCommunityListForTop(position).then(data => {
+        let isNeedRegistNotExistsReply = true;
+        this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
             this.communityListForTop = data;
         });
     }

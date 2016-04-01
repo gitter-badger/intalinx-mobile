@@ -9,11 +9,10 @@
 </ion-navbar>
 <ion-content padding class="add-comment">
     <form #addCommentForm="ngForm" (ngSubmit)="saveComment(addCommentForm)">
-        <!--<div class="title">{{title}}</div>-->
         <ion-item>
             <ion-textarea placeholder='{{ "app.blog.comment.content" | translate }}' [(ngModel)]="comment.content"></ion-textarea>
         </ion-item>
         <button full type="submit">{{ "app.blog.comment.reply" | translate }}</button>
     </form>
-  
+
 </ion-content>

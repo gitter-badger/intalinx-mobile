@@ -45,7 +45,7 @@ export class BlogService {
     }
 
     // トップ画面について、ブログリストを取得します
-    getCommunityListForTop(position) {
+    getCommunityListForTop(position, isNeedRegistNotExistsReply) {
         let rowsPerpage = 10;
         if (this.data) {
             // already loaded data
@@ -61,7 +61,7 @@ export class BlogService {
                 this.util.setXMLAttribute(cursorNode, "", "position", position);
                 this.util.setXMLAttribute(cursorNode, "", "numRows", rowsPerpage);
 
-                this.util.setNodeText(objRequest, ".//isNeedRegistNotExistsReply", "false");
+                this.util.setNodeText(objRequest, ".//*[local-name()='isNeedRegistNotExistsReply']", isNeedRegistNotExistsReply);
 
                 req = this.util.xml2string(objRequest);
 

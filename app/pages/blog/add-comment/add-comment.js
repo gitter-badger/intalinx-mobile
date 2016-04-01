@@ -1,4 +1,4 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import {Page, Modal, NavController, NavParams} from 'ionic-angular';
 
 import {NgForm} from 'angular2/common';
 
@@ -17,30 +17,28 @@ import {DetailPage} from '../detail/detail';
   Ionic pages and navigation.
 */
 @Page({
-  templateUrl: 'build/pages/blog/add-comment/add-comment.html',
-	providers: [
+    templateUrl: 'build/pages/blog/add-comment/add-comment.html',
+    providers: [
         BlogService,
         Util
     ],
     pipes: [TranslatePipe]
 })
 export class AddCommentPage {
- static get parameters() {
-        return [[NavController], [NavParams], [BlogService], [Util]];
+    static get parameters() {
+        return [[NavController], [NavParams], [BlogService]];
     }
 
-    constructor(nav, params, blogService, util) {
+    constructor(nav, params, blogService) {
         this.nav = nav;
         this.blogService = blogService;
         this.params = params;
-        this.id = this.params.get("id");
-        this.reply = this.params.get("reply");
-        this.util = util;
-        this.isSaveReply = false;
+        this.sendData = this.params.get("sendData");
+        this.id = this.sendData.id;
 
         this.comment = {
             communityID: this.id,
-            content: ""
+            content: this.sendData.unrepliedCommentcontent
         }
     }
 
@@ -50,17 +48,16 @@ export class AddCommentPage {
         } else {
             this.blogService.insertReplyContent(this.comment).then(data => {
                 if (data == "true") {
-                    this.isSaveReply = true;
+                    this.sendData.isRefreshFlag = true;
                     this.nav.pop();
-                    // this.nav.popTo(DetailPage, {
-                    //     "id": this.id,
-                    //     "reply": this.reply,
-                    //     "isSaveReply": this.isSaveReply
-                    // });
                 } else {
                     alert("システムエラーが発生しました。大変お迷惑かかりましたが、システム管理者に連絡してください！");
                 }
             })
         }
+    }
+
+    onPageWillLeave() {
+        this.sendData.unrepliedCommentcontent = this.comment.content;
     }
 }

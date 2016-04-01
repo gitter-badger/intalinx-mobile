@@ -15,22 +15,34 @@ import {Util} from '../../../utils/util';
 export class DetailPage {
 
     static get parameters() {
-        return [[NavController], [NavParams], [BlogService], [Util]];
+        return [[NavController], [NavParams], [BlogService]];
     }
 
-    constructor(nav, params, blogService, util) {
+    constructor(nav, params, blogService) {
         this.nav = nav;
         this.params = params;
         this.id = this.params.get("id");
         this.blogService = blogService;
-        this.reply = "";
+        this.sendData = {
+            "id": this.id,
+            "isRefreshFlag": false,
+            "unrepliedCommentcontent": ""
+        }
 
         this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
-            this.title = data.title;
             this.content = data.content;
             this.createDate = data.createDate;
+            this.createUserName = data.createUserName;
         });
 
+        this.getReplyContentListByCommunityID();
+    }
+
+    addComment() {
+        this.nav.push(AddCommentPage, { "sendData": this.sendData });
+    }
+
+    getReplyContentListByCommunityID() {
         let position = 0;
         this.blogService.getReplyContentListByCommunityID(this.id, position).then(data => {
             if (data) {
@@ -52,12 +64,21 @@ export class DetailPage {
         }, 1000);
     }
 
-    addComment() {
-        this.nav.push(AddCommentPage, {
-            "id": this.id,
-            "reply": this.reply
-        });
+    onPageWillEnter() {
+        let isRefreshFlag = this.sendData.isRefreshFlag;
+        if (isRefreshFlag == true) {
+            this.getReplyContentListByCommunityID();
+        }
     }
 
-}
+    onPageDidEnter() {
+        let isRefreshFlag = this.sendData.isRefreshFlag;
+        if (isRefreshFlag == true) {
+            this.sendData.unrepliedCommentcontent = "";
+        }
+    }
 
+    onPageWillLeave() {
+        this.sendData.isRefreshFlag = false;
+    }
+}
