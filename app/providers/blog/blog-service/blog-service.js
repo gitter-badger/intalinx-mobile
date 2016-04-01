@@ -67,48 +67,47 @@ export class BlogService {
 
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
-                    // let communityOutputs = this.util.selectXMLNode(a, ".//*[local-name()='CommunityOutput']");GetCommunityListForTopResponse
                     let communityOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='CommunityOutput']");
                     let communities = new Array();
                     for (let i = 0; i < communityOutputs.length; i++) {
                         communities.push(this.util.xml2json(communityOutputs[i]).CommunityOutput);
                     }
+                    
                     communities.forEach(function(element) {
                         let publishTime = element.publishStartDate;
-                        let publishYear = publishTime.substring(0, 4);
-                        let publishMonth = publishTime.substring(5, 7);
-                        let publishDay = publishTime.substring(8, 10);
+                        let publishYearMonthDay = publishTime.substring(0, 10);
                         let publishHour = publishTime.substring(11, 13);
                         let publishMinute = publishTime.substring(14, 16);
                         let publishSecond = publishTime.substring(17, 19);
-                        // let publishDate = new Date(element.publishStartDate.replace("T", " ").substring(0,19));
-                        let publishDate = new Date(publishYear, publishMonth, publishDay, publishHour, publishMinute, publishSecond);
-                        let now = new Date();
-                        let publishedMinutes = parseInt((now.getTime() - publishDate.getTime()) / (60 * 1000));
-                        if (publishedMinutes >= 60 * 24 * 30) {
+
+                        let minute = 60;
+                        let hour = minute * 24;
+                        let month = hour * 30;
+                        let publishDate = new Date(publishYearMonthDay);
+                        publishDate.setHours(publishHour);
+                        publishDate.setMinutes(publishMinute);
+                        publishDate.setSeconds(publishSecond);
+                        let publishDateTime = publishDate.getTime();
+
+                        let nowTime = new Date().getTime();
+                        let publishedMinutes = Math.trunc((nowTime - publishDateTime) / (60 * 1000));
+
+                        if (publishedMinutes >= month) {
                             // 一か月前の場合
-                            // "****-**-**"の形で表す
                             element.publishStartDate = publishTime.substring(0, 10);
-                        } else if (publishedMinutes >= 60 * 24) {
+                        } else if (publishedMinutes >= hour) {
                             // 一日前の場合
-                            let days = parseInt(publishedMinutes / (60 * 24));
-                            // 中国語: "天前"
-                            // 日本語: "日前"
-                            // 英語: "day ago"~~~"days ago"の場合も考えておいたほうがいいと思います
+                            let days = Math.trunc(publishedMinutes / hour);
                             element.publishStartDate = days + "日前";
-                        } else if (publishedMinutes >= 60) {
+                        } else if (publishedMinutes >= minute) {
                             // 一時間後、一日以内
-                            let hours = parseInt(publishedMinutes / 60);
-                            // 中国語: "小時前"
-                            // 日本語: "時前"
-                            // 英語: "hour ago"~~~"hours ago"の場合も考えておいたほうがいいと思います
+                            let hours = Math.trunc(publishedMinutes / minute);
                             element.publishStartDate = hours + "時前";
                         } else {
-                            // 一時間以内
-                            // parseIntを使って、一分以内の場合は存在しません。最低限は一分前
-                            // 中国語: "分前"
-                            // 日本語: "分前"
-                            // 英語: "minute ago"~~~"minutes ago"の場合も考えておいたほうがいいと思います
+
+                            if (publishedMinutes < 1) {
+                                publishedMinutes = 1;
+                            }
                             element.publishStartDate = publishedMinutes + "分前";
                         }
                     }, this);
