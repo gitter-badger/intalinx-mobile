@@ -30,6 +30,7 @@ export class DetailPage {
         }
 
         this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
+            this.title = data.title;
             this.content = data.content;
             this.createDate = data.createDate;
             this.createUserName = data.createUserName;
