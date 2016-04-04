@@ -8,7 +8,7 @@ import {LoginPage} from './pages/login/login';
 @App({
     templateUrl: 'build/app.html', //'<ion-nav [root]="rootPage"></ion-nav>',
     config: {
-        "BASE_URL": "http://192.168.11.29/home/InternalSystem/",
+        "BASE_URL": "http://192.168.11.29/home/intalinxcloud/",
         "GATEWAY_URL": "com.eibus.web.soap.Gateway.wcp",
         "PRE_LOGIN_INFO_URL": "com.eibus.sso.web.authentication.PreLoginInfo.wcp",
         "SAMLART_NAME": "SAMLart",
@@ -31,11 +31,6 @@ export class IntaLinx {
     static get parameters() {
         return [[IonicApp], [Platform], [TranslateService], [MenuController]];
     }
-    
-    initializeTranslate() {
-        let userLang = navigator.language.toLowerCase();
-        this.translate.use(userLang);
-    }
 
     constructor(app, platform, translate, menu) {
         // set up our app
@@ -47,7 +42,9 @@ export class IntaLinx {
         this.translate = translate;
         this.app.translate = this.translate;
         // initialize translate library
-        this.initializeTranslate();
+        let userLang = navigator.language;
+        this.app.userLang = userLang;
+        this.translate.use(userLang);
         
         this.platform = platform;
         this.menu = menu;

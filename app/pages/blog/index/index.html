@@ -13,7 +13,10 @@
     </ion-title>
 </ion-navbar>
 <ion-content padding class="blog-index">
-    <ion-refresher (refresh)="doRefresh($event)">
+    <div class="loading" [style.display]="isLoadCompleted ? 'none' : 'block'">
+        <ion-spinner name="dots" ></ion-spinner>
+    </div>
+    <ion-refresher id="blogIndexRefresher" (refresh)="doRefresh($event)">
         <ion-refresher-content refreshingSpinner="circles"> </ion-refresher-content>
     </ion-refresher>
     <ion-list>
@@ -29,12 +32,9 @@
             <p class="userName">{{community.createUser}}</p>
             <p class="communityTime">{{community.publishStartDate}}</p>
             <h2 class="communityTitle">{{community.title}}</h2>
-            <!--
-      <button clear item-right>VIEW</button>
-      -->
         </button>
     </ion-list>
-    <ion-infinite-scroll (infinite)="doInfinite($event)">
+    <ion-infinite-scroll id="blogIndexInfiniteScroll" (infinite)="doInfinite($event)">
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ion-content>
