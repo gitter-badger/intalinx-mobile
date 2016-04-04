@@ -1,4 +1,4 @@
-import {Page, NavController} from 'ionic-angular';
+import {Page, IonicApp, NavController} from 'ionic-angular';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
@@ -23,13 +23,20 @@ import {Util} from '../../../utils/util';
 export class BlogIndexPage {
 
     static get parameters() {
-        return [[NavController], [BlogService]];
+        return [[IonicApp], [NavController], [BlogService]];
     }
 
-    constructor(nav, blogService) {
+    constructor(app, nav, blogService) {
+        this.app = app;
         this.nav = nav;
         this.blogService = blogService;
-
+    }
+    
+    onPageWillEnter() {
+        this.isLoadCompleted = false;
+    }
+    
+    onPageDidEnter() {
         this.getCommunityListForTop();
     }
 
@@ -40,8 +47,8 @@ export class BlogIndexPage {
     }
 
     doRefresh(refresher) {
-        this.getCommunityListForTop();
-        refresher.complete();
+        let isRefresh = true;
+        this.getCommunityListForTop(isRefresh);
     }
 
     doInfinite(infiniteScroll) {
@@ -55,11 +62,18 @@ export class BlogIndexPage {
         });
     }
 
-    getCommunityListForTop() {
+    getCommunityListForTop(isRefresh) {
         let position = 0;
         let isNeedRegistNotExistsReply = true;
         this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
             this.communityListForTop = data;
+            this.isLoadCompleted = true;
+            if (isRefresh) {
+                let infiniteScroll = this.app.getComponent("blogIndexInfiniteScroll");
+                infiniteScroll._highestY = 0;
+                let refresher = this.app.getComponent("blogIndexRefresher");
+                refresher.complete();
+            }
         });
     }
 }
