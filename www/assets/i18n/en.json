@@ -2,6 +2,7 @@
     "app": {
         "message": {
             "error": {
+                "title": "error",
                 "systemError": "An error occurred in this system.Please contact the system administrator."
             }
         },

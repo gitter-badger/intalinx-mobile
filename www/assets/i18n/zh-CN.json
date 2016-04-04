@@ -2,13 +2,15 @@
     "app": {
         "message": {
             "error": {
+                "title": "错误",
                 "systemError": "系统发生异常，请联系管理员。"
             }
         },
         "action": {
             "edit": "编辑",
             "delete": "删除",
-            "save": "保存"
+            "save": "保存",
+            "ok" : "OK"
         },
         "date": {
             "minutesAgo": "分前",

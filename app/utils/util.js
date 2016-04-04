@@ -73,15 +73,21 @@ export class Util {
                 .subscribe(data => {
                     resolve(data);
                 }, error => {
-                    //TODO
-                    /*
-                    let alert = Alert.create({
-                        title: 'Low battery',
-                        subTitle: '10% of battery remaining',
-                        buttons: ['Dismiss']
+                    let responseText = error.text();
+                    let responseNode = this.parseXml(responseText);
+                    let faultstring = this.getNodeText(responseNode, ".//*[local-name()='faultstring']");
+                    this.app.translate.get(["app.message.error.title", "app.action.ok"]).subscribe(message => {
+                        let title = message['app.message.error.title'];
+                        let ok = message['app.action.ok'];
+                        
+                        let alert = Alert.create({
+                            title: title,
+                            subTitle: faultstring,
+                            buttons: [ok]
+                        });
+                        this.nav.present(alert);
                     });
-                    this.nav.present(alert);
-                    */
+                    
                 });
         });
     }

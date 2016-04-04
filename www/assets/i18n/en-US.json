@@ -1,14 +1,16 @@
 {
     "app": {
-                "message": {
+        "message": {
             "error": {
+                "title": "error",
                 "systemError": "An error occurred in this system.Please contact the system administrator."
             }
         },
         "action": {
             "edit": "Edit",
             "delete": "Delete",
-            "save": "Save"
+            "save": "Save",
+            "ok": "ok"
         },
         "portal": {
             "title": "Portal"
