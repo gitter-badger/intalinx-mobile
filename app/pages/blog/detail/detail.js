@@ -54,15 +54,13 @@ export class DetailPage {
     }
 
     doInfinite(infiniteScroll) {
-        setTimeout(() => {
-            let position = this.comments.length;
-            this.blogService.getReplyContentListByCommunityID(this.id, position).then(data => {
-                if (data && data.replyContents[0]) {
-                    this.comments = this.comments.concat(data.replyContents);
-                }
-            });
-            infiniteScroll.complete();
-        }, 1000);
+        let position = this.comments.length;
+        this.blogService.getReplyContentListByCommunityID(this.id, position).then(data => {
+            if (data && data.replyContents[0]) {
+                this.comments = this.comments.concat(data.replyContents);
+            }
+        });
+        infiniteScroll.complete();
     }
 
     onPageWillEnter() {
