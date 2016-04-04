@@ -68,30 +68,36 @@ export class UserService {
 
     getUserDetail() {
         if (this.data) {
-            // already loaded data
             return Promise.resolve(this.data);
         }
-
-        // don't have the data yet
         return new Promise(resolve => {
-            // We're using Angular Http provider to request the data,
-            // then on the response it'll map the JSON data to a parsed JS object.
-            // Next we process the data and resolve the promise with the new data.
-            this.http.get('./mocks/userservice/getuserdetail.json')
-                .map(res => res.json())
-                .subscribe(data => {
-                    // we've got back the raw data, now generate the core schedule data
-                    // and save the data for later reference
-                    this.data = data;
-                    resolve(this.data);
+            this.util.getRequestXml('./assets/requests/get_user_details.xml').then(req => {
+                let objRequest = this.util.parseXml(req);
+                req = this.util.xml2string(objRequest);
+                
+                this.util.callCordysWebservice(req).then(data => {
+                    let objResponse = this.util.parseXml(data);
+
+                    let userOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='user']");
+                    let user = this.util.xml2json(userOutput).user;
+                    
+                    let userId = this.util.getUserIdFromAuthUserDn(user.authuserdn);
+
+                    let userAvatarUrl = this.util.getUserAvatarUrlByUserId(userId);
+                    let returnData = {
+                        "userAvatar": userAvatarUrl,
+                        "userName": user.description,
+                        "userId": userId
+                    }
+                    resolve(returnData);
                 });
+            });
         });
     }
 
     updateProfile(user) {
         if (this.validateUserPassword(user.newPassword, user.confirmPassword)) {
             if (this.data) {
-                // already loaded data
                 return Promise.resolve(this.data);
             }
             return new Promise(resolve => {
@@ -102,12 +108,10 @@ export class UserService {
                     req = this.util.xml2string(objRequest);
 
                     this.util.callCordysWebservice(req).then(data => {
-                        let objResponse = this.util.parseXml(data);
-                        let insertReplyContent = this.util.selectXMLNode(objResponse, ".//*[local-name()='insertReplyContent']");
-                        let returnData = this.util.xml2json(insertReplyContent).insertReplyContent.insertReplyContent;
-
-                        resolve(returnData);
-                    });
+                        
+                        // TODO: webservice error
+                        return true;
+                    });                    
                 });
             });
         }

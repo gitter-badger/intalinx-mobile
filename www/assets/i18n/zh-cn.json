@@ -8,7 +8,13 @@
         "date": {
             "minutesAgo": "分前",
             "hoursAgo": "小时前",
-            "daysAgo": "天前"
+            "sunday": "星期日",
+            "monday": "星期一",
+            "tuesday": "星期二",
+            "wednesday": "星期三",
+            "thursday": "星期四",
+            "friday": "星期五",
+            "saturday": "星期六"
         },
         "portal": {
             "title": "主页"

@@ -5,6 +5,17 @@
             "delete": "Delete",
             "save": "Save"
         },
+        "date": {
+            "minutesAgo": "minutes ago",
+            "hoursAgo": "hours ago",
+            "sunday": "Sunday",
+            "monday": "Monday",
+            "tuesday": "Tuesday",
+            "wednesday": "Wednesday",
+            "thursday": "Thursday",
+            "friday": "Friday",
+            "saturday": "Saturday"
+        },
         "portal": {
             "title": "Portal"
         },

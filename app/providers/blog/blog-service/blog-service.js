@@ -72,47 +72,12 @@ export class BlogService {
                     for (let i = 0; i < communityOutputs.length; i++) {
                         communities.push(this.util.xml2json(communityOutputs[i]).CommunityOutput);
                     }
-                    
+
                     communities.forEach(function(element) {
-                        let publishTime = element.publishStartDate;
-                        let publishYearMonthDay = publishTime.substring(0, 10);
-                        let publishHour = publishTime.substring(11, 13);
-                        let publishMinute = publishTime.substring(14, 16);
-                        let publishSecond = publishTime.substring(17, 19);
-
-                        let minute = 60;
-                        let hour = minute * 24;
-                        let month = hour * 30;
-                        let publishDate = new Date(publishYearMonthDay);
-                        publishDate.setHours(publishHour);
-                        publishDate.setMinutes(publishMinute);
-                        publishDate.setSeconds(publishSecond);
-                        let publishDateTime = publishDate.getTime();
-
-                        let nowTime = new Date().getTime();
-                        let publishedMinutes = Math.trunc((nowTime - publishDateTime) / (60 * 1000));
-
-                        if (publishedMinutes >= month) {
-                            // 一か月前の場合
-                            element.publishStartDate = publishTime.substring(0, 10);
-                        } else if (publishedMinutes >= hour) {
-                            // 一日前の場合
-                            let days = Math.trunc(publishedMinutes / hour);
-                            element.publishStartDate = days + "日前";
-                        } else if (publishedMinutes >= minute) {
-                            // 一時間後、一日以内
-                            let hours = Math.trunc(publishedMinutes / minute);
-                            element.publishStartDate = hours + "時前";
-                        } else {
-
-                            if (publishedMinutes < 1) {
-                                publishedMinutes = 1;
-                            }
-                            element.publishStartDate = publishedMinutes + "分前";
-                        }
+                        element.publishStartDate = this.util.transferDateToKindsOfStyles(element.publishStartDate);
                     }, this);
 
-                     resolve(communities);
+                    resolve(communities);
                 });
             });
         });
@@ -217,6 +182,9 @@ export class BlogService {
                     for (let i = 0; i < rreplyContentOutputs.length; i++) {
                         replyContents.push(this.util.xml2json(rreplyContentOutputs[i]).ReplyContentOutput);
                     }
+                    replyContents.forEach(function(element) {
+                        element.createDate = this.util.transferDateToKindsOfStyles(element.createDate);
+                    }, this);
                     let cursor = this.util.selectXMLNode(objResponse, ".//*[local-name()='cursor']");
                     cursor = this.util.xml2json(cursor);
                     if (cursor && cursor.cursor) {
