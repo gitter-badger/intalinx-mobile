@@ -1,4 +1,4 @@
-import {Page, NavController} from 'ionic-angular';
+import {Page, IonicApp, NavController} from 'ionic-angular';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
@@ -23,13 +23,20 @@ import {Util} from '../../../utils/util';
 export class BlogIndexPage {
 
     static get parameters() {
-        return [[NavController], [BlogService]];
+        return [[IonicApp], [NavController], [BlogService]];
     }
 
-    constructor(nav, blogService) {
+    constructor(app, nav, blogService) {
+        this.app = app;
         this.nav = nav;
         this.blogService = blogService;
-
+    }
+    
+    onPageWillEnter() {
+        this.isLoadCompleted = false;
+    }
+    
+    onPageDidEnter() {
         this.getCommunityListForTop();
     }
 
@@ -40,31 +47,33 @@ export class BlogIndexPage {
     }
 
     doRefresh(refresher) {
-        setTimeout(() => {
-            this.getCommunityListForTop();
-            refresher.complete();
-        }, 1000);
+        let isRefresh = true;
+        this.getCommunityListForTop(isRefresh);
     }
 
     doInfinite(infiniteScroll) {
-
-        setTimeout(() => {
-            let position = this.communityListForTop.length;
-            let isNeedRegistNotExistsReply = false;
-            this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
-                if (data && data[0]) {
-                    this.communityListForTop = this.communityListForTop.concat(data);
-                }
-                infiniteScroll.complete();
-            });
-        }, 1000);
+        let position = this.communityListForTop.length;
+        let isNeedRegistNotExistsReply = false;
+        this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
+            if (data && data[0]) {
+                this.communityListForTop = this.communityListForTop.concat(data);
+            }
+            infiniteScroll.complete();
+        });
     }
 
-    getCommunityListForTop() {
+    getCommunityListForTop(isRefresh) {
         let position = 0;
         let isNeedRegistNotExistsReply = true;
         this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
             this.communityListForTop = data;
+            this.isLoadCompleted = true;
+            if (isRefresh) {
+                let infiniteScroll = this.app.getComponent("blogIndexInfiniteScroll");
+                infiniteScroll._highestY = 0;
+                let refresher = this.app.getComponent("blogIndexRefresher");
+                refresher.complete();
+            }
         });
     }
 }
