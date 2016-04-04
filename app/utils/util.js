@@ -1,4 +1,4 @@
-import {IonicApp} from 'ionic-angular';
+import {IonicApp, NavController, Alert} from 'ionic-angular';
 import {HTTP_PROVIDERS, Http, Headers, RequestOptions, RequestMethod} from 'angular2/http';
 
 import {XmlUtil} from './xmlutil';
@@ -8,12 +8,13 @@ import {CookieUtil} from './cookieutil';
 export class Util {
     
     static get parameters() {
-        return [[Http], [IonicApp]];
+        return [[Http], [IonicApp], [NavController]];
     }
     
-    constructor(http, app) {
+    constructor(http, app, nav) {
         this.http = http;
         this.app = app;
+        this.nav = nav;
     }
     
     parseXml(s) {
@@ -62,11 +63,23 @@ export class Util {
             if (this.hasCookie(this.app.config.get("SAML_ARTIFACT_COOKIE_NAME"))) {
                 url = url + "?" + this.app.config.get("SAMLART_NAME") + "=" +
                         this.getCookie(this.app.config.get("SAML_ARTIFACT_COOKIE_NAME"));
-            }       
+                        
+                url = url + "&language=" + this.app.userLang;     
+            } else {
+                url = url + "?language=" + this.app.userLang;
+            }   
             this.http.post(url, request)
                 .map(res => res.text())
                 .subscribe(data => {
                     resolve(data);
+                }, error => {
+                    debugger
+                    let alert = Alert.create({
+                        title: 'Low battery',
+                        subTitle: '10% of battery remaining',
+                        buttons: ['Dismiss']
+                    });
+                    this.nav.present(alert);
                 });
         });
     }
