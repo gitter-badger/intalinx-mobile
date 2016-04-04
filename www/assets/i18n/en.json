@@ -17,7 +17,7 @@
         },
         "profile": {
             "title": "Profile",
-            "currentPassword": "Current password",
+            "oldPassword": "Old password",
             "newPassword": "New password",
             "confirmPassword": "Verify password"
         },

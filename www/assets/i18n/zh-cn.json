@@ -5,6 +5,11 @@
             "delete": "删除",
             "save": "保存"
         },
+        "date": {
+            "minutesAgo": "分前",
+            "hoursAgo": "小时前",
+            "daysAgo": "天前"
+        },
         "portal": {
             "title": "主页"
         },
@@ -17,7 +22,7 @@
         },
         "profile": {
             "title": "用户资料",
-            "currentPassword": "现在的密码",
+            "oldPassword": "现在的密码",
             "newPassword": "设置新密码",
             "confirmPassword": "确认新密码"
         },

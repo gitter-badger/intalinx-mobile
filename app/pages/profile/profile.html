@@ -4,8 +4,8 @@
 <ion-content padding  class="profile">
     <form #profileForm="ngForm" (ngSubmit)="updateProfile(profileForm)">
         <ion-item>
-            <ion-label floating id="currentPassword">{{ "app.profile.currentPassword" | translate }}</ion-label>
-            <ion-input type="text" [(ngModel)]="user.currentPassword"></ion-input>
+            <ion-label floating id="currentPassword">{{ "app.profile.oldPassword" | translate }}</ion-label>
+            <ion-input type="text" [(ngModel)]="user.oldPassword"></ion-input>
         </ion-item>
         <ion-item>
             <ion-label floating id="newPassword">{{ "app.profile.newPassword" | translate }}</ion-label>

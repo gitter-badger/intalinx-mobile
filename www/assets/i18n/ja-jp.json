@@ -5,6 +5,11 @@
             "delete": "削除",
             "save": "保存"
         },
+        "date": {
+            "minutesAgo": "分前",
+            "hoursAgo": "時前",
+            "daysAgo": "日前"
+        },
         "portal": {
             "title": "ポータル"
         },
@@ -17,7 +22,7 @@
         },
         "profile": {
             "title": "プロファイル",
-            "currentPassword": "現在のパスワード",
+            "oldPassword": "古いパスワード",
             "newPassword": "パスワード",
             "confirmPassword": "パスワード確認"
         },

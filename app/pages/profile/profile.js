@@ -3,13 +3,15 @@ import {Page, NavController} from 'ionic-angular';
 import {NgForm} from 'angular2/common';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
+import {Util} from '../../utils/util';
 
 import {UserService} from '../../providers/user-service/user-service';
 
 @Page({
     templateUrl: 'build/pages/profile/profile.html',
     providers: [
-        UserService
+        UserService,
+        Util
     ],
     pipes: [TranslatePipe]
 })
@@ -23,8 +25,7 @@ export class ProfilePage {
         this.userService = userService;
 
         this.user = {
-            loginId: "",
-            currentPassword: "",
+            oldPassword: "",
             newPassword: "",
             confirmPassword: ""
         }
