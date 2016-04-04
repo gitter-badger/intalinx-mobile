@@ -1,5 +1,10 @@
 {
     "app": {
+                "message": {
+            "error": {
+                "systemError": "An error occurred in this system.Please contact the system administrator."
+            }
+        },
         "action": {
             "edit": "Edit",
             "delete": "Delete",
