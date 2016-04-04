@@ -73,13 +73,15 @@ export class Util {
                 .subscribe(data => {
                     resolve(data);
                 }, error => {
-                    debugger
+                    //TODO
+                    /*
                     let alert = Alert.create({
                         title: 'Low battery',
                         subTitle: '10% of battery remaining',
                         buttons: ['Dismiss']
                     });
                     this.nav.present(alert);
+                    */
                 });
         });
     }
