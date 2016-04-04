@@ -40,24 +40,19 @@ export class BlogIndexPage {
     }
 
     doRefresh(refresher) {
-        setTimeout(() => {
-            this.getCommunityListForTop();
-            refresher.complete();
-        }, 1000);
+        this.getCommunityListForTop();
+        refresher.complete();
     }
 
     doInfinite(infiniteScroll) {
-
-        setTimeout(() => {
-            let position = this.communityListForTop.length;
-            let isNeedRegistNotExistsReply = false;
-            this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
-                if (data && data[0]) {
-                    this.communityListForTop = this.communityListForTop.concat(data);
-                }
-                infiniteScroll.complete();
-            });
-        }, 1000);
+        let position = this.communityListForTop.length;
+        let isNeedRegistNotExistsReply = false;
+        this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
+            if (data && data[0]) {
+                this.communityListForTop = this.communityListForTop.concat(data);
+            }
+            infiniteScroll.complete();
+        });
     }
 
     getCommunityListForTop() {
