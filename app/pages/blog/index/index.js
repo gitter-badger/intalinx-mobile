@@ -30,6 +30,8 @@ export class BlogIndexPage {
         this.app = app;
         this.nav = nav;
         this.blogService = blogService;
+        this.userAvatarImageUrl = this.app.config.get("USER_AVAtar_IMAGE_URL");
+        this.userAvatarImageType = this.app.config.get("USER_AVATAR_IMAGE_TYPE");
     }
     
     onPageWillEnter() {
@@ -68,6 +70,7 @@ export class BlogIndexPage {
         this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
             this.communityListForTop = data;
             this.isLoadCompleted = true;
+            debugger
             if (isRefresh) {
                 let infiniteScroll = this.app.getComponent("blogIndexInfiniteScroll");
                 infiniteScroll._highestY = 0;

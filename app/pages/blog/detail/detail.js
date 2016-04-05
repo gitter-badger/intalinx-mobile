@@ -28,15 +28,23 @@ export class DetailPage {
             "isRefreshFlag": false,
             "unrepliedCommentcontent": ""
         }
+        
+        this.userAvatarImageUrl = this.nav.config.get("USER_AVAtar_IMAGE_URL");
+        this.userAvatarImageType = this.nav.config.get("USER_AVATAR_IMAGE_TYPE");
 
         this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
             this.title = data.title;
             this.content = data.content;
             this.createDate = data.createDate;
             this.createUserName = data.createUserName;
+            this.status = data.status;
+            
+            if (this.status == "PUBLISH") {
+                this.blogService.updateReplyStatus(this.id, "READ");
+            }
         });
-
         this.getReplyContentListByCommunityID();
+
     }
 
     addComment() {
