@@ -10,5 +10,24 @@
     }
     .communityTitle {
         white-space: pre-wrap;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    
+    .newCommunityReturn {
+        background-color: rgb(255,140,0);
+        color: white;
+        position: absolute;
+        top: 0px;
+        left: 40px;
+    }
+    
+    .newCommunity {
+        background-color: red;
+        color: white;
+        position: absolute;
+        top: 0px;
+        left: 40px;
     }
 }

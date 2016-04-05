@@ -31,6 +31,8 @@
         "blog": {
             "title": "Blog",
             "detail": "Detail Info",
+                        "newBlog": "new",
+            "newReturn": "new",
             "comment": {
                 "add": "Add Comment",
                 "content": "Comment Content",
