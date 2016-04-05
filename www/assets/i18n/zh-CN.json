@@ -42,6 +42,8 @@
         "blog": {
             "title": "博客",
             "detail": "博客详情",
+            "newBlog": "新",
+            "newReturn": "新",
             "comment": {
                 "add": "发表评论",
                 "content": "评论内容",
