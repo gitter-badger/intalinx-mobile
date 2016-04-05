@@ -32,14 +32,12 @@ export class BlogIndexPage {
         this.blogService = blogService;
         this.userAvatarImageUrl = this.app.config.get("USER_AVAtar_IMAGE_URL");
         this.userAvatarImageType = this.app.config.get("USER_AVATAR_IMAGE_TYPE");
+        
+        this.getCommunityListForTop();
     }
     
     onPageWillEnter() {
         this.isLoadCompleted = false;
-    }
-    
-    onPageDidEnter() {
-        this.getCommunityListForTop();
     }
 
     openDetail(community) {
