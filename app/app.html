@@ -13,6 +13,7 @@
       
       <button ion-item *ngFor="#item of menus" (click)="openPage(item)">
         <ion-icon name={{item.titleIcon}} item-left primary></ion-icon>{{item.title}}
+        <ion-badge class="new-information-count" *ngIf="item.newInformationCount!=''">{{item.newInformationCount}}</ion-badge>
       </button>
     </ion-list>
   </ion-content>

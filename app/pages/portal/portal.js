@@ -4,7 +4,8 @@ import {TranslatePipe} from 'ng2-translate/ng2-translate';
 import {Util} from '../../utils/util';
 
 import {AppsService} from '../../providers/apps-service/apps-service'; 
-import {UserService} from '../../providers/user-service/user-service'; 
+import {UserService} from '../../providers/user-service/user-service';
+import {BlogService} from '../../providers/blog/blog-service/blog-service'; 
 
 import {BlogIndexPage} from '../blog/index/index';
 import {ProfilePage} from '../profile/profile';
@@ -20,6 +21,7 @@ import {ProfilePage} from '../profile/profile';
   providers: [
       AppsService,
       UserService,
+      BlogService,
       Util
   ],
   pipes: [TranslatePipe]

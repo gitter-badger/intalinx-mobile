@@ -121,7 +121,6 @@ export class BlogService {
 
                     let returnOutPut = this.util.selectXMLNode(objResponse, ".//*[local-name()='return']");
                     let returnData = this.util.xml2json(returnOutPut).return;
-debugger
                     resolve(returnData);
                 });
             });
