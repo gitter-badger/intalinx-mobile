@@ -44,6 +44,7 @@ export class BlogIndexPage {
         this.nav.push(DetailPage, {
             "id": community.communityID
         });
+        
     }
 
     doRefresh(refresher) {
@@ -68,7 +69,6 @@ export class BlogIndexPage {
         this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
             this.communityListForTop = data;
             this.isLoadCompleted = true;
-            debugger
             if (isRefresh) {
                 let infiniteScroll = this.app.getComponent("blogIndexInfiniteScroll");
                 infiniteScroll._highestY = 0;

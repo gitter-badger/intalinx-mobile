@@ -28,8 +28,8 @@
                 <img src="{{userAvatarImageUrl}}{{community.createUser}}{{userAvatarImageType}}"
                 />
                 <!--</ion-avatar>-->
-                <ion-badge class="new-community" *ngIf="community.readStatus=='NOT_READ'"  danger>{{"app.blog.newBlog" | translate}}</ion-badge>
-                <ion-badge class="new-community-reply" *ngIf="community.readStatus!='NOT_READ' && community.newReplyFlag=='TRUE'" color="black">{{"app.blog.newReturn" | translate}}</ion-badge>
+                <ion-badge class="new-community" *ngIf="community.readStatus=='NOT_READ'">{{"app.blog.newBlog" | translate}}</ion-badge>
+                <ion-badge class="new-community-reply" *ngIf="community.readStatus!='NOT_READ' && community.newReplyFlag=='TRUE'">{{"app.blog.newReturn" | translate}}</ion-badge>
             </ion-thumbnail>
             <p>{{community.createUserName}}</p>
             <p>{{community.publishStartDate}}</p>
