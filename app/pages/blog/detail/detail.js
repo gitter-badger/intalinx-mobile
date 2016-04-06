@@ -69,8 +69,8 @@ export class DetailPage {
             if (data && data.replyContents[0]) {
                 this.comments = this.comments.concat(data.replyContents);
             }
+            infiniteScroll.complete();
         });
-        infiniteScroll.complete();
     }
 
     onPageWillEnter() {
@@ -90,7 +90,7 @@ export class DetailPage {
 
         if (this.status == "PUBLISH") {
             if (this.readStatus == "NOT_READ") {
-                setTimeout(this.updateReplyStatus(),3000);
+                setTimeout(this.updateReplyStatus(), 3000);
                 this.updateNewReplyFlag();
                 this.app.blogNewInformationCount = blogNewInformationCount - 1;
             } else if (this.newReplyFlag == "TRUE") {
