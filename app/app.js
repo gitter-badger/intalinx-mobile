@@ -37,7 +37,7 @@ export class IntaLinx {
     constructor(app, platform, translate, menu) {
         // set up our app
         this.app = app;
-        // TODO: Need to be change with another safety way!
+        // TODO: need to be change with another safety way!
         this.app.config = this.app._config;
         
         // set up translate
@@ -55,7 +55,9 @@ export class IntaLinx {
         let menus = [];
         this.user = user;
         this.menus = menus;
-
+        
+        
+        this.app.redirectLoginPage = this.redirectLoginPage(this);
         // initiallize menu and pass this object to change the model
         this.app.initializeMenu = this.initializeMenu(this);
         this.app.initializeUser = this.initializeUser(this);        
@@ -95,6 +97,12 @@ export class IntaLinx {
     initializeUser(that) {
         return function(user) {
             that.user = user;
+        }
+    }
+    
+    redirectLoginPage(that) {
+        return function() {
+            that.app.getComponent('nav').setRoot(LoginPage);
         }
     }
 
