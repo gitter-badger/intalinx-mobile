@@ -1,4 +1,4 @@
-import {Page, NavController} from 'ionic-angular';
+import {Page, IonicApp, NavController, Alert} from 'ionic-angular';
 
 import {NgForm} from 'angular2/common';
 
@@ -18,25 +18,26 @@ import {PortalPage} from '../portal/portal';
 })
 export class LoginPage {
     static get parameters() {
-        return [[NavController], [UserService]];
+        return [[IonicApp], [NavController], [UserService]];
     }
 
-    constructor(nav, userService) {
+    constructor(app, nav, userService) {
         this.nav = nav;
+        this.app = app;
         this.userService = userService;
-        
+
         this.user = {
             loginId: "",
             password: "",
             rememberMe: false
         }
     }
-    
+
     ngOnInit() {
         // If use already logged on, then redirect to portal page.
         this.loggedOn();
     }
-    
+
     loggedOn() {
         this.userService.loggedOn().then(isLoggedOn => {
             if (isLoggedOn) {
@@ -50,11 +51,22 @@ export class LoginPage {
             if (authenticationResult) {
                 this.redirectToPortal();
             } else {
-                alert("uid password error")
+                this.app.translate.get(["app.login.message.error.title", "app.login.message.error.idOrPasswordNotCorrect", "app.action.ok"]).subscribe(message => {
+                    let title = message['app.login.message.error.title'];
+                    let ok = message['app.action.ok'];
+                    let content = message['app.blog.message.error.idOrPasswordNotCorrect'];
+
+                    let alert = Alert.create({
+                        title: title,
+                        subTitle: content,
+                        buttons: [ok]
+                    });
+                    this.nav.present(alert);
+                });
             }
         });
     }
-    
+
     redirectToPortal() {
         this.nav.setRoot(PortalPage);
     }

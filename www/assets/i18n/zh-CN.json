@@ -10,7 +10,7 @@
             "edit": "编辑",
             "delete": "删除",
             "save": "保存",
-            "ok" : "OK"
+            "ok": "OK"
         },
         "date": {
             "minutesAgo": "分前",
@@ -31,7 +31,13 @@
             "loginId": "账号",
             "password": "密码",
             "rememberMe": "记住密码",
-            "login": "登录"
+            "login": "登录",
+            "message": {
+                "error": {
+                    "title": "错误",
+                    "idOrPasswordNotCorrect": "您输入的帐号或密码有误。"
+                }
+            }
         },
         "profile": {
             "title": "用户资料",
@@ -48,6 +54,12 @@
                 "add": "发表评论",
                 "content": "评论内容",
                 "reply": "提交"
+            },
+            "message": {
+                "error": {
+                    "title": "错误",
+                    "noContent": "请输入内容"
+                }
             }
         }
     }

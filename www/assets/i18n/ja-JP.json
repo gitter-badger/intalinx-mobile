@@ -31,7 +31,13 @@
             "loginId": "ログインID",
             "password": "パスワード",
             "rememberMe": "ログインしたままにする",
-            "login": "ログイン"
+            "login": "ログイン",
+            "message": {
+                "error": {
+                    "title": "エラー",
+                    "idOrPasswordNotCorrect": "IDまたはパスワードが違います。"
+                }
+            }
         },
         "profile": {
             "title": "プロファイル",
@@ -51,6 +57,7 @@
             },
             "message": {
                 "error": {
+                    "title": "エラー",
                     "noContent": "コメントを入力してください！"
                 }
             }
