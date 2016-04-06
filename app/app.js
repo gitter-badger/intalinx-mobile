@@ -69,6 +69,10 @@ export class IntaLinx {
         
         // initiallize new information count of blog system
         this.app.blogNewInformationCount = "";
+        
+        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
+        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
+  
     }
 
     initializeApp() {
@@ -115,5 +119,10 @@ export class IntaLinx {
         if (this.app.showMenu) {
             this.app.showMenu(item);
         }
+    }
+    
+    loadImageError(event){
+        let img = event.currentTarget;
+        img.src = this.userAvatarImageUrl + this.userAvatarDefaultImage;
     }
 }

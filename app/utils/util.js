@@ -154,7 +154,7 @@ export class Util {
     }
 
     getUserAvatarUrlByUserId(userId) {
-        return this.app.config.get("USER_AVAtar_IMAGE_URL") + userId;
+        return this.app.config.get("USER_AVATAR_IMAGE_URL") + userId;
     }
 
     getUserIdFromAuthUserDn(authUserDn) {

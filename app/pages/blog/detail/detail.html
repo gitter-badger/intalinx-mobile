@@ -30,7 +30,7 @@
             <ion-item>
                 <!-- こっちは丸形 -->
                 <ion-avatar item-left class="avatar">
-                    <img src="{{userAvatarImageUrl}}{{comment.userID}}{{userAvatarImageType}}" />
+                    <img src="{{userAvatarImageUrl}}{{comment.userID}}" (error)="loadImageError($event)" />
                 </ion-avatar>
                 <div class="name">{{comment.userName}}</div>
                 <div class="time">{{comment.createDate}}</div>

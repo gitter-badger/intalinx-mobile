@@ -35,8 +35,8 @@ export class DetailPage {
             "unrepliedCommentcontent": ""
         }
         
-        this.userAvatarImageUrl = this.app.config.get("USER_AVAtar_IMAGE_URL");
-        this.userAvatarImageType = this.app.config.get("USER_AVATAR_IMAGE_TYPE");
+        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
+        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
 
         this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
             this.title = data.title;
@@ -129,5 +129,10 @@ export class DetailPage {
                 this.community.newReplyFlag = newReplyFlag;
             }
         });
+    }
+    
+    loadImageError(event){
+        let img = event.currentTarget;
+        img.src = this.userAvatarImageUrl + this.userAvatarDefaultImage;
     }
 }
