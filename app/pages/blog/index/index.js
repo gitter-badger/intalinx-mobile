@@ -88,7 +88,6 @@ export class BlogIndexPage {
     }
     
     loadImageError(event){
-        debugger;
         let img = event.currentTarget;
         img.src = this.userAvatarImageUrl + this.userAvatarDefaultImage;
     }
