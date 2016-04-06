@@ -1,4 +1,4 @@
-import {Page, Modal, NavController, NavParams} from 'ionic-angular';
+import {Page, IonicApp, Modal, NavController, NavParams, Alert} from 'ionic-angular';
 
 import {NgForm} from 'angular2/common';
 
@@ -26,10 +26,11 @@ import {DetailPage} from '../detail/detail';
 })
 export class AddCommentPage {
     static get parameters() {
-        return [[NavController], [NavParams], [BlogService]];
+        return [[IonicApp], [NavController], [NavParams], [BlogService]];
     }
 
-    constructor(nav, params, blogService) {
+    constructor(app, nav, params, blogService) {
+        this.app = app;
         this.nav = nav;
         this.blogService = blogService;
         this.params = params;
@@ -44,14 +45,36 @@ export class AddCommentPage {
 
     saveComment() {
         if (this.comment.content == null || this.comment.content.replace(" ", "").replace("　", "") == "") {
-            alert("コメントを入力してください！");
+            this.app.translate.get(["app.blog.message.error.title", "app.blog.message.error.noContent", "app.action.ok"]).subscribe(message => {
+                let title = message['app.blog.message.error.title'];
+                let ok = message['app.action.ok'];
+                let content = message['app.blog.message.error.noContent'];
+
+                let alert = Alert.create({
+                    title: title,
+                    subTitle: content,
+                    buttons: [ok]
+                });
+                this.nav.present(alert);
+            });
         } else {
             this.blogService.insertReplyContent(this.comment).then(data => {
                 if (data == "true") {
                     this.sendData.isRefreshFlag = true;
                     this.nav.pop();
                 } else {
-                    alert("システムエラーが発生しました。大変お迷惑かかりましたが、システム管理者に連絡してください！");
+                    this.app.translate.get(["app.blog.message.error.title", "app.message.error.systemError", "app.action.ok"]).subscribe(message => {
+                        let title = message['app.blog.message.error.title'];
+                        let ok = message['app.action.ok'];
+                        let content = message['app.message.error.systemError'];
+
+                        let alert = Alert.create({
+                            title: title,
+                            subTitle: content,
+                            buttons: [ok]
+                        });
+                        this.nav.present(alert);
+                    });
                 }
             })
         }

@@ -154,8 +154,7 @@ export class Util {
     }
 
     getUserAvatarUrlByUserId(userId) {
-        // return this.app.config.get("USER_AVAtar_IMAGE_URL") + userId + this.app.config.get("USER_AVATAR_IMAGE_TYPE");
-        return this.app.config.get("USER_AVAtar_IMAGE_URL") + "2" + this.app.config.get("USER_AVATAR_IMAGE_TYPE");
+        return this.app.config.get("USER_AVAtar_IMAGE_URL") + userId + this.app.config.get("USER_AVATAR_IMAGE_TYPE");
     }
 
     getUserIdFromAuthUserDn(authUserDn) {
@@ -191,7 +190,7 @@ export class Util {
         } else if (minutesFromDateToNow >= minutesOfOneHour) {
             // 一時間~一日の場合
             let hours = Math.trunc(minutesFromDateToNow / minutesOfOneHour);
-            returnDate = hours + this.app.translate.get("app.date.hoursgo").value;
+            returnDate = hours + this.app.translate.get("app.date.hoursAgo").value;
         } else {
             // 一時間以内場合
             // １分以内場合

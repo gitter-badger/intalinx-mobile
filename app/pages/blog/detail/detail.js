@@ -1,4 +1,4 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import {Page, IonicApp, NavController, NavParams} from 'ionic-angular';
 import {Component} from 'angular2/core';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
@@ -15,27 +15,37 @@ import {Util} from '../../../utils/util';
 export class DetailPage {
 
     static get parameters() {
-        return [[NavController], [NavParams], [BlogService]];
+        return [[IonicApp], [NavController], [NavParams], [BlogService]];
     }
 
-    constructor(nav, params, blogService) {
+    constructor(app, nav, params, blogService) {
+        this.app = app;
         this.nav = nav;
         this.params = params;
-        this.id = this.params.get("id");
+        
+        this.community = this.params.get("community");
+        this.id = this.community.communityID;
+        this.readStatus = this.community.readStatus;
+        this.newReplyFlag = this.community.newReplyFlag;
+
         this.blogService = blogService;
         this.sendData = {
             "id": this.id,
             "isRefreshFlag": false,
             "unrepliedCommentcontent": ""
         }
+        
+        this.userAvatarImageUrl = this.app.config.get("USER_AVAtar_IMAGE_URL");
+        this.userAvatarImageType = this.app.config.get("USER_AVATAR_IMAGE_TYPE");
 
         this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
             this.title = data.title;
             this.content = data.content;
             this.createDate = data.createDate;
             this.createUserName = data.createUserName;
+            this.status = data.status;
+            
         });
-
         this.getReplyContentListByCommunityID();
     }
 
@@ -59,13 +69,19 @@ export class DetailPage {
             if (data && data.replyContents[0]) {
                 this.comments = this.comments.concat(data.replyContents);
             }
+            infiniteScroll.complete();
         });
-        infiniteScroll.complete();
     }
 
+    onPageLoaded() {
+        this.pageLoadTime = new Date().getTime();
+    }
+    
     onPageWillEnter() {
         let isRefreshFlag = this.sendData.isRefreshFlag;
         if (isRefreshFlag == true) {
+            let infiniteScroll = this.app.getComponent("blogDetailInfiniteScroll");
+            infiniteScroll._highestY = 0;
             this.getReplyContentListByCommunityID();
         }
     }
@@ -75,9 +91,43 @@ export class DetailPage {
         if (isRefreshFlag == true) {
             this.sendData.unrepliedCommentcontent = "";
         }
+        
+        let blogNewInformationCount = Number(this.app.blogNewInformationCount);
+
+        if (this.status == "PUBLISH" && this.newReplyFlag == "TRUE") {
+            this.updateNewReplyFlag();
+        }
     }
 
     onPageWillLeave() {
         this.sendData.isRefreshFlag = false;
+    }
+    
+    onPageWillUnload() {
+        let now = new Date().getTime();
+        let pageLoadingTime = now - this.pageLoadTime;
+        if (this.status == "PUBLISH" && this.readStatus == "NOT_READ" && pageLoadingTime >= 3000) {
+            this.updateReplyStatus();
+        }
+    }
+    
+    updateReplyStatus() {
+        let readStatus = "READ";
+        this.blogService.updateReplyStatus(this.id, readStatus).then(data => {
+            if (data == "true") {
+                this.community.readStatus = readStatus;
+                let blogNewInformationCount = Number(this.app.blogNewInformationCount);
+                this.app.blogNewInformationCount = blogNewInformationCount - 1;
+            }
+        });
+    }
+    
+    updateNewReplyFlag() {
+        let newReplyFlag = "FALSE";
+        this.blogService.updateNewReplyFlag(this.id, newReplyFlag).then(data => {
+            if (data == "true") {
+                this.community.newReplyFlag = newReplyFlag;
+            }
+        });
     }
 }

@@ -1,14 +1,30 @@
 @import "../pages/blog/detail/detail";
+@import "../pages/blog/add-comment/add-comment";
 
 .blog-index {
     .avatar {
         height: 3em;
     }
-    .userName {
-    }
-    .communityTime {
-    }
-    .communityTitle {
+    .community-title {
         white-space: pre-wrap;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    
+    .new-community-reply {
+        background-color: rgb(255,140,0);
+        color: white;
+        position: absolute;
+        top: 0px;
+        left: 40px;
+    }
+    
+    .new-community {
+        background-color: red;
+        color: white;
+        position: absolute;
+        top: 0px;
+        left: 40px;
     }
 }

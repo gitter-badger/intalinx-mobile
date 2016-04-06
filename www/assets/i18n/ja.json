@@ -2,6 +2,7 @@
     "app": {
         "message": {
             "error": {
+                "title": "エラー",
                 "systemError": "システムエラーが発生しました。大変お迷惑かかりましたが、システム管理者に連絡してください！"
             }
         },
@@ -31,7 +32,12 @@
             "password": "パスワード",
             "rememberMe": "ログインしたままにする",
             "login": "ログイン",
-            "message": {}
+            "message": {
+                "error": {
+                    "title": "エラー",
+                    "idOrPasswordNotCorrect": "IDまたはパスワードが違います。"
+                }
+            }
         },
         "profile": {
             "title": "プロファイル",
@@ -42,6 +48,8 @@
         "blog": {
             "title": "ブログ",
             "detail": "ブログ明細",
+            "newBlog": "新着",
+            "newReturn": "新着",
             "comment": {
                 "add": "返信追加",
                 "content": "返信内容",
@@ -49,6 +57,7 @@
             },
             "message": {
                 "error": {
+                    "title": "エラー",
                     "noContent": "コメントを入力してください！"
                 }
             }

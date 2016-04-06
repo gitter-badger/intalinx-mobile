@@ -31,7 +31,13 @@
             "loginId": "Account",
             "password": "Password",
             "rememberMe": "Remember me",
-            "login": "Login"
+            "login": "Login",
+            "message": {
+                "error": {
+                    "title": "error",
+                    "idOrPasswordNotCorrect": "The id and password you entered don't match."
+                }
+            }
         },
         "profile": {
             "title": "Profile",
@@ -42,10 +48,18 @@
         "blog": {
             "title": "Blog",
             "detail": "Detail Info",
+            "newBlog": "new",
+            "newReturn": "new",
             "comment": {
                 "add": "Add Comment",
                 "content": "Comment Content",
                 "reply": "Reply"
+            },
+            "message": {
+                "error": {
+                    "title": "error",
+                    "noContent": "The content is required."
+                }
             }
         }
     }
