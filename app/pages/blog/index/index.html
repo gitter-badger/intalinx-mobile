@@ -12,7 +12,7 @@
         {{"app.blog.title" | translate}}
     </ion-title>
 </ion-navbar>
-<ion-content padding class="blog-index">
+<ion-content class="blog-index">
     <div class="loading" [style.display]="isLoadCompleted ? 'none' : 'block'">
         <ion-spinner name="dots" ></ion-spinner>
     </div>
@@ -20,21 +20,23 @@
         <ion-refresher-content refreshingSpinner="circles"> </ion-refresher-content>
     </ion-refresher>
     <ion-list>
-        <button ion-item *ngFor="#community of communityListForTop" (click)="openDetail(community)">
+        <ion-item *ngFor="#community of communityListForTop" >
             <!-- こっちは四角 -->
             <ion-thumbnail item-left class="avatar">
                 <!--<ion-icon name="person" class="avatar"></ion-icon>-->
                 <!-- こっちは丸形　<ion-avatar item-left class="avatar">-->
-                <img src="{{userAvatarImageUrl}}{{community.createUser}}{{userAvatarImageType}}"
-                />
-                <!--</ion-avatar>-->
-                <ion-badge class="new-community" *ngIf="community.readStatus=='NOT_READ'">{{"app.blog.newBlog" | translate}}</ion-badge>
-                <ion-badge class="new-community-reply" *ngIf="community.readStatus!='NOT_READ' && community.newReplyFlag=='TRUE'">{{"app.blog.newReturn" | translate}}</ion-badge>
+                <img src="{{userAvatarImageUrl}}{{community.createUser}}{{userAvatarImageType}}" (error)="loadImageError($event)"/>
+                <p>{{community.createUserName}}</p>
             </ion-thumbnail>
-            <p>{{community.createUserName}}</p>
-            <p>{{community.publishStartDate}}</p>
-            <h2 class="community-title">{{community.title}}</h2>
-        </button>
+            
+            
+            <h2 class="title" (click)="openDetail(community)">{{community.title}}</h2>
+            <div item-right class="status">
+                <ion-badge class="new" *ngIf="community.readStatus=='NOT_READ'">{{"app.blog.newBlog" | translate}}</ion-badge>
+                <ion-badge class="new-reply" *ngIf="community.readStatus!='NOT_READ' && community.newReplyFlag=='TRUE'">{{"app.blog.newReturn" | translate}}</ion-badge>
+                <p>{{community.publishStartDate}}</p>
+            </div>
+        </ion-item>
     </ion-list>
     <ion-infinite-scroll id="blogIndexInfiniteScroll" (infinite)="doInfinite($event)">
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>

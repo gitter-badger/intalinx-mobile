@@ -3,28 +3,36 @@
 
 .blog-index {
     .avatar {
-        height: 3em;
+        height: 4em;
+        img {
+            width: 4.5rem;
+            height: 4.5rem;
+        }
+        p {
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
     }
-    .community-title {
+    .title {
         white-space: pre-wrap;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
     }
     
-    .new-community-reply {
-        background-color: rgb(255,140,0);
-        color: white;
-        position: absolute;
-        top: 0px;
-        left: 40px;
+    .status {
+        text-align: center;
+        width: 6rem;
+        margin: 0px;
+        .new {
+            color: white;
+            padding: 2px;
+            border-radius: 2px;
+            background-color: red;
+        }
+        
+        .new-reply {
+            @extend .new;
+            background-color: rgb(255,140,0);
+        }
     }
     
-    .new-community {
-        background-color: red;
-        color: white;
-        position: absolute;
-        top: 0px;
-        left: 40px;
-    }
+    
 }

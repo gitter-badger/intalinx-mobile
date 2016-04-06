@@ -15,8 +15,9 @@ import {LoginPage} from './pages/login/login';
         "SAML_ARTIFACT_COOKIE_NAME": "defaultinst_SAMLart",
         "SAML_ARTIFACT_COOKIE_PATH": "/",
         "CHECK_NAME": "defaultinst_ct",
-        "USER_AVAtar_IMAGE_URL": "img/",
-        "USER_AVATAR_IMAGE_TYPE": ".jpg"
+        "USER_AVATAR_IMAGE_URL": "img/",
+        "USER_AVATAR_IMAGE_TYPE": ".jpg",
+        "USER_AVATAR_DEFAULT_IMAGE": "default"
     }, 
     providers: [
         provide(TranslateLoader, {
