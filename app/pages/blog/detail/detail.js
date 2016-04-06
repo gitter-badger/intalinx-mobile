@@ -94,7 +94,6 @@ export class DetailPage {
             if (this.readStatus == "NOT_READ") {
                 setTimeout(this.updateReplyStatus(), 3000);
                 this.updateNewReplyFlag();
-                this.app.blogNewInformationCount = blogNewInformationCount - 1;
             } else if (this.newReplyFlag == "TRUE") {
                 this.updateNewReplyFlag();
             }   
@@ -109,6 +108,7 @@ export class DetailPage {
         let readStatus = "READ";
         this.blogService.updateReplyStatus(this.id, readStatus);
         this.community.readStatus = readStatus;
+        this.app.blogNewInformationCount = blogNewInformationCount - 1;
     }
     
     updateNewReplyFlag() {
