@@ -227,4 +227,26 @@ export class Util {
                 });
         });
     }
+    
+    /**
+     * Html Tag を転換する
+     */
+    replaceHtmlTagCharacter(content) {
+        content = content.replace(/&/g, "&amp;");
+        content = content.replace(/</g, "&lt;");
+        content = content.replace(/>/g, "&gt;");
+        content = content.replace(/\n/g,"<br />");
+        
+        return content;
+    }
+    
+    /**
+     * 半角スペース、全角スペース、改行を削除する
+     */
+    deleteEmSpaceEnSpaceNewLineInCharacter(content) {
+        content = content.replace(/\n/g, "");
+        content = content.replace(/\s+/g, "");
+        
+        return content;
+    }
 }

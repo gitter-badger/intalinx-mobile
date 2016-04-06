@@ -2,6 +2,9 @@ import {Injectable, Inject} from 'angular2/core';
 import {Http} from 'angular2/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx';
+
+import {IonicApp, NavController, Alert} from 'ionic-angular';
+
 import {Util} from '../../../utils/util';
 
 /*
@@ -13,11 +16,13 @@ import {Util} from '../../../utils/util';
 export class BlogService {
 
     static get parameters() {
-        return [[Http], [Util]];
+        return [[Http], [IonicApp], [NavController], [Util]];
     }
 
-    constructor(http, util) {
+    constructor(http, app, nav, util) {
         this.http = http;
+        this.app = app;
+        this.nav = nav;
         this.data = null;
         this.util = util;
     }
@@ -86,6 +91,7 @@ export class BlogService {
     }
 
     insertReplyContent(comment) {
+        let content = this.util.replaceCharacterOfHtmlTag(comment.content);
         if (this.data) {
             // already loaded data
             return Promise.resolve(this.data);
@@ -94,7 +100,7 @@ export class BlogService {
             this.util.getRequestXml('./assets/requests/insert_reply_content_request.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
                 this.util.setNodeText(objRequest, ".//*[local-name()='communityID']", comment.communityID);
-                this.util.setNodeText(objRequest, ".//*[local-name()='content']", comment.content);
+                this.util.setNodeText(objRequest, ".//*[local-name()='content']", content);
                 req = this.util.xml2string(objRequest);
 
                 this.util.callCordysWebservice(req).then(data => {
@@ -238,6 +244,44 @@ export class BlogService {
                     resolve("true");
                 });
             });
+        });
+    }
+    
+    saveComment(comment) {
+        return new Promise(resolve => {
+            if (comment.content && this.util.deleteEmSpaceEnSpaceNewLineInCharacter(comment.content) != "") {
+                this.insertReplyContent(comment).then(data => {
+                    if (data == "true") {
+                        resolve(data);
+                    } else {
+                        this.app.translate.get(["app.blog.message.error.title", "app.message.error.systemError", "app.action.ok"]).subscribe(message => {
+                            let title = message['app.blog.message.error.title'];
+                            let ok = message['app.action.ok'];
+                            let content = message['app.message.error.systemError'];
+
+                            let alert = Alert.create({
+                                title: title,
+                                subTitle: content,
+                                buttons: [ok]
+                            });
+                            this.nav.present(alert);
+                        });
+                    }
+                });
+            } else {
+                this.app.translate.get(["app.blog.message.error.title", "app.blog.message.error.noContent", "app.action.ok"]).subscribe(message => {
+                    let title = message['app.blog.message.error.title'];
+                    let ok = message['app.action.ok'];
+                    let content = message['app.blog.message.error.noContent'];
+
+                    let alert = Alert.create({
+                        title: title,
+                        subTitle: content,
+                        buttons: [ok]
+                    });
+                    this.nav.present(alert);
+                });
+            }
         });
     }
 }
