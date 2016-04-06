@@ -33,5 +33,43 @@ export class DateUtil {
         return sValue;
     }
     
-    
+    static transferDateToKindsOfStyles(date) {
+        let yearMonthDay = date.substring(0, 10);
+        let dateWhoutT = DateUtil.transferCordysDateStringToUTC(date);
+        let dateWhoutTTime = dateWhoutT.getTime();
+
+        let nowTime = new Date().getTime();
+        let minutesFromDateToNow = Math.trunc((nowTime - dateWhoutTTime) / (60 * 1000));
+
+        let minutesOfOneHour = 60;
+        let minutesOfOneday = minutesOfOneHour * 24;
+        let minutesOfOneWeek = minutesOfOneday * 7;
+        return new Promise(resolve => {
+            if (minutesFromDateToNow >= minutesOfOneWeek) {
+                // 一週前の場合
+                resolve(yearMonthDay.replace(/\-/ig, "/"));
+            } else if (minutesFromDateToNow >= minutesOfOneday) {
+                // 一日~一週の場合
+                this.transferDateToWeekDayName(dateWhoutT).then(data => {
+                    resolve(data + " " + date.substring(11, 16));
+                });
+            } else if (minutesFromDateToNow >= minutesOfOneHour) {
+                // 一時間~一日の場合
+                let hours = Math.trunc(minutesFromDateToNow / minutesOfOneHour);
+                this.app.translate.get(["app.date.hoursAgo"]).subscribe(message => {
+                    resolve(hours + message["app.date.hoursAgo"]);
+                });
+            } else {
+                // 一時間以内場合
+                // １分以内場合
+                if (minutesFromDateToNow < 1) {
+                    minutesFromDateToNow = 1;
+                }
+                this.app.translate.get(["app.date.minutesAgo"]).subscribe(message => {
+                    resolve(minutesFromDateToNow + message["app.date.minutesAgo"]);
+                });
+            }
+
+        });
+    }
 }
