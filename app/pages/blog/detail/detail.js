@@ -73,6 +73,10 @@ export class DetailPage {
         });
     }
 
+    onPageLoaded() {
+        this.pageLoadTime = new Date().getTime();
+    }
+    
     onPageWillEnter() {
         let isRefreshFlag = this.sendData.isRefreshFlag;
         if (isRefreshFlag == true) {
@@ -90,13 +94,8 @@ export class DetailPage {
         
         let blogNewInformationCount = Number(this.app.blogNewInformationCount);
 
-        if (this.status == "PUBLISH") {
-            if (this.readStatus == "NOT_READ") {
-                setTimeout(this.updateReplyStatus(), 3000);
-                this.updateNewReplyFlag();
-            } else if (this.newReplyFlag == "TRUE") {
-                this.updateNewReplyFlag();
-            }   
+        if (this.status == "PUBLISH" && this.newReplyFlag == "TRUE") {
+            this.updateNewReplyFlag();
         }
     }
 
@@ -104,16 +103,31 @@ export class DetailPage {
         this.sendData.isRefreshFlag = false;
     }
     
+    onPageWillUnload() {
+        let now = new Date().getTime();
+        let pageLoadingTime = now - this.pageLoadTime;
+        if (this.status == "PUBLISH" && this.readStatus == "NOT_READ" && pageLoadingTime >= 3000) {
+            this.updateReplyStatus();
+        }
+    }
+    
     updateReplyStatus() {
         let readStatus = "READ";
-        this.blogService.updateReplyStatus(this.id, readStatus);
-        this.community.readStatus = readStatus;
-        this.app.blogNewInformationCount = blogNewInformationCount - 1;
+        this.blogService.updateReplyStatus(this.id, readStatus).then(data => {
+            if (data == "true") {
+                this.community.readStatus = readStatus;
+                let blogNewInformationCount = Number(this.app.blogNewInformationCount);
+                this.app.blogNewInformationCount = blogNewInformationCount - 1;
+            }
+        });
     }
     
     updateNewReplyFlag() {
         let newReplyFlag = "FALSE";
-        this.blogService.updateNewReplyFlag(this.id, newReplyFlag);
-        this.community.newReplyFlag = newReplyFlag;
+        this.blogService.updateNewReplyFlag(this.id, newReplyFlag).then(data => {
+            if (data == "true") {
+                this.community.newReplyFlag = newReplyFlag;
+            }
+        });
     }
 }

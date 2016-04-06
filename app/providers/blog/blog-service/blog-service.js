@@ -212,7 +212,7 @@ export class BlogService {
                 req = this.util.xml2string(objRequest);
 
                 this.util.callCordysWebservice(req).then(data => {
-                    return true;
+                    resolve("true");
                 });
             });
         });
@@ -231,7 +231,7 @@ export class BlogService {
                 req = this.util.xml2string(objRequest);
 
                 this.util.callCordysWebservice(req).then(data => {
-                    return true;
+                    resolve("true");
                 });
             });
         });
