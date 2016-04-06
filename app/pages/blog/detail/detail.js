@@ -76,6 +76,8 @@ export class DetailPage {
     onPageWillEnter() {
         let isRefreshFlag = this.sendData.isRefreshFlag;
         if (isRefreshFlag == true) {
+            let infiniteScroll = this.app.getComponent("blogDetailInfiniteScroll");
+            infiniteScroll._highestY = 0;
             this.getReplyContentListByCommunityID();
         }
     }
