@@ -1,4 +1,4 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import {Page, IonicApp, NavController, NavParams} from 'ionic-angular';
 import {Component} from 'angular2/core';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
@@ -15,13 +15,19 @@ import {Util} from '../../../utils/util';
 export class DetailPage {
 
     static get parameters() {
-        return [[NavController], [NavParams], [BlogService]];
+        return [[IonicApp], [NavController], [NavParams], [BlogService]];
     }
 
-    constructor(nav, params, blogService) {
+    constructor(app, nav, params, blogService) {
+        this.app = app;
         this.nav = nav;
         this.params = params;
-        this.id = this.params.get("id");
+        
+        this.community = this.params.get("community");
+        this.id = this.community.communityID;
+        this.readStatus = this.community.readStatus;
+        this.newReplyFlag = this.community.newReplyFlag;
+
         this.blogService = blogService;
         this.sendData = {
             "id": this.id,
@@ -29,8 +35,8 @@ export class DetailPage {
             "unrepliedCommentcontent": ""
         }
         
-        this.userAvatarImageUrl = this.nav.config.get("USER_AVAtar_IMAGE_URL");
-        this.userAvatarImageType = this.nav.config.get("USER_AVATAR_IMAGE_TYPE");
+        this.userAvatarImageUrl = this.app.config.get("USER_AVAtar_IMAGE_URL");
+        this.userAvatarImageType = this.app.config.get("USER_AVATAR_IMAGE_TYPE");
 
         this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
             this.title = data.title;
@@ -39,12 +45,8 @@ export class DetailPage {
             this.createUserName = data.createUserName;
             this.status = data.status;
             
-            if (this.status == "PUBLISH") {
-                this.blogService.updateReplyStatus(this.id, "READ");
-            }
         });
         this.getReplyContentListByCommunityID();
-
     }
 
     addComment() {
@@ -83,9 +85,33 @@ export class DetailPage {
         if (isRefreshFlag == true) {
             this.sendData.unrepliedCommentcontent = "";
         }
+        
+        let blogNewInformationCount = Number(this.app.blogNewInformationCount);
+
+        if (this.status == "PUBLISH") {
+            if (this.readStatus == "NOT_READ") {
+                setTimeout(this.updateReplyStatus(),3000);
+                this.updateNewReplyFlag();
+                this.app.blogNewInformationCount = blogNewInformationCount - 1;
+            } else if (this.newReplyFlag == "TRUE") {
+                this.updateNewReplyFlag();
+            }   
+        }
     }
 
     onPageWillLeave() {
         this.sendData.isRefreshFlag = false;
+    }
+    
+    updateReplyStatus() {
+        let readStatus = "READ";
+        this.blogService.updateReplyStatus(this.id, readStatus);
+        this.community.readStatus = readStatus;
+    }
+    
+    updateNewReplyFlag() {
+        let newReplyFlag = "FALSE";
+        this.blogService.updateNewReplyFlag(this.id, newReplyFlag);
+        this.community.newReplyFlag = newReplyFlag;
     }
 }

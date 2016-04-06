@@ -34,22 +34,23 @@ export class BlogIndexPage {
         this.userAvatarImageType = this.app.config.get("USER_AVATAR_IMAGE_TYPE");
         
         this.getCommunityListForTop();
+        this.getBlogNewInformationCount();
     }
     
     onPageWillEnter() {
         this.isLoadCompleted = false;
     }
 
-    openDetail(community) {
+    openDetail(community) {      
         this.nav.push(DetailPage, {
-            "id": community.communityID
+            "community": community
         });
-        
     }
 
     doRefresh(refresher) {
         let isRefresh = true;
         this.getCommunityListForTop(isRefresh);
+        this.getBlogNewInformationCount();
     }
 
     doInfinite(infiniteScroll) {
@@ -74,6 +75,14 @@ export class BlogIndexPage {
                 infiniteScroll._highestY = 0;
                 let refresher = this.app.getComponent("blogIndexRefresher");
                 refresher.complete();
+            }
+        });
+    }
+    
+    getBlogNewInformationCount() {
+        this.blogService.getNotReadCommunityCountBySelf().then(data => {
+            if (data) {
+                this.app.blogNewInformationCount = data;
             }
         });
     }

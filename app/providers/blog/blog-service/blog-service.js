@@ -217,4 +217,23 @@ export class BlogService {
             });
         });
     }
+    
+    updateNewReplyFlag(communityID, status) {
+        if (this.data) {
+            // already loaded data
+            return Promise.resolve(this.data);
+        }
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/update_new_reply_flag.xml').then(req => {
+                let objRequest = this.util.parseXml(req);
+                this.util.setNodeText(objRequest, ".//*[local-name()='communityID']", communityID);
+                this.util.setNodeText(objRequest, ".//*[local-name()='newReplyFlag']", status);
+                req = this.util.xml2string(objRequest);
+
+                this.util.callCordysWebservice(req).then(data => {
+                    return true;
+                });
+            });
+        });
+    }
 }

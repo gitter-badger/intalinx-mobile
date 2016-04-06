@@ -2,7 +2,7 @@ import {Injectable, Inject} from 'angular2/core';
 import {Http} from 'angular2/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx';
-
+import {IonicApp} from 'ionic-angular';
 import {BlogService} from '../../providers/blog/blog-service/blog-service';
 
 /*
@@ -14,11 +14,12 @@ import {BlogService} from '../../providers/blog/blog-service/blog-service';
 export class AppsService {
 
     static get parameters() {
-        return [[Http], [BlogService]];
+        return [[Http], [IonicApp], [BlogService]];
     }
 
-    constructor(http, blogService) {
+    constructor(http, app, blogService) {
         this.http = http;
+        this.app = app;
         this.data = null;
         this.blogService = blogService;
     }
@@ -41,7 +42,7 @@ export class AppsService {
                     // and save the data for later reference
                     let items = Array.from(data);
                     items.forEach(function(element) {
-                       element = this.getNewInformationCount(element);
+                       this.getNewInformationCount(element);
                     }, this);
                     
                     this.data = items;
@@ -54,8 +55,7 @@ export class AppsService {
         if (item.componentsId == "blog") {
             this.blogService.getNotReadCommunityCountBySelf().then(data => {
                 if (data) {
-                    item.newInformationCount = data;
-                    return item;
+                    this.app.blogNewInformationCount = data;
                 }
             });
         }

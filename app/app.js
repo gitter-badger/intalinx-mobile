@@ -64,6 +64,9 @@ export class IntaLinx {
         this.initializeApp();
 
         this.rootPage = LoginPage;
+        
+        // initiallize new information count of blog system
+        this.app.blogNewInformationCount = "";
     }
 
     initializeApp() {
