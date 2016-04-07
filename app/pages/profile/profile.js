@@ -32,8 +32,10 @@ export class ProfilePage {
     }
 
     updateProfile() {
-        if (this.userService.updateProfile(this.user)) {
-            this.nav.pop();
-        }
+        this.userService.updateProfile(this.user).then(data => {
+            if (data == "true") {
+                this.nav.pop();
+            }
+        });
     }
 }

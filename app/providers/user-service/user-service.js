@@ -3,7 +3,7 @@ import {Http} from 'angular2/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx';
 
-import {IonicApp} from 'ionic-angular';
+import {IonicApp, NavController, Alert} from 'ionic-angular';
 
 import {Util} from '../../utils/util';
 import {SSO} from '../../utils/sso';
@@ -17,12 +17,13 @@ import {SSO} from '../../utils/sso';
 export class UserService {
 
     static get parameters() {
-        return [[Http], [IonicApp], [Util]];
+        return [[Http], [IonicApp], [NavController], [Util]];
     }
 
-    constructor(http, app, util) {
+    constructor(http, app, nav, util) {
         this.http = http;
         this.app = app;
+        this.nav = nav;
         this.sso = null;
         this.util = util;
     }
@@ -97,38 +98,54 @@ export class UserService {
     }
 
     updateProfile(user) {
-        if (this.validateUserPassword(user.newPassword, user.confirmPassword)) {
-            if (this.data) {
-                return Promise.resolve(this.data);
-            }
-            return new Promise(resolve => {
-                this.util.getRequestXml('./assets/requests/set_password.xml').then(req => {
-                    let objRequest = this.util.parseXml(req);
-                    this.util.setNodeText(objRequest, ".//*[local-name()='OldPassword']", user.oldPassword);
-                    this.util.setNodeText(objRequest, ".//*[local-name()='NewPassword']", user.newPassword);
-                    req = this.util.xml2string(objRequest);
+        return new Promise(resolve => {
+            if (this.validateUserPassword(user.newPassword, user.confirmPassword)) {
+            
+            this.util.getRequestXml('./assets/requests/set_password.xml').then(req => {
+                let objRequest = this.util.parseXml(req);
+                this.util.setNodeText(objRequest, ".//*[local-name()='OldPassword']", user.oldPassword);
+                this.util.setNodeText(objRequest, ".//*[local-name()='NewPassword']", user.newPassword);
+                req = this.util.xml2string(objRequest);
 
-                    this.util.callCordysWebservice(req).then(data => {
-                        
-                        // TODO: webservice error
-                        return true;
-                    });                    
-                });
+                this.util.callCordysWebservice(req).then(data => {
+                    
+                    resolve("true");
+                });                    
             });
-        }
+            }
+        });
     }
 
     validateUserPassword(newPassword, confirmPassword) {
         let passwordEmptyFault = newPassword == "" && confirmPassword == "";
         let arePasswordsSame = newPassword == confirmPassword;
-
         if (passwordEmptyFault) {
-            alert("パスワードは空になることはできません。");
-        }
-        else if (!arePasswordsSame) {
-            alert("パスワードが一致しません。 両方のテキスト ボックスに同じパスワードを入力するを確認してください。");
-        }
+            this.app.translate.get(["app.profile.message.error.title", "app.profile.message.error.emptyPassword", "app.action.ok"]).subscribe(message => {
+                let title = message['app.profile.message.error.title'];
+                let ok = message['app.action.ok'];
+                let content = message['app.profile.message.error.emptyPassword'];
 
+                let alert = Alert.create({
+                    title: title,
+                    subTitle: content,
+                    buttons: [ok]
+                });
+                this.nav.present(alert);
+            });
+        } else if (!arePasswordsSame) {
+            this.app.translate.get(["app.profile.message.error.title", "app.profile.message.error.mismatchPassword", "app.action.ok"]).subscribe(message => {
+                let title = message['app.profile.message.error.title'];
+                let ok = message['app.action.ok'];
+                let content = message['app.profile.message.error.mismatchPassword'];
+
+                let alert = Alert.create({
+                    title: title,
+                    subTitle: content,
+                    buttons: [ok]
+                });
+                this.nav.present(alert);
+            });      
+        } 
         return !passwordEmptyFault && arePasswordsSame;
     }
 }

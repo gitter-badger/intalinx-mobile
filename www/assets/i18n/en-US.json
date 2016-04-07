@@ -43,7 +43,14 @@
             "title": "Profile",
             "currentPassword": "Current password",
             "newPassword": "New password",
-            "confirmPassword": "Verify password"
+            "confirmPassword": "Verify password",
+            "message": {
+                "error": {
+                    "title": "error",
+                    "emptyPassword": "Password cannot be left empty.",
+                    "mismatchPassword": "Password mismatch. Ensure to enter the same password  in both the text boxes."
+                }
+            }
         },
         "blog": {
             "title": "Blog",

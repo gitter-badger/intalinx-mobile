@@ -3,7 +3,7 @@
         "message": {
             "error": {
                 "title": "エラー",
-                "systemError": "システムエラーが発生しました。大変お迷惑かかりましたが、システム管理者に連絡してください！"
+                "systemError": "システムエラーが発生しました。大変お迷惑かかりましたが、システム管理者に連絡してください。"
             }
         },
         "action": {
@@ -43,7 +43,14 @@
             "title": "プロファイル",
             "oldPassword": "古いパスワード",
             "newPassword": "パスワード",
-            "confirmPassword": "パスワード確認"
+            "confirmPassword": "パスワード確認",
+            "message": {
+                "error": {
+                    "title": "エラー",
+                    "emptyPassword": "パスワードは空になることはできません。",
+                    "mismatchPassword": "パスワードが一致しません。　両方のテキストボックスに同じパスワードを入力するを確認してください。"
+                }
+            }
         },
         "blog": {
             "title": "ブログ",
@@ -58,7 +65,7 @@
             "message": {
                 "error": {
                     "title": "エラー",
-                    "noContent": "コメントを入力してください！"
+                    "noContent": "コメントを入力してください。"
                 }
             }
         }

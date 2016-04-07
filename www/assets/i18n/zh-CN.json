@@ -3,7 +3,7 @@
         "message": {
             "error": {
                 "title": "错误",
-                "systemError": "系统发生异常，请联系管理员。"
+                "systemError": "系统发生异常，请联系管理员！"
             }
         },
         "action": {
@@ -35,7 +35,7 @@
             "message": {
                 "error": {
                     "title": "错误",
-                    "idOrPasswordNotCorrect": "您输入的帐号或密码有误。"
+                    "idOrPasswordNotCorrect": "您输入的帐号或密码有误！"
                 }
             }
         },
@@ -43,7 +43,14 @@
             "title": "用户资料",
             "oldPassword": "现在的密码",
             "newPassword": "设置新密码",
-            "confirmPassword": "确认新密码"
+            "confirmPassword": "确认新密码",
+            "message": {
+                "error": {
+                    "title": "错误",
+                    "emptyPassword": "密码不能为空。",
+                    "mismatchPassword": "两次输入的密码不一致！"
+                }
+            }
         },
         "blog": {
             "title": "博客",
@@ -58,7 +65,7 @@
             "message": {
                 "error": {
                     "title": "错误",
-                    "noContent": "请输入内容"
+                    "noContent": "请输入内容！"
                 }
             }
         }
