@@ -6,13 +6,12 @@
 -->
 <ion-navbar *navbar>
     <ion-title>{{ "app.blog.comment.add" | translate }}</ion-title>
+    <ion-buttons end>
+        <button (click)="saveComment()">{{ "app.blog.comment.reply" | translate }}</button>
+    </ion-buttons>
 </ion-navbar>
 <ion-content padding class="add-comment">
-    <form #addCommentForm="ngForm" (ngSubmit)="saveComment(addCommentForm)">
-        <ion-item>
-            <ion-textarea placeholder='{{ "app.blog.comment.content" | translate }}' [(ngModel)]="comment.content"></ion-textarea>
-        </ion-item>
-        <button full type="submit">{{ "app.blog.comment.reply" | translate }}</button>
-    </form>
-
+    <ion-item no-lines>
+        <ion-textarea placeholder='{{ "app.blog.comment.content" | translate }}' [(ngModel)]="comment.content"></ion-textarea>
+    </ion-item>
 </ion-content>
