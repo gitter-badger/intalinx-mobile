@@ -37,17 +37,22 @@ export class DateUtil {
         dateWhoutT.setMinutes(date.substring(14, 16));
         dateWhoutT.setSeconds(date.substring(17, 19));
         let dateWhoutTTime = dateWhoutT.getTime();
-        let nowTime = new Date().getTime();
+        let now = new Date();
+        let nowTime = now.getTime();
         let minutesFromDateToNow = Math.trunc((nowTime - dateWhoutTTime) / (60 * 1000));
 
         let minutesOfOneHour = 60;
         let minutesOfOneday = minutesOfOneHour * 24;
         let minutesOfOneWeek = minutesOfOneday * 7;
+        let minutesOfOneYear = minutesOfOneday * 365;
         
         return new Promise(resolve => {
-            if (minutesFromDateToNow >= minutesOfOneWeek) {
+            if (now.getFullYear() != date.substring(0, 4)) {
+                // 今年以前の場合
+                resolve(yearMonthDay.substring(0, 7).replace(/\-/ig, "/"));              
+            } else if (minutesFromDateToNow >= minutesOfOneWeek) {
                 // 一週前の場合
-                resolve(yearMonthDay.replace(/\-/ig, "/"));
+                resolve(yearMonthDay.substring(5, 10).replace(/\-/ig, "/") + " " + date.substring(11, 16));
             } else if (minutesFromDateToNow >= minutesOfOneday) {
                 // 一日~一週の場合
                 DateUtil.transferDateToWeekDayName(dateWhoutT, app).then(data => {
