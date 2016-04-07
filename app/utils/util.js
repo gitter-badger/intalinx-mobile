@@ -167,26 +167,7 @@ export class Util {
     }
 
     transferDateToKindsOfStyles(date) {
-        return DateUtil.transferDateToKindsOfStyles(date);
-    }
-
-    transferDateToWeekDayName(date) {
-        let weekday = new Array(7);
-        return new Promise(resolve => {
-            this.app.translate.get(["app.date.sunday", "app.date.monday", "app.date.tuesday",
-                "app.date.wednesday", "app.date.thursday", "app.date.friday", "app.date.saturday"]).subscribe(message => {
-
-                    weekday[0] = message["app.date.sunday"];
-                    weekday[1] = message["app.date.monday"];
-                    weekday[2] = message["app.date.tuesday"];
-                    weekday[3] = message["app.date.wednesday"];
-                    weekday[4] = message["app.date.thursday"];
-                    weekday[5] = message["app.date.friday"];
-                    weekday[6] = message["app.date.saturday"];
-
-                    resolve(weekday[date.getDay()]);
-                });
-        });
+        return DateUtil.transferDateToKindsOfStyles(date, this.app);
     }
     
     /**

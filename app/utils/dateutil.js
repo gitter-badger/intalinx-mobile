@@ -1,7 +1,4 @@
 export class DateUtil {
-    constructor() {
-
-    }
 
     static transferCordysDateStringToUTC(sValue) {
         var fields = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/.exec(sValue);
@@ -33,30 +30,33 @@ export class DateUtil {
         return sValue;
     }
     
-    static transferDateToKindsOfStyles(date) {
+    static transferDateToKindsOfStyles(date, app) {
         let yearMonthDay = date.substring(0, 10);
-        let dateWhoutT = DateUtil.transferCordysDateStringToUTC(date);
+        let dateWhoutT = new Date(yearMonthDay);
+        dateWhoutT.setHours(date.substring(11, 13));
+        dateWhoutT.setMinutes(date.substring(14, 16));
+        dateWhoutT.setSeconds(date.substring(17, 19));
         let dateWhoutTTime = dateWhoutT.getTime();
-
         let nowTime = new Date().getTime();
         let minutesFromDateToNow = Math.trunc((nowTime - dateWhoutTTime) / (60 * 1000));
 
         let minutesOfOneHour = 60;
         let minutesOfOneday = minutesOfOneHour * 24;
         let minutesOfOneWeek = minutesOfOneday * 7;
+        
         return new Promise(resolve => {
             if (minutesFromDateToNow >= minutesOfOneWeek) {
                 // 一週前の場合
                 resolve(yearMonthDay.replace(/\-/ig, "/"));
             } else if (minutesFromDateToNow >= minutesOfOneday) {
                 // 一日~一週の場合
-                this.transferDateToWeekDayName(dateWhoutT).then(data => {
+                DateUtil.transferDateToWeekDayName(dateWhoutT, app).then(data => {
                     resolve(data + " " + date.substring(11, 16));
                 });
             } else if (minutesFromDateToNow >= minutesOfOneHour) {
                 // 一時間~一日の場合
                 let hours = Math.trunc(minutesFromDateToNow / minutesOfOneHour);
-                this.app.translate.get(["app.date.hoursAgo"]).subscribe(message => {
+                app.translate.get(["app.date.hoursAgo"]).subscribe(message => {
                     resolve(hours + message["app.date.hoursAgo"]);
                 });
             } else {
@@ -65,11 +65,30 @@ export class DateUtil {
                 if (minutesFromDateToNow < 1) {
                     minutesFromDateToNow = 1;
                 }
-                this.app.translate.get(["app.date.minutesAgo"]).subscribe(message => {
+                app.translate.get(["app.date.minutesAgo"]).subscribe(message => {
                     resolve(minutesFromDateToNow + message["app.date.minutesAgo"]);
                 });
             }
 
+        });
+    }
+    
+    static transferDateToWeekDayName(date, app) {
+        let weekday = new Array(7);
+        return new Promise(resolve => {
+            app.translate.get(["app.date.sunday", "app.date.monday", "app.date.tuesday",
+                "app.date.wednesday", "app.date.thursday", "app.date.friday", "app.date.saturday"]).subscribe(message => {
+
+                    weekday[0] = message["app.date.sunday"];
+                    weekday[1] = message["app.date.monday"];
+                    weekday[2] = message["app.date.tuesday"];
+                    weekday[3] = message["app.date.wednesday"];
+                    weekday[4] = message["app.date.thursday"];
+                    weekday[5] = message["app.date.friday"];
+                    weekday[6] = message["app.date.saturday"];
+
+                    resolve(weekday[date.getDay()]);
+                });
         });
     }
 }

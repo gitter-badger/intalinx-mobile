@@ -91,7 +91,7 @@ export class BlogService {
     }
 
     insertReplyContent(comment) {
-        let content = this.util.replaceCharacterOfHtmlTag(comment.content);
+        let content = this.util.replaceHtmlTagCharacter(comment.content);
         if (this.data) {
             // already loaded data
             return Promise.resolve(this.data);
