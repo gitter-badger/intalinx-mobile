@@ -91,4 +91,12 @@ export class BlogIndexPage {
         let img = event.currentTarget;
         img.src = this.userAvatarImageUrl + this.userAvatarDefaultImage;
     }
+    
+    ngAfterViewInit() {
+        this.pageContent = this.app.getComponent('blogIndex');
+    }
+    
+    scrollToIndexPageTop() {
+        this.pageContent.scrollToTop();
+    }
 }

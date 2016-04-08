@@ -41,9 +41,11 @@ export class DetailPage {
         this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
             this.title = data.title;
             this.content = data.content;
+            this.createUserId = data.createUser;
             this.createDate = data.createDate;
             this.createUserName = data.createUserName;
             this.status = data.status;
+            this.readCount = data.readCount;
             
         });
         this.getReplyContentListByCommunityID();
@@ -134,5 +136,13 @@ export class DetailPage {
     loadImageError(event){
         let img = event.currentTarget;
         img.src = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+    }
+    
+    ngAfterViewInit() {
+        this.pageContent = this.app.getComponent('detail');
+    }
+    
+    scrollToDetailPageTop() {
+        this.pageContent.scrollToTop();
     }
 }

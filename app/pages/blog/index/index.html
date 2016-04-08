@@ -12,7 +12,7 @@
         {{"app.blog.title" | translate}}
     </ion-title>
 </ion-navbar>
-<ion-content class="blog-index">
+<ion-content id="blogIndex" class="blog-index">
     <div class="loading" [style.display]="isLoadCompleted ? 'none' : 'block'">
         <ion-spinner name="dots" ></ion-spinner>
     </div>
@@ -42,3 +42,6 @@
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ion-content>
+<button fab fab-bottom primary-text (click)="scrollToIndexPageTop()">
+    <ion-icon name="arrow-up"></ion-icon>
+</button>
