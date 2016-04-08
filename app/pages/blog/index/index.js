@@ -37,7 +37,7 @@ export class BlogIndexPage {
         this.getBlogNewInformationCount();
     }
     
-    onPageWillEnter() {
+    onPageLoaded () {
         this.isLoadCompleted = false;
     }
 
