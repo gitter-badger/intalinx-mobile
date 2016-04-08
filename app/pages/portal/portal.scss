@@ -3,6 +3,7 @@
 ion-navbar {
     .bar-button-default {
         color: $primary-color-text;
+        padding: 0px;
     }
     .toolbar-title {
         color: $primary-color-text;
@@ -32,9 +33,15 @@ ion-navbar {
         max-height: 10rem;
         border-radius: 10rem;
     }
-    button ion-label{
-        color: $primary-text-color;
-    }
+    button {
+        ion-label{
+            color: $primary-text-color;
+        }
+        .item-inner {
+            background-image: none !important;
+            padding-right: 0px !important;
+        }
+    } 
 }
 .portal {
     ion-buttons[start] {
