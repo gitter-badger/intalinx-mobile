@@ -1,9 +1,4 @@
 <SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
-   <SOAP:Header>
-      <header xmlns="http://schemas.cordys.com/General/1.0/">
-         <Logger />
-      </header>
-   </SOAP:Header>
    <SOAP:Body>
       <GetUserDetails xmlns="http://schemas.cordys.com/1.0/ldap" />
    </SOAP:Body>
