@@ -88,9 +88,16 @@ export class Util {
                 .subscribe(data => {
                     resolve(data);
                 }, error => {
-                    let responseText = error.text();
-                    let responseNode = this.parseXml(responseText);
-                    let faultstring = this.getNodeText(responseNode, ".//*[local-name()='faultstring']");
+                    let faultstring = "";
+                    if (error.status == "200" && error.type == "3") {
+                        this.app.translate.get(["app.message.error.systemError"]).subscribe(message => {
+                            faultstring = message['app.message.error.systemError'];
+                        });
+                    } else {
+                        let responseText = error.text();
+                        let responseNode = this.parseXml(responseText);
+                        faultstring = this.getNodeText(responseNode, ".//*[local-name()='faultstring']");
+                    }
                     this.app.translate.get(["app.message.error.title", "app.action.ok"]).subscribe(message => {
                         let title = message['app.message.error.title'];
                         let ok = message['app.action.ok'];
@@ -113,6 +120,22 @@ export class Util {
                 .map(res => res.text())
                 .subscribe(data => {
                     resolve(data);
+                }, error => {
+                    if (error.status == "200" && error.type == "3") {
+                        this.app.translate.get(["app.message.error.title","app.message.error.systemError", "app.action.ok"]).subscribe(message => {
+                        let title = message['app.message.error.title'];
+                        let ok = message['app.action.ok'];
+                        let content = message['app.message.error.systemError'];
+
+                        let alert = Alert.create({
+                            title: title,
+                            subTitle: content,
+                            buttons: [ok]
+                        });
+                        this.nav.present(alert);
+                    });
+
+                    }
                 });
         });
     }
