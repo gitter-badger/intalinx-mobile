@@ -5,6 +5,9 @@ ion-navbar {
         color: $primary-color-text;
         padding: 0px;
     }
+    .bar-button-default:hover:not(.disable-hover) {
+        color: $primary-color-light;
+    }
     .toolbar-title {
         color: $primary-color-text;
     }
