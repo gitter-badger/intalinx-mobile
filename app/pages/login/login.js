@@ -28,8 +28,8 @@ export class LoginPage {
 
         this.user = {
             loginId: "",
-            password: "",
-            rememberMe: false
+            password: ""
+            // rememberMe: false
         }
     }
 
@@ -54,7 +54,7 @@ export class LoginPage {
                 this.app.translate.get(["app.login.message.error.title", "app.login.message.error.idOrPasswordNotCorrect", "app.action.ok"]).subscribe(message => {
                     let title = message['app.login.message.error.title'];
                     let ok = message['app.action.ok'];
-                    let content = message['app.blog.message.error.idOrPasswordNotCorrect'];
+                    let content = message['app.login.message.error.idOrPasswordNotCorrect'];
 
                     let alert = Alert.create({
                         title: title,
