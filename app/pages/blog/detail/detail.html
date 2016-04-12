@@ -7,7 +7,12 @@
 <ion-navbar *navbar>
     <ion-title>{{"app.blog.detail" | translate}}</ion-title>
 </ion-navbar>
-<ion-content id="detail">
+<ion-content [style.display]="isLoadCompleted ? 'none' : 'block'">
+    <div class="loading">
+        <ion-spinner name="dots" ></ion-spinner>
+    </div>
+</ion-content>
+<ion-content id="detail" [style.display]="isLoadCompleted ? 'block' : 'none'">
     <ion-item no-lines>
         <h2 class="title">{{title}}</h2>
     </ion-item>
@@ -51,9 +56,9 @@
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ion-content>
-<button fab fab-right fab-bottom secondary (click)="addComment()">
+<button fab fab-right fab-bottom secondary [style.display]="isLoadCompleted ? 'block' : 'none'" (click)="addComment()">
     <ion-icon name="add"></ion-icon>
 </button>
-<button fab fab-left fab-bottom primary-text (click)="scrollToDetailPageTop()">
+<!--<button fab fab-left fab-bottom primary-text (click)="scrollToDetailPageTop()">
     <ion-icon name="arrow-up"></ion-icon>
-</button>
+</button>-->

@@ -46,6 +46,7 @@ export class DetailPage {
             this.createUserName = data.createUserName;
             this.status = data.status;
             this.readCount = data.readCount;
+            this.isLoadCompleted = true;
             
         });
         this.getReplyContentListByCommunityID();
@@ -111,6 +112,7 @@ export class DetailPage {
         if (this.status == "PUBLISH" && this.readStatus == "NOT_READ" && pageLoadingTime >= 3000) {
             this.updateReplyStatus();
         }
+        this.isLoadCompleted = false;
     }
     
     updateReplyStatus() {
