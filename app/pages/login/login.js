@@ -50,7 +50,7 @@ export class LoginPage {
         this.userService.authenticate(this.user).then(authenticationResult => {
             if (authenticationResult) {
                 this.redirectToPortal();
-            } else {
+            } else if (!authenticationResult) {
                 this.app.translate.get(["app.login.message.error.title", "app.login.message.error.idOrPasswordNotCorrect", "app.action.ok"]).subscribe(message => {
                     let title = message['app.login.message.error.title'];
                     let ok = message['app.action.ok'];

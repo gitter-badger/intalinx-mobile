@@ -1,4 +1,4 @@
-import {Page, NavController} from 'ionic-angular';
+import {IonicApp, Page, NavController, ViewController} from 'ionic-angular';
 
 import {NgForm} from 'angular2/common';
 
@@ -17,12 +17,14 @@ import {UserService} from '../../providers/user-service/user-service';
 })
 export class ProfilePage {
     static get parameters() {
-        return [[NavController], [UserService]];
+        return [[IonicApp], [NavController], [UserService], [ViewController]];
     }
 
-    constructor(nav, userService) {
+    constructor(app, nav, userService, view) {
+        this.app = app;
         this.nav = nav;
         this.userService = userService;
+        this.view = view;
 
         this.user = {
             oldPassword: "",
@@ -36,6 +38,13 @@ export class ProfilePage {
             if (data == "true") {
                 this.nav.pop();
             }
+        });
+    }
+    
+    onPageWillEnter() {
+        this.app.translate.get(["app.action.back"]).subscribe(message => {
+            let title = message['app.action.back']; 
+            this.view.setBackButtonText(title);
         });
     }
 }

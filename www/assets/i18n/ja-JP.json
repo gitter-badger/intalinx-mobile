@@ -10,7 +10,8 @@
             "edit": "編集",
             "delete": "削除",
             "save": "保存",
-            "ok": "はい"
+            "ok": "はい",
+            "back": "戻る"
         },
         "date": {
             "minutesAgo": "分前",
@@ -54,7 +55,7 @@
         },
         "blog": {
             "title": "ブログ",
-            "detail": "ブログ明細",
+            "detail": "ブログ詳細",
             "newBlog": "新着",
             "newReturn": "新着",
             "comment": {

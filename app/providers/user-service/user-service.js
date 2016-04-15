@@ -57,13 +57,29 @@ export class UserService {
     }
 
     authenticate(user) {
+        debugger
         return new Promise(resolve => {
             this.getSSO()
                 .then(sso => {
                     return sso.authenticate(user.loginId, user.password);
                 })
                 .then(authenticationResult => {
-                    resolve(authenticationResult);
+                    if (authenticationResult || !authenticationResult) {
+                        resolve(authenticationResult);
+                    } else {
+                        this.app.translate.get(["app.blog.message.error.title", "app.message.error.systemError", "app.action.ok"]).subscribe(message => {
+                            let title = message['app.blog.message.error.title'];
+                            let ok = message['app.action.ok'];
+                            let content = message['app.message.error.systemError'];
+
+                            let alert = Alert.create({
+                                title: title,
+                                subTitle: content,
+                                buttons: [ok]
+                            });
+                            this.nav.present(alert);
+                        });
+                    }
                 });
         });
     }

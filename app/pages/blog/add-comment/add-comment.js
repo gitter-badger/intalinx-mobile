@@ -1,4 +1,4 @@
-import {Page, IonicApp, Modal, NavController, NavParams, Alert} from 'ionic-angular';
+import {Page, IonicApp, Modal, NavController, NavParams, Alert, ViewController} from 'ionic-angular';
 
 import {NgForm} from 'angular2/common';
 
@@ -26,12 +26,13 @@ import {DetailPage} from '../detail/detail';
 })
 export class AddCommentPage {
     static get parameters() {
-        return [[IonicApp], [NavController], [NavParams], [BlogService]];
+        return [[IonicApp], [NavController], [NavParams], [BlogService], [ViewController]];
     }
 
-    constructor(app, nav, params, blogService) {
+    constructor(app, nav, params, blogService, view) {
         this.app = app;
         this.nav = nav;
+        this.view = view;
         this.blogService = blogService;
         this.params = params;
         this.sendData = this.params.get("sendData");
@@ -54,5 +55,12 @@ export class AddCommentPage {
 
     onPageWillLeave() {
         this.sendData.unrepliedCommentcontent = this.comment.content;
+    }
+    
+    onPageWillEnter() {
+        this.app.translate.get(["app.action.back"]).subscribe(message => {
+            let title = message['app.action.back']; 
+            this.view.setBackButtonText(title);
+        });
     }
 }

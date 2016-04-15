@@ -1,4 +1,4 @@
-import {Page, IonicApp, NavController, NavParams} from 'ionic-angular';
+import {Page, IonicApp, NavController, NavParams, ViewController} from 'ionic-angular';
 import {Component} from 'angular2/core';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
@@ -15,13 +15,14 @@ import {Util} from '../../../utils/util';
 export class DetailPage {
 
     static get parameters() {
-        return [[IonicApp], [NavController], [NavParams], [BlogService]];
+        return [[IonicApp], [NavController], [NavParams], [BlogService], [ViewController]];
     }
 
-    constructor(app, nav, params, blogService) {
+    constructor(app, nav, params, blogService, view) {
         this.app = app;
         this.nav = nav;
         this.params = params;
+        this.view = view;
         
         this.community = this.params.get("community");
         this.id = this.community.communityID;
@@ -87,6 +88,10 @@ export class DetailPage {
             infiniteScroll._highestY = 0;
             this.getReplyContentListByCommunityID();
         }
+        this.app.translate.get(["app.action.back"]).subscribe(message => {
+            let title = message['app.action.back']; 
+            this.view.setBackButtonText(title);
+        });
     }
 
     onPageDidEnter() {

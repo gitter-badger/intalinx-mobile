@@ -10,7 +10,8 @@
             "edit": "编辑",
             "delete": "删除",
             "save": "保存",
-            "ok": "OK"
+            "ok": "OK",
+            "back": "返回"
         },
         "date": {
             "minutesAgo": "分前",
