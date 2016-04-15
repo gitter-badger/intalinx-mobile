@@ -2,6 +2,7 @@
 @import "../pages/blog/add-comment/add-comment";
 
 .blog-index {
+    -webkit-user-select: auto;
     .avatar {
         height: 4em;
         img {

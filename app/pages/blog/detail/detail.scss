@@ -4,6 +4,7 @@ $padding-right: 16px;
 $padding-bottom: 16px;
 
 #detail {
+  -webkit-user-select: auto;
   .title {
     padding-top: 6px;
     padding-right: 6px;
