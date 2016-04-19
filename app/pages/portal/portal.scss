@@ -3,10 +3,17 @@
 ion-navbar {
     .bar-button-default {
         color: $primary-color-text;
-        padding: 0px;
+        padding-right: 0px;
     }
     .bar-button-default:hover:not(.disable-hover) {
         color: $primary-color-light;
+    }
+    .bar-button-default.disable-hover:disabled {
+        color: $divider-color;
+        background-color: #FFFFFF;
+        border-color: #B6B6B6;
+        border-width: 1px;
+        border-style: solid;
     }
     .toolbar-title {
         color: $primary-color-text;
@@ -21,6 +28,7 @@ ion-navbar {
 }
 
 .menu {
+    width: 80%;
     ion-card {
         margin-left: 0px;
         margin-right: 0px;
@@ -32,9 +40,9 @@ ion-navbar {
         }
     }
     ion-avatar img {
-        max-width: 10rem;
-        max-height: 10rem;
-        border-radius: 10rem;
+        max-width: 6rem;
+        max-height: 6rem;
+        border-radius: 6rem;
     }
     button {
         ion-label{
@@ -54,8 +62,8 @@ ion-navbar {
 .biznavi-badge {
     background-color: $accent-color;
     position: relative;
-    left: -10px;
-    top: -5px;
+    left: -1rem;
+    top: -0.5rem;
 }
 .button-fab {
     z-index: 1;
@@ -68,5 +76,9 @@ ion-navbar {
 .new-information-count {
     background-color: $accent-color;
     position: relative;
-    left: 100px;
+    left: 60%;
+}
+
+button :disabled {
+    color: $divider-color;
 }
