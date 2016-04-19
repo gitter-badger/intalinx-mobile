@@ -1,4 +1,4 @@
-import {Page, IonicApp, Modal, NavController, NavParams, Alert, ViewController} from 'ionic-angular';
+import {Page, IonicApp, Modal, NavController, NavParams, Alert, ViewController, Platform} from 'ionic-angular';
 
 import {NgForm} from 'angular2/common';
 
@@ -26,14 +26,16 @@ import {DetailPage} from '../detail/detail';
 })
 export class AddCommentPage {
     static get parameters() {
-        return [[IonicApp], [NavController], [NavParams], [BlogService], [ViewController]];
+        return [[IonicApp], [NavController], [NavParams], [BlogService], [ViewController], [Platform], [Util]];
     }
 
-    constructor(app, nav, params, blogService, view) {
+    constructor(app, nav, params, blogService, view, platform, util) {
         this.app = app;
         this.nav = nav;
         this.view = view;
+        this.platform = platform;
         this.blogService = blogService;
+        this.util = util;
         this.params = params;
         this.sendData = this.params.get("sendData");
         this.id = this.sendData.id;
@@ -45,10 +47,13 @@ export class AddCommentPage {
     }
 
     saveComment() {
+        this.isDisabled = true;
         this.blogService.saveComment(this.comment).then(data => {
             if (data == "true") {
                 this.sendData.isRefreshFlag = true;
                 this.nav.pop();
+            } else {
+                this.isDisabled = null;
             }
         });
     }
@@ -56,11 +61,31 @@ export class AddCommentPage {
     onPageWillLeave() {
         this.sendData.unrepliedCommentcontent = this.comment.content;
     }
-    
+
     onPageWillEnter() {
-        this.app.translate.get(["app.action.back"]).subscribe(message => {
-            let title = message['app.action.back']; 
-            this.view.setBackButtonText(title);
-        });
+        if (this.platform.is('ios')) {
+            this.app.translate.get(["app.action.back"]).subscribe(message => {
+                let title = message['app.action.back'];
+                this.view.setBackButtonText(title);
+            });
+        }
+        if (this.comment.content && this.util.deleteEmSpaceEnSpaceNewLineInCharacter(this.comment.content) != "") {
+            this.isDisabled = null;
+        } else {
+            this.isDisabled = true;
+        }
+    }
+    
+    onPageDidEnter () {
+        let height = document.getElementById("addComment").offsetHeight;
+        document.getElementsByTagName("textarea")[0].style.height = (height - 32)  + "px";
+    }
+
+    changeContent() {
+        if (this.comment.content && this.util.deleteEmSpaceEnSpaceNewLineInCharacter(this.comment.content) != "") {
+            this.isDisabled = null;
+        } else {
+            this.isDisabled = true;
+        }
     }
 }

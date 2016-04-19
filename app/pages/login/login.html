@@ -7,16 +7,16 @@
     <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
         <ion-item>
             <ion-label floating id="loginId">{{ "app.login.loginId" | translate }}</ion-label>
-            <ion-input type="text" [(ngModel)]="user.loginId"></ion-input>
+            <ion-input type="text" [(ngModel)]="user.loginId" (ngModelChange)="changeUser($event)"></ion-input>
         </ion-item>
         <ion-item>
             <ion-label floating id="password">{{ "app.login.password" | translate }}</ion-label>
-            <ion-input type="password" [(ngModel)]="user.password"></ion-input>
+            <ion-input type="password" [(ngModel)]="user.password" (ngModelChange)="changeUser($event)"></ion-input>
         </ion-item>
         <!--<ion-item no-lines class="remember-me">
             <ion-label>{{ "app.login.rememberMe" | translate }}</ion-label>
             <ion-checkbox checked="false" [(ngModel)]="user.rememberMe"></ion-checkbox>
         </ion-item>-->
-        <button full type="submit">{{ "app.login.login" | translate }}</button>
+        <button disabled={{isDisabled}} full type="submit">{{ "app.login.login" | translate }}</button>
     </form>
 </ion-content>

@@ -7,11 +7,11 @@
 <ion-navbar *navbar>
     <ion-title>{{ "app.blog.comment.add" | translate }}</ion-title>
     <ion-buttons end>
-        <button (click)="saveComment()">{{ "app.blog.comment.reply" | translate }}</button>
+        <button disabled={{isDisabled}} (click)="saveComment()">{{ "app.blog.comment.reply" | translate }}</button>
     </ion-buttons>
 </ion-navbar>
-<ion-content padding class="add-comment">
+<ion-content padding id="addComment" class="add-comment">
     <ion-item no-lines>
-        <ion-textarea placeholder='{{ "app.blog.comment.content" | translate }}' [(ngModel)]="comment.content"></ion-textarea>
+        <ion-textarea placeholder='{{ "app.blog.comment.content" | translate }}' [(ngModel)]="comment.content" (ngModelChange)="changeContent($event)"></ion-textarea>
     </ion-item>
 </ion-content>

@@ -5,16 +5,16 @@
     <form #profileForm="ngForm" (ngSubmit)="updateProfile(profileForm)">
         <ion-item>
             <ion-label floating id="currentPassword">{{ "app.profile.oldPassword" | translate }}</ion-label>
-            <ion-input type="password" [(ngModel)]="user.oldPassword"></ion-input>
+            <ion-input type="password" [(ngModel)]="user.oldPassword" (ngModelChange)="changePassword($event)"></ion-input>
         </ion-item>
         <ion-item>
             <ion-label floating id="newPassword">{{ "app.profile.newPassword" | translate }}</ion-label>
-            <ion-input type="password" [(ngModel)]="user.newPassword"></ion-input>
+            <ion-input type="password" [(ngModel)]="user.newPassword" (ngModelChange)="changePassword($event)"></ion-input>
         </ion-item>
         <ion-item>
             <ion-label floating id="confirmPassword">{{ "app.profile.confirmPassword" | translate }}</ion-label>
-            <ion-input type="password" [(ngModel)]="user.confirmPassword"></ion-input>
+            <ion-input type="password" [(ngModel)]="user.confirmPassword" (ngModelChange)="changePassword($event)"></ion-input>
         </ion-item>
-        <button full type="submit">{{ "app.action.save" | translate }}</button>
+        <button disabled={{isDisabled}} full type="submit">{{ "app.action.save" | translate }}</button>
     </form>
 </ion-content>

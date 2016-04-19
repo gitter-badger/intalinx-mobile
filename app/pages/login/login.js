@@ -47,6 +47,7 @@ export class LoginPage {
     }
 
     login() {
+        this.isDisabled = true;
         this.userService.authenticate(this.user).then(authenticationResult => {
             if (authenticationResult) {
                 this.redirectToPortal();
@@ -69,5 +70,17 @@ export class LoginPage {
 
     redirectToPortal() {
         this.nav.setRoot(PortalPage);
+    }
+    
+    onPageWillEnter() {
+        this.isDisabled = true;
+    }
+    
+    changeUser() {
+        if (this.user.loginId && this.user.password) {
+            this.isDisabled = null;
+        } else {
+            this.isDisabled = true;
+        }
     }
 }
