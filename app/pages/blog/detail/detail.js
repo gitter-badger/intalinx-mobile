@@ -1,4 +1,4 @@
-import {Page, IonicApp, NavController, NavParams, ViewController} from 'ionic-angular';
+import {Page, IonicApp, NavController, NavParams, ViewController, Platform} from 'ionic-angular';
 import {Component} from 'angular2/core';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
@@ -15,15 +15,16 @@ import {Util} from '../../../utils/util';
 export class DetailPage {
 
     static get parameters() {
-        return [[IonicApp], [NavController], [NavParams], [BlogService], [ViewController]];
+        return [[IonicApp], [NavController], [NavParams], [BlogService], [ViewController], [Platform]];
     }
 
-    constructor(app, nav, params, blogService, view) {
+    constructor(app, nav, params, blogService, view, platform) {
         this.app = app;
         this.nav = nav;
         this.params = params;
         this.view = view;
-        
+        this.platform = platform;
+
         this.community = this.params.get("community");
         this.id = this.community.communityID;
         this.readStatus = this.community.readStatus;
@@ -35,7 +36,7 @@ export class DetailPage {
             "isRefreshFlag": false,
             "unrepliedCommentcontent": ""
         }
-        
+
         this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
         this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
 
@@ -48,7 +49,8 @@ export class DetailPage {
             this.status = data.status;
             this.readCount = data.readCount;
             this.isLoadCompleted = true;
-            
+            this.isScrollToTopButtonVisible = false;
+
         });
         this.getReplyContentListByCommunityID();
     }
@@ -80,7 +82,7 @@ export class DetailPage {
     onPageLoaded() {
         this.pageLoadTime = new Date().getTime();
     }
-    
+
     onPageWillEnter() {
         let isRefreshFlag = this.sendData.isRefreshFlag;
         if (isRefreshFlag == true) {
@@ -88,10 +90,12 @@ export class DetailPage {
             infiniteScroll._highestY = 0;
             this.getReplyContentListByCommunityID();
         }
-        this.app.translate.get(["app.action.back"]).subscribe(message => {
-            let title = message['app.action.back']; 
-            this.view.setBackButtonText(title);
-        });
+        if (this.platform.is('ios')) {
+            this.app.translate.get(["app.action.back"]).subscribe(message => {
+                let title = message['app.action.back'];
+                this.view.setBackButtonText(title);
+            });
+        }
     }
 
     onPageDidEnter() {
@@ -99,7 +103,7 @@ export class DetailPage {
         if (isRefreshFlag == true) {
             this.sendData.unrepliedCommentcontent = "";
         }
-        
+
         let blogNewInformationCount = Number(this.app.blogNewInformationCount);
 
         if (this.status == "PUBLISH" && this.newReplyFlag == "TRUE") {
@@ -110,7 +114,7 @@ export class DetailPage {
     onPageWillLeave() {
         this.sendData.isRefreshFlag = false;
     }
-    
+
     onPageWillUnload() {
         let now = new Date().getTime();
         let pageLoadingTime = now - this.pageLoadTime;
@@ -118,8 +122,9 @@ export class DetailPage {
             this.updateReplyStatus();
         }
         this.isLoadCompleted = false;
+        this.isScrollToTopButtonVisible = false;
     }
-    
+
     updateReplyStatus() {
         let readStatus = "READ";
         this.blogService.updateReplyStatus(this.id, readStatus).then(data => {
@@ -130,7 +135,7 @@ export class DetailPage {
             }
         });
     }
-    
+
     updateNewReplyFlag() {
         let newReplyFlag = "FALSE";
         this.blogService.updateNewReplyFlag(this.id, newReplyFlag).then(data => {
@@ -139,17 +144,28 @@ export class DetailPage {
             }
         });
     }
-    
-    loadImageError(event){
+
+    loadImageError(event) {
         let img = event.currentTarget;
         img.src = this.userAvatarImageUrl + this.userAvatarDefaultImage;
     }
-    
+
     ngAfterViewInit() {
         this.pageContent = this.app.getComponent('detail');
+        this.pageContent.addScrollListener(this.onPageScroll(this));
     }
-    
+
     scrollToDetailPageTop() {
         this.pageContent.scrollToTop();
+    }
+    
+    onPageScroll(that) {
+        return function() {
+            if (this.scrollTop > 200) {
+                that.isScrollToTopButtonVisible = true;
+            } else {
+                that.isScrollToTopButtonVisible = false;
+            }
+        }       
     }
 }

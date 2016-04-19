@@ -9,7 +9,7 @@
 </ion-navbar>
 <ion-content [style.display]="isLoadCompleted ? 'none' : 'block'">
     <div class="loading">
-        <ion-spinner name="dots" ></ion-spinner>
+        <ion-spinner name="dots"></ion-spinner>
     </div>
 </ion-content>
 <ion-content id="detail" [style.display]="isLoadCompleted ? 'block' : 'none'">
@@ -18,7 +18,7 @@
     </ion-item>
     <ion-item class="status">
         <ion-avatar item-left class="avatar">
-            <img src="{{userAvatarImageUrl}}{{createUserId}}" (error)="loadImageError($event)"/>
+            <img src="{{userAvatarImageUrl}}{{createUserId}}" (error)="loadImageError($event)" />
         </ion-avatar>
         <div class="name">{{createUserName}}</div>
         <div class="time">
@@ -26,11 +26,11 @@
         </div>
     </ion-item>
     <ion-item no-lines class="read-count">
-        <button primary clear item-right>
+        <button disabled primary clear item-right>
             <ion-icon name="eye"></ion-icon>
             <div>{{readCount}}</div>
         </button>
-        <button primary clear item-right>
+        <button disabled primary clear item-right>
             <ion-icon name="text"></ion-icon>
             <div>{{commentCount}}</div>
         </button>
@@ -39,7 +39,7 @@
 
     <ion-list>
         <ion-item class="comment" *ngFor="#comment of comments">
-            <ion-item>
+            <ion-item class="status">
                 <ion-avatar item-left class="avatar">
                     <img src="{{userAvatarImageUrl}}{{comment.userID}}" (error)="loadImageError($event)" />
                 </ion-avatar>
@@ -59,6 +59,6 @@
 <button fab fab-right fab-bottom secondary [style.display]="isLoadCompleted ? 'block' : 'none'" (click)="addComment()">
     <ion-icon name="add"></ion-icon>
 </button>
-<!--<button fab fab-left fab-bottom primary-text (click)="scrollToDetailPageTop()">
+<button fab fab-left fab-bottom primary-text [style.display]="isScrollToTopButtonVisible ? 'block' : 'none'" (click)="scrollToDetailPageTop()">
     <ion-icon name="arrow-up"></ion-icon>
-</button>-->
+</button>

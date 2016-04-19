@@ -70,6 +70,7 @@ export class BlogIndexPage {
         this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
             this.communityListForTop = data;
             this.isLoadCompleted = true;
+            this.isScrollToTopButtonVisible = false;
             if (isRefresh) {
                 let infiniteScroll = this.app.getComponent("blogIndexInfiniteScroll");
                 infiniteScroll._highestY = 0;
@@ -94,9 +95,20 @@ export class BlogIndexPage {
     
     ngAfterViewInit() {
         this.pageContent = this.app.getComponent('blogIndex');
+        this.pageContent.addScrollListener(this.onPageScroll(this));
     }
     
     scrollToIndexPageTop() {
         this.pageContent.scrollToTop();
+    }
+    
+    onPageScroll(that) {
+        return function() {
+            if (this.scrollTop > 200) {
+                that.isScrollToTopButtonVisible = true;
+            } else {
+                that.isScrollToTopButtonVisible = false;
+            }
+        }       
     }
 }
