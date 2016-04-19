@@ -57,7 +57,6 @@ export class UserService {
     }
 
     authenticate(user) {
-        debugger
         return new Promise(resolve => {
             this.getSSO()
                 .then(sso => {
