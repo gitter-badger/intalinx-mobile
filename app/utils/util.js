@@ -88,28 +88,15 @@ export class Util {
                 .subscribe(data => {
                     resolve(data);
                 }, error => {
-                    let faultstring = "";
-                    if (error.status == "200" && error.type == "3") {
-                        this.app.translate.get(["app.message.error.systemError"]).subscribe(message => {
-                            faultstring = message['app.message.error.systemError'];
-                        });
-                    } else {
+                    if (error.status == "500" && error.type == "2") {
                         let responseText = error.text();
                         let responseNode = this.parseXml(responseText);
-                        faultstring = this.getNodeText(responseNode, ".//*[local-name()='faultstring']");
-                    }
-                    this.app.translate.get(["app.message.error.title", "app.action.ok"]).subscribe(message => {
-                        let title = message['app.message.error.title'];
-                        let ok = message['app.action.ok'];
-
-                        let alert = Alert.create({
-                            title: title,
-                            subTitle: faultstring,
-                            buttons: [ok]
+                        this.changeErrorMessageOfWebservice(this.getNodeText(responseNode, ".//*[local-name()='faultstring']")).then(message => {
+                            this.presentErrorModal(message);
                         });
-                        this.nav.present(alert);
-                    });
-
+                    } else {
+                        this.presentSystemErrorModal();
+                    }
                 });
         });
     }   
@@ -121,21 +108,7 @@ export class Util {
                 .subscribe(data => {
                     resolve(data);
                 }, error => {
-                    if (error.status == "200" && error.type == "3") {
-                        this.app.translate.get(["app.message.error.title","app.message.error.systemError", "app.action.ok"]).subscribe(message => {
-                        let title = message['app.message.error.title'];
-                        let ok = message['app.action.ok'];
-                        let content = message['app.message.error.systemError'];
-
-                        let alert = Alert.create({
-                            title: title,
-                            subTitle: content,
-                            buttons: [ok]
-                        });
-                        this.nav.present(alert);
-                    });
-
-                    }
+                    this.presentSystemErrorModal();
                 });
         });
     }
@@ -213,5 +186,52 @@ export class Util {
         content = content.replace(/\s+/g, "");
         
         return content;
+    }
+    
+    changeErrorMessageOfWebservice(message) {
+        return new Promise(resolve => {
+            if (this.app.userLang.toLowerCase() == "zh-cn") {
+                if (message.indexOf("The username or password you entered is incorrect") > 0) {
+                    this.app.translate.get(["app.message.error.idOrPasswordNotCorrect"]).subscribe(message => {
+                        resolve(message['app.message.error.idOrPasswordNotCorrect']);
+                    });
+                } else if (message.indexOf("does not match the current password") > 0) {
+                    this.app.translate.get(["app.profile.message.error.mismatchCurrentPassword"]).subscribe(message => {
+                        resolve(message['app.profile.message.error.mismatchCurrentPassword']);
+                    });
+                }
+            } else {
+                resolve(message);
+            }
+        });
+    }
+    
+    presentErrorModal(subTitle) {
+        this.app.translate.get(["app.message.error.title", "app.action.ok"]).subscribe(message => {
+            let title = message['app.message.error.title'];
+            let ok = message['app.action.ok'];
+
+            let alert = Alert.create({
+                title: title,
+                subTitle: subTitle,
+                buttons: [ok]
+            });
+            this.nav.present(alert);
+        });
+    }
+    
+    presentSystemErrorModal() {
+        this.app.translate.get(["app.message.error.title","app.message.error.systemError", "app.action.ok"]).subscribe(message => {
+            let title = message['app.message.error.title'];
+            let ok = message['app.action.ok'];
+            let content = message['app.message.error.systemError'];
+
+            let alert = Alert.create({
+                title: title,
+                subTitle: content,
+                buttons: [ok]
+            });
+            this.nav.present(alert);
+        });
     }
 }

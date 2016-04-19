@@ -49,7 +49,8 @@
                 "error": {
                     "title": "错误",
                     "emptyPassword": "密码不能为空。",
-                    "mismatchPassword": "两次输入的密码不一致！"
+                    "mismatchPassword": "两次输入的密码不一致！",
+                    "mismatchCurrentPassword": "输入的密码与当前密码不一致！"
                 }
             }
         },
