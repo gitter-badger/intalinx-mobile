@@ -1,17 +1,17 @@
 [
     {
         "titleIcon": "home",
-        "title": "ホーム",
+        "title": "app.portal.title",
         "componentsId": "portal"
     },
     {
         "titleIcon": "chatbubbles",
-        "title": "ブログ",
+        "title": "app.blog.title",
         "componentsId": "blog"
     },
     {
         "titleIcon": "settings",
-        "title": "プロファイル",
+        "title": "app.profile.title",
         "componentsId": "profile",
         "isPush": true
     }

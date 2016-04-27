@@ -151,7 +151,7 @@ export class DetailPage {
     }
 
     ngAfterViewInit() {
-        this.pageContent = this.app.getComponent('detail');
+        this.pageContent = this.app.getComponent('blogDetail');
         this.pageContent.addScrollListener(this.onPageScroll(this));
     }
 

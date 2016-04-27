@@ -25,7 +25,8 @@
             "saturday": "Saturday"
         },
         "portal": {
-            "title": "Portal"
+            "title": "Portal",
+            "content": "Under development. Will coming soon."
         },
         "login": {
             "title": "Login",

@@ -16,13 +16,17 @@
     </ion-buttons>-->
 </ion-navbar>
 <ion-content class="portal">
+    <ion-card>
+        <ion-card-content>
+            {{"app.portal.content" | translate}}
+        </ion-card-content>
+    </ion-card>
     <ion-list>
         <ion-item *ngFor="#app of apps">
             <ion-thumbnail item-left>
                 <img src="{{app.icon}}">
             </ion-thumbnail>
-            <h2>{{app.title}}</h2>
-            <p>{{app.description}}</p>
+            <h2>{{ app.title | translate}}</h2>
             <button clear item-right (click)="appSelected(app)">詳細</button>
         </ion-item>
     </ion-list>

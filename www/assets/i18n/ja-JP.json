@@ -25,7 +25,8 @@
             "saturday": "土曜日"
         },
         "portal": {
-            "title": "ポータル"
+            "title": "ポータル",
+            "content": "開発中です。もうしばらくお待ち下さい。"
         },
         "login": {
             "title": "ログイン",

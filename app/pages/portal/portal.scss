@@ -3,17 +3,15 @@
 ion-navbar {
     .bar-button-default {
         color: $primary-color-text;
-        padding-right: 0px;
+        padding: 6px;
     }
     .bar-button-default:hover:not(.disable-hover) {
         color: $primary-color-light;
     }
     .bar-button-default.disable-hover:disabled {
-        color: $divider-color;
-        background-color: #FFFFFF;
-        border-color: #B6B6B6;
-        border-width: 1px;
-        border-style: solid;
+        opacity: 0.4;
+        cursor: default !important;
+        pointer-events: none;
     }
     .toolbar-title {
         color: $primary-color-text;
@@ -69,6 +67,11 @@ ion-navbar {
     z-index: 1;
     opacity: 0.9; 
 }
+
+.scroll-to-top {
+    background-color: $secondary-text-color;
+}
+
 .loading {
     text-align: center;
 }

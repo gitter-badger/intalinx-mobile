@@ -12,7 +12,7 @@
         <ion-spinner name="dots"></ion-spinner>
     </div>
 </ion-content>
-<ion-content id="detail" [style.display]="isLoadCompleted ? 'block' : 'none'">
+<ion-content id="blogDetail" class="blog-detail" [style.display]="isLoadCompleted ? 'block' : 'none'">
     <ion-item no-lines>
         <h2 class="title">{{title}}</h2>
     </ion-item>
@@ -24,8 +24,6 @@
         <div class="time">
             {{createDate}}
         </div>
-    </ion-item>
-    <ion-item no-lines class="read-count">
         <button disabled primary clear item-right>
             <ion-icon name="eye"></ion-icon>
             <div>{{readCount}}</div>
@@ -59,6 +57,6 @@
 <button fab fab-right fab-bottom secondary [style.display]="isLoadCompleted ? 'block' : 'none'" (click)="addComment()">
     <ion-icon name="add"></ion-icon>
 </button>
-<button fab fab-left fab-bottom primary-text [style.display]="isScrollToTopButtonVisible ? 'block' : 'none'" (click)="scrollToDetailPageTop()">
+<button class="detail scroll-to-top" fab fab-right fab-bottom [style.display]="isScrollToTopButtonVisible ? 'block' : 'none'" (click)="scrollToDetailPageTop()">
     <ion-icon name="arrow-up"></ion-icon>
 </button>

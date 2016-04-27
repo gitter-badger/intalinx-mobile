@@ -3,15 +3,11 @@ $padding-left: 16px;
 $padding-right: 16px;
 $padding-bottom: 16px;
 
-#detail {
+.blog-detail {
   -webkit-user-select: auto;
   .title {
-    padding-top: 6px;
-    padding-right: 6px;
-    padding-left: 6px;
     display: block;
     line-height: 1.2;
-    margin: 2px 0 2px;
     font-size: 2.0rem;
     color: #222;
     font-weight: bold;
@@ -45,19 +41,33 @@ $padding-bottom: 16px;
     }
     .item-inner {
       border: 0px;
-    }
-    ion-card {
+      ion-label {
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+      .avatar {
+        font-size: 2em;
+        color: #eee;
+      }
+      ion-card {
         margin: 2px;
         ion-card-content {
             white-space: normal;
+            padding: 8px;
         }
-    }
-    .avatar {
-      font-size: 2em;
-      color: #eee;
+      }
     }
   }
   .toolbar {
     position: inherit;
   }
+  ion-list {
+    margin-bottom: -53px;
+    .item:last-child, ion-item-sliding:last-child .item {
+      border-bottom: 0px;
+    }
+  }
+}
+.detail.scroll-to-top {
+  bottom: 88px;
 }

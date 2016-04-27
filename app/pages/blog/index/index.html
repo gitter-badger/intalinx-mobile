@@ -42,6 +42,6 @@
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ion-content>
-<button fab fab-left fab-bottom primary-text [style.display]="isScrollToTopButtonVisible ? 'block' : 'none'" (click)="scrollToIndexPageTop()">
+<button class="scroll-to-top" fab fab-right fab-bottom [style.display]="isScrollToTopButtonVisible ? 'block' : 'none'" (click)="scrollToIndexPageTop()">
     <ion-icon name="arrow-up"></ion-icon>
 </button>
