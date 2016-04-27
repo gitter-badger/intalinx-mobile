@@ -1,10 +1,14 @@
 import {Page, IonicApp, NavController, MenuController} from 'ionic-angular';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
+import {Util} from '../../utils/util';
+
 import {AppsService} from '../../providers/apps-service/apps-service'; 
-import {UserService} from '../../providers/user-service/user-service'; 
+import {UserService} from '../../providers/user-service/user-service';
+import {BlogService} from '../../providers/blog/blog-service/blog-service'; 
 
 import {BlogIndexPage} from '../blog/index/index';
+import {ProfilePage} from '../profile/profile';
 
 /*
   Generated class for the PortalPage page.
@@ -16,7 +20,9 @@ import {BlogIndexPage} from '../blog/index/index';
   templateUrl: 'build/pages/portal/portal.html',
   providers: [
       AppsService,
-      UserService
+      UserService,
+      BlogService,
+      Util
   ],
   pipes: [TranslatePipe]
 })
@@ -33,7 +39,8 @@ export class PortalPage {
     
     this.components = {
         "portal": PortalPage,
-        "blogIndex" : BlogIndexPage
+        "blog" : BlogIndexPage,
+        "profile" : ProfilePage
     }
     
     if (!this.app.showMenu) {
@@ -51,7 +58,11 @@ export class PortalPage {
   
   showMenu(that) {
       return function(menu) {
-          that.nav.setRoot(that.components[menu.componentsId]);
+          if (menu.isPush) {
+              that.nav.push(that.components[menu.componentsId]);
+          } else {
+              that.nav.setRoot(that.components[menu.componentsId]);
+          }
       }
   }
 }

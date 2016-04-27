@@ -9,18 +9,39 @@
         <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-        {{"app.title" | translate}}
+        {{"app.blog.title" | translate}}
     </ion-title>
 </ion-navbar>
-<ion-content padding class="blog-index">
-  <ion-list>
-    <ion-item *ngFor="#blog of blogs" (click)="openDetail(blog)">
-      <ion-thumbnail item-left>
-        <ion-icon name="person" class="avatar"></ion-icon>
-      </ion-thumbnail>
-      <h2>{{blog.title}}</h2>
-      <p>{{blog.summary}}</p>
-      <button clear item-right>View</button>
-    </ion-item>
-  </ion-list>
+<ion-content id="blogIndex" class="blog-index">
+    <div class="loading" [style.display]="isLoadCompleted ? 'none' : 'block'">
+        <ion-spinner name="dots"></ion-spinner>
+    </div>
+    <ion-refresher id="blogIndexRefresher" (refresh)="doRefresh($event)">
+        <ion-refresher-content refreshingSpinner="circles"> </ion-refresher-content>
+    </ion-refresher>
+    <ion-list>
+        <ion-item *ngFor="#community of communityListForTop">
+            <!-- こっちは四角 -->
+            <ion-thumbnail item-left class="avatar">
+                <!--<ion-icon name="person" class="avatar"></ion-icon>-->
+                <!-- こっちは丸形　<ion-avatar item-left class="avatar">-->
+                <img src="{{userAvatarImageUrl}}{{community.createUser}}" (error)="loadImageError($event)" />
+                <p>{{community.createUserName}}</p>
+            </ion-thumbnail>
+
+
+            <h2 class="title" (click)="openDetail(community)">{{community.title}}</h2>
+            <div item-right class="status">
+                <ion-badge class="new" *ngIf="community.readStatus=='NOT_READ'">{{"app.blog.newBlog" | translate}}</ion-badge>
+                <ion-badge class="new-reply" *ngIf="community.readStatus!='NOT_READ' && community.newReplyFlag=='TRUE'">{{"app.blog.newReturn" | translate}}</ion-badge>
+                <p>{{community.publishStartDate}}</p>
+            </div>
+        </ion-item>
+    </ion-list>
+    <ion-infinite-scroll id="blogIndexInfiniteScroll" (infinite)="doInfinite($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 </ion-content>
+<button class="scroll-to-top" fab fab-right fab-bottom [style.display]="isScrollToTopButtonVisible ? 'block' : 'none'" (click)="scrollToIndexPageTop()">
+    <ion-icon name="arrow-up"></ion-icon>
+</button>

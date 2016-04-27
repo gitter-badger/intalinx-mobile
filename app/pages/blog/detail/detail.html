@@ -5,58 +5,58 @@
   Ionic pages and navigation.
 -->
 <ion-navbar *navbar>
-  <ion-title>detail</ion-title>
-  <ion-buttons end>
-   <button (click)="openModal()">
-     <ion-icon outline name="create"></ion-icon>Edit
-   </button>
- </ion-buttons>
+    <ion-title>{{"app.blog.detail" | translate}}</ion-title>
 </ion-navbar>
-<ion-content class="detail">
-  <div class="title">{{blog.title}}</div>
-  <ion-item class="status">
-    <div class="time" primary clear item-right>
-      11h ago
+<ion-content [style.display]="isLoadCompleted ? 'none' : 'block'">
+    <div class="loading">
+        <ion-spinner name="dots"></ion-spinner>
     </div>
-    <button primary clear>
-      <ion-icon name="text"></ion-icon>
-      <div>4 Comments</div>
-    </button>
-  </ion-item>
-  <div class="contents" [innerHTML]="blog.contents"></div>
-
-  <ion-list>
-    <ion-item class="comment" *ngFor="#comment of comments">
-        <div class="author" item-left>
-          <ion-avatar>
-            <ion-icon name="person" class="avatar"></ion-icon>
-          </ion-avatar>
-          <div class="name">Zhihui Tian</div>
-          <div class="time">1h ago</div>
-        </div>
-        <ion-card>
-          <ion-card-header>
-            {{comment.title}}
-          </ion-card-header>
-          <ion-card-content [innerHTML]="comment.contents">
-            <!-- Add card content here! -->
-          </ion-card-content>
-        </ion-card>
-    </ion-item>
-  </ion-list>
-  <button fab fab-right fab-bottom>
-    <ion-icon name="add"></ion-icon>
-  </button>
-  <!--
-
-  <ion-toolbar position="bottom">
-
-
-
-    <button>
-      <ion-icon name="home"></ion-icon>
-      Left Icon
-    </button>
-  </ion-toolbar>
-  -->
 </ion-content>
+<ion-content id="blogDetail" class="blog-detail" [style.display]="isLoadCompleted ? 'block' : 'none'">
+    <ion-item no-lines>
+        <h2 class="title">{{title}}</h2>
+    </ion-item>
+    <ion-item class="status">
+        <ion-avatar item-left class="avatar">
+            <img src="{{userAvatarImageUrl}}{{createUserId}}" (error)="loadImageError($event)" />
+        </ion-avatar>
+        <div class="name">{{createUserName}}</div>
+        <div class="time">
+            {{createDate}}
+        </div>
+        <button disabled primary clear item-right>
+            <ion-icon name="eye"></ion-icon>
+            <div>{{readCount}}</div>
+        </button>
+        <button disabled primary clear item-right>
+            <ion-icon name="text"></ion-icon>
+            <div>{{commentCount}}</div>
+        </button>
+    </ion-item>
+    <div class="contents" [innerHTML]="content"></div>
+
+    <ion-list>
+        <ion-item class="comment" *ngFor="#comment of comments">
+            <ion-item class="status">
+                <ion-avatar item-left class="avatar">
+                    <img src="{{userAvatarImageUrl}}{{comment.userID}}" (error)="loadImageError($event)" />
+                </ion-avatar>
+                <div class="name">{{comment.userName}}</div>
+                <div class="time">{{comment.createDate}}</div>
+            </ion-item>
+            <ion-card>
+                <ion-card-content [innerHTML]="comment.content">
+                </ion-card-content>
+            </ion-card>
+        </ion-item>
+    </ion-list>
+    <ion-infinite-scroll id="blogDetailInfiniteScroll" (infinite)="doInfinite($event)">
+        <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+</ion-content>
+<button fab fab-right fab-bottom secondary [style.display]="isLoadCompleted ? 'block' : 'none'" (click)="addComment()">
+    <ion-icon name="add"></ion-icon>
+</button>
+<button class="detail scroll-to-top" fab fab-right fab-bottom [style.display]="isScrollToTopButtonVisible ? 'block' : 'none'" (click)="scrollToDetailPageTop()">
+    <ion-icon name="arrow-up"></ion-icon>
+</button>

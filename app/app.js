@@ -7,7 +7,17 @@ import {LoginPage} from './pages/login/login';
 
 @App({
     templateUrl: 'build/app.html', //'<ion-nav [root]="rootPage"></ion-nav>',
-    config: {}, //http://ionicframework.com/docs/v2/api/config/Config/
+    config: {
+        "BASE_URL": "http://192.168.11.29/home/InternalSystem/",
+        "GATEWAY_URL": "com.eibus.web.soap.Gateway.wcp",
+        "PRE_LOGIN_INFO_URL": "com.eibus.sso.web.authentication.PreLoginInfo.wcp",
+        "SAMLART_NAME": "SAMLart",
+        "SAML_ARTIFACT_COOKIE_NAME": "defaultinst_SAMLart",
+        "SAML_ARTIFACT_COOKIE_PATH": "/",
+        "CHECK_NAME": "defaultinst_ct",
+        "USER_AVATAR_IMAGE_URL": "img/",
+        "USER_AVATAR_DEFAULT_IMAGE": "default"
+    }, 
     providers: [
         provide(TranslateLoader, {
             useFactory: (http) => {
@@ -23,22 +33,20 @@ export class IntaLinx {
     static get parameters() {
         return [[IonicApp], [Platform], [TranslateService], [MenuController]];
     }
-    
-    initializeTranslate() {
-        let userLang = navigator.language.split('-')[0];
-        userLang = /(ja|ch)/gi.test(userLang) ? userLang : 'zh';
-        this.translate.use(userLang);
-    }
 
     constructor(app, platform, translate, menu) {
         // set up our app
         this.app = app;
+        // TODO: need to be change with another safety way!
+        this.app.config = this.app._config;
         
         // set up translate
         this.translate = translate;
         this.app.translate = this.translate;
         // initialize translate library
-        this.initializeTranslate();
+        let userLang = navigator.language;
+        this.app.userLang = userLang;
+        this.translate.use(userLang);
         
         this.platform = platform;
         this.menu = menu;
@@ -47,7 +55,9 @@ export class IntaLinx {
         let menus = [];
         this.user = user;
         this.menus = menus;
-
+        
+        
+        this.app.redirectLoginPage = this.redirectLoginPage(this);
         // initiallize menu and pass this object to change the model
         this.app.initializeMenu = this.initializeMenu(this);
         this.app.initializeUser = this.initializeUser(this);        
@@ -56,6 +66,13 @@ export class IntaLinx {
         this.initializeApp();
 
         this.rootPage = LoginPage;
+        
+        // initiallize new information count of blog system
+        this.app.blogNewInformationCount = "";
+        
+        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
+        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
+  
     }
 
     initializeApp() {
@@ -89,6 +106,12 @@ export class IntaLinx {
             that.user = user;
         }
     }
+    
+    redirectLoginPage(that) {
+        return function() {
+            that.app.getComponent('nav').setRoot(LoginPage);
+        }
+    }
 
     openPage(item) {
         // close the menu when clicking a link from the menu
@@ -96,5 +119,10 @@ export class IntaLinx {
         if (this.app.showMenu) {
             this.app.showMenu(item);
         }
+    }
+    
+    loadImageError(event){
+        let img = event.currentTarget;
+        img.src = this.userAvatarImageUrl + this.userAvatarDefaultImage;
     }
 }

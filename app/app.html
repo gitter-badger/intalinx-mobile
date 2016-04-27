@@ -1,18 +1,19 @@
 <ion-menu [content]="content" class="menu">
   <ion-content>
     <ion-list no-lines>
-      <ion-card>
+      <ion-card secondary>
         <ion-item>
           <ion-avatar item-left>
-            <img src={{user.userAvatar}}>
+            <img src={{user.userAvatar}} (error)="loadImageError($event)" />
           </ion-avatar>
           <span>{{user.userName}}</span>
         </ion-item>
-        <ion-item><span>{{user.userAddress}}</span></ion-item>
+        <ion-item><span>{{user.userId}}</span></ion-item>
       </ion-card>
       
       <button ion-item *ngFor="#item of menus" (click)="openPage(item)">
-        <ion-icon name={{item.titleIcon}} item-left></ion-icon>{{item.title}}
+        <ion-icon name={{item.titleIcon}} item-left primary></ion-icon>{{item.title | translate}}
+        <ion-badge class="new-information-count" *ngIf="item.componentsId=='blog'&&app.blogNewInformationCount!=''&&app.blogNewInformationCount!=0">{{app.blogNewInformationCount}}</ion-badge>
       </button>
     </ion-list>
   </ion-content>
