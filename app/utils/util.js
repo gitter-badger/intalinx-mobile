@@ -4,7 +4,7 @@ import {HTTP_PROVIDERS, Http, Headers, RequestOptions, RequestMethod} from 'angu
 import {SSO} from './sso';
 import {XmlUtil} from './xmlutil';
 import {DateUtil} from './dateutil';
-import {CookieUtil} from './cookieutil';
+import {StorageUtil} from './storageutil';
 
 export class Util {
 
@@ -77,12 +77,11 @@ export class Util {
             let url = this.app.config.get("BASE_URL") + this.app.config.get("GATEWAY_URL");
             if (!useAnonymous) {
                 url = url + "?" + this.app.config.get("SAMLART_NAME") + "=" +
-                this.getCookie(this.app.config.get("SAML_ARTIFACT_COOKIE_NAME"));
+                this.getSAMLart(this.app.config.get("SAML_ARTIFACT_STORAGE_NAME"));
                 url = url + "&language=" + this.app.userLang;
             } else {
                 url = url + "?language=" + this.app.userLang;
             }
-            
             this.http.post(url, request)
                 .map(res => res.text())
                 .subscribe(data => {
@@ -118,28 +117,20 @@ export class Util {
             this.http.get(url)
                 .map(res => res.text())
                 .subscribe(data => {
-
                     resolve(data);
                 });
 
         });
     }
 
-    setCookie(name, value, end, path, domain, secure) {
-        CookieUtil.set(name, value, end, path, domain, secure);
+    setSAMLart(key, value, notOnOrAfter) {
+        StorageUtil.setSAMLart(key, value, notOnOrAfter);
+    }
+    
+    getSAMLart(key) {
+        return StorageUtil.getSAMLart(key);
     }
 
-    getCookie(name) {
-        return CookieUtil.get(name);
-    }
-
-    removeCookie(name, path) {
-        return CookieUtil.remove(name, path);
-    }
-
-    hasCookie(name) {
-        return CookieUtil.has(name);
-    }
     
     transferCordysDateStringToUTC(dateString) {
         return DateUtil.transferCordysDateStringToUTC(dateString);
