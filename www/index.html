@@ -17,6 +17,10 @@
   <ion-app></ion-app>
 
   <script src="cordova.js"></script>
+  <!-- Polyfill needed for platforms without Promise and Collection support -->
+  <script src="build/js/es6-shim.min.js"></script>
+  <!-- Zone.js and Reflect-metadata  -->
+  <script src="build/js/angular2-polyfills.js"></script>
   <script src="build/js/app.bundle.js"></script>
 </body>
 
