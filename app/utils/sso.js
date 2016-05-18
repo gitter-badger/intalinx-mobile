@@ -80,7 +80,7 @@ export class SSO {
                                 let notOnOrAfterString = this.util.getNodeText(samlResponse, ".//saml:Conditions/@NotOnOrAfter", null);
                                 if (notOnOrAfterString) {
                                     let notOnOrAfterDate = this.util.transferCordysDateStringToUTC(notOnOrAfterString);
-                                    this.util.setCookie(this.config.get("SAML_ARTIFACT_COOKIE_NAME"), samlArtifact, notOnOrAfterDate, this.config.get("SAML_ARTIFACT_COOKIE_PATH"));
+                                    this.util.setSAMLart(this.config.get("SAML_ARTIFACT_STORAGE_NAME"), samlArtifact, notOnOrAfterDate);
                                     authenticationResult = true;    
                                 }
                                 /*
@@ -99,15 +99,8 @@ export class SSO {
 
     loggedOn() {
         let isLoggedOn = false;
-        let cookie = this.util.getCookie(this.config.get("SAML_ARTIFACT_COOKIE_NAME"));
-        isLoggedOn = cookie != null && cookie != "";
-        // TODO
-        /*
-        if (!isLoggedOn && this.config.useSamlUrlArtifact) {
-            let artifact = BizNaviUtil.getValueFromURL(BizNaviUtil.constants.SAMLART_NAME);
-            isLoggedOn = artifact != null;
-        }
-        */
+        let storage =  this.util.getSAMLart(this.config.get("SAML_ARTIFACT_STORAGE_NAME"));
+        isLoggedOn = storage != null && storage != "";
         return isLoggedOn;
     }
 }
