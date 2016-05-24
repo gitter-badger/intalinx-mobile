@@ -43,7 +43,7 @@ export class IntaLinx {
         this.translate = translate;
         this.app.translate = this.translate;
         // initialize translate library
-        let userLang = navigator.language;
+        let userLang = navigator.language.toLowerCase();
         this.app.userLang = userLang;
         this.translate.use(userLang);
         

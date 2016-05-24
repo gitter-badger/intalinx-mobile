@@ -33,8 +33,13 @@
     "run-sequence": "1.1.5",
     "strip-sourcemap-loader": "0.0.1"
   },
-  "name": "intalinx-blog",
-  "description": "intalinx-blog: An Ionic project",
+  "name": "intalinx-mobile",
+  "description": "intalinx-mobile: An Ionic project",
+  "license" : "MIT",
+  "repository": { 
+    "type" : "git", 
+    "url" : "https://github.com/intasect/intalinx-mobile.git"
+  },
   "cordovaPlatforms": [
     "ios",
     "android"
