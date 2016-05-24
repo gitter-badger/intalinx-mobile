@@ -102,6 +102,7 @@ export class DetailPage {
     onPageDidEnter() {
         let isRefreshFlag = this.sendData.isRefreshFlag;
         if (isRefreshFlag == true) {
+            this.pageContent.scrollToBottom();
             this.sendData.unrepliedCommentcontent = "";
         }
 
