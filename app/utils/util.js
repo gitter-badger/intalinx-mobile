@@ -1,5 +1,5 @@
 import {IonicApp, NavController, Alert} from 'ionic-angular';
-import {HTTP_PROVIDERS, Http, Headers, RequestOptions, RequestMethod} from 'angular2/http';
+import {HTTP_PROVIDERS, Http, Headers, RequestOptions, RequestMethod} from '@angular/http';
 
 import {SSO} from './sso';
 import {XmlUtil} from './xmlutil';

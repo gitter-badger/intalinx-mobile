@@ -1,4 +1,5 @@
-import {Page, IonicApp, NavController} from 'ionic-angular';
+import {Page, IonicApp, NavController, Content} from 'ionic-angular';
+import {ViewChild} from '@angular/core';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
@@ -18,7 +19,12 @@ import {Util} from '../../../utils/util';
 @Page({
     templateUrl: 'build/pages/blog/index/index.html',
     providers: [BlogService, Util],
-    pipes: [TranslatePipe]
+    pipes: [TranslatePipe],
+    queries: {
+        pageContent: new ViewChild(Content),
+        blogIndexInfiniteScroll: new ViewChild('blogIndexInfiniteScroll'),
+        blogIndexRefresher: new ViewChild('blogIndexRefresher')
+    }
 })
 export class BlogIndexPage {
 
@@ -41,7 +47,7 @@ export class BlogIndexPage {
         this.isLoadCompleted = false;
     }
 
-    openDetail(community) {      
+    openDetail(community) {
         this.nav.push(DetailPage, {
             "community": community
         });
@@ -72,9 +78,9 @@ export class BlogIndexPage {
             this.isLoadCompleted = true;
             this.isScrollToTopButtonVisible = false;
             if (isRefresh) {
-                let infiniteScroll = this.app.getComponent("blogIndexInfiniteScroll");
+                let infiniteScroll = blogIndexInfiniteScroll;
                 infiniteScroll._highestY = 0;
-                let refresher = this.app.getComponent("blogIndexRefresher");
+                let refresher = blogIndexRefresher;
                 refresher.complete();
             }
         });
@@ -94,7 +100,6 @@ export class BlogIndexPage {
     }
     
     ngAfterViewInit() {
-        this.pageContent = this.app.getComponent('blogIndex');
         this.pageContent.addScrollListener(this.onPageScroll(this));
     }
     

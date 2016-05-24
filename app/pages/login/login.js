@@ -1,6 +1,6 @@
 import {Page, IonicApp, NavController, Alert} from 'ionic-angular';
 
-import {NgForm} from 'angular2/common';
+import {NgForm} from '@angular/common';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 

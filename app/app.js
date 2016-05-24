@@ -1,7 +1,7 @@
 import {App, IonicApp, Platform, MenuController} from 'ionic-angular';
 // import {App, IonicApp, Platform, MenuController, NavController, NavParams} from 'ionic-angular';
-import {provide} from 'angular2/core';
-import {Http} from 'angular2/http';
+import {provide} from '@angular/core';
+import {Http} from '@angular/http';
 import {TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
 import {LoginPage} from './pages/login/login';
 
@@ -91,6 +91,7 @@ export class IntaLinx {
             if (window.StatusBar) {
                 window.StatusBar.styleDefault();
             }
+            // navigator.splashscreen.hide();
         });
     }
 

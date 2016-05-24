@@ -1,5 +1,5 @@
-import {Page, IonicApp, NavController, NavParams, ViewController, Platform} from 'ionic-angular';
-import {Component} from 'angular2/core';
+import {Page, IonicApp, NavController, NavParams, ViewController, Platform, Content} from 'ionic-angular';
+import {Component, ViewChild} from '@angular/core';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
@@ -10,7 +10,11 @@ import {Util} from '../../../utils/util';
 @Page({
     templateUrl: 'build/pages/blog/detail/detail.html',
     providers: [BlogService, Util],
-    pipes: [TranslatePipe]
+    pipes: [TranslatePipe],
+    queries: {
+        pageContent: new ViewChild(Content),
+        blogDetailInfiniteScroll: new ViewChild('blogDetailInfiniteScroll')
+    }
 })
 export class DetailPage {
 
@@ -86,7 +90,7 @@ export class DetailPage {
     onPageWillEnter() {
         let isRefreshFlag = this.sendData.isRefreshFlag;
         if (isRefreshFlag == true) {
-            let infiniteScroll = this.app.getComponent("blogDetailInfiniteScroll");
+            let infiniteScroll = blogDetailInfiniteScroll;
             infiniteScroll._highestY = 0;
             this.getReplyContentListByCommunityID();
         }
@@ -151,7 +155,6 @@ export class DetailPage {
     }
 
     ngAfterViewInit() {
-        this.pageContent = this.app.getComponent('blogDetail');
         this.pageContent.addScrollListener(this.onPageScroll(this));
     }
 
