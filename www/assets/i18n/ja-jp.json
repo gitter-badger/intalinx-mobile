@@ -32,7 +32,7 @@
             "title": "ログイン",
             "loginId": "ログインID",
             "password": "パスワード",
-            "rememberMe": "ログインしたままにする",
+            "rememberLoginId": "ログインIDを保存する",
             "login": "ログイン",
             "message": {
                 "error": {

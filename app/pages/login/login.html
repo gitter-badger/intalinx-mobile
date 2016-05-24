@@ -13,10 +13,10 @@
             <ion-label floating id="password">{{ "app.login.password" | translate }}</ion-label>
             <ion-input type="password" [(ngModel)]="user.password" (ngModelChange)="changeUser($event)"></ion-input>
         </ion-item>
-        <!--<ion-item no-lines class="remember-me">
-            <ion-label>{{ "app.login.rememberMe" | translate }}</ion-label>
-            <ion-checkbox checked="false" [(ngModel)]="user.rememberMe"></ion-checkbox>
-        </ion-item>-->
+        <ion-item no-lines class="remember-loginId">
+            <ion-label>{{ "app.login.rememberLoginId" | translate }}</ion-label>
+            <ion-checkbox checked="false" [(ngModel)]="user.rememberLoginId"></ion-checkbox>
+        </ion-item>
         <button disabled={{isDisabled}} full type="submit">{{ "app.login.login" | translate }}</button>
     </form>
 </ion-content>

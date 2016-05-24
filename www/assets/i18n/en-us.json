@@ -32,7 +32,7 @@
             "title": "Login",
             "loginId": "Account",
             "password": "Password",
-            "rememberMe": "Remember me",
+            "rememberLoginId": "Remember Account",
             "login": "Login",
             "message": {
                 "error": {
