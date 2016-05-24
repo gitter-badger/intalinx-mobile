@@ -12,8 +12,7 @@ import {Util} from '../../../utils/util';
     providers: [BlogService, Util],
     pipes: [TranslatePipe],
     queries: {
-        pageContent: new ViewChild(Content),
-        blogDetailInfiniteScroll: new ViewChild('blogDetailInfiniteScroll')
+        pageContent: new ViewChild(Content)
     }
 })
 export class DetailPage {
@@ -90,8 +89,6 @@ export class DetailPage {
     onPageWillEnter() {
         let isRefreshFlag = this.sendData.isRefreshFlag;
         if (isRefreshFlag == true) {
-            let infiniteScroll = blogDetailInfiniteScroll;
-            infiniteScroll._highestY = 0;
             this.getReplyContentListByCommunityID();
         }
         if (this.platform.is('ios')) {

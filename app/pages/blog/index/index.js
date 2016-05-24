@@ -21,9 +21,7 @@ import {Util} from '../../../utils/util';
     providers: [BlogService, Util],
     pipes: [TranslatePipe],
     queries: {
-        pageContent: new ViewChild(Content),
-        blogIndexInfiniteScroll: new ViewChild('blogIndexInfiniteScroll'),
-        blogIndexRefresher: new ViewChild('blogIndexRefresher')
+        pageContent: new ViewChild(Content)
     }
 })
 export class BlogIndexPage {
@@ -55,7 +53,7 @@ export class BlogIndexPage {
 
     doRefresh(refresher) {
         let isRefresh = true;
-        this.getCommunityListForTop(isRefresh);
+        this.getCommunityListForTop(refresher, isRefresh);
         this.getBlogNewInformationCount();
     }
 
@@ -70,7 +68,7 @@ export class BlogIndexPage {
         });
     }
 
-    getCommunityListForTop(isRefresh) {
+    getCommunityListForTop(refresher, isRefresh) {
         let position = 0;
         let isNeedRegistNotExistsReply = true;
         this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
@@ -78,9 +76,6 @@ export class BlogIndexPage {
             this.isLoadCompleted = true;
             this.isScrollToTopButtonVisible = false;
             if (isRefresh) {
-                let infiniteScroll = blogIndexInfiniteScroll;
-                infiniteScroll._highestY = 0;
-                let refresher = blogIndexRefresher;
                 refresher.complete();
             }
         });

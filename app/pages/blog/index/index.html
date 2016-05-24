@@ -12,11 +12,11 @@
         {{"app.blog.title" | translate}}
     </ion-title>
 </ion-navbar>
-<ion-content id="blogIndex" class="blog-index">
+<ion-content class="blog-index">
     <div class="loading" [style.display]="isLoadCompleted ? 'none' : 'block'">
         <ion-spinner name="dots"></ion-spinner>
     </div>
-    <ion-refresher id="blogIndexRefresher" (refresh)="doRefresh($event)">
+    <ion-refresher (refresh)="doRefresh($event)">
         <ion-refresher-content refreshingSpinner="circles"> </ion-refresher-content>
     </ion-refresher>
     <ion-list>
@@ -38,7 +38,7 @@
             </div>
         </ion-item>
     </ion-list>
-    <ion-infinite-scroll id="blogIndexInfiniteScroll" (infinite)="doInfinite($event)">
+    <ion-infinite-scroll (infinite)="doInfinite($event)">
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ion-content>
