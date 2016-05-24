@@ -91,7 +91,10 @@ export class LoginPage {
     
     onPageDidEnter() {
         this.local.get(LoginPage.constants.LOGIN_ID_STORAGE_NAME).then(value => {
-            this.user.loginId = value;
+            if (value != null) {
+                this.user.loginId = value;
+                this.user.rememberLoginId = true;
+            }
         });
     }
     
