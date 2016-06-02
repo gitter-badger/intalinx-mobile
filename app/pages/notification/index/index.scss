@@ -1,0 +1,57 @@
+.notification-index {
+    -webkit-user-select: auto;
+    .avatar {
+        height: 4em;
+        img {
+            width: 4.5rem;
+            height: 4.5rem;
+            margin: 0 auto;
+        }
+        p {
+            margin-top: 2px;
+            margin-bottom: 2px;
+            text-align: center;
+        }
+    }
+    
+    .title {
+        white-space: pre-wrap;
+    }
+    
+    .status {
+        text-align: center;
+        width: 5rem;
+        margin: 0px;
+        .new {
+            color: white;
+            padding: 4px;
+            border-radius: 2px;
+            background-color: red;
+            margin-bottom: 4px;
+        }
+        
+        .new-reply {
+            @extend .new;
+            background-color: rgb(255,140,0);
+        }
+    }
+    
+}
+
+.md {
+    .blog-index {
+        .avatar{
+            img {
+                width: 6.5rem;
+                height: 6.5rem;
+            }
+        }
+    }
+    .blog-index {
+        .status{
+            width: 6rem;
+        }
+    }
+}
+
+

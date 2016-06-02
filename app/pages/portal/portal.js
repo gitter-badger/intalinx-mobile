@@ -6,9 +6,11 @@ import {Util} from '../../utils/util';
 import {AppsService} from '../../providers/apps-service/apps-service'; 
 import {UserService} from '../../providers/user-service/user-service';
 import {BlogService} from '../../providers/blog/blog-service/blog-service'; 
+import {NotificationService} from '../../providers/notification/notification-service/notification-service'; 
 
 import {BlogIndexPage} from '../blog/index/index';
 import {ProfilePage} from '../profile/profile';
+import {NotificationIndexPage} from '../notification/index/index'
 
 /*
   Generated class for the PortalPage page.
@@ -22,6 +24,7 @@ import {ProfilePage} from '../profile/profile';
       AppsService,
       UserService,
       BlogService,
+      NotificationService,
       Util
   ],
   pipes: [TranslatePipe]
@@ -40,7 +43,8 @@ export class PortalPage {
     this.components = {
         "portal": PortalPage,
         "blog" : BlogIndexPage,
-        "profile" : ProfilePage
+        "profile" : ProfilePage,
+        "notification" : NotificationIndexPage
     }
     
     if (!this.app.showMenu) {

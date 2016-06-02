@@ -14,5 +14,10 @@
         "title": "app.profile.title",
         "componentsId": "profile",
         "isPush": true
+    },
+    {
+        "titleIcon": "notifications",
+        "title": "app.notification.title",
+        "componentsId": "notification"
     }
 ]
