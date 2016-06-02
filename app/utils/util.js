@@ -1,5 +1,5 @@
 import {IonicApp, NavController, Alert} from 'ionic-angular';
-import {HTTP_PROVIDERS, Http, Headers, RequestOptions, RequestMethod} from 'angular2/http';
+import {HTTP_PROVIDERS, Http, Headers, RequestOptions, RequestMethod} from '@angular/http';
 
 import {SSO} from './sso';
 import {XmlUtil} from './xmlutil';
@@ -182,11 +182,11 @@ export class Util {
     changeErrorMessageOfWebservice(message) {
         return new Promise(resolve => {
             if (this.app.userLang.toLowerCase() == "zh-cn") {
-                if (message.indexOf("The username or password you entered is incorrect") > 0) {
-                    this.app.translate.get(["app.message.error.idOrPasswordNotCorrect"]).subscribe(message => {
-                        resolve(message['app.message.error.idOrPasswordNotCorrect']);
+                if (message.indexOf("The username or password you entered is incorrect") >= 0) {
+                    this.app.translate.get(["app.login.message.error.idOrPasswordNotCorrect"]).subscribe(message => {
+                        resolve(message['app.login.message.error.idOrPasswordNotCorrect']);
                     });
-                } else if (message.indexOf("does not match the current password") > 0) {
+                } else if (message.indexOf("does not match the current password") >= 0) {
                     this.app.translate.get(["app.profile.message.error.mismatchCurrentPassword"]).subscribe(message => {
                         resolve(message['app.profile.message.error.mismatchCurrentPassword']);
                     });

@@ -1,14 +1,14 @@
 import {App, IonicApp, Platform, MenuController} from 'ionic-angular';
 // import {App, IonicApp, Platform, MenuController, NavController, NavParams} from 'ionic-angular';
-import {provide} from 'angular2/core';
-import {Http} from 'angular2/http';
+import {provide} from '@angular/core';
+import {Http} from '@angular/http';
 import {TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
 import {LoginPage} from './pages/login/login';
 
 @App({
     templateUrl: 'build/app.html', //'<ion-nav [root]="rootPage"></ion-nav>',
     config: {
-        "BASE_URL": "http://192.168.11.29/home/InternalSystem/",
+        "BASE_URL": "http://www.intalinx.cn/home/intalinxcloud/",
         "GATEWAY_URL": "com.eibus.web.soap.Gateway.wcp",
         "PRE_LOGIN_INFO_URL": "com.eibus.sso.web.authentication.PreLoginInfo.wcp",
         "SAMLART_NAME": "SAMLart",
@@ -43,7 +43,7 @@ export class IntaLinx {
         this.translate = translate;
         this.app.translate = this.translate;
         // initialize translate library
-        let userLang = navigator.language;
+        let userLang = navigator.language.toLowerCase();
         this.app.userLang = userLang;
         this.translate.use(userLang);
         
@@ -91,6 +91,7 @@ export class IntaLinx {
             if (window.StatusBar) {
                 window.StatusBar.styleDefault();
             }
+            // navigator.splashscreen.hide();
         });
     }
 

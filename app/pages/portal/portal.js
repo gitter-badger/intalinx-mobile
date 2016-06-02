@@ -49,6 +49,8 @@ export class PortalPage {
     
     this.appsService.load().then(data => {
         this.app.initializeMenu(data);
+        // set root to blog.
+        this.nav.setRoot(BlogIndexPage);
     })
     
     this.userService.getUserDetail().then(data => {

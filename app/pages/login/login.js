@@ -1,6 +1,6 @@
-import {Page, IonicApp, NavController, Alert} from 'ionic-angular';
+import {Page, IonicApp, NavController, Alert, Storage, LocalStorage} from 'ionic-angular';
 
-import {NgForm} from 'angular2/common';
+import {NgForm} from '@angular/common';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
@@ -17,6 +17,13 @@ import {PortalPage} from '../portal/portal';
     pipes: [TranslatePipe]
 })
 export class LoginPage {
+    
+    static get constants() {
+        return {
+            LOGIN_ID_STORAGE_NAME: "loginId"
+        }
+    }
+    
     static get parameters() {
         return [[IonicApp], [NavController], [UserService]];
     }
@@ -25,11 +32,12 @@ export class LoginPage {
         this.nav = nav;
         this.app = app;
         this.userService = userService;
+        this.local = new Storage(LocalStorage);
 
         this.user = {
             loginId: "",
-            password: ""
-            // rememberMe: false
+            password: "",
+            rememberLoginId: false
         }
     }
 
@@ -50,6 +58,11 @@ export class LoginPage {
         this.isDisabled = true;
         this.userService.authenticate(this.user).then(authenticationResult => {
             if (authenticationResult) {
+                if (this.user.rememberLoginId) {
+                    this.local.set(LoginPage.constants.LOGIN_ID_STORAGE_NAME, this.user.loginId);
+                } else {
+                    this.local.remove(LoginPage.constants.LOGIN_ID_STORAGE_NAME);
+                }
                 this.redirectToPortal();
             } else if (!authenticationResult) {
                 this.app.translate.get(["app.login.message.error.title", "app.login.message.error.idOrPasswordNotCorrect", "app.action.ok"]).subscribe(message => {
@@ -74,6 +87,15 @@ export class LoginPage {
     
     onPageWillEnter() {
         this.isDisabled = true;
+    }
+    
+    onPageDidEnter() {
+        this.local.get(LoginPage.constants.LOGIN_ID_STORAGE_NAME).then(value => {
+            if (value != null) {
+                this.user.loginId = value;
+                this.user.rememberLoginId = true;
+            }
+        });
     }
     
     changeUser() {
