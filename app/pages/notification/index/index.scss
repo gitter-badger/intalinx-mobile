@@ -1,3 +1,5 @@
+@import "../pages/notification/detail/detail";
+
 .notification-index {
     -webkit-user-select: auto;
     .avatar {
@@ -29,17 +31,12 @@
             background-color: red;
             margin-bottom: 4px;
         }
-        
-        .new-reply {
-            @extend .new;
-            background-color: rgb(255,140,0);
-        }
     }
     
 }
 
 .md {
-    .blog-index {
+    .notification-index {
         .avatar{
             img {
                 width: 6.5rem;
@@ -47,7 +44,7 @@
             }
         }
     }
-    .blog-index {
+    .notification-index {
         .status{
             width: 6rem;
         }

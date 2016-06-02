@@ -113,4 +113,19 @@ export class NotificationService {
             });
         });
     }
+    
+    updateReadStatus(notificationID, status){
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/update_read_status.xml').then(req => {
+                let objRequest = this.util.parseXml(req);
+                this.util.setNodeText(objRequest, ".//*[local-name()='notificationId']", notificationID);
+                this.util.setNodeText(objRequest, ".//*[local-name()='status']", status);
+                req = this.util.xml2string(objRequest);
+
+                this.util.callCordysWebservice(req).then(data => {
+                    resolve("true");
+                });
+            });
+        });
+    }
 }
