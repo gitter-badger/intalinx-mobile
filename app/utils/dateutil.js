@@ -78,6 +78,55 @@ export class DateUtil {
         });
     }
     
+    // 通知では、公開開始時間を表示して、詳しい時間は全部午前零時からだから、詳しい時間の表示は必要ないです。
+    static transferDateToKindsOfStylesWithoutTime(date, app) {
+        let yearMonthDay = date.substring(0, 10);
+        let dateWhoutT = new Date(yearMonthDay);
+        dateWhoutT.setHours(date.substring(11, 13));
+        dateWhoutT.setMinutes(date.substring(14, 16));
+        dateWhoutT.setSeconds(date.substring(17, 19));
+        let dateWhoutTTime = dateWhoutT.getTime();
+        let now = new Date();
+        let nowTime = now.getTime();
+        let minutesFromDateToNow = Math.trunc((nowTime - dateWhoutTTime) / (60 * 1000));
+
+        let minutesOfOneHour = 60;
+        let minutesOfOneday = minutesOfOneHour * 24;
+        let minutesOfOneWeek = minutesOfOneday * 7;
+        let minutesOfOneYear = minutesOfOneday * 365;
+        
+        return new Promise(resolve => {
+            if (now.getFullYear() != date.substring(0, 4)) {
+                // 今年以前の場合
+                resolve(yearMonthDay.substring(0, 7).replace(/\-/ig, "/"));              
+            } else if (minutesFromDateToNow >= minutesOfOneWeek) {
+                // 一週前の場合
+                resolve(yearMonthDay.substring(5, 10).replace(/\-/ig, "/"));
+            } else if (minutesFromDateToNow >= minutesOfOneday) {
+                // 一日~一週の場合
+                DateUtil.transferDateToWeekDayName(dateWhoutT, app).then(data => {
+                    resolve(data);
+                });
+            } else if (minutesFromDateToNow >= minutesOfOneHour) {
+                // 一時間~一日の場合
+                let hours = Math.trunc(minutesFromDateToNow / minutesOfOneHour);
+                app.translate.get(["app.date.hoursAgo"]).subscribe(message => {
+                    resolve(hours + message["app.date.hoursAgo"]);
+                });
+            } else {
+                // 一時間以内場合
+                // １分以内場合
+                if (minutesFromDateToNow < 1) {
+                    minutesFromDateToNow = 1;
+                }
+                app.translate.get(["app.date.minutesAgo"]).subscribe(message => {
+                    resolve(minutesFromDateToNow + message["app.date.minutesAgo"]);
+                });
+            }
+
+        });
+    }
+    
     static transferDateToWeekDayName(date, app) {
         let weekday = new Array(7);
         return new Promise(resolve => {

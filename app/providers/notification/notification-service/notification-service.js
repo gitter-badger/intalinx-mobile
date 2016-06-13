@@ -57,7 +57,7 @@ export class NotificationService {
                     }
 
                     notifications.forEach(function(element) {
-                        this.util.transferDateToKindsOfStyles(element.publishStartDate).then(data => {
+                        this.util.transferDateToKindsOfStylesWithoutTime(element.publishStartDate).then(data => {
                             element.publishStartDate = data;
                         });
                     }, this);

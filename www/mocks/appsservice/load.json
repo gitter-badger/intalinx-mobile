@@ -5,6 +5,11 @@
         "componentsId": "portal"
     },
     {
+        "titleIcon": "notifications",
+        "title": "app.notification.title",
+        "componentsId": "notification"
+    },
+    {
         "titleIcon": "chatbubbles",
         "title": "app.blog.title",
         "componentsId": "blog"
@@ -14,10 +19,5 @@
         "title": "app.profile.title",
         "componentsId": "profile",
         "isPush": true
-    },
-    {
-        "titleIcon": "notifications",
-        "title": "app.notification.title",
-        "componentsId": "notification"
     }
 ]
