@@ -4,6 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx';
 import {IonicApp} from 'ionic-angular';
 import {BlogService} from '../../providers/blog/blog-service/blog-service';
+import {NotificationService} from '../../providers/notification/notification-service/notification-service';
 
 /*
   Generated class for the AppsService provider.
@@ -14,14 +15,15 @@ import {BlogService} from '../../providers/blog/blog-service/blog-service';
 export class AppsService {
 
     static get parameters() {
-        return [[Http], [IonicApp], [BlogService]];
+        return [[Http], [IonicApp], [BlogService],[NotificationService]];
     }
 
-    constructor(http, app, blogService) {
+    constructor(http, app, blogService, notificationService) {
         this.http = http;
         this.app = app;
         this.data = null;
         this.blogService = blogService;
+        this.notificationService = notificationService;
     }
 
     load() {
@@ -56,6 +58,13 @@ export class AppsService {
             this.blogService.getNotReadCommunityCountBySelf().then(data => {
                 if (data) {
                     this.app.blogNewInformationCount = data;
+                }
+            });
+        }
+        if (item.componentsId == "notification") {
+            this.notificationService.getNotReadNotificationCountBySelf().then(data => {
+                if (data) {
+                    this.app.notificationNewInformationCount = data;
                 }
             });
         }

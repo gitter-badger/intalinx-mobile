@@ -71,6 +71,11 @@
                     "noContent": "请输入内容！"
                 }
             }
+        },
+        "notification": {
+            "title": "通知",
+            "detail": "通知详细",
+            "newNotification": "新"
         }
     }
 }

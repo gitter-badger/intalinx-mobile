@@ -1,7 +1,6 @@
-@import "../pages/blog/detail/detail";
-@import "../pages/blog/add-comment/add-comment";
+@import "../pages/notification/detail/detail";
 
-.blog-index {
+.notification-index {
     -webkit-user-select: auto;
     .avatar {
         height: 4em;
@@ -32,17 +31,12 @@
             background-color: red;
             margin-bottom: 4px;
         }
-        
-        .new-reply {
-            @extend .new;
-            background-color: rgb(255,140,0);
-        }
     }
     
 }
 
 .ios {
-    .blog-index {
+    .notification-index {
         .status{
             p {
                 font-size: 1.1rem;
@@ -52,7 +46,7 @@
 }
 
 .md {
-    .blog-index {
+    .notification-index {
         .avatar{
             img {
                 width: 6.5rem;
@@ -60,7 +54,7 @@
             }
         }
     }
-    .blog-index {
+    .notification-index {
         .status{
             width: 6.5rem;
             p {

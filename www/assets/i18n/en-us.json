@@ -70,6 +70,11 @@
                     "noContent": "The content is required."
                 }
             }
+        },
+        "notification": {
+            "title": "notification",
+            "detail": "Details",
+            "newNotification": "new"
         }
     }
 }
