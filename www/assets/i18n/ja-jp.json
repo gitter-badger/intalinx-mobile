@@ -16,6 +16,7 @@
         "date": {
             "YYYYMM": "{{YYYY}}年{{MM}}月",
             "MMDD": "{{MM}}月{{DD}}日",
+            "today": "今日",
             "yesterday": "昨日",
             "minutesAgo": "分前",
             "hoursAgo": "時前",
