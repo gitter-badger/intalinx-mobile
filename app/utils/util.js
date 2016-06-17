@@ -16,6 +16,9 @@ export class Util {
         this.http = http;
         this.app = app;
         this.nav = nav;
+        // set default lang to moment
+        let lang = this.app.userLang;
+        moment.locale(lang);
     }
 
     parseXml(s) {
@@ -153,17 +156,15 @@ export class Util {
         return userId;
     }
 
-    transferDateToKindsOfStyles(date) {
-        let usrLan = this.app.userLang;
-        moment.locale(usrLan);
-        return DateUtil.transferDateToKindsOfStyles(date, this.app);
+    fromNow(date) {
+        let translateService = this.app.translate;
+        return DateUtil.fromNow(date, translateService);
     }
     
     // 通知では、公開開始時間を表示して、詳しい時間は全部午前零時からだから、詳しい時間の表示は必要ないです。
-    transferDateToKindsOfStylesWithoutTime(date) {
-        let usrLan = this.app.userLang;
-        moment.locale(usrLan);
-        return DateUtil.transferDateToKindsOfStylesWithoutTime(date, this.app);
+    fromNowForNotification(date) {
+        let translateService = this.app.translate;
+        return DateUtil.fromNowForNotification(date, translateService);
     }
     /**
      * Html Tag を転換する
@@ -173,7 +174,6 @@ export class Util {
         content = content.replace(/</g, "&lt;");
         content = content.replace(/>/g, "&gt;");
         content = content.replace(/\n/g,"<br />");
-        
         return content;
     }
     
@@ -183,7 +183,6 @@ export class Util {
     deleteEmSpaceEnSpaceNewLineInCharacter(content) {
         content = content.replace(/\n/g, "");
         content = content.replace(/\s+/g, "");
-        
         return content;
     }
     

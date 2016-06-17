@@ -57,7 +57,7 @@ export class NotificationService {
                     }
 
                     notifications.forEach(function(element) {
-                        this.util.transferDateToKindsOfStylesWithoutTime(element.publishStartDate).then(data => {
+                        this.util.fromNowForNotification(element.publishStartDate).then(data => {
                             element.publishStartDate = data;
                         });
                     }, this);
@@ -107,7 +107,9 @@ export class NotificationService {
 
                     let notificationOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='NotificationOutput']");
                     let notification = this.util.xml2json(notificationOutput).NotificationOutput;
-
+                    this.util.fromNowForNotification(notification.publishStartDate).then(data => {
+                        notification.publishStartDate = data;
+                    });
                     resolve(notification);
                 });
             });

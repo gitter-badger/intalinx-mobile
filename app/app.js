@@ -8,7 +8,8 @@ import {LoginPage} from './pages/login/login';
 @App({
     templateUrl: 'build/app.html', //'<ion-nav [root]="rootPage"></ion-nav>',
     config: {
-        "BASE_URL": "http://www.intalinx.cn/home/intalinxcloud/",
+        //"BASE_URL": "http://www.intalinx.cn/home/intalinxcloud/",
+        "BASE_URL": "http://192.168.11.29/home/InternalSystem/",
         "GATEWAY_URL": "com.eibus.web.soap.Gateway.wcp",
         "PRE_LOGIN_INFO_URL": "com.eibus.sso.web.authentication.PreLoginInfo.wcp",
         "SAMLART_NAME": "SAMLart",
