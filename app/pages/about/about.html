@@ -1,0 +1,37 @@
+<!--
+  Generated template for the InformationPage page.
+
+  See http://ionicframework.com/docs/v2/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-navbar *navbar>
+  <ion-title>{{"app.about.title" | translate}}</ion-title>
+</ion-navbar>
+
+<ion-content padding class="about">
+    <div class="center">
+        <ion-card class="version-card">
+            <img src="img/favicon.png" class="version-icon"/>
+        </ion-card>
+        <p>IntaLinxCloud: {{versionInfos.version}}</p>
+    </div>
+  <p>{{"app.about.version" | translate}}: {{versionInfos.version}}</p>
+  <div id="versionUpgrade" [style.display]="isShowUpgrade ? 'block' : 'none'">
+    <p [style.display]="isLatestVersion ? 'block' : 'none'">{{"app.about.latestInfo" | translate}}</p>
+    <p [style.display]="isLatestVersion ? 'none' : 'block'">{{"app.about.pleaseUpgrade" | translate}}</p>
+    <a [style.display]="showIosUpgrade ? 'block' : 'none'"
+        href = '{{upgrade.iosURL}}'>{{versionInfos.latestVersion}}</a>
+    <a [style.display]="showAndroidUpgrade ? 'block' : 'none'"
+        href = '{{upgrade.androidURL}}'>{{versionInfos.latestVersion}}</a>
+  </div>
+
+<p style="margin-top: 40px; font-size: 2rem">The next divison is just for test!</p>
+    <p>{{infos}}</p>
+    <p>{{isIOS}}</p>
+    <p>{{isAndroid}}</p>
+    <p>{{isWeb}}</p>
+    <p>isApp: {{isApp}}</p>
+    <p>versionInfos: {{versionInfos.version}}</p>
+    <p>{{versionInfos.appKey}}</p>
+    <p>{{versionInfos.appVersion}}</p>
+</ion-content>

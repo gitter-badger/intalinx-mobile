@@ -76,6 +76,12 @@
             "title": "通知",
             "detail": "通知详细",
             "newNotification": "新"
+        },
+        "about": {
+            "title": "版本信息",
+            "version": "版本",
+            "latestInfo": "已是最新版。",
+            "pleaseUpgrade": "有更新了。请点击以下链接更新。"
         }
     }
 }

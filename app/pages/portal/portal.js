@@ -10,7 +10,8 @@ import {NotificationService} from '../../providers/notification/notification-ser
 
 import {BlogIndexPage} from '../blog/index/index';
 import {ProfilePage} from '../profile/profile';
-import {NotificationIndexPage} from '../notification/index/index'
+import {NotificationIndexPage} from '../notification/index/index';
+import {AboutPage} from '../about/about';
 
 /*
   Generated class for the PortalPage page.
@@ -44,7 +45,8 @@ export class PortalPage {
         "portal": PortalPage,
         "blog" : BlogIndexPage,
         "profile" : ProfilePage,
-        "notification" : NotificationIndexPage
+        "notification" : NotificationIndexPage,
+        "about": AboutPage
     }
     
     if (!this.app.showMenu) {

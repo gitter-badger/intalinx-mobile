@@ -75,6 +75,12 @@
             "title": "notification",
             "detail": "Details",
             "newNotification": "new"
+        },
+        "about": {
+            "title": "About",
+            "version": "version",
+            "latestInfo": "is the latest version.",
+            "pleaseUpgrade": "is not the latest version. Please click the next link to upgrade."
         }
     }
 }
