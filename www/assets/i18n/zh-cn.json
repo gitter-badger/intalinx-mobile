@@ -4,6 +4,10 @@
             "error": {
                 "title": "错误",
                 "systemError": "系统发生异常，请联系管理员！"
+            },
+            "info": {
+                "title": "提示",
+                "versionTooOld": "有新的版本更新。" 
             }
         },
         "action": {

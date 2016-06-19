@@ -46,7 +46,6 @@ export class AboutPage {
       this.aboutService.getLatestVersion().then(data => {
           this.latestVersion = data;
       });
-      
   }
 
   getUpgradeUrl() {

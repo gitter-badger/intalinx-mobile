@@ -94,7 +94,7 @@ export class Util {
                         let responseText = error.text();
                         let responseNode = this.parseXml(responseText);
                         this.changeErrorMessageOfWebservice(this.getNodeText(responseNode, ".//*[local-name()='faultstring']")).then(message => {
-                            this.presentErrorModal(message);
+                            this.presentModal(message);
                         });
                     } else {
                         this.presentSystemErrorModal();
@@ -204,14 +204,17 @@ export class Util {
         });
     }
     
-    presentErrorModal(subTitle) {
-        this.app.translate.get(["app.message.error.title", "app.action.ok"]).subscribe(message => {
-            let title = message['app.message.error.title'];
+    presentModal(content, level) {
+        if (!level) {
+            level = "error";
+        }
+        this.app.translate.get(["app.message." + level + ".title", "app.action.ok"]).subscribe(message => {
+            let title = message["app.message." + level + ".title"];
             let ok = message['app.action.ok'];
 
             let alert = Alert.create({
                 title: title,
-                subTitle: subTitle,
+                subTitle: content,
                 buttons: [ok]
             });
             this.nav.present(alert);
