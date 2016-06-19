@@ -8,15 +8,22 @@ import {LoginPage} from './pages/login/login';
 @App({
     templateUrl: 'build/app.html', //'<ion-nav [root]="rootPage"></ion-nav>',
     config: {
-        //"BASE_URL": "http://www.intalinx.cn/home/intalinxcloud/",
-        "BASE_URL": "http://192.168.11.29/home/InternalSystem/",
+        "BASE_URL": "http://www.intalinx.cn/home/intalinxcloud/",
         "GATEWAY_URL": "com.eibus.web.soap.Gateway.wcp",
         "PRE_LOGIN_INFO_URL": "com.eibus.sso.web.authentication.PreLoginInfo.wcp",
         "SAMLART_NAME": "SAMLart",
         "SAML_ARTIFACT_STORAGE_NAME": "defaultinst_SAMLart",
         "CHECK_NAME": "defaultinst_ct",
         "USER_AVATAR_IMAGE_URL": "img/",
-        "USER_AVATAR_DEFAULT_IMAGE": "default"
+        "USER_AVATAR_DEFAULT_IMAGE": "default",
+        "PGYER" : {
+            "ANDROID" : {
+                "aKey" : "c6a2b64fb666d2535a6c280daf70f806",
+            },
+            "IOS" : {
+                "aKey" : "a44902065de396ea09bee856d48d6e44",
+            }
+        }
     }, 
     providers: [
         provide(TranslateLoader, {
@@ -72,7 +79,7 @@ export class IntaLinx {
         
         this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
         this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
-  
+
     }
 
     initializeApp() {

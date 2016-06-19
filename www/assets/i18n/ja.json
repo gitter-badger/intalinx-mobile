@@ -81,10 +81,10 @@
             "newNotification": "新"
         },
         "about": {
-            "title": "バージョン情報",
+            "title": "本Appについて",
             "version": "バージョン",
-            "latestInfo": "は最新版です。",
-            "pleaseUpgrade": "更新があります。次のリンクとクリックしてアップグレードしてください。"
+            "latestVersion": "最新バージョン",
+            "new": "新"
         }
     }
 }

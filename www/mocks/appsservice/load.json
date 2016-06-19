@@ -21,7 +21,7 @@
         "isPush": true
     },
     {
-        "titleIcon": "book",
+        "titleIcon": "information-circle",
         "title": "app.about.title",
         "componentsId": "about",
         "isPush": true

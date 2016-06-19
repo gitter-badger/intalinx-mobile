@@ -82,9 +82,9 @@
         },
         "about": {
             "title": "About",
-            "version": "version",
-            "latestInfo": "is the latest version.",
-            "pleaseUpgrade": "is not the latest version. Please click the next link to upgrade."
+            "version": "Version",
+            "latestVersion": "Latest version",
+            "new": "New"
         }
     }
 }

@@ -82,10 +82,10 @@
             "newNotification": "新"
         },
         "about": {
-            "title": "版本信息",
+            "title": "关于本App",
             "version": "版本",
-            "latestInfo": "已是最新版。",
-            "pleaseUpgrade": "有更新了。请点击以下链接更新。"
+            "latestVersion": "最新版本",
+            "new": "New"
         }
     }
 }

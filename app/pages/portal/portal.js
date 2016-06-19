@@ -1,4 +1,4 @@
-import {Page, IonicApp, NavController, MenuController} from 'ionic-angular';
+import {Page, IonicApp, Platform, NavController, MenuController} from 'ionic-angular';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
 import {Util} from '../../utils/util';
@@ -32,10 +32,10 @@ import {AboutPage} from '../about/about';
 })
 export class PortalPage {
   static get parameters() {
-    return [[IonicApp], [NavController], [MenuController], [AppsService], [UserService]];
+    return [[IonicApp], [Platform], [NavController], [MenuController], [AppsService], [UserService]];
   }
 
-  constructor(app, nav, menu, appsService, userService) {
+  constructor(app, platform, nav, menu, appsService, userService) {
     this.app = app;
     this.nav = nav;
     this.appsService = appsService;
@@ -54,6 +54,11 @@ export class PortalPage {
     }
     
     this.appsService.load().then(data => {
+        // when the app is runing as a native app. remove about page.
+        if (!platform.is('cordova')) {
+            data.pop();
+        }
+
         this.app.initializeMenu(data);
         // set root to blog.
         this.nav.setRoot(BlogIndexPage);

@@ -9,29 +9,24 @@
 </ion-navbar>
 
 <ion-content padding class="about">
-    <div class="center">
-        <ion-card class="version-card">
+    <ion-card>
+        <div class="center">    
             <img src="img/favicon.png" class="version-icon"/>
-        </ion-card>
-        <p>IntaLinxCloud: {{versionInfos.version}}</p>
-    </div>
-  <p>{{"app.about.version" | translate}}: {{versionInfos.version}}</p>
-  <div id="versionUpgrade" [style.display]="isShowUpgrade ? 'block' : 'none'">
-    <p [style.display]="isLatestVersion ? 'block' : 'none'">{{"app.about.latestInfo" | translate}}</p>
-    <p [style.display]="isLatestVersion ? 'none' : 'block'">{{"app.about.pleaseUpgrade" | translate}}</p>
-    <a [style.display]="showIosUpgrade ? 'block' : 'none'"
-        href = '{{upgrade.iosURL}}'>{{versionInfos.latestVersion}}</a>
-    <a [style.display]="showAndroidUpgrade ? 'block' : 'none'"
-        href = '{{upgrade.androidURL}}'>{{versionInfos.latestVersion}}</a>
-  </div>
-
-<p style="margin-top: 40px; font-size: 2rem">The next divison is just for test!</p>
-    <p>{{infos}}</p>
-    <p>{{isIOS}}</p>
-    <p>{{isAndroid}}</p>
-    <p>{{isWeb}}</p>
-    <p>isApp: {{isApp}}</p>
-    <p>versionInfos: {{versionInfos.version}}</p>
-    <p>{{versionInfos.appKey}}</p>
-    <p>{{versionInfos.appVersion}}</p>
+        </div>
+        <ion-card-content>
+            <ion-list>
+                <ion-item>
+                    <h2>{{version}}</h2>
+                    <p>{{"app.about.version" | translate}}</p>
+                </ion-item>
+                <a ion-item [href]="upgradeUrl">
+                    <h2>
+                        <span>{{latestVersion}}</span>
+                        <ion-badge class="new">{{"app.about.new" | translate}}</ion-badge>
+                    </h2>
+                    <p>{{"app.about.latestVersion" | translate}}</p>
+                </a>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
 </ion-content>
