@@ -18,10 +18,10 @@ import {LoginPage} from './pages/login/login';
         "USER_AVATAR_DEFAULT_IMAGE": "default",
         "PGYER" : {
             "ANDROID" : {
-                "aKey" : "c6a2b64fb666d2535a6c280daf70f806",
+                "url" : "https://www.pgyer.com/MMHC"
             },
             "IOS" : {
-                "aKey" : "a44902065de396ea09bee856d48d6e44",
+                "url" : "https://www.pgyer.com/MMHB"
             }
         }
     }, 

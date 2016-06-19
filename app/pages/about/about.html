@@ -19,10 +19,10 @@
                     <h2>{{version}}</h2>
                     <p>{{"app.about.version" | translate}}</p>
                 </ion-item>
-                <a ion-item [href]="upgradeUrl">
+                <a ion-item [attr.detail-none]="version==latestVersion" [href]="upgradeUrl" (click)="openUpgradeUrl()">
                     <h2>
                         <span>{{latestVersion}}</span>
-                        <ion-badge class="new">{{"app.about.new" | translate}}</ion-badge>
+                        <ion-badge *ngIf="version!=latestVersion" class="new">{{"app.about.new" | translate}}</ion-badge>
                     </h2>
                     <p>{{"app.about.latestVersion" | translate}}</p>
                 </a>

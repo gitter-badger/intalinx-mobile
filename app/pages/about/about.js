@@ -54,4 +54,10 @@ export class AboutPage {
           this.upgradeUrl = data;
       });
   }
+
+  openUpgradeUrl() {
+      if (this.version == this.latestVersion) {
+          return false;
+      }
+  }
 }

@@ -53,21 +53,15 @@ export class AboutService {
 
     getUpgradeUrl() {
         return new Promise(resolve => {
-            
-            let baseUrl = "http://www.pgyer.com/apiv1/app/install?";
-            var parameters = "uKey=3ef865272b876a357bd12b1a0c3b6adc";
-            parameters += "&_api_key=61b73e850a3cc863a5d34dfe6d8bed85";
-            
+            let url = "";
             if (this.platform.is('android')) {
-                parameters += "&aKey=" + this.app.config.get("PGYER").ANDROID.aKey;
-            } else if (this.platform.is('android')) {
-                parameters += "&aKey=" + this.app.config.get("PGYER").IOS.aKey;
+                url = this.app.config.get("PGYER").ANDROID.url;
+            } else if (this.platform.is('ios')) {
+                url = this.app.config.get("PGYER").ANDROID.url;
             } else {
                 // parameters += "&aKey=" + this.app.config.get("PGYER").IOS.aKey;
             }
-            parameters += "&password=intasect2016";
-            
-            resolve(baseUrl + parameters);
+            resolve(url);
         });
     }
 }
