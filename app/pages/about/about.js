@@ -32,7 +32,7 @@ export class AboutPage {
         this.aboutService = aboutService;
         this.version = "latest";
         this.latestVersion = "latest";
-        this.upgradeUrl = "latest";
+        this.upgradeUrl = "";
         this.getVersionInfo();
         this.getUpgradeUrl();
     }  
