@@ -38,6 +38,7 @@ export class DetailPage {
             this.content = data.content;
             this.createUserId = data.createUser;
             this.publishStartDate = data.publishStartDate;
+            this.createUserAvatar = data.createUserAvatar;
             // this.createUserName = data.createUserName;
             this.status = data.status;
             this.readCount = data.readCount;

@@ -1,4 +1,4 @@
-import {Page, IonicApp, NavController, Modal, Toast, NavParams, ViewController, Platform} from 'ionic-angular';
+import {Page, IonicApp, NavController, Modal, Toast, Alert, NavParams, ViewController, Platform} from 'ionic-angular';
 import {ViewChild} from '@angular/core'
 import * as EXIF from 'exif-js';
 
@@ -42,10 +42,12 @@ export class ChangeAvatarPage {
         
         this.width = window.innerWidth;
         this.height = window.innerHeight;
+        this.isDisabled = null;
     }
 
     onFileInputChange(event) {
         let fileInput = event.currentTarget;
+        debugger
         let file = fileInput.files[0];
         
         if (file) {
@@ -62,7 +64,6 @@ export class ChangeAvatarPage {
     }
 
     render(file, src, other) {
-        let maxHeight = other.height;
         EXIF.getData(file, function() {
             //获取照片本身的Orientation
             let orientation = EXIF.getTag(this, "Orientation");
@@ -115,12 +116,17 @@ export class ChangeAvatarPage {
                 } else if(file.size > 2 * 1024 * 1024 && file.size <= 5 * 1024 * 1024) {
                     quality = 10;
                 } else {
-                    let toast = Toast.create({
-                        message: 'Avatar is too big',
-                        duration: 3000,
-                        position: 'middle'
+                    other.app.translate.get(["app.blog.message.error.title", "app.profile.message.error.avatarTooLarge", "app.action.ok"]).subscribe(message => {
+                        let title = message['app.blog.message.error.title'];
+                        let ok = message['app.action.ok'];
+                        let content = message['app.profile.message.error.avatarTooLarge'];
+                        let alert = Alert.create({
+                            title: title,
+                            subTitle: content,
+                            buttons: [ok]
+                        });
+                        other.nav.present(alert);
                     });
-                    other.nav.present(toast);
                     other.isSelectChange = false;
                     return false;
                 }
@@ -129,24 +135,28 @@ export class ChangeAvatarPage {
                 other.userAvatar = base64;
 
                 other.isSelectChange = true;
-                
             };
             image.src = src;
         });
     }
     
     changeUserAvatar() {
+        this.isDisabled = true;
         this.userService.changeUserAvatar(this.userAvatar).then(data => {
             if (data == "true") {
-                let toast = Toast.create({
-                    message: 'Avatar has been changed successfully',
-                    duration: 3000,
-                    position: 'middle'
-                });
-                this.nav.present(toast);
+                 this.app.translate.get(["app.profile.message.success.changeAvatar"]).subscribe(message => {
+                    let content = message['app.profile.message.success.changeAvatar'];
+                    let toast = Toast.create({
+                        message: content,
+                        duration: 3000,
+                        position: 'middle'
+                    });
+                    this.nav.present(toast);
+                 });
                 this.isSelectChange = false;
-                this.fileInput.nativeElement.value = ''
+                this.fileInput.nativeElement.value = '';
             }
+            this.isDisabled = null;
         });
     }
 
@@ -157,7 +167,6 @@ export class ChangeAvatarPage {
                 this.view.setBackButtonText(title);
             });
         }
-        this.isDisabled = true;
     }
     
     presentPreviewAvatar() {

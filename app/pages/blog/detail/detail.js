@@ -46,6 +46,7 @@ export class DetailPage {
             this.createUserId = data.createUser;
             this.createDate = data.createDate;
             this.createUserName = data.createUserName;
+            this.createUserAvatar = data.createUserAvatar;
             this.status = data.status;
             this.readCount = data.readCount;
             this.isLoadCompleted = true;

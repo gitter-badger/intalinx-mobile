@@ -15,6 +15,6 @@
         <button type="reset" (click)="resetUserAvatar()">{{ "app.action.cancel" | translate }}</button>
     </ion-buttons>
     <ion-buttons end>
-        <button type="submit" (click)="changeUserAvatar()">{{ "app.action.select" | translate }}</button>
+        <button type="submit" disabled={{isDisabled}} (click)="changeUserAvatar()">{{ "app.action.select" | translate }}</button>
     </ion-buttons>
 </ion-toolbar>

@@ -62,7 +62,11 @@
                 "error": {
                     "title": "error",
                     "emptyPassword": "Password cannot be left empty.",
-                    "mismatchPassword": "Password mismatch. Ensure to enter the same password  in both the text boxes."
+                    "mismatchPassword": "Password mismatch. Ensure to enter the same password  in both the text boxes.",
+                    "avatarTooLarge": "Your avatar's file size is too large"
+                },
+                "success": {
+                    "changeAvatar": "Avatar has been changed successfully"
                 }
             }
         },
