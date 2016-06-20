@@ -11,7 +11,9 @@
             "delete": "削除",
             "save": "保存",
             "ok": "はい",
-            "back": "戻る"
+            "back": "戻る",
+            "cancel": "キャンセル",
+            "select": "選択"
         },
         "date": {
             "minutesAgo": "分前",
@@ -46,6 +48,8 @@
             "oldPassword": "古いパスワード",
             "newPassword": "パスワード",
             "confirmPassword": "パスワード確認",
+            "changeAvatar": "プロファイル写真",
+            "changePassword": "パスワードの設定",
             "message": {
                 "error": {
                     "title": "エラー",

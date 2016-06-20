@@ -1,5 +1,6 @@
 @import "../pages/blog/index/index";
 @import "../pages/notification/index/index";
+@import "../pages/profile/index/index";
 
 ion-navbar {
     .bar-button-default {
@@ -38,11 +39,16 @@ ion-navbar {
             color: $primary-color-text;
             background-color: $primary-color;
         }
+        ion-item {
+            height: 10rem;
+        }
     }
     ion-avatar img {
-        max-width: 6rem;
-        max-height: 6rem;
-        border-radius: 6rem;
+        max-width: 8rem;
+        max-height: 8rem;
+        border-radius: 8rem;
+        min-width: 8rem;
+        min-height: 8rem;
     }
     button {
         ion-label{

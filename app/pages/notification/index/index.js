@@ -28,8 +28,6 @@ export class NotificationIndexPage {
         this.app = app;
         this.nav = nav;
         this.notificationService = notificationService;
-        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
-        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
         
         this.getNotificationListForTop();
         this.getNotReadNotificationCountBySelf();
@@ -81,11 +79,6 @@ export class NotificationIndexPage {
                 this.app.notificationNewInformationCount = data;
             }
         });
-    }
-    
-    loadImageError(event){
-        let img = event.currentTarget;
-        img.src = this.userAvatarImageUrl + this.userAvatarDefaultImage;
     }
     
     ngAfterViewInit() {

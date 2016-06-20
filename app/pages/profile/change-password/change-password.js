@@ -3,19 +3,19 @@ import {IonicApp, Page, NavController, ViewController, Platform} from 'ionic-ang
 import {NgForm} from '@angular/common';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
-import {Util} from '../../utils/util';
+import {Util} from '../../../utils/util';
 
-import {UserService} from '../../providers/user-service/user-service';
+import {UserService} from '../../../providers/user-service/user-service';
 
 @Page({
-    templateUrl: 'build/pages/profile/profile.html',
+    templateUrl: 'build/pages/profile/change-password/change-password.html',
     providers: [
         UserService,
         Util
     ],
     pipes: [TranslatePipe]
 })
-export class ProfilePage {
+export class ChangePasswordPage {
     static get parameters() {
         return [[IonicApp], [NavController], [UserService], [ViewController], [Platform]];
     }
@@ -52,13 +52,12 @@ export class ProfilePage {
         }
         this.isDisabled = true;
     }
-    
+
     changePassword() {
         if (this.user.oldPassword && this.user.newPassword && this.user.confirmPassword) {
             this.isDisabled = null;
         } else {
             this.isDisabled = true;
         }
-        
     }
 }

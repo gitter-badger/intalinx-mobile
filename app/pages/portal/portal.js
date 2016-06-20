@@ -9,7 +9,7 @@ import {BlogService} from '../../providers/blog/blog-service/blog-service';
 import {NotificationService} from '../../providers/notification/notification-service/notification-service'; 
 
 import {BlogIndexPage} from '../blog/index/index';
-import {ProfilePage} from '../profile/profile';
+import {ProfileIndexPage} from '../profile/index/index';
 import {NotificationIndexPage} from '../notification/index/index'
 
 /*
@@ -42,9 +42,9 @@ export class PortalPage {
     
     this.components = {
         "portal": PortalPage,
+        "notification" : NotificationIndexPage,
         "blog" : BlogIndexPage,
-        "profile" : ProfilePage,
-        "notification" : NotificationIndexPage
+        "profile" : ProfileIndexPage
     }
     
     if (!this.app.showMenu) {
@@ -57,7 +57,7 @@ export class PortalPage {
         this.nav.setRoot(BlogIndexPage);
     })
     
-    this.userService.getUserDetail().then(data => {
+    this.userService.getUserDetailsFromUser().then(data => {
         this.app.initializeUser(data);
     })
   }

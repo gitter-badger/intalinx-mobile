@@ -11,7 +11,9 @@
             "delete": "Delete",
             "save": "Save",
             "ok": "ok",
-            "back": "back"
+            "back": "back",
+            "cancel": "cancel",
+            "select": "select"
         },
         "date": {
             "minutesAgo": "minutes ago",
@@ -46,6 +48,8 @@
             "oldPassword": "Old password",
             "newPassword": "New password",
             "confirmPassword": "Verify password",
+            "changeAvatar": "Change avatar",
+            "changePassword": "Change password",
             "message": {
                 "error": {
                     "title": "error",

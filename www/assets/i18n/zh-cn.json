@@ -11,7 +11,9 @@
             "delete": "删除",
             "save": "保存",
             "ok": "OK",
-            "back": "返回"
+            "back": "返回",
+            "cancel": "取消",
+            "select": "选择"
         },
         "date": {
             "minutesAgo": "分前",
@@ -46,6 +48,8 @@
             "oldPassword": "现在的密码",
             "newPassword": "设置新密码",
             "confirmPassword": "确认新密码",
+            "changeAvatar": "修改头像",
+            "changePassword": "修改密码",
             "message": {
                 "error": {
                     "title": "错误",

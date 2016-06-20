@@ -1,0 +1,18 @@
+<ion-navbar *navbar>
+  <ion-title>{{ "app.profile.title" | translate }}</ion-title>
+</ion-navbar>
+
+<ion-content padding class="index">
+    <ion-list>
+        <button  ion-item (click)="openChangeAvatar(user)">
+            <ion-thumbnail item-left class="avatar">
+                <img src="{{user.userAvatar}}" />
+            </ion-thumbnail>
+            <p>{{user.userName}}</p>
+        </button>
+        <button  ion-item (click)="openChangePassword()">
+            <ion-icon item-left name="cog"></ion-icon>
+            <p>{{ "app.profile.changePassword" | translate }}</p>
+        </button>
+    </ion-list>
+</ion-content>

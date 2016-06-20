@@ -33,9 +33,6 @@ export class DetailPage {
 
         this.notificationService = notificationService;
 
-        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
-        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
-
         this.notificationService.getNotificationDetailByNotificationID(this.id).then(data => {
             this.title = data.title;
             this.content = data.content;
@@ -82,11 +79,6 @@ export class DetailPage {
                 this.app.notificationNewInformationCount = notificationNewInformationCount - 1;
             }
         });
-    }
-
-    loadImageError(event) {
-        let img = event.currentTarget;
-        img.src = this.userAvatarImageUrl + this.userAvatarDefaultImage;
     }
 
     ngAfterViewInit() {

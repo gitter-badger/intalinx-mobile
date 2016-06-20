@@ -34,8 +34,6 @@ export class BlogIndexPage {
         this.app = app;
         this.nav = nav;
         this.blogService = blogService;
-        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
-        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
         
         this.getCommunityListForTop();
         this.getBlogNewInformationCount();
@@ -87,11 +85,6 @@ export class BlogIndexPage {
                 this.app.blogNewInformationCount = data;
             }
         });
-    }
-    
-    loadImageError(event){
-        let img = event.currentTarget;
-        img.src = this.userAvatarImageUrl + this.userAvatarDefaultImage;
     }
     
     ngAfterViewInit() {

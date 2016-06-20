@@ -40,9 +40,6 @@ export class DetailPage {
             "unrepliedCommentcontent": ""
         }
 
-        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
-        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
-
         this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
             this.title = data.title;
             this.content = data.content;
@@ -145,11 +142,6 @@ export class DetailPage {
                 this.community.newReplyFlag = newReplyFlag;
             }
         });
-    }
-
-    loadImageError(event) {
-        let img = event.currentTarget;
-        img.src = this.userAvatarImageUrl + this.userAvatarDefaultImage;
     }
 
     ngAfterViewInit() {

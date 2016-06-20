@@ -17,7 +17,7 @@
         </ion-item>
         <ion-item class="status">
             <ion-avatar item-left class="avatar">
-                <img src="{{userAvatarImageUrl}}{{createUserId}}" (error)="loadImageError($event)" />
+                <img src="{{createUserId}}"" />
             </ion-avatar>
             <div class="name">{{createUserName}}</div>
             <div class="time">
@@ -38,7 +38,7 @@
             <ion-item class="comment" *ngFor="let comment of comments">
                 <ion-item class="status">
                     <ion-avatar item-left class="avatar">
-                        <img src="{{userAvatarImageUrl}}{{comment.userID}}" (error)="loadImageError($event)" />
+                        <img src="{{comment.userID}}" />
                     </ion-avatar>
                     <div class="name">{{comment.userName}}</div>
                     <div class="time">{{comment.createDate}}</div>
