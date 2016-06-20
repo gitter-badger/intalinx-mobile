@@ -27,7 +27,7 @@ export class AboutService {
     }
     
     getVersion() {
-        return AppVersion.getVersionCode();
+        return AppVersion.getVersionNumber();
     }
 
     getLatestVersion() {
