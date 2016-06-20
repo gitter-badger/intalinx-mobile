@@ -79,7 +79,7 @@ export class DateUtil {
             if (moment(nowWithoutTime).subtract(1, 'days').isAfter(dateWithoutTime) &&
                 (moment(nowWithoutTime).subtract(7, 'days').isSame(dateWithoutTime) ||
                 moment(nowWithoutTime).subtract(7, 'days').isBefore(dateWithoutTime))) {
-                resolve(date.weekdays());
+                resolve(moment.weekdays(date.weekday()));
             }
 
             // 182days(half of a year) before 12:00am ~ last week 12:00 am
