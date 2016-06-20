@@ -20,7 +20,7 @@
         <ion-refresher-content refreshingSpinner="circles"> </ion-refresher-content>
     </ion-refresher>
     <ion-list>
-        <ion-item *ngFor="let community of communityListForTop">
+        <button ion-item detail-none (click)="openDetail(community)" *ngFor="let community of communityListForTop">
             <!-- こっちは四角 -->
             <ion-thumbnail item-left class="avatar">
                 <!--<ion-icon name="person" class="avatar"></ion-icon>-->
@@ -28,15 +28,13 @@
                 <img src="{{community.createUser}}" />
                 <p>{{community.createUserName}}</p>
             </ion-thumbnail>
-
-
-            <h2 class="title" (click)="openDetail(community)">{{community.title}}</h2>
+            <h2 class="title">{{community.title}}</h2>
             <div item-right class="status">
                 <ion-badge class="new" *ngIf="community.readStatus=='NOT_READ'">{{"app.blog.newBlog" | translate}}</ion-badge>
                 <ion-badge class="new-reply" *ngIf="community.readStatus!='NOT_READ' && community.newReplyFlag=='TRUE'">{{"app.blog.newReturn" | translate}}</ion-badge>
                 <p>{{community.publishStartDate}}</p>
             </div>
-        </ion-item>
+        </button>
     </ion-list>
     <ion-infinite-scroll (infinite)="doInfinite($event)">
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>

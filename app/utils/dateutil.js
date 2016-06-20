@@ -30,119 +30,82 @@ export class DateUtil {
         return sValue;
     }
     
-    static transferDateToKindsOfStyles(date, app) {
-        let yearMonthDay = date.substring(0, 10);
-        let dateWhoutT = new Date(yearMonthDay);
-        dateWhoutT.setHours(date.substring(11, 13));
-        dateWhoutT.setMinutes(date.substring(14, 16));
-        dateWhoutT.setSeconds(date.substring(17, 19));
-        let dateWhoutTTime = dateWhoutT.getTime();
-        let now = new Date();
-        let nowTime = now.getTime();
-        let minutesFromDateToNow = Math.trunc((nowTime - dateWhoutTTime) / (60 * 1000));
+    static fromNow(cordysDate, translateService) {
+        return DateUtil.fromNowCoreLogic(cordysDate, translateService);
+    }
+    
+    static fromNowForNotification(cordysDate, translateService) {
+        return DateUtil.fromNowCoreLogic(cordysDate, translateService, true);
+    }
 
-        let minutesOfOneHour = 60;
-        let minutesOfOneday = minutesOfOneHour * 24;
-        let minutesOfOneWeek = minutesOfOneday * 7;
-        let minutesOfOneYear = minutesOfOneday * 365;
-        
+    static fromNowCoreLogic(cordysDate, translateService, hideTime) {
         return new Promise(resolve => {
-            if (now.getFullYear() != date.substring(0, 4)) {
-                // 今年以前の場合
-                resolve(yearMonthDay.substring(0, 7).replace(/\-/ig, "/"));              
-            } else if (minutesFromDateToNow >= minutesOfOneWeek) {
-                // 一週前の場合
-                resolve(yearMonthDay.substring(5, 10).replace(/\-/ig, "/") + " " + date.substring(11, 16));
-            } else if (minutesFromDateToNow >= minutesOfOneday) {
-                // 一日~一週の場合
-                DateUtil.transferDateToWeekDayName(dateWhoutT, app).then(data => {
-                    resolve(data + " " + date.substring(11, 16));
-                });
-            } else if (minutesFromDateToNow >= minutesOfOneHour) {
-                // 一時間~一日の場合
-                let hours = Math.trunc(minutesFromDateToNow / minutesOfOneHour);
-                app.translate.get(["app.date.hoursAgo"]).subscribe(message => {
-                    resolve(hours + message["app.date.hoursAgo"]);
-                });
-            } else {
-                // 一時間以内場合
-                // １分以内場合
-                if (minutesFromDateToNow < 1) {
-                    minutesFromDateToNow = 1;
+            let date = moment(cordysDate, 'YYYY/MM/DDTHH:mm:ss.SSS');
+            if (cordysDate.indexOf('T') < 0) {
+                date = moment(cordysDate, 'YYYY/MM/DD HH:mm:ss');
+            }
+            
+            // clone date and set 12:00 am
+            let dateWithoutTime = moment(date).startOf('day');
+            // today 12:00 am
+            let nowWithoutTime = moment().startOf('day');
+            
+            // after today 12:00 am
+            if (nowWithoutTime.isSame(dateWithoutTime)) {
+                if (hideTime) {
+                    translateService.get('app.date.today').subscribe(message => {
+                        resolve(message);
+                        console.log("message")
+                    });
+                } else {
+                    resolve(date.fromNow());
                 }
-                app.translate.get(["app.date.minutesAgo"]).subscribe(message => {
-                    resolve(minutesFromDateToNow + message["app.date.minutesAgo"]);
+            }
+
+            // after yesterday 12:00 am
+            // 昨日 12:00 / 昨天 12:00 / Yesterday 12:00
+            if (moment(nowWithoutTime).subtract(1, 'days').isSame(dateWithoutTime)) {
+                translateService.get('app.date.yesterday').subscribe(message => {
+                    if (hideTime) {
+                        resolve(message);
+                    } else {
+                        resolve(message + date.format('H:mm'));
+                    }
                 });
             }
 
-        });
-    }
-    
-    // 通知では、公開開始時間を表示して、詳しい時間は全部午前零時からだから、詳しい時間の表示は必要ないです。
-    static transferDateToKindsOfStylesWithoutTime(date, app) {
-        let yearMonthDay = date.substring(0, 10);
-        let dateWhoutT = new Date(yearMonthDay);
-        dateWhoutT.setHours(date.substring(11, 13));
-        dateWhoutT.setMinutes(date.substring(14, 16));
-        dateWhoutT.setSeconds(date.substring(17, 19));
-        let dateWhoutTTime = dateWhoutT.getTime();
-        let now = new Date();
-        let nowTime = now.getTime();
-        let minutesFromDateToNow = Math.trunc((nowTime - dateWhoutTTime) / (60 * 1000));
+            // yesterday 12:00am ~ last week 12:00 am
+            // X曜日 / 星期X / Mon.
+            if (moment(nowWithoutTime).subtract(1, 'days').isAfter(dateWithoutTime) &&
+                (moment(nowWithoutTime).subtract(7, 'days').isSame(dateWithoutTime) ||
+                moment(nowWithoutTime).subtract(7, 'days').isBefore(dateWithoutTime))) {
+                resolve(moment.weekdays(date.weekday() + 1));
+            }
 
-        let minutesOfOneHour = 60;
-        let minutesOfOneday = minutesOfOneHour * 24;
-        let minutesOfOneWeek = minutesOfOneday * 7;
-        let minutesOfOneYear = minutesOfOneday * 365;
-        
-        return new Promise(resolve => {
-            if (now.getFullYear() != date.substring(0, 4)) {
-                // 今年以前の場合
-                resolve(yearMonthDay.substring(0, 7).replace(/\-/ig, "/"));              
-            } else if (minutesFromDateToNow >= minutesOfOneWeek) {
-                // 一週前の場合
-                resolve(yearMonthDay.substring(5, 10).replace(/\-/ig, "/"));
-            } else if (minutesFromDateToNow >= minutesOfOneday) {
-                // 一日~一週の場合
-                DateUtil.transferDateToWeekDayName(dateWhoutT, app).then(data => {
-                    resolve(data);
-                });
-            } else if (minutesFromDateToNow >= minutesOfOneHour) {
-                // 一時間~一日の場合
-                let hours = Math.trunc(minutesFromDateToNow / minutesOfOneHour);
-                app.translate.get(["app.date.hoursAgo"]).subscribe(message => {
-                    resolve(hours + message["app.date.hoursAgo"]);
-                });
-            } else {
-                // 一時間以内場合
-                // １分以内場合
-                if (minutesFromDateToNow < 1) {
-                    minutesFromDateToNow = 1;
-                }
-                app.translate.get(["app.date.minutesAgo"]).subscribe(message => {
-                    resolve(minutesFromDateToNow + message["app.date.minutesAgo"]);
+            // 182days(half of a year) before 12:00am ~ last week 12:00 am
+            // M月d日 / M月d日 / Mnd/d
+            if (moment(nowWithoutTime).subtract(7, 'days').isAfter(dateWithoutTime) &&
+                (moment(nowWithoutTime).subtract(182, 'days').isSame(dateWithoutTime) || 
+                moment(nowWithoutTime).subtract(182, 'days').isBefore(dateWithoutTime))) {
+                let parameter = {
+                    "MM": (date.month() + 1),
+                    "DD": date.date()
+                };
+                translateService.get('app.date.MMDD', parameter).subscribe(message => {
+                    resolve(message);
                 });
             }
 
-        });
-    }
-    
-    static transferDateToWeekDayName(date, app) {
-        let weekday = new Array(7);
-        return new Promise(resolve => {
-            app.translate.get(["app.date.sunday", "app.date.monday", "app.date.tuesday",
-                "app.date.wednesday", "app.date.thursday", "app.date.friday", "app.date.saturday"]).subscribe(message => {
-
-                    weekday[0] = message["app.date.sunday"];
-                    weekday[1] = message["app.date.monday"];
-                    weekday[2] = message["app.date.tuesday"];
-                    weekday[3] = message["app.date.wednesday"];
-                    weekday[4] = message["app.date.thursday"];
-                    weekday[5] = message["app.date.friday"];
-                    weekday[6] = message["app.date.saturday"];
-
-                    resolve(weekday[date.getDay()]);
+            // 183days before 12:00am
+            if (moment(nowWithoutTime).subtract(183, 'days').isAfter(dateWithoutTime)) {
+                let parameter = {
+                    "YYYY" : date.year(),
+                    "MM": (date.month() + 1)
+                };
+                translateService.get('app.date.YYYYMM', parameter).subscribe(message => {
+                    resolve(message);
                 });
+            }
         });
     }
 }

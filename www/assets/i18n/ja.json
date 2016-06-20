@@ -4,6 +4,10 @@
             "error": {
                 "title": "エラー",
                 "systemError": "システムエラーが発生しました。大変お迷惑かかりましたが、システム管理者に連絡してください。"
+            },
+            "info": {
+                "title": "情報",
+                "versionTooOld": "最新のバージョンがあります。"
             }
         },
         "action": {
@@ -16,6 +20,10 @@
             "select": "選択"
         },
         "date": {
+            "YYYYMM": "{{YYYY}}年{{MM}}月",
+            "MMDD": "{{MM}}月{{DD}}日",
+            "today": "今日",
+            "yesterday": "昨日",
             "minutesAgo": "分前",
             "hoursAgo": "時前",
             "sunday": "日曜日",
@@ -79,6 +87,12 @@
             "title": "通知",
             "detail": "通知詳細",
             "newNotification": "新"
+        },
+        "about": {
+            "title": "本Appについて",
+            "version": "バージョン",
+            "latestVersion": "最新バージョン",
+            "new": "新"
         }
     }
 }

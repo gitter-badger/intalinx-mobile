@@ -15,7 +15,15 @@ import {LoginPage} from './pages/login/login';
         "SAML_ARTIFACT_STORAGE_NAME": "defaultinst_SAMLart",
         "CHECK_NAME": "defaultinst_ct",
         "USER_AVATAR_IMAGE_URL": "img/",
-        "USER_AVATAR_DEFAULT_IMAGE": "default"
+        "USER_AVATAR_DEFAULT_IMAGE": "default",
+        "PGYER" : {
+            "ANDROID" : {
+                "url" : "https://www.pgyer.com/MMHC"
+            },
+            "IOS" : {
+                "url" : "https://www.pgyer.com/MMHB"
+            }
+        }
     }, 
     providers: [
         provide(TranslateLoader, {
@@ -71,7 +79,7 @@ export class IntaLinx {
         
         this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
         this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
-  
+
     }
 
     initializeApp() {

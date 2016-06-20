@@ -16,6 +16,9 @@ export class Util {
         this.http = http;
         this.app = app;
         this.nav = nav;
+        // set default lang to moment
+        let lang = this.app.userLang;
+        moment.locale(lang);
     }
 
     parseXml(s) {
@@ -91,7 +94,7 @@ export class Util {
                         let responseText = error.text();
                         let responseNode = this.parseXml(responseText);
                         this.changeErrorMessageOfWebservice(this.getNodeText(responseNode, ".//*[local-name()='faultstring']")).then(message => {
-                            this.presentErrorModal(message);
+                            this.presentModal(message);
                         });
                     } else {
                         this.presentSystemErrorModal();
@@ -139,7 +142,7 @@ export class Util {
     getUTCDate() {
         return DateUtil.getUTCDate();
     }
-  
+    
     getUserAvatarUrlByUserId(userId) {
         return this.app.config.get("USER_AVATAR_IMAGE_URL") + userId;
     }
@@ -153,13 +156,15 @@ export class Util {
         return userId;
     }
 
-    transferDateToKindsOfStyles(date) {
-        return DateUtil.transferDateToKindsOfStyles(date, this.app);
+    fromNow(date) {
+        let translateService = this.app.translate;
+        return DateUtil.fromNow(date, translateService);
     }
     
     // 通知では、公開開始時間を表示して、詳しい時間は全部午前零時からだから、詳しい時間の表示は必要ないです。
-    transferDateToKindsOfStylesWithoutTime(date) {
-        return DateUtil.transferDateToKindsOfStylesWithoutTime(date, this.app);
+    fromNowForNotification(date) {
+        let translateService = this.app.translate;
+        return DateUtil.fromNowForNotification(date, translateService);
     }
     /**
      * Html Tag を転換する
@@ -169,7 +174,6 @@ export class Util {
         content = content.replace(/</g, "&lt;");
         content = content.replace(/>/g, "&gt;");
         content = content.replace(/\n/g,"<br />");
-        
         return content;
     }
     
@@ -179,7 +183,6 @@ export class Util {
     deleteEmSpaceEnSpaceNewLineInCharacter(content) {
         content = content.replace(/\n/g, "");
         content = content.replace(/\s+/g, "");
-        
         return content;
     }
     
@@ -201,14 +204,17 @@ export class Util {
         });
     }
     
-    presentErrorModal(subTitle) {
-        this.app.translate.get(["app.message.error.title", "app.action.ok"]).subscribe(message => {
-            let title = message['app.message.error.title'];
+    presentModal(content, level) {
+        if (!level) {
+            level = "error";
+        }
+        this.app.translate.get(["app.message." + level + ".title", "app.action.ok"]).subscribe(message => {
+            let title = message["app.message." + level + ".title"];
             let ok = message['app.action.ok'];
 
             let alert = Alert.create({
                 title: title,
-                subTitle: subTitle,
+                subTitle: content,
                 buttons: [ok]
             });
             this.nav.present(alert);

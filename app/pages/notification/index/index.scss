@@ -15,14 +15,13 @@
             text-align: center;
         }
     }
-    
     .title {
         white-space: pre-wrap;
     }
     
     .status {
         text-align: center;
-        width: 5rem;
+        width: 6rem;
         margin: 0px;
         .new {
             color: white;
@@ -33,6 +32,16 @@
         }
     }
     
+}
+
+.ios {
+    .notification-index {
+        .status{
+            p {
+                font-size: 1.1rem;
+            }
+        }
+    }
 }
 
 .md {
@@ -46,7 +55,10 @@
     }
     .notification-index {
         .status{
-            width: 6rem;
+            width: 6.5rem;
+            p {
+                font-size: 1.2rem;
+            }
         }
     }
 }

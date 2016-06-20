@@ -19,5 +19,11 @@
         "title": "app.profile.title",
         "componentsId": "profile",
         "isPush": true
+    },
+    {
+        "titleIcon": "information-circle",
+        "title": "app.about.title",
+        "componentsId": "about",
+        "isPush": true
     }
 ]

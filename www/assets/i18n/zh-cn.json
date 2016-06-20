@@ -4,6 +4,10 @@
             "error": {
                 "title": "错误",
                 "systemError": "系统发生异常，请联系管理员！"
+            },
+            "info": {
+                "title": "提示",
+                "versionTooOld": "有新的版本更新。" 
             }
         },
         "action": {
@@ -16,6 +20,10 @@
             "select": "选择"
         },
         "date": {
+            "YYYYMM": "{{YYYY}}年{{MM}}月",
+            "MMDD": "{{MM}}月{{DD}}日",
+            "today": "今天",
+            "yesterday": "昨天",
             "minutesAgo": "分前",
             "hoursAgo": "小时前",
             "sunday": "星期日",
@@ -80,6 +88,12 @@
             "title": "通知",
             "detail": "通知详细",
             "newNotification": "新"
+        },
+        "about": {
+            "title": "关于本App",
+            "version": "版本",
+            "latestVersion": "最新版本",
+            "new": "New"
         }
     }
 }

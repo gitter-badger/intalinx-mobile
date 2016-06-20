@@ -3,6 +3,7 @@ var path = require('path');
 
 module.exports = {
   entry: [
+    path.normalize('moment/moment'),
     path.normalize('es6-shim/es6-shim.min'),
     'reflect-metadata',
     path.normalize('zone.js/dist/zone-microtask'),
@@ -33,6 +34,7 @@ module.exports = {
     ],
     noParse: [
       /es6-shim/,
+      /moment(\/|\\)moment/,
       /reflect-metadata/,
       /zone\.js(\/|\\)dist(\/|\\)zone-microtask/
     ]

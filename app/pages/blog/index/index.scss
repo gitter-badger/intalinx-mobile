@@ -23,7 +23,7 @@
     
     .status {
         text-align: center;
-        width: 5rem;
+        width: 6rem;
         margin: 0px;
         .new {
             color: white;
@@ -41,6 +41,16 @@
     
 }
 
+.ios {
+    .blog-index {
+        .status{
+            p {
+                font-size: 1.1rem;
+            }
+        }
+    }
+}
+
 .md {
     .blog-index {
         .avatar{
@@ -52,7 +62,10 @@
     }
     .blog-index {
         .status{
-            width: 6rem;
+            width: 6.5rem;
+            p {
+                font-size: 1.2rem;
+            }
         }
     }
 }

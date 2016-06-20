@@ -57,7 +57,7 @@ export class BlogService {
                     }
 
                     communities.forEach(function(element) {
-                        this.util.transferDateToKindsOfStyles(element.publishStartDate).then(data => {
+                        this.util.fromNow(element.publishStartDate).then(data => {
                             element.publishStartDate = data;
                         });
                     }, this);
@@ -133,7 +133,9 @@ export class BlogService {
 
                     let communityOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='CommunityOutput']");
                     let community = this.util.xml2json(communityOutput).CommunityOutput;
-
+                    this.util.fromNow(community.createDate).then(data => {
+                        community.createDate = data;
+                    });
                     resolve(community);
                 });
             });
@@ -168,7 +170,7 @@ export class BlogService {
                         replyContents.push(this.util.xml2json(rreplyContentOutputs[i]).ReplyContentOutput);
                     }
                     replyContents.forEach(function(element) {
-                        this.util.transferDateToKindsOfStyles(element.createDate).then(data => {
+                        this.util.fromNow(element.createDate).then(data => {
                             element.createDate = data;
                         });
                     }, this);

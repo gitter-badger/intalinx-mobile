@@ -4,6 +4,10 @@
             "error": {
                 "title": "error",
                 "systemError": "An error occurred in this system.Please contact the system administrator."
+            },
+            "info": {
+                "title": "info",
+                "versionTooOld": "We have a new version."
             }
         },
         "action": {
@@ -16,6 +20,10 @@
             "select": "select"
         },
         "date": {
+            "YYYYMM": "{{MM}}/{{YYYY}}",
+            "MMDD": "{{MM}}/{{DD}}",
+            "today": "Today",
+            "yesterday": "Yesterday",
             "minutesAgo": "minutes ago",
             "hoursAgo": "hours ago",
             "sunday": "Sunday",
@@ -79,6 +87,12 @@
             "title": "notification",
             "detail": "Details",
             "newNotification": "new"
+        },
+        "about": {
+            "title": "About",
+            "version": "Version",
+            "latestVersion": "Latest version",
+            "new": "New"
         }
     }
 }

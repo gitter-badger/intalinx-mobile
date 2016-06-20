@@ -37,7 +37,7 @@ export class DetailPage {
             this.title = data.title;
             this.content = data.content;
             this.createUserId = data.createUser;
-            this.createDate = data.createDate;
+            this.publishStartDate = data.publishStartDate;
             // this.createUserName = data.createUserName;
             this.status = data.status;
             this.readCount = data.readCount;
