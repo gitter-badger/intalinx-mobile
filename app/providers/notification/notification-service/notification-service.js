@@ -25,6 +25,9 @@ export class NotificationService {
         this.nav = nav;
         this.data = null;
         this.util = util;
+        
+        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
+        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
     }
 
     // トップ画面について、ブログリストを取得します
@@ -57,6 +60,9 @@ export class NotificationService {
                     }
 
                     notifications.forEach(function(element) {
+                        if (element.createUserAvatar.toString().indexOf("data:image") != 0) {
+                            element.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                        }
                         this.util.fromNowForNotification(element.publishStartDate).then(data => {
                             element.publishStartDate = data;
                         });
@@ -107,6 +113,9 @@ export class NotificationService {
 
                     let notificationOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='NotificationOutput']");
                     let notification = this.util.xml2json(notificationOutput).NotificationOutput;
+                    if (notification.createUserAvatar.toString().indexOf("data:image") != 0) {
+                        notification.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                    }
                     this.util.fromNowForNotification(notification.publishStartDate).then(data => {
                         notification.publishStartDate = data;
                     });

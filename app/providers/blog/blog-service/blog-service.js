@@ -25,6 +25,9 @@ export class BlogService {
         this.nav = nav;
         this.data = null;
         this.util = util;
+        
+        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
+        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
     }
 
     // トップ画面について、ブログリストを取得します
@@ -57,6 +60,9 @@ export class BlogService {
                     }
 
                     communities.forEach(function(element) {
+                        if (element.createUserAvatar.toString().indexOf("data:image") != 0) {
+                            element.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                        }
                         this.util.fromNow(element.publishStartDate).then(data => {
                             element.publishStartDate = data;
                         });
@@ -133,6 +139,9 @@ export class BlogService {
 
                     let communityOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='CommunityOutput']");
                     let community = this.util.xml2json(communityOutput).CommunityOutput;
+                    if (community.createUserAvatar.toString().indexOf("data:image") != 0) {
+                        community.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                    }
                     this.util.fromNow(community.createDate).then(data => {
                         community.createDate = data;
                     });
@@ -170,6 +179,9 @@ export class BlogService {
                         replyContents.push(this.util.xml2json(rreplyContentOutputs[i]).ReplyContentOutput);
                     }
                     replyContents.forEach(function(element) {
+                        if (element.userAvatar.toString().indexOf("data:image") != 0) {
+                            element.userAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                        }
                         this.util.fromNow(element.createDate).then(data => {
                             element.createDate = data;
                         });

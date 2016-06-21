@@ -1,5 +1,5 @@
 import {Page, IonicApp, NavController, Modal, Toast, Alert, NavParams, ViewController, Platform} from 'ionic-angular';
-import {ViewChild} from '@angular/core'
+import {ViewChild, NgZone} from '@angular/core'
 import * as EXIF from 'exif-js';
 
 import {UserService} from '../../../providers/user-service/user-service';
@@ -20,15 +20,16 @@ import {Util} from '../../../utils/util';
 export class ChangeAvatarPage {
     
     static get parameters() {
-        return [[IonicApp], [NavController], [NavParams], [ViewController], [Platform], [UserService]];
+        return [[IonicApp], [NavController], [NavParams], [ViewController], [NgZone], [Platform], [UserService]];
     }
 
-    constructor(app, nav, params, view, platform, userService) {
+    constructor(app, nav, params, view, zone, platform, userService) {
         this.app = app;
         this.nav = nav;
         this.params = params;
         this.user = this.params.get("user");
-        
+        this.isLoadCompleted = true;
+        this.zone = zone;
         this.view = view;
         this.platform = platform;
         
@@ -42,12 +43,11 @@ export class ChangeAvatarPage {
         
         this.width = window.innerWidth;
         this.height = window.innerHeight;
-        this.isDisabled = null;
     }
 
-    onFileInputChange(event) {
+    onFileInputChange() {
+        this.isLoadCompleted = false;
         let fileInput = event.currentTarget;
-        debugger
         let file = fileInput.files[0];
         
         if (file) {
@@ -65,7 +65,7 @@ export class ChangeAvatarPage {
 
     render(file, src, other) {
         EXIF.getData(file, function() {
-            //获取照片本身的Orientation
+            //get the Orientation of avatar
             let orientation = EXIF.getTag(this, "Orientation");
 
             let image = new Image();
@@ -81,13 +81,13 @@ export class ChangeAvatarPage {
                 let context = canvas.getContext('2d');
 
                 switch (orientation) {
-                    //iphone横屏拍摄，此时home键在左侧
+                    //thake photo when home key is on the left of iphone
                     case 3:
                         degree = 180;
                         drawWidth=-width;
                         drawHeight=-height;
                         break;
-                    //iphone竖屏拍摄，此时home键在下方(正常拿手机的方向)
+                    //thake photo when home key is on the bottom of iphone
                     case 6:
                         canvas.width=height;
                         canvas.height=width; 
@@ -95,7 +95,7 @@ export class ChangeAvatarPage {
                         drawWidth=width;
                         drawHeight=-height;
                         break;
-                    //iphone竖屏拍摄，此时home键在上方
+                    //thake photo when home key is on the top of iphone
                     case 8:
                         canvas.width=height;
                         canvas.height=width; 
@@ -104,17 +104,19 @@ export class ChangeAvatarPage {
                         drawHeight=height;
                         break;
                 }
-                //使用canvas旋转校正
+                // //user canvas to rotate the picture
                 context.rotate(degree * Math.PI / 180);
                 context.drawImage(image, 0, 0, drawWidth, drawHeight);
-                if (file.size <= 500 * 1024) {
-                    quality = 100;
+                if (file.size <= 200 * 1024) {
+                    quality = 1;
+                } else if(file.size > 200 * 1024 && file.size <= 500 * 1024) {
+                    quality = 0.5;
                 } else if(file.size > 500 * 1024 && file.size <= 1 * 1024 * 1024) {
-                    quality = 50;
+                    quality = 0.3;
                 } else if(file.size > 1 * 1024 * 1024 && file.size <= 2 * 1024 * 1024) {
-                    quality = 40;
+                    quality = 0.1;
                 } else if(file.size > 2 * 1024 * 1024 && file.size <= 5 * 1024 * 1024) {
-                    quality = 10;
+                    quality = 0.01;
                 } else {
                     other.app.translate.get(["app.blog.message.error.title", "app.profile.message.error.avatarTooLarge", "app.action.ok"]).subscribe(message => {
                         let title = message['app.blog.message.error.title'];
@@ -130,18 +132,19 @@ export class ChangeAvatarPage {
                     other.isSelectChange = false;
                     return false;
                 }
-                
-                let base64 = canvas.toDataURL("image/jpeg", quality);
-                other.userAvatar = base64;
-
-                other.isSelectChange = true;
+                other.zone.run(() => {
+                    let base64 = canvas.toDataURL("image/jpeg", quality);
+                    other.userAvatar = base64;
+                    other.isSelectChange = true;
+                    other.isLoadCompleted = true;
+                }); 
             };
             image.src = src;
         });
     }
     
     changeUserAvatar() {
-        this.isDisabled = true;
+        this.isLoadCompleted = false;
         this.userService.changeUserAvatar(this.userAvatar).then(data => {
             if (data == "true") {
                  this.app.translate.get(["app.profile.message.success.changeAvatar"]).subscribe(message => {
@@ -156,7 +159,7 @@ export class ChangeAvatarPage {
                 this.isSelectChange = false;
                 this.fileInput.nativeElement.value = '';
             }
-            this.isDisabled = null;
+            this.isLoadCompleted = true;
         });
     }
 
@@ -167,11 +170,6 @@ export class ChangeAvatarPage {
                 this.view.setBackButtonText(title);
             });
         }
-    }
-    
-    presentPreviewAvatar() {
-        let previewAvatar = Modal.create(PreviewAvatar);
-        this.nav.present(previewAvatar);
     }
     
     resetUserAvatar() {

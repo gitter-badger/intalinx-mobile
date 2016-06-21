@@ -57,12 +57,16 @@ export class IntaLinx {
         
         this.platform = platform;
         this.menu = menu;
+        
+        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
+        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
 
-        let user = {};
+        let user = {
+            "userAvatar": this.userAvatarImageUrl + this.userAvatarDefaultImage
+        };
         let menus = [];
         this.user = user;
-        this.menus = menus;
-        
+        this.menus = menus;     
         
         this.app.redirectLoginPage = this.redirectLoginPage(this);
         // initiallize menu and pass this object to change the model
@@ -76,9 +80,6 @@ export class IntaLinx {
         
         // initiallize new information count of blog system
         this.app.blogNewInformationCount = "";
-        
-        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
-        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
 
     }
 

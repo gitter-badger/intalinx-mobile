@@ -8,13 +8,16 @@
     </ion-buttons>
 </ion-navbar>
 <ion-content padding class="change-avatar">
+    <div class="loading" [style.display]="isLoadCompleted ? 'none' : 'block'">
+        <ion-spinner name="crescent"></ion-spinner>
+    </div>
     <img src="{{userAvatar}}" />
 </ion-content>
-<ion-toolbar position="bottom" [style.display]="isSelectChange ? 'inherit' : 'none'">
+<ion-toolbar position="bottom" [style.display]="isSelectChange && isLoadCompleted ? 'inherit' : 'none'">
     <ion-buttons start>
         <button type="reset" (click)="resetUserAvatar()">{{ "app.action.cancel" | translate }}</button>
     </ion-buttons>
     <ion-buttons end>
-        <button type="submit" disabled={{isDisabled}} (click)="changeUserAvatar()">{{ "app.action.select" | translate }}</button>
+        <button type="submit" (click)="changeUserAvatar()">{{ "app.action.select" | translate }}</button>
     </ion-buttons>
 </ion-toolbar>

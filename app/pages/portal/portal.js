@@ -44,7 +44,6 @@ export class PortalPage {
     this.userService = userService;
     this.aboutService = aboutService;
     this.util = util;
-    
     this.version = "latest";
     this.latestVersion = "latest";
 

@@ -15,4 +15,29 @@
         right: 0;
         margin: auto;
     }
+    .loading {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        border-radius:5px;
+        width: 150px;
+        height: 150px;
+        z-index: 2;
+        background-color: $primary-text-color;
+        ion-spinner {
+            margin: auto;
+            margin-top: 50px;
+            z-index: 2;
+            color: $primary-color-text;
+            width: 50px;
+            height: 50px;
+                circle {
+                stroke: $primary-color-text;
+            }
+        }
+    }
+    
 }

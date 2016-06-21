@@ -28,12 +28,19 @@ export class ProfileIndexPage {
         this.view = view;
         this.platform = platform;
 
-        this.user = {};
+        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
+        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
+
+        this.user = {
+            "userAvatar": this.userAvatarImageUrl + this.userAvatarDefaultImage
+        };
     }
 
     onPageWillEnter() {
+        this.isLoadCompleted = false;
         this.userService.getUserDetailsFromUser().then(data => {
             this.user = data;
+            this.isLoadCompleted = true;
         });
         if (this.platform.is('ios')) {
             this.app.translate.get(["app.action.back"]).subscribe(message => {

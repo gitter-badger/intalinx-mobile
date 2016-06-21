@@ -3,7 +3,10 @@
 </ion-navbar>
 
 <ion-content padding class="index">
-    <ion-list>
+    <div class="loading" [style.display]="isLoadCompleted ? 'none' : 'block'">
+        <ion-spinner name="dots"></ion-spinner>
+    </div>
+    <ion-list [style.display]="isLoadCompleted ? 'block' : 'none'">
         <button  ion-item (click)="openChangeAvatar(user)">
             <ion-thumbnail item-left class="avatar">
                 <img src="{{user.userAvatar}}" />
