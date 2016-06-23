@@ -104,8 +104,6 @@ export class DetailPage {
             this.sendData.unrepliedCommentcontent = "";
         }
 
-        let blogNewInformationCount = Number(this.app.blogNewInformationCount);
-
         if (this.status == "PUBLISH" && this.newReplyFlag == "TRUE") {
             this.updateNewReplyFlag();
         }
