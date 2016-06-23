@@ -1,0 +1,30 @@
+.facilities {
+    $grey-border: 1px solid #D7D7D7;
+    
+    .only-border {
+        border: $grey-border;
+        width: 600px;
+        display: none; // use to tests
+    }
+    .period-cell {
+        border: $grey-border;
+        height: 30px;
+        width: 50px;
+    }
+    .facility-cell {
+        border: $grey-border;
+        height: 30px;
+        width: 100px;
+    }
+    .block-container {
+        position: absolute;
+        margin-left: -2px;
+        margin-top: -215px;
+    }
+    .init-event {
+        position: absolute;
+        z-index: 3;
+        height: 30px;
+    }
+
+}

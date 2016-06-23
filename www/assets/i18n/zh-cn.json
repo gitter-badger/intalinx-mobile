@@ -102,6 +102,15 @@
             "version": "版本",
             "latestVersion": "最新版本",
             "new": "New"
+        },
+        "schedule": {
+            "title": "日程",
+            "facilities": {
+                "title": "设施一览",
+                "today": "今天"
+            },
+            "index": {
+            }
         }
     }
 }

@@ -101,6 +101,15 @@
             "version": "バージョン",
             "latestVersion": "最新バージョン",
             "new": "新"
+        },
+        "schedule": {
+            "title": "スケジュール",
+            "facilities": {
+                "title": "施設一覧",
+                "today": "今日"
+            },
+            "index": {
+            }
         }
     }
 }
