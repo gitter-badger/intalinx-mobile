@@ -92,7 +92,7 @@
             }
         },
         "notification": {
-            "title": "notification",
+            "title": "Notification",
             "detail": "Details",
             "newNotification": "new"
         },
@@ -101,6 +101,15 @@
             "version": "Version",
             "latestVersion": "Latest version",
             "new": "New"
+        },
+        "schedule": {
+            "title": "Schedule",
+            "facilities": {
+                "title": "Facilities",
+                "today": "Today"
+            },
+            "index": {
+            }
         }
     }
 }
