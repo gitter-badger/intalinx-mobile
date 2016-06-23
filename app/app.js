@@ -65,7 +65,7 @@ export class IntaLinx {
             "userAvatar": this.userAvatarImageUrl + this.userAvatarDefaultImage
         };
         let menus = [];
-        this.user = user;
+        this.app.user = user;
         this.menus = menus;     
         
         this.app.redirectLoginPage = this.redirectLoginPage(this);
@@ -112,7 +112,7 @@ export class IntaLinx {
 
     initializeUser(that) {
         return function(user) {
-            that.user = user;
+            that.app.user = user;
         }
     }
     
