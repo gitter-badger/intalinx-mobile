@@ -7,11 +7,13 @@ import {AppsService} from '../../providers/apps-service/apps-service';
 import {UserService} from '../../providers/user-service/user-service';
 import {BlogService} from '../../providers/blog/blog-service/blog-service'; 
 import {NotificationService} from '../../providers/notification/notification-service/notification-service';
+import {ScheduleService} from '../../providers/schedule/schedule-service/schedule-service';
 import {AboutService} from '../../providers/about-service/about-service';  
 
 import {BlogIndexPage} from '../blog/index/index';
 import {ProfileIndexPage} from '../profile/index/index';
 import {NotificationIndexPage} from '../notification/index/index';
+import {MonthCalendarPage} from '../schedule/month-calendar/month-calendar';
 import {AboutPage} from '../about/about';
 
 /*
@@ -27,6 +29,7 @@ import {AboutPage} from '../about/about';
       UserService,
       BlogService,
       NotificationService,
+      ScheduleService,
       AboutService,
       Util
   ],
@@ -52,6 +55,7 @@ export class PortalPage {
         "notification" : NotificationIndexPage,
         "blog" : BlogIndexPage,
         "profile" : ProfileIndexPage,
+        "schedule": MonthCalendarPage,
         "about": AboutPage
     }
     
@@ -63,7 +67,7 @@ export class PortalPage {
         this.app.initializeMenu(data);
         // set root to blog.
         this.nav.setRoot(BlogIndexPage);
-
+        
         // when the app is runing as a native app. remove about page.
         if (!platform.is('cordova')) {
             data.pop();

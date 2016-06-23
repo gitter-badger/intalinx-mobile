@@ -1,0 +1,21 @@
+<ion-navbar *navbar>
+    <button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{ "app.schedule.title" | translate }}</ion-title>
+    <ion-buttons end><button>
+        <ion-icon name="more" aria-label="more"></ion-icon>
+    </button>
+    </ion-buttons>
+</ion-navbar>
+<ion-content>
+    <!--<ion-toolbar position="bottom">-->
+    <ion-item  class="date" no-lines>
+        <ion-datetime  class="date" displayFormat="YYYY/MM" (change)="changeCalendar($event)" [(ngModel)]="yearMonth"></ion-datetime>
+    </ion-item>
+    <!--<ion-searchbar class="event-search-bar" placeholder="イベント" [(ngModel)]="searchQuery" (input)="searchEvents()"></ion-searchbar>-->
+    
+    <ion-row *ngFor="let week of calendar">
+        <ion-col *ngFor="let day of week" [style.color]="(toady==day.format('YYYY/MM/DD')) ? 'red' : 'black'" >{{day.format('DD')}}</ion-col>
+    </ion-row>
+</ion-content>
