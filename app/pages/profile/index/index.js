@@ -40,6 +40,7 @@ export class ProfileIndexPage {
         this.isLoadCompleted = false;
         this.userService.getUserDetailsFromUser().then(data => {
             this.user = data;
+            this.app.user.userAvatar = data.userAvatar;
             this.isLoadCompleted = true;
         });
         if (this.platform.is('ios')) {
