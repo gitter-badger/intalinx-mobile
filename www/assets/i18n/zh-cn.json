@@ -68,6 +68,10 @@
                 },
                 "success": {
                     "changeAvatar": "头像上传成功！"
+                },
+                "loading": {
+                    "avatarLoading": "头像加载中......",
+                    "avatarUploading": "头像上传中......"
                 }
             }
         },

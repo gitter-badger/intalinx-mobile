@@ -67,6 +67,10 @@
                 },
                 "success": {
                     "changeAvatar": "ユーザ画像は更新しました。"
+                },
+                "loading": {
+                    "avatarLoading": "ロード中......",
+                    "avatarUploading": "アップロード中......"
                 }
             }
         },

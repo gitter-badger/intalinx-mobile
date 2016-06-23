@@ -1,4 +1,4 @@
-import {Page, IonicApp, NavController, Modal, Toast, Alert, NavParams, ViewController, Platform} from 'ionic-angular';
+import {Page, IonicApp, NavController, Loading, Modal, Toast, Alert, NavParams, ViewController, Platform} from 'ionic-angular';
 import {ViewChild, NgZone} from '@angular/core'
 import * as EXIF from 'exif-js';
 
@@ -47,6 +47,14 @@ export class ChangeAvatarPage {
 
     onFileInputChange() {
         this.isLoadCompleted = false;
+        this.app.translate.get(["app.profile.message.loading.avatarLoading"]).subscribe(message => {
+            let content = message['app.profile.message.loading.avatarLoading'];
+            this.loading = Loading.create({
+                spinner: 'ios',
+                content: content
+            });
+            this.nav.present(this.loading);
+        });
         let fileInput = event.currentTarget;
         let file = fileInput.files[0];
         
@@ -137,6 +145,7 @@ export class ChangeAvatarPage {
                     other.userAvatar = base64;
                     other.isSelectChange = true;
                     other.isLoadCompleted = true;
+                    other.loading.dismiss();
                 }); 
             };
             image.src = src;
@@ -145,21 +154,31 @@ export class ChangeAvatarPage {
     
     changeUserAvatar() {
         this.isLoadCompleted = false;
-        this.userService.changeUserAvatar(this.userAvatar).then(data => {
-            if (data == "true") {
-                 this.app.translate.get(["app.profile.message.success.changeAvatar"]).subscribe(message => {
-                    let content = message['app.profile.message.success.changeAvatar'];
-                    let toast = Toast.create({
-                        message: content,
-                        duration: 3000,
-                        position: 'middle'
-                    });
-                    this.nav.present(toast);
-                 });
-                this.isSelectChange = false;
-                this.fileInput.nativeElement.value = '';
-            }
-            this.isLoadCompleted = true;
+        this.app.translate.get(["app.profile.message.loading.avatarUploading"]).subscribe(message => {
+            let content = message['app.profile.message.loading.avatarUploading'];
+            let upLoading = Loading.create({
+                spinner: 'ios',
+                content: content
+            });
+             this.nav.present(upLoading).then(() => {
+                this.userService.changeUserAvatar(this.userAvatar).then(data => {
+                    if (data == "true") {
+                        this.app.translate.get(["app.profile.message.success.changeAvatar"]).subscribe(message => {
+                            let content = message['app.profile.message.success.changeAvatar'];
+                            let toast = Toast.create({
+                                message: content,
+                                duration: 3000,
+                                cssClass: 'middle'
+                            });
+                            // this.nav.present(toast);
+                        });
+                        this.isSelectChange = false;
+                        this.fileInput.nativeElement.value = '';
+                    }
+                    upLoading.dismiss();
+                    this.isLoadCompleted = true;
+                });
+            });
         });
     }
 

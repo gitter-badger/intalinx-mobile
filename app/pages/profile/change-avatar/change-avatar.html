@@ -8,9 +8,6 @@
     </ion-buttons>
 </ion-navbar>
 <ion-content padding class="change-avatar">
-    <div class="loading" [style.display]="isLoadCompleted ? 'none' : 'block'">
-        <ion-spinner name="crescent"></ion-spinner>
-    </div>
     <img src="{{userAvatar}}" />
 </ion-content>
 <ion-toolbar position="bottom" [style.display]="isSelectChange && isLoadCompleted ? 'inherit' : 'none'">

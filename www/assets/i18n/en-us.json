@@ -67,6 +67,10 @@
                 },
                 "success": {
                     "changeAvatar": "Avatar has been changed successfully"
+                },
+                "loading": {
+                    "avatarLoading": "Avatar is loading, please wait...",
+                    "avatarUploading": "Avatar is uploading, please wait..."
                 }
             }
         },
