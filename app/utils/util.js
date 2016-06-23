@@ -99,6 +99,7 @@ export class Util {
                     } else {
                         this.presentSystemErrorModal();
                     }
+                    reject(error);
                 });
         });
     }   

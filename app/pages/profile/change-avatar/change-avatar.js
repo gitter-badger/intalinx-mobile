@@ -126,6 +126,7 @@ export class ChangeAvatarPage {
                 } else if(file.size > 2 * 1024 * 1024 && file.size <= 5 * 1024 * 1024) {
                     quality = 0.01;
                 } else {
+                    other.loading.dismiss();
                     other.app.translate.get(["app.blog.message.error.title", "app.profile.message.error.avatarTooLarge", "app.action.ok"]).subscribe(message => {
                         let title = message['app.blog.message.error.title'];
                         let ok = message['app.action.ok'];
@@ -177,6 +178,8 @@ export class ChangeAvatarPage {
                     }
                     upLoading.dismiss();
                     this.isLoadCompleted = true;
+                }, function(){
+                    upLoading.dismiss();
                 });
             });
         });

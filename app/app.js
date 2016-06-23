@@ -13,7 +13,6 @@ import {LoginPage} from './pages/login/login';
         "PRE_LOGIN_INFO_URL": "com.eibus.sso.web.authentication.PreLoginInfo.wcp",
         "SAMLART_NAME": "SAMLart",
         "SAML_ARTIFACT_STORAGE_NAME": "defaultinst_SAMLart",
-        "CHECK_NAME": "defaultinst_ct",
         "USER_AVATAR_IMAGE_URL": "img/",
         "USER_AVATAR_DEFAULT_IMAGE": "default",
         "PGYER" : {
