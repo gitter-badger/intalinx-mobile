@@ -34,7 +34,8 @@
     "ionic-gulp-scripts-copy": "^2.0.0",
     "ionic-gulp-webpack-build": "^1.0.0",
     "run-sequence": "1.1.5",
-    "strip-sourcemap-loader": "0.0.1"
+    "strip-sourcemap-loader": "0.0.1",
+    "cordova-plugin-settings-hook": "0.2.3"
   },
   "name": "intalinx-mobile",
   "description": "intalinx-mobile: An Ionic project",
