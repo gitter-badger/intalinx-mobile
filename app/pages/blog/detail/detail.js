@@ -40,15 +40,13 @@ export class DetailPage {
             "unrepliedCommentcontent": ""
         }
 
-        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
-        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
-
         this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
             this.title = data.title;
             this.content = data.content;
             this.createUserId = data.createUser;
             this.createDate = data.createDate;
             this.createUserName = data.createUserName;
+            this.createUserAvatar = data.createUserAvatar;
             this.status = data.status;
             this.readCount = data.readCount;
             this.isLoadCompleted = true;
@@ -106,8 +104,6 @@ export class DetailPage {
             this.sendData.unrepliedCommentcontent = "";
         }
 
-        let blogNewInformationCount = Number(this.app.blogNewInformationCount);
-
         if (this.status == "PUBLISH" && this.newReplyFlag == "TRUE") {
             this.updateNewReplyFlag();
         }
@@ -145,11 +141,6 @@ export class DetailPage {
                 this.community.newReplyFlag = newReplyFlag;
             }
         });
-    }
-
-    loadImageError(event) {
-        let img = event.currentTarget;
-        img.src = this.userAvatarImageUrl + this.userAvatarDefaultImage;
     }
 
     ngAfterViewInit() {

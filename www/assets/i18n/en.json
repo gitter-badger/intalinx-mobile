@@ -4,6 +4,10 @@
             "error": {
                 "title": "error",
                 "systemError": "An error occurred in this system.Please contact the system administrator."
+            },
+            "info": {
+                "title": "info",
+                "versionTooOld": "We have a new version."
             }
         },
         "action": {
@@ -11,9 +15,15 @@
             "delete": "Delete",
             "save": "Save",
             "ok": "ok",
-            "back": "back"
+            "back": "back",
+            "cancel": "cancel",
+            "select": "select"
         },
         "date": {
+            "YYYYMM": "{{MM}}/{{YYYY}}",
+            "MMDD": "{{MM}}/{{DD}}",
+            "today": "Today",
+            "yesterday": "Yesterday",
             "minutesAgo": "minutes ago",
             "hoursAgo": "hours ago",
             "sunday": "Sunday",
@@ -46,11 +56,21 @@
             "oldPassword": "Old password",
             "newPassword": "New password",
             "confirmPassword": "Verify password",
+            "changeAvatar": "Change avatar",
+            "changePassword": "Change password",
             "message": {
                 "error": {
                     "title": "error",
                     "emptyPassword": "Password cannot be left empty.",
-                    "mismatchPassword": "Password mismatch. Ensure to enter the same password  in both the text boxes."
+                    "mismatchPassword": "Password mismatch. Ensure to enter the same password  in both the text boxes.",
+                    "avatarTooLarge": "Your avatar's file size is too large"
+                },
+                "success": {
+                    "changeAvatar": "Avatar has been changed successfully"
+                },
+                "loading": {
+                    "avatarLoading": "Avatar is loading, please wait...",
+                    "avatarUploading": "Avatar is uploading, please wait..."
                 }
             }
         },
@@ -75,6 +95,12 @@
             "title": "notification",
             "detail": "Details",
             "newNotification": "new"
+        },
+        "about": {
+            "title": "About",
+            "version": "Version",
+            "latestVersion": "Latest version",
+            "new": "New"
         }
     }
 }

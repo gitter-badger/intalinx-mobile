@@ -26,6 +26,9 @@ export class UserService {
         this.nav = nav;
         this.sso = null;
         this.util = util;
+        
+        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
+        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
     }
 
     initializeSSO() {
@@ -83,50 +86,21 @@ export class UserService {
         });
     }
 
-    getUserDetail() {
-        if (this.data) {
-            return Promise.resolve(this.data);
-        }
-        return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/get_user_details.xml').then(req => {
-                let objRequest = this.util.parseXml(req);
-                req = this.util.xml2string(objRequest);
-                
-                this.util.callCordysWebservice(req).then(data => {
-                    let objResponse = this.util.parseXml(data);
-
-                    let userOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='user']");
-                    let user = this.util.xml2json(userOutput).user;
-                    
-                    let userId = this.util.getUserIdFromAuthUserDn(user.authuserdn);
-
-                    let userAvatarUrl = this.util.getUserAvatarUrlByUserId(userId);
-                    let returnData = {
-                        "userAvatar": userAvatarUrl,
-                        "userName": user.description,
-                        "userId": userId
-                    }
-                    resolve(returnData);
-                });
-            });
-        });
-    }
-
     updateProfile(user) {
         return new Promise(resolve => {
             if (this.validateUserPassword(user.newPassword, user.confirmPassword)) {
-            
-            this.util.getRequestXml('./assets/requests/set_password.xml').then(req => {
-                let objRequest = this.util.parseXml(req);
-                this.util.setNodeText(objRequest, ".//*[local-name()='OldPassword']", user.oldPassword);
-                this.util.setNodeText(objRequest, ".//*[local-name()='NewPassword']", user.newPassword);
-                req = this.util.xml2string(objRequest);
 
-                this.util.callCordysWebservice(req).then(data => {
-                    
-                    resolve("true");
-                });                    
-            });
+                this.util.getRequestXml('./assets/requests/set_password.xml').then(req => {
+                    let objRequest = this.util.parseXml(req);
+                    this.util.setNodeText(objRequest, ".//*[local-name()='OldPassword']", user.oldPassword);
+                    this.util.setNodeText(objRequest, ".//*[local-name()='NewPassword']", user.newPassword);
+                    req = this.util.xml2string(objRequest);
+
+                    this.util.callCordysWebservice(req).then(data => {
+
+                        resolve("true");
+                    });
+                });
             }
         });
     }
@@ -159,8 +133,70 @@ export class UserService {
                     buttons: [ok]
                 });
                 this.nav.present(alert);
-            });      
-        } 
+            });
+        }
         return !passwordEmptyFault && arePasswordsSame;
+    }
+
+    getUserDetailsFromUser() {
+        if (this.data) {
+            return Promise.resolve(this.data);
+        }
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/get_user_details_from_user.xml').then(req => {
+                let objRequest = this.util.parseXml(req);
+                req = this.util.xml2string(objRequest);
+                this.util.callCordysWebservice(req).then(data => {
+                    let objResponse = this.util.parseXml(data);
+                    let userOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='User']");
+                    let user = this.util.xml2json(userOutput).User;
+                    let userAvatar = user.ContactInformation.address;
+                    if (!userAvatar) {
+                        userAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                    }
+                    let returnUser = {
+                        "userName": user.UserName,
+                        "description": user.Description,
+                        "email": user.ContactInformation.email,
+                        "phone": user.ContactInformation.phone,
+                        "fax": user.ContactInformation.fax,
+                        "userAvatar": userAvatar,
+                        "company": user.ContactInformation.company
+                    }
+                    resolve(returnUser);
+                });
+            });
+        });
+    }
+
+    setUserDetailsIntoUser(description, email, phone, fax, address, company) {
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/set_user_details_into_user.xml').then(req => {
+                let objRequest = this.util.parseXml(req);
+                this.util.setNodeText(objRequest, ".//*[local-name()='description']", description);
+                this.util.setNodeText(objRequest, ".//*[local-name()='email']", email);
+                this.util.setNodeText(objRequest, ".//*[local-name()='phone']", phone);
+                this.util.setNodeText(objRequest, ".//*[local-name()='fax']", fax);
+                this.util.setNodeText(objRequest, ".//*[local-name()='address']", address);
+                this.util.setNodeText(objRequest, ".//*[local-name()='company']", company);
+                req = this.util.xml2string(objRequest);
+
+                this.util.callCordysWebservice(req).then(data => {
+                    resolve("true");
+                });
+            });
+        });
+    }
+
+    changeUserAvatar(userAvatar) {
+        return new Promise(resolve => {
+            this.getUserDetailsFromUser().then(user => {
+                this.setUserDetailsIntoUser(user.description, user.email, user.phone, user.fax, userAvatar, user.company).then(data => {
+                    if (data == "true") {
+                        resolve("true");
+                    }
+                });
+            });
+        });
     }
 }

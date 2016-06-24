@@ -18,11 +18,11 @@
         </ion-item>
         <ion-item class="status">
             <ion-avatar item-left class="avatar">
-                <img src="{{userAvatarImageUrl}}{{createUserId}}" (error)="loadImageError($event)" />
+                <img src="{{createUserAvatar}}" />
             </ion-avatar>
             <div class="name">{{createUserName}}</div>
             <div class="time">
-                {{createDate}}
+                {{publishStartDate}}
             </div>
             <button disabled primary clear item-right>
                 <ion-icon name="eye"></ion-icon>

@@ -25,6 +25,12 @@ $padding-bottom: 16px;
   }
   .status.item {
     min-height: 0;
+    .avatar {
+        img {
+            width: 4rem;
+            height: 4rem;
+        }
+    }
   }
   .contents {
     padding-right: $padding-right;

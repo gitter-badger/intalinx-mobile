@@ -33,15 +33,13 @@ export class DetailPage {
 
         this.notificationService = notificationService;
 
-        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
-        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
-
         this.notificationService.getNotificationDetailByNotificationID(this.id).then(data => {
             this.title = data.title;
             this.content = data.content;
             this.createUserId = data.createUser;
-            this.createDate = data.createDate;
-            // this.createUserName = data.createUserName;
+            this.publishStartDate = data.publishStartDate;
+            this.createUserAvatar = data.createUserAvatar;
+            this.createUserName = data.createUserName;
             this.status = data.status;
             this.readCount = data.readCount;
             this.isLoadCompleted = true;
@@ -82,11 +80,6 @@ export class DetailPage {
                 this.app.notificationNewInformationCount = notificationNewInformationCount - 1;
             }
         });
-    }
-
-    loadImageError(event) {
-        let img = event.currentTarget;
-        img.src = this.userAvatarImageUrl + this.userAvatarDefaultImage;
     }
 
     ngAfterViewInit() {

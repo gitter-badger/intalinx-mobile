@@ -14,22 +14,20 @@
         <ion-refresher-content refreshingSpinner="circles"> </ion-refresher-content>
     </ion-refresher>
     <ion-list>
-        <ion-item *ngFor="let notification of notificationListForTop">
+        <button ion-item detail-none (click)="openDetail(notification)" *ngFor="let notification of notificationListForTop">
             <!-- こっちは四角 -->
             <ion-thumbnail item-left class="avatar">
                 <!--<ion-icon name="person" class="avatar"></ion-icon>-->
                 <!-- こっちは丸形　<ion-avatar item-left class="avatar">-->
-                <img src="{{userAvatarImageUrl}}{{notification.createUser}}" (error)="loadImageError($event)" />
-                <p>{{notification.createUser}}</p>
+                <img src="{{notification.createUserAvatar}}" />
+                <p>{{notification.createUserName}}</p>
             </ion-thumbnail>
-
-
-            <h2 class="title" (click)="openDetail(notification)">{{notification.title}}</h2>
+            <h2 class="title">{{notification.title}}</h2>
             <div item-right class="status">
                 <ion-badge class="new" *ngIf="notification.readStatus=='NOT_READ'">{{"app.notification.newNotification" | translate}}</ion-badge>
                 <p>{{notification.publishStartDate}}</p>
             </div>
-        </ion-item>
+        </button>
     </ion-list>
     <ion-infinite-scroll (infinite)="doInfinite($event)">
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>

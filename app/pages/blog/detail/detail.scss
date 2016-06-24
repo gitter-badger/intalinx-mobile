@@ -25,6 +25,10 @@ $padding-bottom: 16px;
   }
   .status.item {
     min-height: 0;
+    .avatar img {
+        width: 4rem;
+        height: 4rem;
+    }
   }
   .contents {
     padding-right: $padding-right;
@@ -44,6 +48,10 @@ $padding-bottom: 16px;
       ion-label {
         margin-top: 8px;
         margin-bottom: 8px;
+        img {
+            width: 5.6rem;
+            height: 5.6rem; 
+        }
       }
       .avatar {
         font-size: 2em;

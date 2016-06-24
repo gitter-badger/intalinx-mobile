@@ -4,6 +4,10 @@
             "error": {
                 "title": "错误",
                 "systemError": "系统发生异常，请联系管理员！"
+            },
+            "info": {
+                "title": "提示",
+                "versionTooOld": "有新的版本更新。" 
             }
         },
         "action": {
@@ -11,9 +15,15 @@
             "delete": "删除",
             "save": "保存",
             "ok": "OK",
-            "back": "返回"
+            "back": "返回",
+            "cancel": "取消",
+            "select": "选择"
         },
         "date": {
+            "YYYYMM": "{{YYYY}}年{{MM}}月",
+            "MMDD": "{{MM}}月{{DD}}日",
+            "today": "今天",
+            "yesterday": "昨天",
             "minutesAgo": "分前",
             "hoursAgo": "小时前",
             "sunday": "星期日",
@@ -46,12 +56,22 @@
             "oldPassword": "现在的密码",
             "newPassword": "设置新密码",
             "confirmPassword": "确认新密码",
+            "changeAvatar": "修改头像",
+            "changePassword": "修改密码",
             "message": {
                 "error": {
                     "title": "错误",
                     "emptyPassword": "密码不能为空。",
                     "mismatchPassword": "两次输入的密码不一致！",
-                    "mismatchCurrentPassword": "输入的密码与当前密码不一致！"
+                    "mismatchCurrentPassword": "输入的密码与当前密码不一致！",
+                    "avatarTooLarge": "您上传的头像图片太大！"
+                },
+                "success": {
+                    "changeAvatar": "头像上传成功！"
+                },
+                "loading": {
+                    "avatarLoading": "头像加载中......",
+                    "avatarUploading": "头像上传中......"
                 }
             }
         },
@@ -76,6 +96,12 @@
             "title": "通知",
             "detail": "通知详细",
             "newNotification": "新"
+        },
+        "about": {
+            "title": "关于本App",
+            "version": "版本",
+            "latestVersion": "最新版本",
+            "new": "New"
         }
     }
 }

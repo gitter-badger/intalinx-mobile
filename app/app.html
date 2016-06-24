@@ -4,17 +4,15 @@
       <ion-card secondary>
         <ion-item>
           <ion-avatar item-left>
-            <img src={{user.userAvatar}} (error)="loadImageError($event)" />
+            <img src={{app.user.userAvatar}} />
           </ion-avatar>
-          <span>{{user.userName}}</span>
+          <span>{{app.user.userName}}</span>
         </ion-item>
-        <ion-item><span>{{user.userId}}</span></ion-item>
       </ion-card>
-      
       <button ion-item *ngFor="let item of menus" (click)="openPage(item)">
         <ion-icon name={{item.titleIcon}} item-left primary></ion-icon>{{item.title | translate}}
-        <ion-badge class="new-information-count" *ngIf="item.componentsId=='blog'&&app.blogNewInformationCount!=''&&app.blogNewInformationCount!=0">{{app.blogNewInformationCount}}</ion-badge>
-        <ion-badge class="new-information-count" *ngIf="item.componentsId=='notification'&&app.notificationNewInformationCount!=''&&app.notificationNewInformationCount!=0">{{app.notificationNewInformationCount}}</ion-badge>
+        <ion-badge class="new-information-count" *ngIf="item.componentsId=='blog'&&app.blogNewInformationCount!=''&&app.blogNewInformationCount>0">{{app.blogNewInformationCount}}</ion-badge>
+        <ion-badge class="new-information-count" *ngIf="item.componentsId=='notification'&&app.notificationNewInformationCount!=''&&app.notificationNewInformationCount>0">{{app.notificationNewInformationCount}}</ion-badge>
       </button>
     </ion-list>
   </ion-content>

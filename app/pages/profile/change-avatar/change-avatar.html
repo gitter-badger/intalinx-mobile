@@ -1,0 +1,20 @@
+<ion-navbar *navbar>
+    <ion-title>{{ "app.profile.changeAvatar" | translate }}</ion-title>
+    <ion-buttons end>
+        <button>
+            <ion-icon name="more"></ion-icon>
+        </button>
+        <input #fileInput type=file accept="image/*" (change)="onFileInputChange($event)" class="upload-input" />
+    </ion-buttons>
+</ion-navbar>
+<ion-content padding class="change-avatar">
+    <img src="{{userAvatar}}" />
+</ion-content>
+<ion-toolbar position="bottom" [style.display]="isSelectChange && isLoadCompleted ? 'inherit' : 'none'">
+    <ion-buttons start>
+        <button type="reset" (click)="resetUserAvatar()">{{ "app.action.cancel" | translate }}</button>
+    </ion-buttons>
+    <ion-buttons end>
+        <button type="submit" (click)="changeUserAvatar()">{{ "app.action.select" | translate }}</button>
+    </ion-buttons>
+</ion-toolbar>
