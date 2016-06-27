@@ -149,4 +149,114 @@ export class ScheduleService {
             });
         });
     }
+    
+    getEventsForDeviceAndGroup(startTime, endTime, selType) {
+       if (this.data) {
+            // already loaded data
+            return Promise.resolve(this.data);
+        }
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/schedule/get_events_for_device_and_group.xml').then(req => {
+                let objRequest = this.util.parseXml(req);
+
+                this.util.setNodeText(objRequest, ".//*[local-name()='startTime']", startTime);
+                this.util.setNodeText(objRequest, ".//*[local-name()='endTime']", endTime);
+                this.util.setNodeText(objRequest, ".//*[local-name()='selType']", selType);
+
+                req = this.util.xml2string(objRequest);
+
+                this.util.callCordysWebservice(req).then(data => {
+                    let objResponse = this.util.parseXml(data);
+
+                    let holidayOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='HolidayOutput']");
+                    let eventOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='EventOutput']");
+                    
+                    let holidays = new Array();
+                    for (let i = 0; i < holidayOutputs.length; i++) {
+                        holidays.push(this.util.xml2json(holidayOutputs[i]).HolidayOutput);
+                    }
+                    
+                    let events = new Array();
+                    for (let i = 0; i < eventOutputs.length; i++) {
+                        events.push(this.util.xml2json(eventOutputs[i]).EventOutput);
+                    }
+                    
+                    let result = {
+                        "holidays": holidays,
+                        "events" : events
+                    }
+                    
+                    resolve(result);
+                });
+            });
+        });
+    }
+    
+    searchEvents(categoryID, isRepeat, startTime, endTime, deviceID, visibility, title, summary, location, timezone, selType, userID) {
+    //    if (this.data) {
+    //         // already loaded data
+    //         return Promise.resolve(this.data);
+    //     }
+    //     return new Promise(resolve => {
+    //         this.util.getRequestXml('./assets/requests/schedule/search_events.xml').then(req => {
+    //             let objRequest = this.util.parseXml(req);
+
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='categoryID']", categoryID);
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='isRepeat']", isRepeat);
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='startTime']", startTime);
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='endTime']", endTime);
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='deviceID']", deviceID);
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='visibility']", visibility);
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='title']", title);
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='summary']", summary);
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='location']", location);
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='timezone']", timezone);
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='selType']", selType);
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='userID']", userID);
+
+    //             req = this.util.xml2string(objRequest);
+                
+    //             debugger
+
+    //             this.util.callCordysWebservice(req).then(data => {
+    //                 let objResponse = this.util.parseXml(data);
+
+    //                 let eventOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='EventOutput']");
+                    
+    //                 let events = new Array();
+    //                 for (let i = 0; i < eventOutputs.length; i++) {
+    //                     let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
+    //                     events.push();
+                        
+    //                 }
+
+    //                 resolve(events);
+    //             });
+    //         });
+    //     });
+        if (this.data) {
+            // already loaded data
+            return Promise.resolve(this.data);
+        }
+
+        // don't have the data yet
+        return new Promise(resolve => {
+            this.util.getRequestXml('./mocks/scheduleservice/events.json').then(req => {
+                let objResponse = this.util.parseXml(req);
+                let eventOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='EventOutput']");
+                
+                let events = new Array();
+                for (let i = 0; i < eventOutputs.length; i++) {
+                    let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
+                    let event = {
+                        startTime: moment.unix(eventOutput.startTime).format("HH:MM"),
+                        endTime: moment.unix(eventOutput.endTime).format("HH:MM"),
+                        title: eventOutput.title
+                    }
+                    events.push(event);             
+                }
+                resolve(events);
+            });
+        });
+    }
 }

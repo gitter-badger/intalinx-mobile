@@ -3,19 +3,57 @@
         <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>{{ "app.schedule.title" | translate }}</ion-title>
-    <ion-buttons end><button>
-        <ion-icon name="more" aria-label="more"></ion-icon>
-    </button>
+    <ion-buttons end>
+        <button>
+            <ion-icon name="more" aria-label="more"></ion-icon>
+        </button>
     </ion-buttons>
 </ion-navbar>
-<ion-content>
-    <!--<ion-toolbar position="bottom">-->
-    <ion-item  class="date" no-lines>
-        <ion-datetime  class="date" displayFormat="YYYY/MM" (change)="changeCalendar($event)" [(ngModel)]="yearMonth"></ion-datetime>
+<ion-toolbar no-border-top class="year-month-tool">
+    <ion-buttons start>
+        <button class="last-month" (click)="lastMonth()">
+            <ion-icon name="arrow-back"></ion-icon>
+        </button>
+    </ion-buttons>
+    <ion-item class="display-year-month">
+        <ion-datetime displayFormat="YYYY/MM" (change)="changeCalendar($event)" [(ngModel)]="yearMonth"></ion-datetime>
     </ion-item>
-    <!--<ion-searchbar class="event-search-bar" placeholder="イベント" [(ngModel)]="searchQuery" (input)="searchEvents()"></ion-searchbar>-->
-    
-    <ion-row *ngFor="let week of calendar">
-        <ion-col *ngFor="let day of week" [style.color]="(toady==day.format('YYYY/MM/DD')) ? 'red' : 'black'" >{{day.format('DD')}}</ion-col>
+    <ion-buttons end>
+        <button class="next-month" (click)="nextMonth()">
+            <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+        <button class="search-event-bar" (click)="searchEvents()">
+            <ion-icon name="search"></ion-icon>
+        </button>
+        <button class="search-event-bar" (click)="searchEvents()">
+            <ion-icon name="md-add"></ion-icon>
+        </button>
+        <!--<ion-searchbar right class="search-event-bar" placeholder="イベント" [(ngModel)]="searchQuery" (input)="searchEvents()"></ion-searchbar>-->
+    </ion-buttons>
+</ion-toolbar>
+<ion-toolbar no-border-top class="week-names">
+    <ion-row>
+        <ion-col>
+        </ion-col>
     </ion-row>
+</ion-toolbar>
+<ion-content class="month-calendar">
+    <ion-slides [options]="calendarSlideOptions">
+        <ion-slide>
+            <ion-row *ngFor="let week of calendar">
+                <ion-col *ngFor="let day of week" [style.color]="(toady==day.format('YYYY/MM/DD')) ? 'red' : 'black'">{{day.format('DD')}}</ion-col>
+            </ion-row>
+        </ion-slide>
+    </ion-slides>
+    <ion-scroll class="events" scrollY="true">
+        <ion-item *ngFor="let event of events">
+            <ion-row>
+                <ion-col>
+                    <ion-row>{{event.startTime}}</ion-row>
+                    <ion-row>{{event.endTime}}</ion-row>
+                </ion-col>
+                <ion-col>{{event.title}}</ion-col>
+            </ion-row>
+        </ion-item>
+    </ion-scroll>
 </ion-content>

@@ -32,10 +32,13 @@ export class MonthCalendarPage {
 
         this.today = moment().format('YYYY/MM/DD');
         this.yearMonth = moment().format('YYYY-MM');
-        
         this.showCalendar(this.yearMonth);
         
-
+        this.calendarSlideOptions = {
+            direction: 'vertical'
+        }
+        
+        this.events = this.searchEvents();
         
         // this.searchEvents();
     }
@@ -43,9 +46,20 @@ export class MonthCalendarPage {
     changeCalendar(event) {
         let yearMonth = moment({
             y: event.year.value,
-            M: event.month.value});
+            M: event.month.value - 1});
         this.showCalendar(yearMonth);
     }
+    
+    lastMonth() {
+        this.yearMonth = moment(this.yearMonth).subtract(1, 'months').format('YYYY-MM');
+        this.showCalendar(this.yearMonth);
+    }
+    
+    nextMonth() {
+        this.yearMonth = moment(this.yearMonth).add(1, 'months').format('YYYY-MM');
+        this.showCalendar(this.yearMonth);
+    }
+    
     
     showCalendar(yearMonth) {
         //本月份
@@ -73,18 +87,19 @@ export class MonthCalendarPage {
         this.calendar = calendar;
     }
     
+    setColClass () {
+        let defaultColClass = "col-default";
+        let todayColClass = "col-today";
+        let hasEventClass = "col-has-event";
+    }
     
-    // searchEvents(categoryID, isRepeat, startTime, endTime, deviceID, visibility, title, summary, location, timezone, selType, userId) {
+    
+    searchEvents(categoryID, isRepeat, startTime, endTime, deviceID, visibility, title, summary, location, timezone, selType, userId) {
         
-    //     startTime = 1465311800;
-    //     endTime = 1465398000;
-    //     userId = "wang";
-    //     this.scheduleService.searchEvents(categoryID, isRepeat, startTime, endTime, deviceID, visibility, title, summary, location, timezone, selType, userId).then(data => {
-    //         this.events = data;
-
-    //         debugger
-    //     });
-    // }
+        this.scheduleService.searchEvents(categoryID, isRepeat, startTime, endTime, deviceID, visibility, title, summary, location, timezone, selType, userId).then(data => {
+            this.events = data;
+        });
+    }
     
     // getEventsForDeviceAndGroup(startTime, endTime, selType) {
     //     startTime = 1465311800;
@@ -94,6 +109,7 @@ export class MonthCalendarPage {
             
     //         debugger
     //     });
+
     // }
 
 }
