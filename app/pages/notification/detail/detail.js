@@ -53,12 +53,6 @@ export class DetailPage {
     }
 
     onPageWillEnter() {
-        if (this.platform.is('ios')) {
-            this.app.translate.get(["app.action.back"]).subscribe(message => {
-                let title = message['app.action.back'];
-                this.view.setBackButtonText(title);
-            });
-        }
     }
 
     onPageWillUnload() {

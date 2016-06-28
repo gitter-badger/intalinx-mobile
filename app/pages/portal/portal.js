@@ -84,11 +84,11 @@ export class PortalPage {
                 });
             });
         }
-    })
+    });
     
     this.userService.getUserDetailsFromUser().then(data => {
         this.app.initializeUser(data);
-    })
+    });
   }
   
   showMenu(that) {

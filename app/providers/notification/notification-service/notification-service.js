@@ -113,7 +113,7 @@ export class NotificationService {
 
                     let notificationOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='NotificationOutput']");
                     let notification = this.util.xml2json(notificationOutput).NotificationOutput;
-                    if (notification.createUserAvatar.toString().indexOf("data:image") != 0) {
+                    if (!notification.createUserAvatar || notification.createUserAvatar.toString().indexOf("data:image") != 0) {
                         notification.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
                     }
                     this.util.fromNowForNotification(notification.publishStartDate).then(data => {

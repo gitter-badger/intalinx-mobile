@@ -1,5 +1,4 @@
 import {App, IonicApp, Platform, MenuController} from 'ionic-angular';
-// import {App, IonicApp, Platform, MenuController, NavController, NavParams} from 'ionic-angular';
 import {provide} from '@angular/core';
 import {Http} from '@angular/http';
 import {TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
@@ -8,7 +7,8 @@ import {LoginPage} from './pages/login/login';
 @App({
     templateUrl: 'build/app.html', //'<ion-nav [root]="rootPage"></ion-nav>',
     config: {
-        "BASE_URL": "http://www.intalinx.cn/home/intalinxcloud/",
+        // "BASE_URL": "http://www.intalinx.cn/home/intalinxcloud/",
+        "BASE_URL": "http://192.168.11.29/home/InternalSystem/",
         "GATEWAY_URL": "com.eibus.web.soap.Gateway.wcp",
         "PRE_LOGIN_INFO_URL": "com.eibus.sso.web.authentication.PreLoginInfo.wcp",
         "SAMLART_NAME": "SAMLart",
@@ -56,7 +56,11 @@ export class IntaLinx {
         
         this.platform = platform;
         this.menu = menu;
-        
+
+        this.getBackButtonText().then(message => {
+            this.app.config.set("ios", "backButtonText", message);
+        })
+
         this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
         this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
 
@@ -76,10 +80,6 @@ export class IntaLinx {
         this.initializeApp();
 
         this.rootPage = LoginPage;
-        
-        // initiallize new information count of blog system
-        this.app.blogNewInformationCount = "";
-
     }
 
     initializeApp() {
@@ -100,6 +100,14 @@ export class IntaLinx {
                 window.StatusBar.styleDefault();
             }
             // navigator.splashscreen.hide();
+        });
+    }
+
+    getBackButtonText() {
+        return new Promise(resolve => {
+            this.translate.get("app.action.back").subscribe(message => {
+                resolve(message);
+            });
         });
     }
 
