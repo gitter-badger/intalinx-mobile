@@ -89,12 +89,6 @@ export class DetailPage {
         if (isRefreshFlag == true) {
             this.getReplyContentListByCommunityID();
         }
-        if (this.platform.is('ios')) {
-            this.app.translate.get(["app.action.back"]).subscribe(message => {
-                let title = message['app.action.back'];
-                this.view.setBackButtonText(title);
-            });
-        }
     }
 
     onPageDidEnter() {

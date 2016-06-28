@@ -173,7 +173,7 @@ export class UserService {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/set_user_details_into_user.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
-                this.util.setNodeText(objRequest, ".//*[local-name()='description']", description);
+                this.util.setNodeText(objRequest, ".//*[local-name()='Description']", description);
                 this.util.setNodeText(objRequest, ".//*[local-name()='email']", email);
                 this.util.setNodeText(objRequest, ".//*[local-name()='phone']", phone);
                 this.util.setNodeText(objRequest, ".//*[local-name()='fax']", fax);

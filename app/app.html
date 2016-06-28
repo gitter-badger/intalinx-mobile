@@ -6,7 +6,7 @@
           <ion-avatar item-left>
             <img src={{app.user.userAvatar}} />
           </ion-avatar>
-          <span>{{app.user.userName}}</span>
+          <span>{{app.user.description}}</span>
         </ion-item>
       </ion-card>
       <button ion-item *ngFor="let item of menus" (click)="openPage(item)">
