@@ -33,15 +33,17 @@
 </ion-toolbar>
 <ion-toolbar no-border-top class="week-names">
     <ion-row>
-        <ion-col>
-        </ion-col>
+        <ion-col *ngFor="let weekday of weekdays">{{weekday}}</ion-col>
     </ion-row>
 </ion-toolbar>
 <ion-content class="month-calendar">
     <ion-slides [options]="calendarSlideOptions">
         <ion-slide>
             <ion-row *ngFor="let week of calendar">
-                <ion-col *ngFor="let day of week" [style.color]="(toady==day.format('YYYY/MM/DD')) ? 'red' : 'black'">{{day.format('DD')}}</ion-col>
+                <ion-col *ngFor="let day of week" (mouseover)="searchEvents(day)">
+                    <!--<button>{{day.format('DD')}}</button>-->
+                    <div class="day-default" [ngClass]="{'day-not-this-month': day.format('YYYY-MM')!=yearMonth, 'day-today': day.format('YYYY/MM/DD')==today, 'day-has-events': hasEvents, 'day-select': isSelected}">{{day.format('D')}}</div>
+                </ion-col>
             </ion-row>
         </ion-slide>
     </ion-slides>

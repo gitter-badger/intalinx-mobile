@@ -30,6 +30,10 @@
     }
 }
 
+.week-names {
+    text-align: center;
+}
+
 .month-calendar {
     ion-slides {
         width: 100%;
@@ -40,10 +44,30 @@
         // ion-slide {
         //     height: 100%
         // }
-    }
-    
-    .col-default {
-        
+        .day-default {
+            width: 32px;
+            height: 32px;
+            margin: auto;
+            line-height: 32px;
+        }
+        .day-default:hover {
+            border-radius: 32px;
+            background-color: $primary-text-color;
+            color: $primary-color-text;
+        }
+        .day-not-this-month {
+            visibility: hidden;
+        }
+        .day-today {
+            color: $primary-color-dark;
+        }
+        .day-today:hover {
+            background-color: $primary-color-dark;
+            color: $primary-color-text;
+        }
+        button {
+            // color: white;
+        }
     }
     
     .events {
