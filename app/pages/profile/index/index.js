@@ -43,12 +43,6 @@ export class ProfileIndexPage {
             this.app.user.userAvatar = data.userAvatar;
             this.isLoadCompleted = true;
         });
-        if (this.platform.is('ios')) {
-            this.app.translate.get(["app.action.back"]).subscribe(message => {
-                let title = message['app.action.back'];
-                this.view.setBackButtonText(title);
-            });
-        }
     }
 
     openChangeAvatar(user) {
