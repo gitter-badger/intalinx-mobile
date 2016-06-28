@@ -139,7 +139,7 @@ export class BlogService {
 
                     let communityOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='CommunityOutput']");
                     let community = this.util.xml2json(communityOutput).CommunityOutput;
-                    if (community.createUserAvatar.toString().indexOf("data:image") != 0) {
+                    if (!community.createUserAvatar || community.createUserAvatar.toString().indexOf("data:image") != 0) {
                         community.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
                     }
                     this.util.fromNow(community.createDate).then(data => {
