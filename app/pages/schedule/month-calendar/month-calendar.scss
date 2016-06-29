@@ -34,6 +34,9 @@
 
 .week-names {
     text-align: center;
+    .weekends {
+        color: $secondary-text-color;
+    }
 }
 
 .month-calendar {
@@ -67,6 +70,9 @@
             }
             .day-today {
                 color: $primary-color-dark;
+            }
+            .weekends {
+                color: $secondary-text-color;
             }
             .day-today.hover {
                 border-radius: 24px;

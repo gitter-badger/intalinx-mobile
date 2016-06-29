@@ -32,7 +32,7 @@
 </ion-toolbar>
 <ion-toolbar no-border-top class="week-names">
     <ion-row>
-        <ion-col *ngFor="let weekday of weekdays">{{weekday}}</ion-col>
+        <ion-col *ngFor="let weekday of weekdays" [ngClass]="{'weekends': weekday==weekdays[0] || weekday==weekdays[6]}">{{weekday}}</ion-col>
     </ion-row>
 </ion-toolbar>
 <ion-content class="month-calendar">
@@ -43,6 +43,7 @@
                     <ion-col *ngFor="let day of week" (mouseover)="searchEventsBySelectedDay(day.format('YYYY/MM/D'))">
                         <div class="day-default" [ngClass]="{'day-not-this-month': day.format('YYYY-MM')!=yearMonth,
                             'day-today': day.format('YYYY/MM/D')==today,
+                            'weekends': day.format('d')==6 || day.format('d')==0,
                             'hover': day.format('YYYY/MM/D')==selectDay}">
                             {{day.format('D')}}
                         </div>
@@ -58,15 +59,13 @@
             <ion-item *ngFor="let event of events" (click)="openDetail(event)">
                 <!--<ion-item *ngFor="let event of events" (click)="openDetail(item)">-->
                 <ion-row>
-                    <ion-col width-15 [style.display]="event.isAllDay=='true' ? 'block' : 'none'">
-                        <ion-row>終日</ion-row>
-                    </ion-col>
-                    <ion-col width-15 [style.display]="event.isAllDay=='true' ? 'none' : 'block'">
-                        <ion-row>{{event.startTime}}</ion-row>
-                        <ion-row>{{event.endTime}}</ion-row>
+                    <ion-col width-20>
+                        <ion-row [style.display]="event.isAllDay=='true' ? 'block' : 'none'">終日</ion-row>
+                        <ion-row [style.display]="event.isAllDay=='true' ? 'none' : 'block'">{{event.startTime}}</ion-row>
+                        <ion-row [style.display]="event.isAllDay=='true' ? 'none' : 'block'">{{event.endTime}}</ion-row>
                     </ion-col>
                     <ion-col width-70>{{event.title}}</ion-col>
-                    <ion-col width-15></ion-col>
+                    <ion-col width-10></ion-col>
                 </ion-row>
             </ion-item>
         </ion-list>

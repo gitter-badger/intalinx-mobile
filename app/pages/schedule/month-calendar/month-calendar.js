@@ -35,6 +35,9 @@ export class MonthCalendarPage {
         
         this.calendarSlideOptions = {
             direction: 'vertical'
+            // ,
+            // initialSlide: 0,
+            // loop: true
         }
         
         this.weekdays = moment.weekdaysMin(true);
