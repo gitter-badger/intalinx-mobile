@@ -38,6 +38,13 @@ export class MonthCalendarPage {
         }
         
         this.weekdays = moment.weekdaysMin(true);
+        this.today = moment().format('YYYY/MM/D');
+        this.yearMonth = moment().format('YYYY-MM');
+        //this month
+        let firstDateWeek = moment(this.yearMonth);
+        this.selectDay = this.today;
+        
+        this.days = new Array();
         
         this.searchEventsRequires = {
             "categoryID":  null,
@@ -53,100 +60,96 @@ export class MonthCalendarPage {
             "selType": null,
             "userId": null
         }
-
-        this.today = moment().format('YYYY/MM/D');
-        this.yearMonth = moment().format('YYYY-MM');
-        this.showCalendar(this.yearMonth, true);
+        this.showCalendar(firstDateWeek);
     }
     
     changeCalendar(event) {
         let yearMonth = moment({
             y: event.year.value,
             M: event.month.value - 1});
-        this.showCalendar(yearMonth);
+        //selected month
+        let firstDateWeek = moment(yearMonth);
+        this.selectDay = firstDateWeek.format('YYYY/MM/D');
+        this.showCalendar(firstDateWeek);
     }
     
     lastMonth() {
         this.yearMonth = moment(this.yearMonth).subtract(1, 'months').format('YYYY-MM');
-        this.showCalendar(this.yearMonth);
+        //last month
+        let firstDateWeek = moment(this.yearMonth);
+        this.selectDay = firstDateWeek.format('YYYY/MM/D');
+        this.showCalendar(firstDateWeek);
     }
     
     nextMonth() {
         this.yearMonth = moment(this.yearMonth).add(1, 'months').format('YYYY-MM');
-        this.showCalendar(this.yearMonth);
+        //next month
+        let firstDateWeek = moment(this.yearMonth);
+        this.selectDay = firstDateWeek.format('YYYY/MM/D');
+        this.showCalendar(firstDateWeek);
     }
     
     
-    showCalendar(yearMonth, isToday) {
-        //本月份
-        let firstDateWeek = moment(yearMonth);
-        //本月一共几天
+    showCalendar(firstDateWeek) {
+        //the quantity of days in selected month
         let daysInMonth = firstDateWeek.daysInMonth();
-        //本月第一天是周几
+        //the weekday of the first day on this month
         let firstDayWeek = firstDateWeek.format('d');
-        //时间轴(一维)
+        //weekdays
         let timeline = [];
-        //时间日历
+        //calendar
         let calendar = [];
         
-        //时间轴算法
+        //day and weekday
         for (let i=0; i<firstDayWeek; i++) {
             timeline.push(moment(firstDateWeek).subtract(firstDayWeek-i, 'days'));
         }
         for (let i=0; i<daysInMonth; i++) {
             timeline.push(moment(firstDateWeek).add(i, 'days'));
         }
-        
         let lastDateWeek = moment(firstDateWeek).endOf('month').format('d');
         for (let i=0; i<6-lastDateWeek; i++) {
             timeline.push(moment(lastDateWeek).add(i, 'days'));
         }
-        //时间轴转日历
+        //calendar
         for (let i=0; i<Math.ceil(timeline.length/7); i++) {
             calendar[i] = timeline.slice(i*7, (i+1)*7);
         }
         this.calendar = calendar;
-        
-        let selectDay = firstDateWeek;
-        
-        if (isToday) {
-            selectDay = this.today;
-        }
-        
+
         this.userService.getUserId().then(data => {
             this.searchEventsRequires.userId = data;
-            this.events = this.searchEvents(selectDay);
+            this.searchEventsBySelectedDay(this.selectDay).then(data =>{
+                if (data=="true") {
+                    this.selectEventsByDisplayedMonth();
+                }
+            });
         });
     }
     
-    // setColClass () {
-    //     let defaultColClass = "col-default";
-    //     let todayColClass = "col-today";
-    //     let hasEventClass = "col-has-event";
-    // }
-    
-    
-    searchEvents(selectDay) {
-        let startTime = moment(selectDay).format('X');
-        let endTime = moment(selectDay).add(1, 'd').format('X');
-        
-        this.searchEventsRequires.startTime = startTime;
-        this.searchEventsRequires.endTime = endTime;
-        
-        this.scheduleService.searchEvents(this.searchEventsRequires).then(data => {
-            this.events = data;
-        });
-    }
-    
-    // getEventsForDeviceAndGroup(startTime, endTime, selType) {
-    //     startTime = 1465311800;
-    //     endTime = 1465398000;
-    //     selType = null;
-    //     this.scheduleService.getEventsForDeviceAndGroup(startTime, endTime, selType).then(data => {
+    searchEventsBySelectedDay(selectDay) {
+         return new Promise(resolve => {
+             this.selectDay = selectDay;
+            let startTime = moment(selectDay).unix();
+            let endTime = moment(selectDay).add(1, 'd').subtract('seconds', 1).unix();
             
-    //         debugger
-    //     });
+            this.searchEventsRequires.startTime = startTime;
+            this.searchEventsRequires.endTime = endTime;
 
-    // }
-
+            this.scheduleService.searchEventsBySelectedDay(this.searchEventsRequires).then(data => {
+                this.events = data;
+                resolve("true");
+            });
+        });
+    }
+    
+    selectEventsByDisplayedMonth() {
+        let startTimeOfMonth = moment(this.yearMonth).unix() + moment().zone() * 60;
+        let endTimeOfMonth = moment(this.yearMonth).add('months', 1).subtract('seconds', 1).unix() + moment().zone() * 60;
+        this.searchEventsRequires.startTime = startTimeOfMonth;
+        this.searchEventsRequires.endTime = endTimeOfMonth;
+        this.scheduleService.selectEventsByDisplayedMonth(this.searchEventsRequires).then(data => {
+            this.days = data;
+        });
+    }
 }

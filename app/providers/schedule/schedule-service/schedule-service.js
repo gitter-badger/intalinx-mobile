@@ -18,7 +18,7 @@ export class ScheduleService {
         this.app = app;
         this.nav = nav;
         this.util = util;
-        
+
         this.data = null;
         this.userSettingsData = null;
         this.userDetailsData = null;
@@ -48,7 +48,7 @@ export class ScheduleService {
             });
         });
     }
-    
+
     getUserDetails() {
         if (this.userDetailsData) {
             // already loaded data
@@ -57,7 +57,7 @@ export class ScheduleService {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_user_details.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
-                
+
                 req = this.util.xml2string(objRequest);
 
                 this.util.callCordysWebservice(req).then(data => {
@@ -71,7 +71,7 @@ export class ScheduleService {
                     for (let i = 0; i < organizationsOutputs.length; i++) {
                         organizations.push(this.util.xml2json(organizationsOutputs[i]).organization);
                     }
-                    
+
                     let returnUser = {
                         "authuserdn": user.authuserdn,
                         "description": user.description,
@@ -82,7 +82,7 @@ export class ScheduleService {
             });
         });
     }
-    
+
     getEventsForDeviceAndGroup(eventInputForDeviceAndGroup) {
         if (this.data) {
             // already loaded data
@@ -91,36 +91,36 @@ export class ScheduleService {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_events_for_device_and_group.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
-                
+
                 // startTime/endTime--
                 // selType--施設一覧画面の施設・スケジュール画面のグループのため取得するデータ--device/group--groupの場合はデータなし
                 this.util.setNodeText(objRequest, ".//*[local-name()='startTime']", eventInputForDeviceAndGroup.startTime);
                 this.util.setNodeText(objRequest, ".//*[local-name()='endTime']", eventInputForDeviceAndGroup.endTime);
                 this.util.setNodeText(objRequest, ".//*[local-name()='selType']", eventInputForDeviceAndGroup.selType);
-                
+
                 req = this.util.xml2string(objRequest);
-                
+
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
                     let targetLists = this.util.selectXMLNodes(objResponse, ".//*[local-name()='TargetList']");
                     let devicesAndEvents = new Array();
                     let participants = new Array();
-                    for(let i = 0; i < targetLists.length; i++) {
+                    for (let i = 0; i < targetLists.length; i++) {
                         participants = [];
                         let participantNodes = this.util.selectXMLNodes(targetLists[i], ".//*[local-name()='Participant']");
-                        for(let j = 0; j < participantNodes.length; j++) {
+                        for (let j = 0; j < participantNodes.length; j++) {
                             participants.push(this.util.xml2json(participantNodes[j]).Participant);
                         }
                         devicesAndEvents.push(this.util.xml2json(participantNodes[j]).Participant)
                         devicesAndEvents.participants = participants;
                     }
-                    
+
                     resolve(devicesAndEvents);
                 });
             });
         });
     }
-    
+
     getSpecialDays(request) {
         if (this.specialDaysData) {
             // already loaded data
@@ -134,14 +134,14 @@ export class ScheduleService {
                 this.util.setNodeText(objRequest, ".//*[local-name()='locale']", request.locale);
                 this.util.setNodeText(objRequest, ".//*[local-name()='start']", request.start);
                 this.util.setNodeText(objRequest, ".//*[local-name()='end']", request.end);
-                
+
                 req = this.util.xml2string(objRequest);
-                
+
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
                     let holidayOutputs = this.util.selectXMLNode(objResponse, ".//*[local-name()='HolidayOutput']");
                     let holidays = new Array();
-                    for(let i = 0; i < holidayOutputs.length; i++) {
+                    for (let i = 0; i < holidayOutputs.length; i++) {
                         holidays.push(this.util.xml2json(holidayOutputs[i]).HolidayOutput);
                     }
                     resolve(holidays);
@@ -149,9 +149,9 @@ export class ScheduleService {
             });
         });
     }
-    
+
     getEventsForDeviceAndGroup(startTime, endTime, selType) {
-       if (this.data) {
+        if (this.data) {
             // already loaded data
             return Promise.resolve(this.data);
         }
@@ -170,30 +170,30 @@ export class ScheduleService {
 
                     let holidayOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='HolidayOutput']");
                     let eventOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='EventOutput']");
-                    
+
                     let holidays = new Array();
                     for (let i = 0; i < holidayOutputs.length; i++) {
                         holidays.push(this.util.xml2json(holidayOutputs[i]).HolidayOutput);
                     }
-                    
+
                     let events = new Array();
                     for (let i = 0; i < eventOutputs.length; i++) {
                         events.push(this.util.xml2json(eventOutputs[i]).EventOutput);
                     }
-                    
+
                     let result = {
                         "holidays": holidays,
-                        "events" : events
+                        "events": events
                     }
-                    
+
                     resolve(result);
                 });
             });
         });
     }
-    
+
     searchEvents(searchEventsRequires) {
-       if (this.data) {
+        if (this.data) {
             // already loaded data
             return Promise.resolve(this.data);
         }
@@ -220,21 +220,15 @@ export class ScheduleService {
                     let objResponse = this.util.parseXml(data);
 
                     let eventOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='EventOutput']");
-                    
-                    let events = new Array();
-                    for (let i = 0; i < eventOutputs.length; i++) {
-                        let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
-                        let event = {
-                            startTime: moment(eventOutput.startTime, "X").format("HH:mm"),
-                            endTime: moment(eventOutput.endTime, "X").format("HH:mm"),
-                            title: eventOutput.title
-                        }
-                        events.push(event);             
-                    }
-                    resolve(events);
+
+                    resolve(eventOutputs);
                 });
             });
         });
+
+        // searchAllEventsandHolidays(searchRequires) {
+        //     this.getUserSettings
+        // }
         // if (this.data) {
         //     // already loaded data
         //     return Promise.resolve(this.data);
@@ -245,7 +239,7 @@ export class ScheduleService {
         //     this.util.getRequestXml('./mocks/scheduleservice/events.json').then(req => {
         //         let objResponse = this.util.parseXml(req);
         //         let eventOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='EventOutput']");
-                
+
         //         let events = new Array();
         //         for (let i = 0; i < eventOutputs.length; i++) {
         //             let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
@@ -259,5 +253,59 @@ export class ScheduleService {
         //         resolve(events);
         //     });
         // });
+    }
+
+    searchEventsBySelectedDay(searchEventsRequires) {
+        if (this.data) {
+            // already loaded data
+            return Promise.resolve(this.data);
+        }
+        return new Promise(resolve => {
+            this.searchEvents(searchEventsRequires).then(eventOutputs => {
+                let events = new Array();
+                for (let i = 0; i < eventOutputs.length; i++) {
+                    let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
+                    let startTime = moment(eventOutput.startTime, "X").format("HH:mm");
+                    let endTime = moment(eventOutput.endTime, "X").format("HH:mm");
+                    let isAllDay = eventOutput.isAllDay;
+                    if (searchEventsRequires.startTime >= eventOutput.startTime && searchEventsRequires.endTime <= eventOutput.endTime) {
+                        isAllDay = "true";
+                    } else if (searchEventsRequires.startTime < eventOutput.startTime && searchEventsRequires.endTime < eventOutput.endTime) {
+                        endTime = "24:00";
+                    } else if (searchEventsRequires.endTime > eventOutput.endTime && searchEventsRequires.startTime > eventOutput.startTime) {
+                        startTime = "00:00";
+                    }
+                    let event = {
+                        startTime: startTime,
+                        endTime: endTime,
+                        title: eventOutput.title,
+                        isAllDay: isAllDay
+                    }
+                    events.push(event);
+                }
+                resolve(events);
+            });
+        });
+    }
+
+    selectEventsByDisplayedMonth(searchEventsRequires) {
+        if (this.data) {
+            // already loaded data
+            return Promise.resolve(this.data);
+        }
+        return new Promise(resolve => {
+            this.searchEvents(searchEventsRequires).then(eventOutputs => {
+                let days = new Array();
+                for (let i = 0; i < eventOutputs.length; i++) {
+                    let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
+                    let startDay = Number(moment(eventOutput.startTime, "X").format("D"));
+                    let endDay = Number(moment(eventOutput.endTime, "X").format("D"));
+                    for (let i = startDay; i <= endDay; i++) {
+                        days.push(i.toString());
+                    }
+                }
+                resolve(days);
+            });
+        });
     }
 }

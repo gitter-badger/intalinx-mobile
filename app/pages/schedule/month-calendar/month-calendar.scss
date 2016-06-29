@@ -8,18 +8,20 @@
         }
     }
     .toolbar-content {
-        max-width: 25%;
+        max-width: 30%;
         .display-year-month {
             background-color: inherit;
+            ion-datetime {
+                max-width: 10rem;
+                padding: 0 !important;
+                margin: auto;
+            }
         }
         // min-width: 25rem;
         // .display-year-month {
         //     min-width: 20rem;
         // }
-        ion-datetime {
-            max-width: 10rem;
-            padding: 0 !important;
-        }
+        
     }
     ion-buttons[end] {
         min-width: 60%;
@@ -35,45 +37,48 @@
 }
 
 .month-calendar {
-    ion-slides {
+    ion-slides{
         width: 100%;
-        max-height: 30%;
+        max-height: 50%;
+    }
+    .calendar {
         display: block;
         position: fixed;
-        top: 1;
-        // ion-slide {
-        //     height: 100%
-        // }
-        .day-default {
-            width: 32px;
-            height: 32px;
-            margin: auto;
-            line-height: 32px;
-        }
-        .day-default:hover {
-            border-radius: 32px;
-            background-color: $primary-text-color;
-            color: $primary-color-text;
-        }
-        .day-not-this-month {
-            visibility: hidden;
-        }
-        .day-today {
-            color: $primary-color-dark;
-        }
-        .day-today:hover {
-            background-color: $primary-color-dark;
-            color: $primary-color-text;
-        }
-        button {
-            // color: white;
+        top: 0px;
+        ion-col {
+            padding: 0px;
+            .day-default {
+                width: 24px;
+                height: 24px;
+                margin: auto;
+                line-height: 24px;
+            }
+            .day-default.hover {
+                border-radius: 24px;
+                background-color: $primary-text-color;
+                color: $primary-color-text;
+            }
+            ion-badge.day-has-events {
+                padding: 3px 3px; 
+                min-width: 0px;
+            }
+            .day-not-this-month {
+                visibility: hidden;
+            }
+            .day-today {
+                color: $primary-color-dark;
+            }
+            .day-today.hover {
+                border-radius: 24px;
+                background-color: $primary-color-dark;
+                color: $primary-color-text;
+            }
         }
     }
     
-    .events {
+    .events{
         position: relative;
-        top: 20rem;
         width: 100%;
-        height: 100%;
+        height: 40%;
     }
 }
