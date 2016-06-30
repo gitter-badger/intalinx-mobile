@@ -18,7 +18,7 @@ export class ScheduleService {
         this.app = app;
         this.nav = nav;
         this.util = util;
-
+        
         this.data = null;
         this.userSettingsData = null;
         this.userDetailsData = null;
@@ -26,7 +26,7 @@ export class ScheduleService {
     }
 
     // トップ画面について、ブログリストを取得します
-    getUserSettings(userID) {
+    getUserLocaleSettings(userID) {
         if (this.userSettingsData) {
             // already loaded data
             return Promise.resolve(this.userSettingsData);
@@ -41,15 +41,30 @@ export class ScheduleService {
 
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
-                    let userSettingOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='UserSettingOutput']");
-                    let userSettings = this.util.xml2json(userSettingOutput).UserSettingOutput;
-                    resolve(userSettings);
+                    let userSettings = this.util.selectXMLNodes(objResponse, ".//*[local-name()='UserSettingOutput']");
+                    let localeString = "";
+                    if (userSettings.length > 0) {
+                        var showJapanHoliday = this.util.getNodeText(userSettings[0],  ".//*[local-name()='isShowJapanHoiday']");
+                        var showChinaHoliday = this.util.getNodeText(userSettings[0],  ".//*[local-name()='isShowChinaHoliday']");
+                        var showAmericaHoliday = this.util.getNodeText(userSettings[0],  ".//*[local-name()='isShowAmericaHoliday']");
+                        // JP/CN/US
+                        if (showJapanHoliday == "true") {
+                            localeString += "JP;";
+                        } 
+                        if (showChinaHoliday == "true") {
+                            localeString += "CN;";
+                        }
+                        if (showAmericaHoliday == "true") {
+                            localeString += "US;";
+                        }
+                    }
+                    resolve(localeString);
                 });
             });
         });
     }
-
-    getUserDetails() {
+    
+    getIsAdmin() {
         if (this.userDetailsData) {
             // already loaded data
             return Promise.resolve(this.userDetailsData);
@@ -57,33 +72,29 @@ export class ScheduleService {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_user_details.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
-
+                
                 req = this.util.xml2string(objRequest);
 
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
 
-                    let userOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='User']");
-                    let user = this.util.xml2json(userOutput).User;
-                    let organizationsOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='organization']");
-                    let organizations = new Array();
-                    // default="true"の場合はどう？
-                    for (let i = 0; i < organizationsOutputs.length; i++) {
-                        organizations.push(this.util.xml2json(organizationsOutputs[i]).organization);
+                    let oRoleNodes = this.util.selectXMLNodes(objResponse,  ".//*[local-name()='Role']");
+                    let isAdmin = false;
+                    if (oRoleNodes) {
+                        for (var i = 0; i < oRoleNodes.length; i++) {
+                            var role =this.util.getNodeText(oRoleNodes[i], "./");
+                            if (role == "MyCalAdmin") {
+                                isAdmin = true;
+                            }
+                        }
                     }
-
-                    let returnUser = {
-                        "authuserdn": user.authuserdn,
-                        "description": user.description,
-                        "organization": organizations
-                    }
-                    resolve(returnUser);
+                    resolve(isAdmin);
                 });
             });
         });
     }
-
-    getEventsForDeviceAndGroup(eventInputForDeviceAndGroup) {
+    
+    getEventsForDevice(eventInputForDeviceAndGroup) {
         if (this.data) {
             // already loaded data
             return Promise.resolve(this.data);
@@ -91,36 +102,62 @@ export class ScheduleService {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_events_for_device_and_group.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
-
+                
                 // startTime/endTime--
                 // selType--施設一覧画面の施設・スケジュール画面のグループのため取得するデータ--device/group--groupの場合はデータなし
                 this.util.setNodeText(objRequest, ".//*[local-name()='startTime']", eventInputForDeviceAndGroup.startTime);
                 this.util.setNodeText(objRequest, ".//*[local-name()='endTime']", eventInputForDeviceAndGroup.endTime);
                 this.util.setNodeText(objRequest, ".//*[local-name()='selType']", eventInputForDeviceAndGroup.selType);
-
+                
                 req = this.util.xml2string(objRequest);
-
+                
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
                     let targetLists = this.util.selectXMLNodes(objResponse, ".//*[local-name()='TargetList']");
-                    let devicesAndEvents = new Array();
-                    let participants = new Array();
-                    for (let i = 0; i < targetLists.length; i++) {
-                        participants = [];
-                        let participantNodes = this.util.selectXMLNodes(targetLists[i], ".//*[local-name()='Participant']");
-                        for (let j = 0; j < participantNodes.length; j++) {
-                            participants.push(this.util.xml2json(participantNodes[j]).Participant);
+                    let devicesAndEvents = {};
+                    let facilityList = new Array();
+                    let eventList = new Array();
+                    let participantsOfEvent = new Array();
+                    
+                    for(let i = 0; i < targetLists.length; i++) {
+                        let targetIdString = this.util.getNodeText(targetLists[i], ".//*[local-name()='targetID']");
+                        let targetNameString = this.util.getNodeText(targetLists[i], ".//*[local-name()='targetName']");
+                        
+                        let eventLists = this.util.selectXMLNodes(targetLists[i], ".//*[local-name()='eventList']");
+                        eventList = [];
+                        for(let j = 0; j < eventLists.length; j++) {
+                            participantsOfEvent = [];
+                            let participantNodes = this.util.selectXMLNodes(eventLists[j], ".//*[local-name()='Participant']");
+                            for(let k = 0; k < participantNodes.length; k++) {
+                                let participant = this.util.xml2json(participantNodes[k]).Participant;
+                                participantsOfEvent.push(participant.userName);
+                            }
+                            let eventObject = this.util.xml2json(eventLists[j]).eventList;
+                            let showEventContent = {
+                                "title": eventObject.title, 
+                                "participants": participantsOfEvent,
+                                "deviceName": eventObject.deviceName,
+                                "startTime": eventObject.startTime,
+                                "endTime": eventObject.endTime
+                            };
+                            eventList.push(showEventContent);
                         }
-                        devicesAndEvents.push(this.util.xml2json(participantNodes[j]).Participant)
-                        devicesAndEvents.participants = participants;
+                        let facilityObject = {
+                            "targetId": targetIdString,
+                            "targetName": targetNameString,
+                            "events": eventList
+                        };
+                        facilityList.push(facilityObject);
                     }
-
+                    devicesAndEvents = {
+                        "facilities": facilityList
+                    };
                     resolve(devicesAndEvents);
                 });
             });
         });
     }
-
+    
     getSpecialDays(request) {
         if (this.specialDaysData) {
             // already loaded data
@@ -134,14 +171,14 @@ export class ScheduleService {
                 this.util.setNodeText(objRequest, ".//*[local-name()='locale']", request.locale);
                 this.util.setNodeText(objRequest, ".//*[local-name()='start']", request.start);
                 this.util.setNodeText(objRequest, ".//*[local-name()='end']", request.end);
-
+                
                 req = this.util.xml2string(objRequest);
-
+                
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
-                    let holidayOutputs = this.util.selectXMLNode(objResponse, ".//*[local-name()='HolidayOutput']");
+                    let holidayOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='HolidayOutput']");
                     let holidays = new Array();
-                    for (let i = 0; i < holidayOutputs.length; i++) {
+                    for(let i = 0; i < holidayOutputs.length; i++) {
                         holidays.push(this.util.xml2json(holidayOutputs[i]).HolidayOutput);
                     }
                     resolve(holidays);

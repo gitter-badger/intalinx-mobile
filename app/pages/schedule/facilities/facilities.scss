@@ -1,30 +1,119 @@
 .facilities {
     $grey-border: 1px solid #D7D7D7;
-    
-    .only-border {
+    $red-border: 1px solid red;
+    $cell-width: 200px;
+    $cell-height: 60px;
+    $cell-padding: 6px;
+    height: 100%;
+    ion-col {
+        padding: 0px;
+    }
+    .from-to {
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        * {
+            font-size: 2rem;
+        }
+    }
+    .header {
+        .timezone {
+            height: $cell-height;
+            width: $cell-width;
+            padding: $cell-padding;
+            border-right: $grey-border;
+        }
+        .days-period-container {
+            overflow: hidden;
+            .days-col {
+                padding: $cell-padding;
+                border-right: $grey-border;
+                padding-left: 5px;
+                height: 30px;
+                width: 2400px;
+            }
+            .period-col {
+                padding: $cell-padding;
+                border-right: $grey-border;
+                border-top: $grey-border;
+                height: 30px;
+                width: 100px;
+            }
+        }
+    }
+    .contents {
         border: $grey-border;
-        width: 600px;
-        display: none; // use to tests
+        overflow: hidden;
+        ion-grid {
+            padding: 0px;
+        }
+        .sepcialday{
+            background-color: lightpink;
+        }
+        .saturday {
+            background-color: grey;
+        }
+        
+        .body {
+            // overflow: auto;
+            display: flex;
+            justify-content: space-around;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            // flex-direction: column;
+            align-items: stretch;
+            .device-grid{
+                width: $cell-width;
+                .facility-list {
+                    border-top: $grey-border;
+                    border-right: $grey-border;
+                    height: $cell-height;
+                    width: $cell-width;
+                    padding: 6px;
+                }
+            }
+            .date-grid-container {
+                overflow: auto;
+                .now-line-container {
+                    height: 0px;
+                    margin-left: -2px;
+                    .now-line {
+                        display: block;
+                        position: relative;
+                        width: 1px;
+                        border-right: $red-border;
+                        z-index: 7;
+                    }
+                }
+                .block-container {
+                    height: 0px;
+                    div{
+                        height: $cell-height;
+                        padding-top: 6px;
+                        padding-bottom: 6px;
+                        .init-event {
+                            display: block;
+                            position: relative;
+                            overflow: hidden;
+                            margin-bottom: 0px;
+                            height: 48px;
+                            padding: 6px;
+                            word-break: break-all;
+                            white-space: normal;
+                            text-align: left;
+                        }
+                    }
+                }
+                .facility-use-cell {
+                    border-top: $grey-border;
+                    border-right: $grey-border;
+                    height: 60px;
+                    width: 100px;
+                }
+            }
+        }
     }
-    .period-cell {
-        border: $grey-border;
-        height: 30px;
-        width: 50px;
-    }
-    .facility-cell {
-        border: $grey-border;
-        height: 30px;
-        width: 100px;
-    }
-    .block-container {
-        position: absolute;
-        margin-left: -2px;
-        margin-top: -215px;
-    }
-    .init-event {
-        position: absolute;
-        z-index: 3;
-        height: 30px;
-    }
-
 }
+
