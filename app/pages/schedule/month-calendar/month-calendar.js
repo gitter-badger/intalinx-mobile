@@ -63,7 +63,17 @@ export class MonthCalendarPage {
             "selType": null,
             "userId": null
         }
-        this.showCalendar(firstDateWeek);
+        this.searchHolidaysRequires = {
+            "locale": null,
+            "start": null,
+            "end": null
+        }
+        this.userService.getUserId().then(userId => {
+            this.searchEventsRequires.userId = userId;
+            this.getLocalsFromSetting().then(local => {
+                this.showCalendar(firstDateWeek);
+            });
+        });
     }
     
     changeCalendar(event) {
@@ -119,25 +129,25 @@ export class MonthCalendarPage {
             calendar[i] = timeline.slice(i*7, (i+1)*7);
         }
         this.calendar = calendar;
-
-        this.userService.getUserId().then(data => {
-            this.searchEventsRequires.userId = data;
-            this.searchEventsBySelectedDay(this.selectDay).then(data =>{
-                if (data=="true") {
-                    this.selectEventsByDisplayedMonth();
-                }
-            });
+        
+        this.searchEventsBySelectedDay(this.selectDay).then(data =>{
+            if (data=="true") {
+                this.searchEventsByDisplayedMonth();
+            }
         });
+        // this.getSpecialDays(this.selectDay);
     }
     
     searchEventsBySelectedDay(selectDay) {
          return new Promise(resolve => {
-             this.selectDay = selectDay;
+            this.selectDay = selectDay;
             let startTime = moment(selectDay).unix();
             let endTime = moment(selectDay).add(1, 'd').subtract('seconds', 1).unix();
             
             this.searchEventsRequires.startTime = startTime;
             this.searchEventsRequires.endTime = endTime;
+            
+            this.getSpecialDays(this.selectDay);
 
             this.scheduleService.searchEventsBySelectedDay(this.searchEventsRequires).then(data => {
                 this.events = data;
@@ -146,13 +156,53 @@ export class MonthCalendarPage {
         });
     }
     
-    selectEventsByDisplayedMonth() {
+    searchEventsByDisplayedMonth() {
         let startTimeOfMonth = moment(this.yearMonth).unix() + moment().zone() * 60;
         let endTimeOfMonth = moment(this.yearMonth).add('months', 1).subtract('seconds', 1).unix() + moment().zone() * 60;
         this.searchEventsRequires.startTime = startTimeOfMonth;
         this.searchEventsRequires.endTime = endTimeOfMonth;
-        this.scheduleService.selectEventsByDisplayedMonth(this.searchEventsRequires).then(data => {
+        this.scheduleService.searchEventsByDisplayedMonth(this.searchEventsRequires).then(data => {
             this.days = data;
+        });
+    }
+    
+    getLocalsFromSetting() {
+        return new Promise(resolve => {
+            let locales = {
+                japan:"JP",
+                china:"CN",
+                usa:"US"
+            };
+            this.scheduleService.getUserSettings(this.searchEventsRequires.userId).then(data => {
+                let locale = "";
+                if (data.isShowJapanHoiday == "true") {
+                    locale += locales.japan + ";";
+                } 
+                if (data.isShowChinaHoliday == "true") {
+                    locale += locales.china + ";";
+                }
+                if (data.isShowAmericaHoliday == "true") {
+                    locale += locales.usa + ";";
+                }
+                this.searchHolidaysRequires.locale = locale;
+                resolve(locale);
+            });
+        });
+    }
+    
+    getSpecialDays(selectDay) {
+         return new Promise(resolve => {
+            this.selectDay = selectDay;
+            let startTime = moment(selectDay).unix();
+            let endTime = moment(selectDay).add(1, 'd').subtract('seconds', 1).unix();
+            
+            this.searchHolidaysRequires.start = startTime;
+            this.searchHolidaysRequires.end = endTime;
+
+            this.scheduleService.getSpecialDays(this.searchHolidaysRequires).then(data => {
+                this.specialDays = data;
+                resolve("true");
+            });
         });
     }
 }

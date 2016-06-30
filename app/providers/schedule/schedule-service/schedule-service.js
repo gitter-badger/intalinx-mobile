@@ -127,7 +127,7 @@ export class ScheduleService {
             return Promise.resolve(this.specialDaysData);
         }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/schedule/get_special_days.xml.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/schedule/get_special_days.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
                 // locale--告別--";"でスプリットします。JP/CN/US三つのデータがあります。
                 // start/end--休日検索の開始時間・終了時間timestamp類型
@@ -145,48 +145,6 @@ export class ScheduleService {
                         holidays.push(this.util.xml2json(holidayOutputs[i]).HolidayOutput);
                     }
                     resolve(holidays);
-                });
-            });
-        });
-    }
-
-    getEventsForDeviceAndGroup(startTime, endTime, selType) {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
-        return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/schedule/get_events_for_device_and_group.xml').then(req => {
-                let objRequest = this.util.parseXml(req);
-
-                this.util.setNodeText(objRequest, ".//*[local-name()='startTime']", startTime);
-                this.util.setNodeText(objRequest, ".//*[local-name()='endTime']", endTime);
-                this.util.setNodeText(objRequest, ".//*[local-name()='selType']", selType);
-
-                req = this.util.xml2string(objRequest);
-
-                this.util.callCordysWebservice(req).then(data => {
-                    let objResponse = this.util.parseXml(data);
-
-                    let holidayOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='HolidayOutput']");
-                    let eventOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='EventOutput']");
-
-                    let holidays = new Array();
-                    for (let i = 0; i < holidayOutputs.length; i++) {
-                        holidays.push(this.util.xml2json(holidayOutputs[i]).HolidayOutput);
-                    }
-
-                    let events = new Array();
-                    for (let i = 0; i < eventOutputs.length; i++) {
-                        events.push(this.util.xml2json(eventOutputs[i]).EventOutput);
-                    }
-
-                    let result = {
-                        "holidays": holidays,
-                        "events": events
-                    }
-
-                    resolve(result);
                 });
             });
         });
@@ -225,34 +183,6 @@ export class ScheduleService {
                 });
             });
         });
-
-        // searchAllEventsandHolidays(searchRequires) {
-        //     this.getUserSettings
-        // }
-        // if (this.data) {
-        //     // already loaded data
-        //     return Promise.resolve(this.data);
-        // }
-
-        // // don't have the data yet
-        // return new Promise(resolve => {
-        //     this.util.getRequestXml('./mocks/scheduleservice/events.json').then(req => {
-        //         let objResponse = this.util.parseXml(req);
-        //         let eventOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='EventOutput']");
-
-        //         let events = new Array();
-        //         for (let i = 0; i < eventOutputs.length; i++) {
-        //             let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
-        //             let event = {
-        //                 startTime: moment.unix(eventOutput.startTime).format("HH:MM"),
-        //                 endTime: moment.unix(eventOutput.endTime).format("HH:MM"),
-        //                 title: eventOutput.title
-        //             }
-        //             events.push(event);             
-        //         }
-        //         resolve(events);
-        //     });
-        // });
     }
 
     searchEventsBySelectedDay(searchEventsRequires) {
@@ -288,7 +218,7 @@ export class ScheduleService {
         });
     }
 
-    selectEventsByDisplayedMonth(searchEventsRequires) {
+    searchEventsByDisplayedMonth(searchEventsRequires) {
         if (this.data) {
             // already loaded data
             return Promise.resolve(this.data);
@@ -307,5 +237,9 @@ export class ScheduleService {
                 resolve(days);
             });
         });
+    }
+    
+    searchSpecialDaysByDisplayedMonth(searchSpecialDaysRequires) {
+        
     }
 }

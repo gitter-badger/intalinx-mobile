@@ -56,6 +56,15 @@
     </ion-slides>
     <ion-scroll class="events" scrollY="true">
         <ion-list>
+            <ion-item *ngFor="let specialDay of specialDays">
+                <ion-row>
+                    <ion-col width-20>
+                        <ion-row>終日</ion-row>
+                    </ion-col>
+                    <ion-col width-70>{{specialDay.specialDayName}}</ion-col>
+                    <ion-col width-10></ion-col>
+                </ion-row>
+            </ion-item>
             <ion-item *ngFor="let event of events" (click)="openDetail(event)">
                 <!--<ion-item *ngFor="let event of events" (click)="openDetail(item)">-->
                 <ion-row>
