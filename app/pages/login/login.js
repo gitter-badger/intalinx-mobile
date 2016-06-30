@@ -63,6 +63,7 @@ export class LoginPage {
                 } else {
                     this.local.remove(LoginPage.constants.LOGIN_ID_STORAGE_NAME);
                 }
+                this.app.user.userId = this.user.loginId;
                 this.redirectToPortal();
             } else if (!authenticationResult) {
                 this.app.translate.get(["app.login.message.error.title", "app.login.message.error.idOrPasswordNotCorrect", "app.action.ok"]).subscribe(message => {

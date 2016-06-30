@@ -8,63 +8,87 @@
     <button menuToggle>
         <ion-icon name="menu"></ion-icon>
     </button>
-  <ion-title>facilities</ion-title>
+    <ion-title>{{"app.schedule.facilities.title" | translate}}</ion-title>
+    <ion-buttons right>
+        <button (click)="resetToToday()">{{"app.schedule.facilities.today" | translate}}</button>
+    </ion-buttons>
 </ion-navbar>
 
 <ion-content padding class="facilities">
-    
-    <!--<ion-list no-lines>
-        <ion-item *ngFor="let event of events">
-        <button style="width: {{event.width}}">
-            {{event.background}}
+    <div class="toolbar">
+        <button item-left clear (click)="pickOneDayBefore()">
+            <ion-icon name="arrow-back"></ion-icon>
         </button>
-        <div ng-style="{width: event.width}">test</div>
-        </ion-item>
-    </ion-list>-->
-    <div id="searchCondition">
-        {{platform.isLandscape()}}
+        <div class="from-to">
+            <button clear>
+            <ion-datetime class="from" displayFormat="YYYY/MM/DD" [(ngModel)] = "firstDate.date" (ngModelChange)="changeFirstDate($event)"></ion-datetime>
+            </button>
+            <span class="from-to-text">-</span>
+            <button clear>
+            <ion-datetime class="to" disabled displayFormat="YYYY/MM/DD" [(ngModel)] = "thirdDate.date"></ion-datetime>
+            </button>
+        </div>
+        <button item-right clear (click)="pickOneDayAfter()">
+            <ion-icon name="arrow-forward"></ion-icon>
+        </button>
     </div>
-    <ion-item id="myCalendar">
-        <ion-label fixed>日付</ion-label>
-        <ion-datetime displayFormat="YYYY/MM/DD" [(ngModel)] = "pickedDate"
-        (ngModelChange)="changePickedDate($event)"></ion-datetime>
-    </ion-item>
-    <div class="only-border" [style.display]="isLandscape ? 'block' : 'none'">
-        <tr>
-            <td>
-                <table id="facilitiesTable">
-                    <tr><td><div class="facilityCell">time zone</div></td></tr>
-                    <tr *ngFor="let facility of facilities">
-                        <div class="facility-cell">
-                        facility name
-                        </div>
-                    </tr>
-                </table>
-            </td>
-            <td>
-                <ion-scroll scrollX="true" style="width: 480px; height: 280px;">
-                    <table id="facilitiesTable">
-                        <tr>
-                            <td *ngFor="let time of dateTimes">
-                                <div class="period-cell" style="width:45px">{{time}}</div>
-                            </td>
-                        </tr>
-                        <tr *ngFor="let facility of facilities">
-                            <td class="period-cell" *ngFor="let time of dateTimes"></td>
-                        </tr>
-                    </table>
-                    <div class="block-container">
-                        <button *ngFor="let event of events" class="init-event" 
-                                [style.width]="event.width" 
-                                [style.background]="event.background" 
-                                [style.margin-left]="event.eventMarginLeft" 
-                                [style.margin-top]="event.eventMarginTop" >
-                            {{event.eventName}}
+    
+    <div class="loading" [style.display]="isLoadCompleted ? 'none' : 'block'">
+        <ion-spinner name="dots"></ion-spinner>
+    </div>
+    
+    <div class="contents" [style.display]="isLoadCompleted ? 'block' : 'none'">
+        <ion-grid class="header">
+            <ion-row>
+                <div class="timezone">timeZone</div>
+                <ion-col class="days-period-container">
+                    <div>
+                        <ion-row>
+                            <ion-col><div class="days-col {{(firstDate.isSepcialDay || firstDate.isSunday) ? 'sepcialday' : ''}} {{(firstDate.isSaturday) ? 'saturday' : ''}}">{{firstDate.date}}</div></ion-col>
+                            <ion-col><div class="days-col {{(secondDate.isSepcialDay || secondDate.isSunday) ? 'sepcialday' : ''}} {{(secondDate.isSaturday) ? 'saturday' : ''}}">{{secondDate.date}}</div></ion-col>
+                            <ion-col><div class="days-col {{(thirdDate.isSepcialDay || thirdDate.isSunday) ? 'sepcialday' : ''}} {{(thirdDate.isSaturday) ? 'saturday' : ''}}">{{thirdDate.date}}</div></ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col *ngFor="let time of dateTimes"><div class="period-col {{(firstDate.isSepcialDay || firstDate.isSunday) ? 'sepcialday' : ''}} {{(firstDate.isSaturday) ? 'saturday' : ''}}">{{time}}</div></ion-col>
+                            <ion-col *ngFor="let time of dateTimes"><div class="period-col {{(secondDate.isSepcialDay || secondDate.isSunday) ? 'sepcialday' : ''}} {{(secondDate.isSaturday) ? 'saturday' : ''}}">{{time}}</div></ion-col>
+                            <ion-col *ngFor="let time of dateTimes"><div class="period-col {{(thirdDate.isSepcialDay || thirdDate.isSunday) ? 'sepcialday' : ''}} {{(thirdDate.isSaturday) ? 'saturday' : ''}}">{{time}}</div></ion-col>
+                        </ion-row>
+                    </div>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+        <div class="body">
+            <ion-grid class="device-grid">
+                <ion-row class="device-use-grid">
+                    <ion-col>
+                        <ion-row *ngFor="let facility of facilities">
+                            <ion-col><div class="facility-list">{{facility.targetName}}</div></ion-col>
+                        </ion-row>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+            <div class="date-grid-container" (scroll)="scrollEvents($event)">
+                <div class="now-line-container"><div class="now-line" [style.display]="isNeedShowNowLine ? 'block' : 'none'"></div></div>
+                <div class="block-container">
+                    <div *ngFor="let facility of facilities; let indexDevice = index;">
+                        <button *ngFor="let event of facility.events; let indexEvents = index;" class="init-event" 
+                            [style.width]="event.timeLength" 
+                            [style.background]="event.deviceColor" 
+                            [style.margin-left]="event.eventMarginLeft" 
+                            [style.margin-top]= "event.eventMarginTop"
+                            (click)="showDetail(event)">
+                        {{event.title}}
                         </button>
                     </div>
-                </ion-scroll>
-            </td>
-        </tr>
+                </div>
+                <ion-grid class="date-grid">
+                    <ion-row *ngFor="let facility of facilities">
+                        <ion-col id="firstDayEvent" *ngFor="let time of dateTimes"><div class="facility-use-cell {{(firstDate.isSepcialDay || firstDate.isSunday) ? 'sepcialday' : ''}} {{(firstDate.isSaturday) ? 'saturday' : ''}}"></div></ion-col>
+                        <ion-col id="secondDayEvent" *ngFor="let time of dateTimes"><div class="facility-use-cell {{(secondDate.isSepcialDay || secondDate.isSunday) ? 'sepcialday' : ''}} {{(secondDate.isSaturday) ? 'saturday' : ''}}"></div></ion-col>
+                        <ion-col id="thirdDayEvent" *ngFor="let time of dateTimes"><div class="facility-use-cell {{(thirdDate.isSepcialDay || thirdDate.isSunday) ? 'sepcialday' : ''}} {{(thirdDate.isSaturday) ? 'saturday' : ''}}"></div></ion-col>
+                    </ion-row>
+                </ion-grid>
+            </div>
+        </div>
     </div>
-    
 </ion-content>
