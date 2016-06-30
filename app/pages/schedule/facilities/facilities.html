@@ -14,7 +14,7 @@
     </ion-buttons>
 </ion-navbar>
 
-<ion-content padding class="facilities">
+<ion-content padding class="facilities" (scroll)="scrollHeader($event)">
     <div class="toolbar">
         <button item-left clear (click)="pickOneDayBefore()">
             <ion-icon name="arrow-back"></ion-icon>
@@ -23,8 +23,8 @@
             <button clear>
             <ion-datetime class="from" displayFormat="YYYY/MM/DD" [(ngModel)] = "firstDate.date" (ngModelChange)="changeFirstDate($event)"></ion-datetime>
             </button>
-            <span class="from-to-text">-</span>
-            <button clear>
+            <span class="from-to-text" [style.display]="isLandscape ? 'block' : 'none'">-</span>
+            <button clear [style.display]="isLandscape ? 'block' : 'none'">
             <ion-datetime class="to" disabled displayFormat="YYYY/MM/DD" [(ngModel)] = "thirdDate.date"></ion-datetime>
             </button>
         </div>
@@ -40,13 +40,13 @@
     <div class="contents" [style.display]="isLoadCompleted ? 'block' : 'none'">
         <ion-grid class="header">
             <ion-row>
-                <div class="timezone">timeZone</div>
+                <div class="timezone">{{timeZone}}</div>
                 <ion-col class="days-period-container">
                     <div>
                         <ion-row>
-                            <ion-col><div class="days-col {{(firstDate.isSepcialDay || firstDate.isSunday) ? 'sepcialday' : ''}} {{(firstDate.isSaturday) ? 'saturday' : ''}}">{{firstDate.date}}</div></ion-col>
-                            <ion-col><div class="days-col {{(secondDate.isSepcialDay || secondDate.isSunday) ? 'sepcialday' : ''}} {{(secondDate.isSaturday) ? 'saturday' : ''}}">{{secondDate.date}}</div></ion-col>
-                            <ion-col><div class="days-col {{(thirdDate.isSepcialDay || thirdDate.isSunday) ? 'sepcialday' : ''}} {{(thirdDate.isSaturday) ? 'saturday' : ''}}">{{thirdDate.date}}</div></ion-col>
+                            <ion-col class="days"><div class="days-col {{(firstDate.isSepcialDay || firstDate.isSunday) ? 'sepcialday' : ''}} {{(firstDate.isSaturday) ? 'saturday' : ''}}">{{firstDate.date}}</div></ion-col>
+                            <ion-col class="days"><div class="days-col {{(secondDate.isSepcialDay || secondDate.isSunday) ? 'sepcialday' : ''}} {{(secondDate.isSaturday) ? 'saturday' : ''}}">{{secondDate.date}}</div></ion-col>
+                            <ion-col class="days"><div class="days-col {{(thirdDate.isSepcialDay || thirdDate.isSunday) ? 'sepcialday' : ''}} {{(thirdDate.isSaturday) ? 'saturday' : ''}}">{{thirdDate.date}}</div></ion-col>
                         </ion-row>
                         <ion-row>
                             <ion-col *ngFor="let time of dateTimes"><div class="period-col {{(firstDate.isSepcialDay || firstDate.isSunday) ? 'sepcialday' : ''}} {{(firstDate.isSaturday) ? 'saturday' : ''}}">{{time}}</div></ion-col>

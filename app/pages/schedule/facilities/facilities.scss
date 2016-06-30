@@ -9,6 +9,10 @@
         padding: 0px;
     }
     .from-to {
+        ion-datetime {
+            max-width: 100%;
+        }
+        width: 100%;
         display: flex;
         justify-content: center;
         flex-direction: row;
@@ -24,9 +28,13 @@
             width: $cell-width;
             padding: $cell-padding;
             border-right: $grey-border;
+            font-size: 2.5rem;
         }
         .days-period-container {
             overflow: hidden;
+            .days {
+                width: 2400px;
+            }
             .days-col {
                 padding: $cell-padding;
                 border-right: $grey-border;
