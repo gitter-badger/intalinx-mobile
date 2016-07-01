@@ -16,7 +16,7 @@
         </button>
     </ion-buttons>
     <ion-item class="display-year-month">
-        <ion-datetime displayFormat="YYYY/MM" (change)="changeCalendar($event)" [(ngModel)]="yearMonth"></ion-datetime>
+        <ion-datetime displayFormat="YYYY/MM" min={{minDisplayDate}} max={{maxDisplayDate}} (change)="changeCalendar($event)" [(ngModel)]="yearMonth"></ion-datetime>
     </ion-item>
     <ion-buttons end>
         <button class="next-month" (click)="nextMonth()">
@@ -36,9 +36,9 @@
     </ion-row>
 </ion-toolbar>
 <ion-content class="month-calendar">
-    <ion-slides [options]="calendarSlideOptions">
-        <ion-slide>
-            <ion-grid class="calendar">
+    <ion-slides #calendarSlides (willChange)="changeMonth($event)" [options]="calendarSlideOptions">
+        <ion-slide class="calendar" *ngFor="let n of numbers">
+            <ion-grid>
                 <ion-row *ngFor="let week of calendar">
                     <ion-col *ngFor="let day of week" (mouseover)="searchEventsBySelectedDay(day.format('YYYY/MM/D'))">
                         <div class="day-default" [ngClass]="{'day-not-this-month': day.format('YYYY-MM')!=yearMonth,
@@ -58,17 +58,17 @@
         <ion-list>
             <ion-item *ngFor="let specialDay of specialDays">
                 <ion-row>
-                    <ion-col width-20>
+                    <ion-col text-right width-20 class="border-right-solid" [ngClass]="{'border-right-green': specialDay.type=='JP',
+                            'border-right-red': specialDay.type=='CN',
+                            'border-right-primary': specialDay.type=='US'}">
                         <ion-row>終日</ion-row>
                     </ion-col>
                     <ion-col width-70>{{specialDay.specialDayName}}</ion-col>
-                    <ion-col width-10></ion-col>
                 </ion-row>
             </ion-item>
             <ion-item *ngFor="let event of events" (click)="openDetail(event)">
-                <!--<ion-item *ngFor="let event of events" (click)="openDetail(item)">-->
-                <ion-row>
-                    <ion-col width-20>
+                <ion-row [ngClass]="{'event-in-past-time': selectDay==today&&moment>event.endTime}">
+                    <ion-col text-right width-20 class="border-right-solid border-right-default">
                         <ion-row [style.display]="event.isAllDay=='true' ? 'block' : 'none'">終日</ion-row>
                         <ion-row [style.display]="event.isAllDay=='true' ? 'none' : 'block'">{{event.startTime}}</ion-row>
                         <ion-row [style.display]="event.isAllDay=='true' ? 'none' : 'block'">{{event.endTime}}</ion-row>
@@ -80,3 +80,14 @@
         </ion-list>
     </ion-scroll>
 </ion-content>
+<ion-toolbar position="bottom">
+    <ion-segment class="month-people-bottom-buttons">
+        <ion-segment-button class="button-show-people" (ionSelect)="showPeople()">
+            <ion-icon name="ios-people"></ion-icon>
+        </ion-segment-button>
+        <ion-segment-button class="button-show-today" (ionSelect)="showToday()">今日
+        </ion-segment-button>
+        <ion-segment-button class="button-show-facilities" (ionSelect)="selectedFacilities()">施設一覧
+        </ion-segment-button>
+    </ion-segment>
+</ion-toolbar>

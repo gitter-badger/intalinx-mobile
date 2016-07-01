@@ -277,6 +277,19 @@ export class ScheduleService {
     }
     
     searchSpecialDaysByDisplayedMonth(searchSpecialDaysRequires) {
-        
+        if (this.data) {
+            // already loaded data
+            return Promise.resolve(this.data);
+        }
+        return new Promise(resolve => {
+            this.getSpecialDays(searchSpecialDaysRequires).then(holidays => {
+                let days = new Array();
+                for (let i = 0; i < holidays.length; i++) {
+                    let startDay = Number(moment(holidays[i].startDay, "X").format("D"));
+                    days.push(startDay.toString());
+                }
+                resolve(days);
+            });
+        });
     }
 }
