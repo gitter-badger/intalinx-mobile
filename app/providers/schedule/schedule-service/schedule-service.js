@@ -20,14 +20,14 @@ export class ScheduleService {
         this.util = util;
         
         this.data = null;
-        this.userSettingsData = null;
+        this.userLocaleSettingsData = null;
         this.userDetailsData = null;
         this.specialDaysData = null;
     }
 
     // トップ画面について、ブログリストを取得します
     getUserLocaleSettings(userID) {
-        if (this.userSettingsData) {
+        if (this.userLocaleSettingsData) {
             // already loaded data
             return Promise.resolve(this.userSettingsData);
         }

@@ -41,7 +41,11 @@ export class FacilitiesPage {
     this.paddingWithOneDevice = 48;
     this.paddingWithOneDeviceLine = 60;
     this.wholeDataGrid = 24 * 3 * this.paddingWithOneHour;
-    this.deviceColors = ["pink", "green", "purple", "yellow", "red", "blue", "lightcoral"];
+    // this.deviceColors = ["pink", "green", "purple", "yellow", "red", "blue", "lightcoral"];
+    // いままで施設一覧画面が使っている色を使います。
+    this.deviceColors = ["rgb(210, 80, 127)", "rgb(100, 149, 237)", "rgb(153, 50, 204)", 
+                         "rgb(241, 169, 160)", "rgb(255, 140, 0)", "rgb(46, 139, 87)", 
+                         "rgb(105, 105, 105)", "rgb(249, 191, 59)"];
     // 横向きモードの判断
     this.isLandscape = platform.isLandscape();
     // 今登録しているユーザーが管理人かどうかを判断する
@@ -145,8 +149,8 @@ export class FacilitiesPage {
                   
                   lineEvents[j].eventMarginLeft = this.calculateTimeSpece(this.giStart, viewStartTime);
                   lineEvents[j].timeLength = this.calculateTimeSpece(viewStartTime, lineEvents[j].endTime);
-                  lineEvents[j].deviceColor = this.deviceColors[i%this.deviceColors.length];
               }
+              this.facilities[i].deviceColor = this.deviceColors[i%this.deviceColors.length];;
               this.facilities[i].events = lineEvents;
           }
           this.isLoadCompleted = true;
