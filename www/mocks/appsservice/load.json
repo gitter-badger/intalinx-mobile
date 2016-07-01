@@ -20,6 +20,11 @@
         "componentsId": "schedule"
     },
     {
+        "titleIcon": "desktop",
+        "title": "app.schedule.facilities.title",
+        "componentsId": "facilities"
+    },
+    {
         "titleIcon": "contact",
         "title": "app.profile.title",
         "componentsId": "profile",

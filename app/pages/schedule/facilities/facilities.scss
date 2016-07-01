@@ -1,14 +1,20 @@
 .facilities {
     $grey-border: 1px solid #D7D7D7;
-    $red-border: 1px solid red;
+    $red-border: 2px solid red;
     $cell-width: 200px;
     $cell-height: 60px;
     $cell-padding: 6px;
+    // 三日のデータの表示の幅
+    $content-width: 7200px;
     height: 100%;
     ion-col {
         padding: 0px;
     }
     .from-to {
+        ion-datetime {
+            max-width: 100%;
+        }
+        width: 100%;
         display: flex;
         justify-content: center;
         flex-direction: row;
@@ -19,11 +25,13 @@
         }
     }
     .header {
+        border-bottom: $grey-border;
         .timezone {
             height: $cell-height;
             width: $cell-width;
             padding: $cell-padding;
             border-right: $grey-border;
+            font-size: 2.5rem;
         }
         .days-period-container {
             overflow: hidden;
@@ -32,14 +40,13 @@
                 border-right: $grey-border;
                 padding-left: 5px;
                 height: 30px;
-                width: 2400px;
             }
             .period-col {
                 padding: $cell-padding;
                 border-right: $grey-border;
                 border-top: $grey-border;
                 height: 30px;
-                width: 100px;
+                z-index: 9;
             }
         }
     }
@@ -50,12 +57,17 @@
             padding: 0px;
         }
         .sepcialday{
-            background-color: lightpink;
+            background-color: LIGHTSALMON;
         }
         .saturday {
-            background-color: grey;
+            background-color: SILVER;
         }
         
+        ion-row {
+            .device-use-row {
+                width: $content-width;
+            }
+        }
         .body {
             // overflow: auto;
             display: flex;
@@ -66,23 +78,37 @@
             align-items: stretch;
             .device-grid{
                 width: $cell-width;
+                ion-row {
+                    width: $cell-width;
+                }
                 .facility-list {
                     border-top: $grey-border;
                     border-right: $grey-border;
                     height: $cell-height;
-                    width: $cell-width;
                     padding: 6px;
+                    
+                    .facility-color {
+                        position: relative;
+                        height: 16px;
+                        width: 16px;
+                        margin-right: 2px;
+                    }
                 }
             }
             .date-grid-container {
                 overflow: auto;
+                ion-row {
+                    .device-use-row {
+                        width: $content-width;
+                    }
+                }
                 .now-line-container {
                     height: 0px;
                     margin-left: -2px;
                     .now-line {
                         display: block;
                         position: relative;
-                        width: 1px;
+                        width: 0px;
                         border-right: $red-border;
                         z-index: 7;
                     }
@@ -91,8 +117,8 @@
                     height: 0px;
                     div{
                         height: $cell-height;
-                        padding-top: 6px;
-                        padding-bottom: 6px;
+                        padding-top: 3px;
+                        padding-bottom: 9px;
                         .init-event {
                             display: block;
                             position: relative;
@@ -109,8 +135,7 @@
                 .facility-use-cell {
                     border-top: $grey-border;
                     border-right: $grey-border;
-                    height: 60px;
-                    width: 100px;
+                    height: $cell-height;
                 }
             }
         }

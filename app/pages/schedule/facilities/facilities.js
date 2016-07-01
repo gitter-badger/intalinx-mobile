@@ -35,11 +35,17 @@ export class FacilitiesPage {
     this.util = util;
     this.scheduleService = scheduleService;
     
+    this.timeZone = "UTC" + moment().format("Z");
     // 画面表示イベントとトップまでの距離と左までの距離
     this.paddingWithOneHour = 100;
     this.paddingWithOneDevice = 48;
     this.paddingWithOneDeviceLine = 60;
-    this.deviceColors = ["pink", "green", "purple", "yellow", "red", "blue", "lightcoral"];
+    this.wholeDataGrid = 24 * 3 * this.paddingWithOneHour;
+    // this.deviceColors = ["pink", "green", "purple", "yellow", "red", "blue", "lightcoral"];
+    // いままで施設一覧画面が使っている色を使います。
+    this.deviceColors = ["rgb(210, 80, 127)", "rgb(100, 149, 237)", "rgb(153, 50, 204)", 
+                         "rgb(241, 169, 160)", "rgb(255, 140, 0)", "rgb(46, 139, 87)", 
+                         "rgb(105, 105, 105)", "rgb(249, 191, 59)"];
     // 横向きモードの判断
     this.isLandscape = platform.isLandscape();
     // 今登録しているユーザーが管理人かどうかを判断する
@@ -93,6 +99,8 @@ export class FacilitiesPage {
      this.refresh = this.refreshEvent(this);
      this.isFirstLoad = true;
      this.isNeedShowNowLine = false;
+     this.headerHeight = 100;
+     this.navHeaderHeight = 80;
   }
   
   onPageLoaded () {
@@ -108,9 +116,7 @@ export class FacilitiesPage {
      
       // ユーザー設定を取得する
       // 字体大きさはとりあえずほっどいて、localeをしゅとくする
-      // let userId = "111147";
-      debugger
-      let userId = this.app.user.userId;
+      let userId =this.app.user.userName; // this.app.user.userId;
       this.scheduleService.getUserLocaleSettings(userId).then(data => {
           this.locale = data;
           this.getSpecialDays();
@@ -143,8 +149,8 @@ export class FacilitiesPage {
                   
                   lineEvents[j].eventMarginLeft = this.calculateTimeSpece(this.giStart, viewStartTime);
                   lineEvents[j].timeLength = this.calculateTimeSpece(viewStartTime, lineEvents[j].endTime);
-                  lineEvents[j].deviceColor = this.deviceColors[i%this.deviceColors.length];
               }
+              this.facilities[i].deviceColor = this.deviceColors[i%this.deviceColors.length];;
               this.facilities[i].events = lineEvents;
           }
           this.isLoadCompleted = true;
@@ -165,6 +171,19 @@ export class FacilitiesPage {
   
   // 週末と祝日で特別のCSSを追加する
   checkSpecialDays() {
+      //background-color satuday rgb(235, 240, 246)
+      // background-color sunday & holiday rgb(255, 239, 229)
+      // 三つの日は土曜日か日曜日か祝日かを初期「ない」に設定します。
+      this.firstDate.isSaturday = false;
+      this.firstDate.isSunday = false;
+      this.firstDate.isSepcialDay = false;
+      this.secondDate.isSaturday = false;
+      this.secondDate.isSunday = false;
+      this.secondDate.isSepcialDay = false;
+      this.thirdDate.isSaturday = false;
+      this.thirdDate.isSunday = false;
+      this.thirdDate.isSepcialDay = false;
+      
       let curDay = "";
       if(moment(this.firstDate.date).day() == 6) {
           this.firstDate.isSaturday = true;
@@ -222,6 +241,10 @@ export class FacilitiesPage {
           // var facilityList = document.querySelector(".facilities .contents .device-grid .device-use-grid");
           nowLine.style.height = (this.paddingWithOneDeviceLine * this.facilities.length) + "px";
           this.setTransverseScroll();
+          var contentsHeader = document.querySelector(".facilities .contents .header");
+          var navHeader = document.querySelector(".toolbar");
+          this.navHeaderHeight = navHeader.offsetHeight;
+          this.headerHeight = contentsHeader.offsetTop;
           this.isFirstLoad = false;
       } else if(pastTime >= this.refreshScrollAndEventsTime){
           let today = moment().format("YYYY-MM-DD");
@@ -236,19 +259,18 @@ export class FacilitiesPage {
   }
   
   setTransverseScroll() {
-      let wholeDataGrid = 24 * 3 * this.paddingWithOneHour;
       let transverseScroll = 7 * this.paddingWithOneHour;
       let transFromNow = this.calculateTimeSpece(this.giStart, this.now);
       transFromNow = parseInt(transFromNow.substring(0, transFromNow.indexOf("px")));
       if(this.isFirstLoad) {
-          if(transFromNow != 0 || transFromNow < wholeDataGrid) {
-              this.isNeedShowNowLine = false;
+          if(transFromNow != 0 && transFromNow < this.wholeDataGrid) {
+              this.isNeedShowNowLine = true;
           }
       }
       
       // スクロールの位置は現在時点の二時間前に設定します。
       transFromNow = transFromNow - 2 * this.paddingWithOneHour;
-      if(transFromNow > transverseScroll && transFromNow < wholeDataGrid) {
+      if(transFromNow > transverseScroll && transFromNow < this.wholeDataGrid) {
           transverseScroll = transFromNow;
       }
       var dateGrid = document.querySelector(".facilities .contents .date-grid-container");
@@ -272,34 +294,29 @@ export class FacilitiesPage {
 //       this.setTransverseScroll();
 //   }
   
-//   ngAfterViewInit() {
-//       debugger
-//       // this.pageContent.addScrollListener(this.scrollEvents(this));
-//       this.setTransverseScroll();
-//   }
+  ngAfterViewInit() {
+      this.pageContent.addScrollListener(this.scrollHeader(this));
+  }
     
   resetToToday() {
-      this.standardMoment = moment().unix();
-      this.isLoadCompleted = false;
       this.firstDate.date = moment().format("YYYY-MM-DD");
       this.changeFirstDate();
   }
   pickOneDayBefore() {
-      this.standardMoment = moment().unix();
-      this.isLoadCompleted = false;
       this.firstDate.date = moment.unix(this.giStart).add(-1, "d").format("YYYY-MM-DD");
       this.changeFirstDate();
   }
   
   pickOneDayAfter() {
-      this.standardMoment = moment().unix();
-      this.isLoadCompleted = false;
       this.firstDate.date = moment.unix(this.giStart).add(1, "d").format("YYYY-MM-DD");
       this.changeFirstDate();
   }
   
   changeFirstDate() {
+      this.standardMoment = moment().unix();
       this.isFirstLoad = true;
+      this.isLoadCompleted = false;
+      this.isNeedShowNowLine = false;
       this.giStart = moment(this.firstDate.date).hour(0).minute(0).second(0).unix();
       this.giEnd = moment.unix(this.giStart).add(2, "d").unix();
       
@@ -328,7 +345,20 @@ export class FacilitiesPage {
       daysPeriod.scrollLeft = dateGrid.scrollLeft;
   }
   
-  //background-color satuday rgb(235, 240, 246)
-  // background-color sunday & holiday rgb(255, 239, 229)
-  
+  scrollHeader(that) {
+      return function() {
+          that.standardMoment = moment().unix();
+          var contentsHeader = document.querySelector(".facilities .contents .header");
+          var contentsHeader = document.querySelector(".facilities .contents .header");
+          if (this.scrollTop > that.headerHeight) {
+              contentsHeader.style.top=that.navHeaderHeight + "px";
+              contentsHeader.style.position= "fixed";
+              contentsHeader.style.background = "#FFFFFF";
+              // z-indexを設定すると、エラーを報告します。
+              // contentsHeader.style.z-index = 10;
+          } else {
+              contentsHeader.removeAttribute("style");
+          }
+      }       
+  }
 }

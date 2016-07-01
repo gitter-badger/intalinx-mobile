@@ -8,13 +8,14 @@ import {UserService} from '../../providers/user-service/user-service';
 import {BlogService} from '../../providers/blog/blog-service/blog-service'; 
 import {NotificationService} from '../../providers/notification/notification-service/notification-service';
 import {ScheduleService} from '../../providers/schedule/schedule-service/schedule-service';
-import {AboutService} from '../../providers/about-service/about-service';  
+import {AboutService} from '../../providers/about-service/about-service';
 
 import {BlogIndexPage} from '../blog/index/index';
 import {ProfileIndexPage} from '../profile/index/index';
 import {NotificationIndexPage} from '../notification/index/index';
 import {MonthCalendarPage} from '../schedule/month-calendar/month-calendar';
 import {AboutPage} from '../about/about';
+import {FacilitiesPage} from '../schedule/facilities/facilities';
 
 /*
   Generated class for the PortalPage page.
@@ -56,7 +57,8 @@ export class PortalPage {
         "blog" : BlogIndexPage,
         "profile" : ProfileIndexPage,
         "schedule": MonthCalendarPage,
-        "about": AboutPage
+        "about": AboutPage,
+        "facilities": FacilitiesPage
     }
     
     if (!this.app.showMenu) {
@@ -67,7 +69,7 @@ export class PortalPage {
         this.app.initializeMenu(data);
         // set root to blog.
         this.nav.setRoot(BlogIndexPage);
-        
+
         // when the app is runing as a native app. remove about page.
         if (!platform.is('cordova')) {
             data.pop();
