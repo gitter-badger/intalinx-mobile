@@ -32,7 +32,7 @@
 </ion-toolbar>
 <ion-toolbar no-border-top class="week-names">
     <ion-row>
-        <ion-col *ngFor="let weekday of weekdays" [ngClass]="{'weekends': weekday==weekdays[0] || weekday==weekdays[6]}">{{weekday}}</ion-col>
+        <ion-col *ngFor="let weekday of weekdays" [ngClass]="{'weekends': (isFirstDayMonday==false && (weekday==weekdays[0] || weekday==weekdays[6])) || (isFirstDayMonday==true && (weekday==weekdays[5] || weekday==weekdays[6]))}">{{weekday}}</ion-col>
     </ion-row>
 </ion-toolbar>
 <ion-content class="month-calendar">
@@ -44,7 +44,7 @@
                         <div class="day-default" [ngClass]="{'day-not-this-month': day.format('YYYY-MM')!=yearMonth,
                             'day-today': day.format('YYYY/MM/D')==today,
                             'weekends': day.format('d')==6 || day.format('d')==0,
-                            'hover': day.format('YYYY/MM/D')==selectDay}">
+                            'hover': day.format('YYYY/MM/D')==selectedDay}">
                             {{day.format('D')}}
                         </div>
                         <ion-badge class="day-has-events" [style.visibility]="day.format('YYYY-MM')==yearMonth && days.includes(day.format('D')) ? 'visible' : 'hidden'">
@@ -61,15 +61,15 @@
                     <ion-col text-right width-20 class="border-right-solid" [ngClass]="{'border-right-green': specialDay.type=='JP',
                             'border-right-red': specialDay.type=='CN',
                             'border-right-primary': specialDay.type=='US'}">
-                        <ion-row>終日</ion-row>
+                        <ion-row>{{ "app.schedule.index.allDay" | translate }}</ion-row>
                     </ion-col>
                     <ion-col width-70>{{specialDay.specialDayName}}</ion-col>
                 </ion-row>
             </ion-item>
             <ion-item *ngFor="let event of events" (click)="openDetail(event)">
-                <ion-row [ngClass]="{'event-in-past-time': selectDay==today&&moment>event.endTime}">
+                <ion-row [ngClass]="{'event-in-past-time': selectedDay==today&&event.isAllDay!='true'&&moment>event.endTime}">
                     <ion-col text-right width-20 class="border-right-solid border-right-default">
-                        <ion-row [style.display]="event.isAllDay=='true' ? 'block' : 'none'">終日</ion-row>
+                        <ion-row [style.display]="event.isAllDay=='true' ? 'block' : 'none'">{{ "app.schedule.index.allDay" | translate }}</ion-row>
                         <ion-row [style.display]="event.isAllDay=='true' ? 'none' : 'block'">{{event.startTime}}</ion-row>
                         <ion-row [style.display]="event.isAllDay=='true' ? 'none' : 'block'">{{event.endTime}}</ion-row>
                     </ion-col>
@@ -85,9 +85,9 @@
         <ion-segment-button class="button-show-people" (ionSelect)="showPeople()">
             <ion-icon name="ios-people"></ion-icon>
         </ion-segment-button>
-        <ion-segment-button class="button-show-today" (ionSelect)="showToday()">今日
+        <ion-segment-button class="button-show-today" (ionSelect)="showToday()">{{ "app.schedule.index.today" | translate }}
         </ion-segment-button>
-        <ion-segment-button class="button-show-facilities" (ionSelect)="selectedFacilities()">施設一覧
+        <ion-segment-button class="button-show-facilities" (ionSelect)="showFacilities()">{{ "app.schedule.index.facilities" | translate }}
         </ion-segment-button>
     </ion-segment>
 </ion-toolbar>

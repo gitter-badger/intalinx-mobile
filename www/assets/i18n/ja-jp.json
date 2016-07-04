@@ -109,6 +109,9 @@
                 "today": "今日"
             },
             "index": {
+                "allDay": "終日",
+                "today": "今日",
+                "facilities": "施設一覧"
             }
         }
     }

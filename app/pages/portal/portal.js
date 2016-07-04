@@ -13,7 +13,7 @@ import {AboutService} from '../../providers/about-service/about-service';
 import {BlogIndexPage} from '../blog/index/index';
 import {ProfileIndexPage} from '../profile/index/index';
 import {NotificationIndexPage} from '../notification/index/index';
-import {MonthCalendarPage} from '../schedule/month-calendar/month-calendar';
+import {ScheduleIndexPage} from '../schedule/index/index';
 import {AboutPage} from '../about/about';
 import {FacilitiesPage} from '../schedule/facilities/facilities';
 
@@ -56,7 +56,7 @@ export class PortalPage {
         "notification" : NotificationIndexPage,
         "blog" : BlogIndexPage,
         "profile" : ProfileIndexPage,
-        "schedule": MonthCalendarPage,
+        "schedule": ScheduleIndexPage,
         "about": AboutPage,
         "facilities": FacilitiesPage
     }

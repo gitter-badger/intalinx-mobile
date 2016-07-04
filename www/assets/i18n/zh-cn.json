@@ -110,6 +110,9 @@
                 "today": "今天"
             },
             "index": {
+                "allDay": "全天",
+                "today": "今天",
+                "facilities": "设施一览"
             }
         }
     }

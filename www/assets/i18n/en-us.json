@@ -109,6 +109,9 @@
                 "today": "Today"
             },
             "index": {
+                "allDay": "all-day",
+                "today": "Today",
+                "facilities": "Facilities"
             }
         }
     }

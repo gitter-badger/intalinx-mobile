@@ -285,10 +285,29 @@ export class ScheduleService {
             this.getSpecialDays(searchSpecialDaysRequires).then(holidays => {
                 let days = new Array();
                 for (let i = 0; i < holidays.length; i++) {
-                    let startDay = Number(moment(holidays[i].startDay, "X").format("D"));
-                    days.push(startDay.toString());
+                    let startDay = moment(holidays[i].startDay, "X").format("D");
+                    days.push(startDay);
                 }
                 resolve(days);
+            });
+        });
+    }
+    
+    getSpecialDaysInSelectedDay(searchSpecialDaysRequires, selectedDay) {
+        if (this.data) {
+            // already loaded data
+            return Promise.resolve(this.data);
+        }
+        return new Promise(resolve => {
+            this.getSpecialDays(searchSpecialDaysRequires).then(holidays => {
+                let specialDays = new Array();
+                for (let i = 0; i < holidays.length; i++) {
+                    let startDay = moment(holidays[i].startDay, "X").format('YYYY/MM/D');
+                    if (selectedDay == startDay) {
+                        specialDays.push(holidays[i]);
+                    }
+                }
+                resolve(specialDays);
             });
         });
     }

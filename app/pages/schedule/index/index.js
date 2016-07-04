@@ -11,7 +11,7 @@ import {Util} from '../../../utils/util';
 import {DateUtil} from '../../../utils/dateutil';
 
 @Page({
-    templateUrl: 'build/pages/schedule/month-calendar/month-calendar.html',
+    templateUrl: 'build/pages/schedule/index/index.html',
     providers: [
         ScheduleService,
         UserService,
@@ -22,7 +22,7 @@ import {DateUtil} from '../../../utils/dateutil';
         slider: new ViewChild('calendarSlides')
     }
 })
-export class MonthCalendarPage {
+export class ScheduleIndexPage {
 
     static get parameters() {
         return [[IonicApp], [NavController], [ViewController], [Platform], [ScheduleService], [UserService]];
@@ -38,13 +38,22 @@ export class MonthCalendarPage {
         this.userService = userService;
 
         this.weekdays = moment.weekdaysMin(true);
+        // 日本每周第一天是周一，中国和英国等每周第一天为周天
+        if (this.app.userLang == "ja" || this.app.userLang == "ja-jp") {
+            this.isFirstDayMonday = true;
+            let sunday = this.weekdays[0];
+            this.weekdays.shift();
+            this.weekdays.push(sunday);
+        } else {
+            this.isFirstDayMonday = false;
+        }
         this.today = moment().format('YYYY/MM/D');
         this.yearMonth = moment().format('YYYY-MM');
         this.minDisplayDate = Number(moment().format('YYYY')) - 5 + "-01";
         this.maxDisplayDate = Number(moment().format('YYYY')) + 5 + "-12";
         //this month
         let firstDateWeek = moment(this.yearMonth);
-        this.selectDay = this.today;
+        this.selectedDay = this.today;
         
         this.days = new Array();
         
@@ -91,7 +100,7 @@ export class MonthCalendarPage {
             M: event.month.value - 1});
         //selected month
         let firstDateWeek = moment(yearMonth);
-        this.selectDay = firstDateWeek.format('YYYY/MM/D');
+        this.selectedDay = firstDateWeek.format('YYYY/MM/D');
         this.showCalendar(firstDateWeek);
     }
     
@@ -99,7 +108,7 @@ export class MonthCalendarPage {
         this.yearMonth = moment(this.yearMonth).subtract(1, 'months').format('YYYY-MM');
         //last month
         let firstDateWeek = moment(this.yearMonth);
-        this.selectDay = firstDateWeek.format('YYYY/MM/D');
+        this.selectedDay = firstDateWeek.format('YYYY/MM/D');
         this.showCalendar(firstDateWeek);
     }
     
@@ -107,7 +116,7 @@ export class MonthCalendarPage {
         this.yearMonth = moment(this.yearMonth).add(1, 'months').format('YYYY-MM');
         //next month
         let firstDateWeek = moment(this.yearMonth);
-        this.selectDay = firstDateWeek.format('YYYY/MM/D');
+        this.selectedDay = firstDateWeek.format('YYYY/MM/D');
         this.showCalendar(firstDateWeek);
     }
     
@@ -121,15 +130,21 @@ export class MonthCalendarPage {
         //calendar
         let calendar = [];
         
+        // 日本每周第一天是周一，中国和英国等每周第一天为周天
+        let cursor = 0;
+        if (this.isFirstDayMonday && this.isFirstDayMonday == true) {
+            cursor = 1; 
+        }
+        
         //day and weekday
-        for (let i=0; i<firstDayWeek; i++) {
+        for (let i=0+cursor; i<firstDayWeek; i++) {
             timeline.push(moment(firstDateWeek).subtract(firstDayWeek-i, 'days'));
         }
         for (let i=0; i<daysInMonth; i++) {
             timeline.push(moment(firstDateWeek).add(i, 'days'));
         }
         let lastDateWeek = moment(firstDateWeek).endOf('month').format('d');
-        for (let i=0; i<6-lastDateWeek; i++) {
+        for (let i=0; i<6-lastDateWeek+cursor; i++) {
             timeline.push(moment(lastDateWeek).add(i, 'days'));
         }
         //calendar
@@ -140,23 +155,23 @@ export class MonthCalendarPage {
         
         this.moment = moment().format("HH:mm");
         
-        this.searchEventsBySelectedDay(this.selectDay).then(data =>{
+        this.searchEventsBySelectedDay(this.selectedDay).then(data =>{
             if (data=="true") {
                 this.searchEventsByDisplayedMonth();
             }
         });
     }
     
-    searchEventsBySelectedDay(selectDay) {
+    searchEventsBySelectedDay(selectedDay) {
          return new Promise(resolve => {
-            this.selectDay = selectDay;
-            let startTime = moment(selectDay).unix();
-            let endTime = moment(selectDay).add(1, 'd').subtract('seconds', 1).unix();
+            this.selectedDay = selectedDay;
+            let startTime = moment(selectedDay).unix();
+            let endTime = moment(selectedDay).add(1, 'd').subtract('seconds', 1).unix();
             
             this.searchEventsRequires.startTime = startTime;
             this.searchEventsRequires.endTime = endTime;
             
-            this.getSpecialDays(this.selectDay);
+            this.getSpecialDays(this.selectedDay);
 
             this.scheduleService.searchEventsBySelectedDay(this.searchEventsRequires).then(data => {
                 this.events = data;
@@ -190,16 +205,16 @@ export class MonthCalendarPage {
         });
     }
     
-    getSpecialDays(selectDay) {
+    getSpecialDays(selectedDay) {
          return new Promise(resolve => {
-            this.selectDay = selectDay;
-            let startTime = moment(selectDay).unix();
-            let endTime = moment(selectDay).add(1, 'd').subtract('seconds', 1).unix();
+            this.selectedDay = selectedDay;
+            let startTime = moment(selectedDay).unix();
+            let endTime = moment(selectedDay).add(1, 'd').subtract('seconds', 1).unix();
             
             this.searchHolidaysRequires.start = startTime;
             this.searchHolidaysRequires.end = endTime;
 
-            this.scheduleService.getSpecialDays(this.searchHolidaysRequires).then(data => {
+            this.scheduleService.getSpecialDaysInSelectedDay(this.searchHolidaysRequires, this.selectedDay).then(data => {
                 this.specialDays = data;
                 resolve("true");
             });
