@@ -105,6 +105,12 @@
         },
         "schedule": {
             "title": "日程",
+            "button": {
+                "dateTime": {
+                    "cancel": "取消",
+                    "done": "设定"
+                }
+            },
             "facilities": {
                 "title": "设施一览",
                 "today": "今天"

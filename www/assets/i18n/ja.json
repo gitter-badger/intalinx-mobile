@@ -104,6 +104,12 @@
         },
         "schedule": {
             "title": "スケジュール",
+            "button": {
+                "dateTime": {
+                    "cancel": "キャンセル",
+                    "done": "選択"
+                }
+            },
             "facilities": {
                 "title": "施設一覧",
                 "today": "今日"

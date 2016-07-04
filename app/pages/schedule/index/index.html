@@ -16,7 +16,8 @@
         </button>
     </ion-buttons>
     <ion-item class="display-year-month">
-        <ion-datetime displayFormat="YYYY/MM" min={{minDisplayDate}} max={{maxDisplayDate}} (change)="changeCalendar($event)" [(ngModel)]="yearMonth"></ion-datetime>
+        <ion-datetime displayFormat="YYYY/MM" min={{minDisplayDate}} max={{maxDisplayDate}} (change)="changeCalendar($event)" [(ngModel)]="yearMonth"
+        cancelText='{{ "app.schedule.button.dateTime.cancel" | translate }}' doneText='{{ "app.schedule.button.dateTime.done" | translate }}'></ion-datetime>
     </ion-item>
     <ion-buttons end>
         <button class="next-month" (click)="nextMonth()">
@@ -36,18 +37,21 @@
     </ion-row>
 </ion-toolbar>
 <ion-content class="month-calendar">
-    <ion-slides #calendarSlides (willChange)="changeMonth($event)" [options]="calendarSlideOptions">
+    <div class="loading" [style.display]="isHtmlLoadCompleted ? 'none' : 'block'">
+        <ion-spinner name="dots"></ion-spinner>
+    </div>
+    <ion-slides #calendarSlides (willChange)="changeMonth($event)" [options]="calendarSlideOptions" [style.display]="isHtmlLoadCompleted ? 'block' : 'none'">
         <ion-slide class="calendar" *ngFor="let n of numbers">
             <ion-grid>
                 <ion-row *ngFor="let week of calendar">
-                    <ion-col *ngFor="let day of week" (mouseover)="searchEventsBySelectedDay(day.format('YYYY/MM/D'))">
+                    <ion-col *ngFor="let day of week" (mouseover)="searchEventsAndSpecialDaysBySelectedDay(day.format('YYYY/MM/D'))">
                         <div class="day-default" [ngClass]="{'day-not-this-month': day.format('YYYY-MM')!=yearMonth,
                             'day-today': day.format('YYYY/MM/D')==today,
                             'weekends': day.format('d')==6 || day.format('d')==0,
                             'hover': day.format('YYYY/MM/D')==selectedDay}">
                             {{day.format('D')}}
                         </div>
-                        <ion-badge class="day-has-events" [style.visibility]="day.format('YYYY-MM')==yearMonth && days.includes(day.format('D')) ? 'visible' : 'hidden'">
+                        <ion-badge class="day-has-events" [style.visibility]="day.format('YYYY-MM')==yearMonth && daysOfEvents.includes(day.format('D')) ? 'visible' : 'hidden'">
                         </ion-badge>
                     </ion-col>
                 </ion-row>
@@ -55,7 +59,10 @@
         </ion-slide>
     </ion-slides>
     <ion-scroll class="events" scrollY="true">
-        <ion-list>
+        <div class="loading" [style.display]="isEventLoadCompleted==false ? 'block' : 'none'">
+            <ion-spinner name="dots"></ion-spinner>
+        </div>
+        <ion-list [style.display]="isEventLoadCompleted==false ? 'none' : 'block'">
             <ion-item *ngFor="let specialDay of specialDays">
                 <ion-row>
                     <ion-col text-right width-20 class="border-right-solid" [ngClass]="{'border-right-green': specialDay.type=='JP',
@@ -77,6 +84,9 @@
                     <ion-col width-10></ion-col>
                 </ion-row>
             </ion-item>
+            <!--<ion-item [style.display]="events&&events.length==0 && specialDays&&specialDays.length==0 ? 'block' : 'none'">
+                イベントはありません
+            </ion-item>-->
         </ion-list>
     </ion-scroll>
 </ion-content>

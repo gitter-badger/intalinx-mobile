@@ -104,6 +104,12 @@
         },
         "schedule": {
             "title": "Schedule",
+            "button": {
+                "dateTime": {
+                    "cancel": "Cancel",
+                    "done": "Done"
+                }
+            },
             "facilities": {
                 "title": "Facilities",
                 "today": "Today"

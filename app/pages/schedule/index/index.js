@@ -38,7 +38,7 @@ export class ScheduleIndexPage {
         this.userService = userService;
 
         this.weekdays = moment.weekdaysMin(true);
-        // 日本每周第一天是周一，中国和英国等每周第一天为周天
+        // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
         if (this.app.userLang == "ja" || this.app.userLang == "ja-jp") {
             this.isFirstDayMonday = true;
             let sunday = this.weekdays[0];
@@ -54,8 +54,6 @@ export class ScheduleIndexPage {
         //this month
         let firstDateWeek = moment(this.yearMonth);
         this.selectedDay = this.today;
-        
-        this.days = new Array();
         
         this.searchEventsRequires = {
             "categoryID":  null,
@@ -76,6 +74,7 @@ export class ScheduleIndexPage {
             "start": null,
             "end": null
         }
+        // let userId =this.app.user.userId;
         this.userService.getUserId().then(userId => {
             this.searchEventsRequires.userId = userId;
             this.getLocalsFromSetting().then(local => {
@@ -121,6 +120,7 @@ export class ScheduleIndexPage {
     }
     
     showCalendar(firstDateWeek) {
+        this.daysOfEvents = new Array();
         //the quantity of days in selected month
         let daysInMonth = firstDateWeek.daysInMonth();
         //the weekday of the first day on this month
@@ -130,7 +130,7 @@ export class ScheduleIndexPage {
         //calendar
         let calendar = [];
         
-        // 日本每周第一天是周一，中国和英国等每周第一天为周天
+        // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
         let cursor = 0;
         if (this.isFirstDayMonday && this.isFirstDayMonday == true) {
             cursor = 1; 
@@ -155,14 +155,19 @@ export class ScheduleIndexPage {
         
         this.moment = moment().format("HH:mm");
         
-        this.searchEventsBySelectedDay(this.selectedDay).then(data =>{
+        this.isHtmlLoadCompleted = true;
+        
+        this.searchEventsAndSpecialDaysBySelectedDay(this.selectedDay).then(data =>{
             if (data=="true") {
                 this.searchEventsByDisplayedMonth();
             }
         });
     }
     
-    searchEventsBySelectedDay(selectedDay) {
+    searchEventsAndSpecialDaysBySelectedDay(selectedDay) {
+        this.specialDays = [];
+        this.events == [];
+        this.isEventLoadCompleted = false;
          return new Promise(resolve => {
             this.selectedDay = selectedDay;
             let startTime = moment(selectedDay).unix();
@@ -175,6 +180,7 @@ export class ScheduleIndexPage {
 
             this.scheduleService.searchEventsBySelectedDay(this.searchEventsRequires).then(data => {
                 this.events = data;
+                this.isEventLoadCompleted = true;
                 resolve("true");
             });
         });
@@ -191,7 +197,7 @@ export class ScheduleIndexPage {
  
             this.scheduleService.searchSpecialDaysByDisplayedMonth(this.searchHolidaysRequires).then(specialDays => {
                 eventsDays = eventsDays.concat(specialDays);
-                this.days = Array.from(new Set(eventsDays));
+                this.daysOfEvents = Array.from(new Set(eventsDays));
             });
         });
     }
