@@ -30,8 +30,8 @@
             </button>
             <span class="from-to-text" [style.display]="isMobileAndVertical ? 'none' : 'block'">-</span>
             <!-- using the css disabled of button to css to, just change the opacity from 0.5 to 0.9. -->
-            <button clear class="to" [style.display]="isMobileAndVertical ? 'none' : 'block'">
-            <ion-datetime disabled displayFormat="YYYY/MM/DD" [(ngModel)] = "thirdDate.date"></ion-datetime>
+            <button clear disabled class="to" [style.display]="isMobileAndVertical ? 'none' : 'block'">
+            <ion-datetime displayFormat="YYYY/MM/DD" [(ngModel)] = "thirdDate.date"></ion-datetime>
             </button>
         </div>
         <button item-right clear (click)="pickOneDayAfter()">

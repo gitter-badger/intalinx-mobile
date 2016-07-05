@@ -72,7 +72,7 @@ export class FacilitiesPage {
         isSaturday: false,
         isSunday: false
     };
-    this.firstDate.showDate = moment(this.firstDate.date).format("YYYY/MM/DD") + "(" + moment(this.firstDate.date).format("dd") + ")";
+    this.firstDate.showDate = moment(this.firstDate.date).format("YYYY/MM/DD") + "(" + moment(this.firstDate.date).format("ddd") + ")";
     this.secondDate = {
         date: moment.unix(this.giStart).add(1, "d").format("YYYY-MM-DD"),
         showDate: "",
@@ -80,7 +80,7 @@ export class FacilitiesPage {
         isSaturday: false,
         isSunday: false
     }
-    this.secondDate.showDate = moment(this.secondDate.date).format("YYYY/MM/DD") + "(" + moment(this.secondDate.date).format("dd") + ")";
+    this.secondDate.showDate = moment(this.secondDate.date).format("YYYY/MM/DD") + "(" + moment(this.secondDate.date).format("ddd") + ")";
     this.thirdDate = {
         date: moment.unix(this.giStart).add(2, "d").format("YYYY-MM-DD"),
         showDate: "",
@@ -88,7 +88,7 @@ export class FacilitiesPage {
         isSaturday: false,
         isSunday: false
     };
-    this.thirdDate.showDate = moment(this.thirdDate.date).format("YYYY/MM/DD") + "(" + moment(this.thirdDate.date).format("dd") + ")";
+    this.thirdDate.showDate = moment(this.thirdDate.date).format("YYYY/MM/DD") + "(" + moment(this.thirdDate.date).format("ddd") + ")";
     
     // this.events = [];
     
@@ -350,7 +350,7 @@ export class FacilitiesPage {
   }
   
   changeFirstDate() {
-      this.firstDate.showDate = moment(this.firstDate.date).format("YYYY/MM/DD") + "(" + moment(this.firstDate.date).format("dd") + ")";
+      this.firstDate.showDate = moment(this.firstDate.date).format("YYYY/MM/DD") + "(" + moment(this.firstDate.date).format("ddd") + ")";
       this.standardMoment = moment().unix();
       this.isFirstLoad = true;
       this.isLoadCompleted = false;
@@ -360,8 +360,8 @@ export class FacilitiesPage {
       
       this.secondDate.date = moment.unix(this.giStart).add(1, "d").format("YYYY-MM-DD");
       this.thirdDate.date = moment.unix(this.giStart).add(2, "d").format("YYYY-MM-DD");
-      this.secondDate.showDate = moment(this.secondDate.date).format("YYYY/MM/DD") + "(" + moment(this.secondDate.date).format("dd") + ")";
-      this.thirdDate.showDate = moment(this.thirdDate.date).format("YYYY/MM/DD") + "(" + moment(this.thirdDate.date).format("dd") + ")";
+      this.secondDate.showDate = moment(this.secondDate.date).format("YYYY/MM/DD") + "(" + moment(this.secondDate.date).format("ddd") + ")";
+      this.thirdDate.showDate = moment(this.thirdDate.date).format("YYYY/MM/DD") + "(" + moment(this.thirdDate.date).format("ddd") + ")";
       
       this.getEvents();
       this.getSpecialDays();
