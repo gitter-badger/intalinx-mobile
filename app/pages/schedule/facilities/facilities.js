@@ -48,6 +48,13 @@ export class FacilitiesPage {
                          "rgb(105, 105, 105)", "rgb(249, 191, 59)"];
     // 横向きモードの判断
     this.isLandscape = platform.isLandscape();
+    this.isMobile = platform.is("mobile");
+    this.isMobileAndVertical = false;
+    if(this.isMobile && !this.isLandscape) {
+        this.isMobileAndVertical = true;
+    }
+    this.showStableDate = false;
+    
     // 今登録しているユーザーが管理人かどうかを判断する
     this.isAdmin = false;
     this.locale = "";
@@ -60,22 +67,28 @@ export class FacilitiesPage {
     // ここで注意しなければならないことはion-datetimeが「/」で区別する時間格式を認識できません。
     this.firstDate = {
         date: moment.unix(this.giStart).format("YYYY-MM-DD"),
+        showDate: "", 
         isSepcialDay: false,
         isSaturday: false,
         isSunday: false
     };
+    this.firstDate.showDate = moment(this.firstDate.date).format("YYYY/MM/DD") + "(" + moment(this.firstDate.date).format("dd") + ")";
     this.secondDate = {
         date: moment.unix(this.giStart).add(1, "d").format("YYYY-MM-DD"),
+        showDate: "",
         isSepcialDay: false,
         isSaturday: false,
         isSunday: false
     }
+    this.secondDate.showDate = moment(this.secondDate.date).format("YYYY/MM/DD") + "(" + moment(this.secondDate.date).format("dd") + ")";
     this.thirdDate = {
         date: moment.unix(this.giStart).add(2, "d").format("YYYY-MM-DD"),
+        showDate: "",
         isSepcialDay: false,
         isSaturday: false,
         isSunday: false
     };
+    this.thirdDate.showDate = moment(this.thirdDate.date).format("YYYY/MM/DD") + "(" + moment(this.thirdDate.date).format("dd") + ")";
     
     // this.events = [];
     
@@ -83,10 +96,10 @@ export class FacilitiesPage {
     this.specialDays = new Array();
     
     this.facilities = new Array();
-    this.dateTimes = ["12 am","1 am","2 am","3 am","4 am","5 am", 
-                      "6 am","7 am","8 am","9 am","10 am","11 am", 
-                      "12 pm","1 pm","2 pm","3 pm","4 pm","5 pm", 
-                      "6 pm", "7 pm","8 pm","9 pm","10 pm","11 pm"];
+    this.dateTimes = ["00:00","01:00","02:00","03:00","04:00","05:00", 
+                      "06:00","07:00","08:00","09:00","10:00","11:00", 
+                      "12:00","13:00","14:00","15:00","16:00","17:00", 
+                      "18:00", "19:00","20:00","21:00","22:00","23:00"];
      // 初期データ取得
      this.initData();
      
@@ -101,6 +114,8 @@ export class FacilitiesPage {
      this.isNeedShowNowLine = false;
      this.headerHeight = 100;
      this.navHeaderHeight = 80;
+     this.animateId = "";
+     this.hadScrolled = 0;
   }
   
   onPageLoaded () {
@@ -122,6 +137,11 @@ export class FacilitiesPage {
           this.getSpecialDays();
       });
       this.getEvents();
+      // debugger
+      // let orientation = window.screen.orientation;
+      
+      // window.screen.lockOrientation("landscape-primary");
+      // window.screen.orientation.type = "landscape-primary";
   }
   
   getEvents() {
@@ -234,7 +254,7 @@ export class FacilitiesPage {
   regularRefresh() {
       this.now = moment().unix();
       let pastTime = this.now - this.standardMoment;
-      var nowLine = document.querySelector(".facilities .contents .date-grid-container .now-line");
+      var nowLine = document.querySelector(".facilities .contents .data-grid-container .now-line");
       nowLine.style.marginLeft = this.calculateTimeSpece(this.giStart, this.now);
       
       if(this.isFirstLoad) {
@@ -273,10 +293,27 @@ export class FacilitiesPage {
       if(transFromNow > transverseScroll && transFromNow < this.wholeDataGrid) {
           transverseScroll = transFromNow;
       }
-      var dateGrid = document.querySelector(".facilities .contents .date-grid-container");
-      dateGrid.scrollLeft = transverseScroll;
+      var dataGrid = document.querySelector(".facilities .contents .data-grid-container");
+      // dataGrid.scrollLeft = transverseScroll;
+      
+      // dataGrid.animate({scrollLeft : transverseScroll}, 500);
+      // dataGrid.animate(500, style({scrollLeft : transverseScroll}));
+      this.animateId = this.addScrollLeftInterval(this, transverseScroll);
   }
-  
+  addScrollLeftInterval(that, transverseScroll) {
+      return setInterval(function() {
+          that.animateScrollLeft(transverseScroll);
+      }, 1);
+  }
+  animateScrollLeft(scrollWidth) {
+      var dataGrid = document.querySelector(".facilities .contents .data-grid-container");
+      if(this.hadScrolled >= scrollWidth) {
+          clearInterval(this.animateId);
+      } else {
+          this.hadScrolled += 10;
+          dataGrid.scrollLeft = this.hadScrolled;
+      }
+  }
   
   calculateTimeSpece(startMoment, endMoment) {
       let widthForPeroid = 0;
@@ -293,7 +330,7 @@ export class FacilitiesPage {
 //       debugger
 //       this.setTransverseScroll();
 //   }
-  
+
   ngAfterViewInit() {
       this.pageContent.addScrollListener(this.scrollHeader(this));
   }
@@ -313,6 +350,7 @@ export class FacilitiesPage {
   }
   
   changeFirstDate() {
+      this.firstDate.showDate = moment(this.firstDate.date).format("YYYY/MM/DD") + "(" + moment(this.firstDate.date).format("dd") + ")";
       this.standardMoment = moment().unix();
       this.isFirstLoad = true;
       this.isLoadCompleted = false;
@@ -322,6 +360,8 @@ export class FacilitiesPage {
       
       this.secondDate.date = moment.unix(this.giStart).add(1, "d").format("YYYY-MM-DD");
       this.thirdDate.date = moment.unix(this.giStart).add(2, "d").format("YYYY-MM-DD");
+      this.secondDate.showDate = moment(this.secondDate.date).format("YYYY/MM/DD") + "(" + moment(this.secondDate.date).format("dd") + ")";
+      this.thirdDate.showDate = moment(this.thirdDate.date).format("YYYY/MM/DD") + "(" + moment(this.thirdDate.date).format("dd") + ")";
       
       this.getEvents();
       this.getSpecialDays();
@@ -341,23 +381,41 @@ export class FacilitiesPage {
   scrollEvents() {
       this.standardMoment = moment().unix();
       var daysPeriod = document.querySelector(".facilities .days-period-container");
-      var dateGrid = document.querySelector(".facilities .contents .date-grid-container");
-      daysPeriod.scrollLeft = dateGrid.scrollLeft;
+      var dataGrid = document.querySelector(".facilities .contents .data-grid-container"); 
+      var stableDate = document.querySelector(".facilities .header .stable-date"); 
+      let scrollToLeft = dataGrid.scrollLeft; 
+      daysPeriod.scrollLeft = scrollToLeft;
+      if(scrollToLeft > 100 && scrollToLeft < 2300) {
+          this.showStableDate = true;
+          stableDate.innerHTML = this.firstDate.showDate;
+      } else if(scrollToLeft > 2500 && scrollToLeft < 4700) {
+          this.showStableDate = true;
+          stableDate.innerHTML = this.secondDate.showDate;
+      } else if(scrollToLeft > 4900) {
+          this.showStableDate = true;
+          stableDate.innerHTML = this.thirdDate.showDate;
+      }  else {
+          this.showStableDate = false;
+      }
   }
   
   scrollHeader(that) {
       return function() {
           that.standardMoment = moment().unix();
+          var pageDataBody = document.querySelector(".facilities .contents .body");
           var contentsHeader = document.querySelector(".facilities .contents .header");
-          var contentsHeader = document.querySelector(".facilities .contents .header");
+          var contentsHeaderFrame = document.querySelector(".facilities .header-frame"); 
           if (this.scrollTop > that.headerHeight) {
               contentsHeader.style.top=that.navHeaderHeight + "px";
               contentsHeader.style.position= "fixed";
-              contentsHeader.style.background = "#FFFFFF";
+              contentsHeader.style.background = "white";
+              contentsHeaderFrame.style.width = pageDataBody.offsetWidth + "px";
+              // contentsHeader.style.width = "inherit";
               // z-indexを設定すると、エラーを報告します。
-              // contentsHeader.style.z-index = 10;
+              contentsHeader.style.zIndex = 10;
           } else {
               contentsHeader.removeAttribute("style");
+              contentsHeaderFrame.style.width = "100%";
           }
       }       
   }
