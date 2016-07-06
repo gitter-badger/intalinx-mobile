@@ -1,5 +1,11 @@
 {
   "name": "intalinx-mobile",
   "app_id": "",
-  "v2": true
+  "v2": true,
+  "proxies": [
+    {
+      "path": "/home/InternalSystem",
+      "proxyUrl": "http://iscsys.intasect.co.jp/home/InternalSystem"
+    }
+  ]
 }

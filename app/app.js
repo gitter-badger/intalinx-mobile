@@ -7,12 +7,12 @@ import {LoginPage} from './pages/login/login';
 @App({
     templateUrl: 'build/app.html', //'<ion-nav [root]="rootPage"></ion-nav>',
     config: {
-        // "BASE_URL": "http://www.intalinx.cn/home/intalinxcloud/",
-        "BASE_URL": "http://192.168.11.29/home/InternalSystem/",
+        "BASE_URL": "http://localhost:8100/home/InternalSystem/",
+        // "BASE_URL": "http://iscsys.intasect.co.jp/home/InternalSystem/",
         "GATEWAY_URL": "com.eibus.web.soap.Gateway.wcp",
         "PRE_LOGIN_INFO_URL": "com.eibus.sso.web.authentication.PreLoginInfo.wcp",
         "SAMLART_NAME": "SAMLart",
-        "SAML_ARTIFACT_STORAGE_NAME": "defaultinst_SAMLart",
+        "SAML_ARTIFACT_STORAGE_NAME": "production_SAMLart",
         "USER_AVATAR_IMAGE_URL": "img/",
         "USER_AVATAR_DEFAULT_IMAGE": "default",
         "PGYER" : {
