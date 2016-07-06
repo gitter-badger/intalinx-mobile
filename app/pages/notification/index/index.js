@@ -53,10 +53,12 @@ export class NotificationIndexPage {
         let position = this.notificationListForTop.length;
         let isNeedRegistNotExistsReadStatus = false;
         this.notificationService.getNotificationListForTop(position, isNeedRegistNotExistsReadStatus).then(data => {
+            infiniteScroll.complete();
             if (data && data[0]) {
                 this.notificationListForTop = this.notificationListForTop.concat(data);
+            } else {
+                infiniteScroll.enable(false);
             }
-            infiniteScroll.complete();
         });
     }
 

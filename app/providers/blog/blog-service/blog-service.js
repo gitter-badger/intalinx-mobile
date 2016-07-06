@@ -39,10 +39,7 @@ export class BlogService {
         }
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/get_community_list_for_top_request.xml').then(req => {
-
-
                 let objRequest = this.util.parseXml(req);
-
                 let cursorNode = this.util.selectXMLNode(objRequest, ".//*[local-name()='cursor']");
                 this.util.setXMLAttribute(cursorNode, "", "position", position);
                 this.util.setXMLAttribute(cursorNode, "", "numRows", rowsPerpage);
@@ -59,12 +56,12 @@ export class BlogService {
                         communities.push(this.util.xml2json(communityOutputs[i]).CommunityOutput);
                     }
 
-                    communities.forEach(function(element) {
-                        if (element.createUserAvatar.toString().indexOf("data:image") != 0) {
-                            element.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                    communities.forEach(function(community) {
+                        if (!community.createUserAvatar || community.createUserAvatar.toString().indexOf("data:image") != 0) {
+                            community.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
                         }
-                        this.util.fromNow(element.publishStartDate).then(data => {
-                            element.publishStartDate = data;
+                        this.util.fromNow(community.publishStartDate).then(data => {
+                            community.publishStartDate = data;
                         });
                     }, this);
 
@@ -178,12 +175,12 @@ export class BlogService {
                     for (let i = 0; i < rreplyContentOutputs.length; i++) {
                         replyContents.push(this.util.xml2json(rreplyContentOutputs[i]).ReplyContentOutput);
                     }
-                    replyContents.forEach(function(element) {
-                        if (element.userAvatar.toString().indexOf("data:image") != 0) {
-                            element.userAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                    replyContents.forEach(function(replayContent) {
+                        if (!replayContent.userAvatar || replayContent.userAvatar.toString().indexOf("data:image") != 0) {
+                            replayContent.userAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
                         }
-                        this.util.fromNow(element.createDate).then(data => {
-                            element.createDate = data;
+                        this.util.fromNow(replayContent.createDate).then(data => {
+                            replayContent.createDate = data;
                         });
                     }, this);
                     let cursor = this.util.selectXMLNode(objResponse, ".//*[local-name()='cursor']");

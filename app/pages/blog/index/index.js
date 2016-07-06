@@ -59,10 +59,12 @@ export class BlogIndexPage {
         let position = this.communityListForTop.length;
         let isNeedRegistNotExistsReply = false;
         this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
+            infiniteScroll.complete();
             if (data && data[0]) {
                 this.communityListForTop = this.communityListForTop.concat(data);
+            } else {
+                infiniteScroll.enable(false);
             }
-            infiniteScroll.complete();
         });
     }
 
