@@ -37,10 +37,10 @@
     </ion-row>
 </ion-toolbar>
 <ion-content class="month-calendar">
-    <div class="loading" [style.display]="isHtmlLoadCompleted ? 'none' : 'block'">
+    <div class="loading" [hidden]="isHtmlLoadCompleted==true">
         <ion-spinner name="dots"></ion-spinner>
     </div>
-    <ion-slides #calendarSlides (willChange)="changeMonth($event)" [options]="calendarSlideOptions" [style.display]="isHtmlLoadCompleted ? 'block' : 'none'">
+    <ion-slides #calendarSlides (willChange)="changeMonth($event)" [options]="calendarSlideOptions" [hidden]="isHtmlLoadCompleted==false">
         <ion-slide class="calendar" *ngFor="let n of numbers">
             <ion-grid>
                 <ion-row *ngFor="let week of calendar">
@@ -59,10 +59,10 @@
         </ion-slide>
     </ion-slides>
     <ion-scroll class="events" scrollY="true">
-        <div class="loading" [style.display]="isEventLoadCompleted==false ? 'block' : 'none'">
+        <div class="loading" [hidden]="isEventLoadCompleted!=false">
             <ion-spinner name="dots"></ion-spinner>
         </div>
-        <ion-list [style.display]="isEventLoadCompleted==false ? 'none' : 'block'">
+        <ion-list [hidden]="isEventLoadCompleted==false">
             <ion-item *ngFor="let specialDay of specialDays">
                 <ion-row>
                     <ion-col text-right width-20 class="border-right-solid" [ngClass]="{'border-right-green': specialDay.type=='JP',
@@ -73,12 +73,12 @@
                     <ion-col width-70>{{specialDay.specialDayName}}</ion-col>
                 </ion-row>
             </ion-item>
-            <ion-item *ngFor="let event of events" (click)="openDetail(event)">
+            <ion-item *ngFor="let event of events" (click)="openEventDetail(event)">
                 <ion-row [ngClass]="{'event-in-past-time': selectedDay==today&&event.isAllDay!='true'&&moment>event.endTime}">
                     <ion-col text-right width-20 class="border-right-solid border-right-default">
-                        <ion-row [style.display]="event.isAllDay=='true' ? 'block' : 'none'">{{ "app.schedule.index.allDay" | translate }}</ion-row>
-                        <ion-row [style.display]="event.isAllDay=='true' ? 'none' : 'block'">{{event.startTime}}</ion-row>
-                        <ion-row [style.display]="event.isAllDay=='true' ? 'none' : 'block'">{{event.endTime}}</ion-row>
+                        <ion-row [hidden]="event.isAllDay!='true'">{{ "app.schedule.index.allDay" | translate }}</ion-row>
+                        <ion-row [hidden]="event.isAllDay=='true'">{{event.startTime}}</ion-row>
+                        <ion-row [hidden]="event.isAllDay=='true'">{{event.endTime}}</ion-row>
                     </ion-col>
                     <ion-col width-70>{{event.title}}</ion-col>
                     <ion-col width-10></ion-col>

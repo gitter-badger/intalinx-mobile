@@ -7,8 +7,9 @@ import {TranslatePipe} from 'ng2-translate/ng2-translate';
 import {ScheduleService} from '../../../providers/schedule/schedule-service/schedule-service';
 import {UserService} from '../../../providers/user-service/user-service';
 
+import {EventDetailPage} from '../event-detail/event-detail';
+
 import {Util} from '../../../utils/util';
-import {DateUtil} from '../../../utils/dateutil';
 
 @Page({
     templateUrl: 'build/pages/schedule/index/index.html',
@@ -268,4 +269,10 @@ export class ScheduleIndexPage {
 		}
 		return numbers;
 	}
+    
+    openEventDetail(event) {
+        this.nav.push(EventDetailPage, {
+            "event": event
+        });
+    }
 }
