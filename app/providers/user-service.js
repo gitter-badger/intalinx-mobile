@@ -1,10 +1,5 @@
-import {Injectable, Inject} from '@angular/core';
 import {Http} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/Rx';
-
 import {IonicApp, NavController, Alert} from 'ionic-angular';
-
 import {Util} from '../utils/util';
 import {SSO} from '../utils/sso';
 
