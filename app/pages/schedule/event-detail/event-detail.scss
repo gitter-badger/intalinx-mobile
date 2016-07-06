@@ -1,0 +1,16 @@
+.event-detail {
+    .title {
+        display: block;
+        line-height: 1.2;
+        font-size: 2.0rem;
+        color: #222;
+        font-weight: bold;
+        white-space: pre-wrap;
+    }
+    
+    .participant-name {
+        float: left;
+        width: 33%;
+        text-align: left;
+    }
+}

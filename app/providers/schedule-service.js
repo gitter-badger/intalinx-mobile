@@ -242,6 +242,7 @@ export class ScheduleService {
                         startTime = "00:00";
                     }
                     let event = {
+                        eventID: eventOutput.eventID,
                         startTime: startTime,
                         endTime: endTime,
                         title: eventOutput.title,
@@ -307,6 +308,137 @@ export class ScheduleService {
                     }
                 }
                 resolve(specialDays);
+            });
+        });
+    }
+    
+    getEventByEventId(eventId) {
+       if (this.data) {
+            // already loaded data
+            return Promise.resolve(this.data);
+        }
+        return new Promise(resolve => {
+            // this.util.getRequestXml('./assets/requests/schedule/get_event_by_event_id.xml').then(req => {
+            //     let objRequest = this.util.parseXml(req);
+            //     this.util.setNodeText(objRequest, ".//*[local-name()='eventID']", eventId);
+                
+            //     req = this.util.xml2string(objRequest);
+                
+                // this.util.callCordysWebservice(req).then(data => {
+                    
+                    // let objResponse = this.util.parseXml(data);
+                    // let eventOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='EventOutput']");
+                    // let event = this.util.xml2json(eventOutput).EventOutput;
+                    // resolve(event);
+                // });
+        //     });
+        // this.util.getRequestXml('./mocks/scheduleservice/events.json').then(req => {
+        //         let objResponse = this.util.parseXml(req);
+        //        let eventOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='EventOutput']");
+               
+        //        let events = new Array();
+        //        for (let i = 0; i < eventOutputs.length; i++) {
+        //             let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
+        //             let event = {
+        //                  startTime: moment.unix(eventOutput.startTime).format("HH:MM"),
+        //                 endTime: moment.unix(eventOutput.endTime).format("HH:MM"),
+        //                 title: eventOutput.title
+        //              }
+        //                 events.push(event);             
+        //             }
+        //            resolve(events);
+        //      });
+        
+            this.util.getRequestXml('./mocks/scheduleservice/event.json').then(data => {
+                let objRequest = this.util.parseXml(data);
+                let eventOutput = this.util.selectXMLNode(objRequest, ".//*[local-name()='EventOutput']");
+                let event = this.util.xml2json(eventOutput).EventOutput;
+                resolve(event);
+            });
+        });
+        
+    }
+    
+    getCategoryList() {
+        if (this.data) {
+            // already loaded data
+            return Promise.resolve(this.data);
+        }
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/schedule/get_category_list.xml').then(req => {
+                let objRequest = this.util.parseXml(req);
+                req = this.util.xml2string(objRequest);
+
+                this.util.callCordysWebservice(req).then(data => {
+                    let objResponse = this.util.parseXml(data);
+                    let categoryOutput  = this.util.selectXMLNode(objResponse, ".//*[local-name()='CategoryOutput']");
+                    let categories = this.util.xml2json(categoryOutput).CategoryOutput;
+                    resolve(categories);
+                });
+            });
+        });
+    }
+    
+    getCategoryNameByCategoryId(categoryId) {
+        if (this.data) {
+            // already loaded data
+            return Promise.resolve(this.data);
+        }
+        return new Promise(resolve => {
+            this.getCategoryList().then(data => {
+                let fixedCategories = data.FixedCategory;
+                let otherCategories = data.OtherCategoryList;
+                let categories = data.FixedCategory.concat(data.OtherCategoryList);
+                let categoryName;
+                categories.forEach(function(element) {
+                    if (element.categoryID == categoryId) {
+                        categoryName = element.categoryName;
+                    }
+                }, this);
+                resolve(categoryName);
+            });
+        });
+    }
+    
+    getDeviceList() {
+        if (this.data) {
+            // already loaded data
+            return Promise.resolve(this.data);
+        }
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/schedule/get_device_list.xml').then(req => {
+                let objRequest = this.util.parseXml(req);
+                req = this.util.xml2string(objRequest);
+debugger
+                this.util.callCordysWebservice(req).then(data => {
+                    let objResponse = this.util.parseXml(data);
+                    let deviceOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='DeviceOutput']");
+                    let device = this.util.xml2json(deviceOutput).DeviceOutput;
+                    resolve(device);
+                });
+            });
+        });
+    }
+    
+    getDevicesByDeviceIds(deviceIds) {
+        if (this.data) {
+            // already loaded data
+            return Promise.resolve(this.data);
+        }
+        return new Promise(resolve => {
+            this.getDeviceList().then(data => {
+                let deviceNames = new Array();
+                debugger
+                // let fixedCategories = data.FixedCategory;
+                // let otherCategories = data.OtherCategoryList;
+                // let categories = data.FixedCategory.concat(data.OtherCategoryList);
+                // let categoryName;
+                // categories.forEach(function(element) {
+                //     if (element.categoryID == categoryId) {
+                //         categoryName = element.categoryName;
+                //     }
+                // }, this);
+                resolve(deviceNames);
             });
         });
     }
