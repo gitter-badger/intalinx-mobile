@@ -4,8 +4,8 @@ import {NgForm, ngClass} from '@angular/common';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
-import {ScheduleService} from '../../../providers/schedule/schedule-service/schedule-service';
-import {UserService} from '../../../providers/user-service/user-service';
+import {ScheduleService} from '../../../providers/schedule-service';
+import {UserService} from '../../../providers/user-service';
 
 import {EventDetailPage} from '../event-detail/event-detail';
 

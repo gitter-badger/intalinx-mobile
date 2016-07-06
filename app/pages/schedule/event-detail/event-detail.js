@@ -2,7 +2,7 @@ import {Page, NavController, NavParams} from 'ionic-angular';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
-import {ScheduleService} from '../../../providers/schedule/schedule-service/schedule-service';
+import {ScheduleService} from '../../../providers/schedule-service';
 
 import {Util} from '../../../utils/util';
 
