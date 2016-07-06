@@ -7,12 +7,6 @@ import {IonicApp, NavController, Alert} from 'ionic-angular';
 
 import {Util} from '../../../utils/util';
 
-/*
-  Generated class for the AppsService provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 export class NotificationService {
 
     static get parameters() {
@@ -34,13 +28,11 @@ export class NotificationService {
     getNotificationListForTop(position, isNeedRegistNotExistsReadStatus) {
         let rowsPerpage = 10;
         if (this.data) {
-            // already loaded data
+            // データはもうロードされた。
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/get_notification_list_for_top_request.xml').then(req => {
-
-
+            this.util.getRequestXml('./assets/requests/notification/get_notification_list_for_top_request.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
 
                 let cursorNode = this.util.selectXMLNode(objRequest, ".//*[local-name()='cursor']");
@@ -74,13 +66,14 @@ export class NotificationService {
         });
     }
 
+    // まだ読まない通知に計数を取得する
     getNotReadNotificationCountBySelf() {
         if (this.data) {
-            // already loaded data
+            // データはもうロードされた。
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/get_not_read_notification_count_by_self.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/notification/get_not_read_notification_count_by_self.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
                 req = this.util.xml2string(objRequest);
 
@@ -95,13 +88,14 @@ export class NotificationService {
         });
     }
 
+    // 通知IDに基づいて、通知詳細情報を取得する
     getNotificationDetailByNotificationID(notificationID) {
         if (this.data) {
-            // already loaded data
+            // データはもうロードされた。
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/get_notification_detail_by_notification_id_request.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/notification/get_notification_detail_by_notification_id_request.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
 
                 this.util.setNodeText(objRequest, ".//*[local-name()='notificationID']", notificationID);
@@ -125,10 +119,12 @@ export class NotificationService {
         });
     }
     
+    // 読むか読まないかの識別子を更新します。
     updateReadStatus(notificationID, status){
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/update_read_status.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/notification/update_read_status.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
+                
                 this.util.setNodeText(objRequest, ".//*[local-name()='notificationId']", notificationID);
                 this.util.setNodeText(objRequest, ".//*[local-name()='status']", status);
                 req = this.util.xml2string(objRequest);

@@ -7,12 +7,6 @@ import {IonicApp, NavController, Alert} from 'ionic-angular';
 
 import {Util} from '../../../utils/util';
 
-/*
-  Generated class for the AppsService provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 export class BlogService {
 
     static get parameters() {
@@ -34,11 +28,11 @@ export class BlogService {
     getCommunityListForTop(position, isNeedRegistNotExistsReply) {
         let rowsPerpage = 10;
         if (this.data) {
-            // already loaded data
+            // データはもうロードされた。
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/get_community_list_for_top_request.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/blog/get_community_list_for_top_request.xml').then(req => {
 
 
                 let objRequest = this.util.parseXml(req);
@@ -74,14 +68,15 @@ export class BlogService {
         });
     }
 
+    // 回復内容の追加
     insertReplyContent(comment) {
         let content = this.util.replaceHtmlTagCharacter(comment.content);
         if (this.data) {
-            // already loaded data
+            // データはもうロードされた。
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/insert_reply_content_request.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/blog/insert_reply_content_request.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
                 this.util.setNodeText(objRequest, ".//*[local-name()='communityID']", comment.communityID);
                 this.util.setNodeText(objRequest, ".//*[local-name()='content']", content);
@@ -98,13 +93,14 @@ export class BlogService {
         });
     }
 
+    // まだ読まないブログの計数を取得する
     getNotReadCommunityCountBySelf() {
         if (this.data) {
-            // already loaded data
+            // データはもうロードされた。
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/get_not_read_community_count_by_self.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/blog/get_not_read_community_count_by_self.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
                 req = this.util.xml2string(objRequest);
 
@@ -119,19 +115,18 @@ export class BlogService {
         });
     }
 
+    // ブログIDに基づいて、ブログ詳細を取得する
     getCommunityDetailByCommunityID(communityID) {
         if (this.data) {
-            // already loaded data
+            // データはもうロードされた。
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/get_community_detail_by_community_id_request.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/blog/get_community_detail_by_community_id_request.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
-
-                // this.util.setNodeText(objRequest, ".//communityID", communityID);
+                
                 this.util.setNodeText(objRequest, ".//*[local-name()='communityID']", communityID);
-
-
+                
                 req = this.util.xml2string(objRequest);
 
                 this.util.callCordysWebservice(req).then(data => {
@@ -142,6 +137,7 @@ export class BlogService {
                     if (!community.createUserAvatar || community.createUserAvatar.toString().indexOf("data:image") != 0) {
                         community.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
                     }
+                    
                     this.util.fromNow(community.createDate).then(data => {
                         community.createDate = data;
                     });
@@ -151,16 +147,17 @@ export class BlogService {
         });
     }
 
+    // ブログIDに基づいて、回復リストを取得する
     getReplyContentListByCommunityID(communityID, position) {
-
+        // 毎回取得回復の数量設定
         let rowsPerpage = 5;
 
-        if (this.data) {// already loaded data
+        if (this.data) {
+            // データはもうロードされた。
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/get_reply_content_list_by_community_id_request.xml').then(req => {
-
+            this.util.getRequestXml('./assets/requests/blog/get_reply_content_list_by_community_id_request.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
 
                 let cursorNode = this.util.selectXMLNode(objRequest, ".//*[local-name()='cursor']");
@@ -178,6 +175,7 @@ export class BlogService {
                     for (let i = 0; i < rreplyContentOutputs.length; i++) {
                         replyContents.push(this.util.xml2json(rreplyContentOutputs[i]).ReplyContentOutput);
                     }
+                    
                     replyContents.forEach(function(element) {
                         if (element.userAvatar.toString().indexOf("data:image") != 0) {
                             element.userAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
@@ -186,6 +184,7 @@ export class BlogService {
                             element.createDate = data;
                         });
                     }, this);
+                    
                     let cursor = this.util.selectXMLNode(objResponse, ".//*[local-name()='cursor']");
                     cursor = this.util.xml2json(cursor);
                     if (cursor && cursor.cursor) {
@@ -201,14 +200,16 @@ export class BlogService {
         });
     }
     
+    // 読みましたかどうかの識別子を更新します。
     updateReplyStatus(communityID, status){
         if (this.data) {
-            // already loaded data
+            // データはもうロードされた。
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/update_reply_status.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/blog/update_reply_status.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
+                
                 this.util.setNodeText(objRequest, ".//*[local-name()='communityID']", communityID);
                 this.util.setNodeText(objRequest, ".//*[local-name()='replystatus']", status);
                 req = this.util.xml2string(objRequest);
@@ -220,13 +221,14 @@ export class BlogService {
         });
     }
     
+    // 最新回復があるかどうかの識別子を更新します。
     updateNewReplyFlag(communityID, status) {
         if (this.data) {
-            // already loaded data
+            // データはもうロードされた。
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/update_new_reply_flag.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/blog/update_new_reply_flag.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
                 this.util.setNodeText(objRequest, ".//*[local-name()='communityID']", communityID);
                 this.util.setNodeText(objRequest, ".//*[local-name()='newReplyFlag']", status);
@@ -239,6 +241,7 @@ export class BlogService {
         });
     }
     
+    // 回復追加の前に回復内容について、チェックします。そして、追加した後のプロセス
     saveComment(comment) {
         return new Promise(resolve => {
             if (comment.content && this.util.deleteEmSpaceEnSpaceNewLineInCharacter(comment.content) != "") {
