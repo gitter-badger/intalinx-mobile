@@ -12,7 +12,10 @@ import {Util} from '../../../utils/util';
 
 @Page({
     templateUrl: 'build/pages/notification/index/index.html',
-    providers: [NotificationService, Util],
+    providers: [
+        NotificationService, 
+        Util
+    ],
     pipes: [TranslatePipe],
     queries: {
         pageContent: new ViewChild(Content)
@@ -53,7 +56,7 @@ export class NotificationIndexPage {
         let position = this.notificationListForTop.length;
         let isNeedRegistNotExistsReadStatus = false;
         this.notificationService.getNotificationListForTop(position, isNeedRegistNotExistsReadStatus).then(data => {
-            if (data && data[0]) {
+            if (data && data.lenght > 0) {
                 this.notificationListForTop = this.notificationListForTop.concat(data);
             }
             infiniteScroll.complete();

@@ -26,7 +26,7 @@
                 <div>{{commentCount}}</div>
             </button>
         </ion-item>
-        <div class="contents" [innerHTML]="content"></div>
+        <div class="contents" padding [innerHTML]="content"></div>
         <ion-list>
             <ion-item class="comment" *ngFor="let comment of comments">
                 <ion-item class="status">
@@ -50,6 +50,6 @@
 <button fab fab-right fab-bottom secondary [hidden]="!isLoadCompleted" (click)="addComment()">
     <ion-icon name="add"></ion-icon>
 </button>
-<button class="detail scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">
+<button class="blog-detail scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">
     <ion-icon name="arrow-up"></ion-icon>
 </button>
