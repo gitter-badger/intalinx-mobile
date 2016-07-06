@@ -24,11 +24,10 @@ export class NotificationService {
         this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
     }
 
-    // トップ画面について、ブログリストを取得します
     getNotificationListForTop(position, isNeedRegistNotExistsReadStatus) {
         let rowsPerpage = 10;
         if (this.data) {
-            // データはもうロードされた。
+            // already loaded data
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
@@ -66,10 +65,9 @@ export class NotificationService {
         });
     }
 
-    // まだ読まない通知に計数を取得する
     getNotReadNotificationCountBySelf() {
         if (this.data) {
-            // データはもうロードされた。
+            // already loaded data
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
@@ -88,10 +86,9 @@ export class NotificationService {
         });
     }
 
-    // 通知IDに基づいて、通知詳細情報を取得する
     getNotificationDetailByNotificationID(notificationID) {
         if (this.data) {
-            // データはもうロードされた。
+            // already loaded data
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
@@ -119,7 +116,6 @@ export class NotificationService {
         });
     }
     
-    // 読むか読まないかの識別子を更新します。
     updateReadStatus(notificationID, status){
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/notification/update_read_status.xml').then(req => {

@@ -4,7 +4,7 @@
     $cell-width: 200px;
     $cell-height: 60px;
     $cell-padding: 6px;
-    // 三日のデータの表示の幅
+    // the whoile width of data-grid
     $content-width: 7200px;
     height: 100%;
     ion-col {
@@ -79,26 +79,24 @@
             padding: 0px;
         }
         .sepcialday{
-            background-color: #FFEFE5; // LIGHTSALMON;
+            background-color: #FFEFE5;
         }
         .saturday {
-            background-color: #EBF0F6; // SILVER;
+            background-color: #EBF0F6;
         }
         
         ion-row {
-            .device-use-row-width {
+            .facility-use-row-width {
                 width: $content-width;
             }
         }
         .body {
-            // overflow: auto;
             display: flex;
             justify-content: space-around;
             flex-direction: row;
             flex-wrap: nowrap;
-            // flex-direction: column;
             align-items: stretch;
-            .device-grid{
+            .facility-grid{
                 width: $cell-width;
                 ion-row {
                     width: $cell-width;
@@ -121,7 +119,7 @@
             .data-grid-container {
                 overflow: auto;
                 ion-row {
-                    .device-use-row-width {
+                    .facility-use-row-width {
                         width: $content-width;
                     }
                 }

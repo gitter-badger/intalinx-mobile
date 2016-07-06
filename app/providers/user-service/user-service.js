@@ -8,12 +8,6 @@ import {IonicApp, NavController, Alert} from 'ionic-angular';
 import {Util} from '../../utils/util';
 import {SSO} from '../../utils/sso';
 
-/*
-  Generated class for the UserService provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 export class UserService {
 
     static get parameters() {

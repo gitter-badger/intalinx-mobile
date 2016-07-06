@@ -17,22 +17,14 @@
             "ok": "OK",
             "back": "返回",
             "cancel": "取消",
-            "select": "选择"
+            "select": "选择", 
+            "done": "选择" 
         },
         "date": {
             "YYYYMM": "{{YYYY}}年{{MM}}月",
             "MMDD": "{{MM}}月{{DD}}日",
             "today": "今天",
-            "yesterday": "昨天",
-            "minutesAgo": "分前",
-            "hoursAgo": "小时前",
-            "sunday": "星期日",
-            "monday": "星期一",
-            "tuesday": "星期二",
-            "wednesday": "星期三",
-            "thursday": "星期四",
-            "friday": "星期五",
-            "saturday": "星期六"
+            "yesterday": "昨天" 
         },
         "portal": {
             "title": "主页",
@@ -105,19 +97,11 @@
         },
         "schedule": {
             "title": "日程",
-            "button": {
-                "dateTime": {
-                    "cancel": "取消",
-                    "done": "设定"
-                }
-            },
             "facilities": {
-                "title": "设施一览",
-                "today": "今天"
+                "title": "设施一览" 
             },
             "index": {
-                "allDay": "全天",
-                "today": "今天",
+                "allDay": "全天", 
                 "facilities": "设施一览"
             }
         }

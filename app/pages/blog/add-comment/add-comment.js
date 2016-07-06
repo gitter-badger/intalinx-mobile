@@ -10,12 +10,6 @@ import {Util} from '../../../utils/util';
 
 import {DetailPage} from '../detail/detail';
 
-/*
-  Generated class for the AddCommentPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Page({
     templateUrl: 'build/pages/blog/add-comment/add-comment.html',
     providers: [

@@ -24,11 +24,10 @@ export class BlogService {
         this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
     }
 
-    // トップ画面について、ブログリストを取得します
     getCommunityListForTop(position, isNeedRegistNotExistsReply) {
         let rowsPerpage = 10;
         if (this.data) {
-            // データはもうロードされた。
+            // already loaded data.
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
@@ -68,11 +67,10 @@ export class BlogService {
         });
     }
 
-    // 回復内容の追加
     insertReplyContent(comment) {
         let content = this.util.replaceHtmlTagCharacter(comment.content);
         if (this.data) {
-            // データはもうロードされた。
+            // already loaded data
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
@@ -93,10 +91,10 @@ export class BlogService {
         });
     }
 
-    // まだ読まないブログの計数を取得する
+    // Getting the counting of unread blogs. 
     getNotReadCommunityCountBySelf() {
         if (this.data) {
-            // データはもうロードされた。
+            // already loaded data
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
@@ -114,11 +112,10 @@ export class BlogService {
             });
         });
     }
-
-    // ブログIDに基づいて、ブログ詳細を取得する
+    
     getCommunityDetailByCommunityID(communityID) {
         if (this.data) {
-            // データはもうロードされた。
+            // already loaded data
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
@@ -146,14 +143,13 @@ export class BlogService {
             });
         });
     }
-
-    // ブログIDに基づいて、回復リストを取得する
+    
     getReplyContentListByCommunityID(communityID, position) {
-        // 毎回取得回復の数量設定
+        // Setting the number of per drag.
         let rowsPerpage = 5;
 
         if (this.data) {
-            // データはもうロードされた。
+            // already loaded data
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
@@ -200,10 +196,9 @@ export class BlogService {
         });
     }
     
-    // 読みましたかどうかの識別子を更新します。
     updateReplyStatus(communityID, status){
         if (this.data) {
-            // データはもうロードされた。
+            // already loaded data.
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
@@ -221,10 +216,9 @@ export class BlogService {
         });
     }
     
-    // 最新回復があるかどうかの識別子を更新します。
     updateNewReplyFlag(communityID, status) {
         if (this.data) {
-            // データはもうロードされた。
+            // already loaded data
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
@@ -241,7 +235,6 @@ export class BlogService {
         });
     }
     
-    // 回復追加の前に回復内容について、チェックします。そして、追加した後のプロセス
     saveComment(comment) {
         return new Promise(resolve => {
             if (comment.content && this.util.deleteEmSpaceEnSpaceNewLineInCharacter(comment.content) != "") {

@@ -17,7 +17,7 @@
     </ion-buttons>
     <ion-item class="display-year-month">
         <ion-datetime displayFormat="YYYY/MM" min={{minDisplayDate}} max={{maxDisplayDate}} (change)="changeCalendar($event)" [(ngModel)]="yearMonth"
-        cancelText='{{ "app.schedule.button.dateTime.cancel" | translate }}' doneText='{{ "app.schedule.button.dateTime.done" | translate }}'></ion-datetime>
+        cancelText='{{ "app.action.cancel" | translate }}' doneText='{{ "app.action.done" | translate }}'></ion-datetime>
     </ion-item>
     <ion-buttons end>
         <button class="next-month" (click)="nextMonth()">
@@ -95,7 +95,7 @@
         <ion-segment-button class="button-show-people" (ionSelect)="showPeople()">
             <ion-icon name="ios-people"></ion-icon>
         </ion-segment-button>
-        <ion-segment-button class="button-show-today" (ionSelect)="showToday()">{{ "app.schedule.index.today" | translate }}
+        <ion-segment-button class="button-show-today" (ionSelect)="showToday()">{{ "app.date.today" | translate }}
         </ion-segment-button>
         <ion-segment-button class="button-show-facilities" (ionSelect)="showFacilities()">{{ "app.schedule.index.facilities" | translate }}
         </ion-segment-button>

@@ -5,12 +5,7 @@ import {TranslatePipe} from 'ng2-translate/ng2-translate';
 import {Util} from '../../utils/util';
 import { HTTP_PROVIDERS } from '@angular/http';
 import {AboutService} from '../../providers/about-service/about-service';
-/*
-  Generated class for the InformationPage page.
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Page({
   templateUrl: 'build/pages/about/about.html',
   providers: [Util, 
@@ -35,9 +30,8 @@ export class AboutPage {
         this.upgradeUrl = "";
         this.getVersionInfo();
         this.getUpgradeUrl();
-    }  
-  
-  
+    }
+    
   getVersionInfo() {
       this.aboutService.getVersion().then(data => {
           this.version = data;
