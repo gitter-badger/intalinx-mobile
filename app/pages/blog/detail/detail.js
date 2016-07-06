@@ -73,13 +73,10 @@ export class DetailPage {
     doInfinite(infiniteScroll) {
         let position = this.comments.length;
         this.blogService.getReplyContentListByCommunityID(this.id, position).then(data => {
-            infiniteScroll.complete();
             if (data && data.replyContents[0]) {
                 this.comments = this.comments.concat(data.replyContents);
-            } else {
-                infiniteScroll.enable(false);
             }
-            
+            infiniteScroll.complete();
         });
     }
 

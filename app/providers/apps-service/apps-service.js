@@ -6,12 +6,6 @@ import {IonicApp} from 'ionic-angular';
 import {BlogService} from '../../providers/blog/blog-service/blog-service';
 import {NotificationService} from '../../providers/notification/notification-service/notification-service';
 
-/*
-  Generated class for the AppsService provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 export class AppsService {
 
     static get parameters() {

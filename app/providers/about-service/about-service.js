@@ -6,12 +6,6 @@ import {IonicApp, Platform} from 'ionic-angular';
 import {Util} from '../../utils/util';
 import {AppVersion} from 'ionic-native';
 
-/*
-  Generated class for the AppsService provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 export class AboutService {
 
     static get parameters() {

@@ -9,13 +9,6 @@ import {DetailPage} from '../detail/detail';
 
 import {Util} from '../../../utils/util';
 
-/*
-  Generated class for the BlogIndexPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
-
 @Page({
     templateUrl: 'build/pages/blog/index/index.html',
     providers: [BlogService, Util],
@@ -59,12 +52,10 @@ export class BlogIndexPage {
         let position = this.communityListForTop.length;
         let isNeedRegistNotExistsReply = false;
         this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
-            infiniteScroll.complete();
             if (data && data[0]) {
                 this.communityListForTop = this.communityListForTop.concat(data);
-            } else {
-                infiniteScroll.enable(false);
             }
+            infiniteScroll.complete();
         });
     }
 

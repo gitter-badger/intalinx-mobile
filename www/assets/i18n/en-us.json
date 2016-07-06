@@ -17,22 +17,14 @@
             "ok": "ok",
             "back": "back",
             "cancel": "cancel",
-            "select": "select"
+            "select": "select", 
+            "done": "select" 
         },
         "date": {
             "YYYYMM": "{{MM}}/{{YYYY}}",
             "MMDD": "{{MM}}/{{DD}}",
             "today": "Today",
-            "yesterday": "Yesterday",
-            "minutesAgo": "minutes ago",
-            "hoursAgo": "hours ago",
-            "sunday": "Sunday",
-            "monday": "Monday",
-            "tuesday": "Tuesday",
-            "wednesday": "Wednesday",
-            "thursday": "Thursday",
-            "friday": "Friday",
-            "saturday": "Saturday"
+            "yesterday": "Yesterday" 
         },
         "portal": {
             "title": "Portal",
@@ -104,19 +96,11 @@
         },
         "schedule": {
             "title": "Schedule",
-            "button": {
-                "dateTime": {
-                    "cancel": "Cancel",
-                    "done": "Done"
-                }
-            },
             "facilities": {
-                "title": "Facilities",
-                "today": "Today"
+                "title": "Facilities" 
             },
             "index": {
-                "allDay": "all-day",
-                "today": "Today",
+                "allDay": "all-day", 
                 "facilities": "Facilities"
             }
         }

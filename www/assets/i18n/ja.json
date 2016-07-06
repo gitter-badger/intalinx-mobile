@@ -17,22 +17,14 @@
             "ok": "はい",
             "back": "戻る",
             "cancel": "キャンセル",
-            "select": "選択"
+            "select": "選択", 
+            "done": "選択" 
         },
         "date": {
             "YYYYMM": "{{YYYY}}年{{MM}}月",
             "MMDD": "{{MM}}月{{DD}}日",
             "today": "今日",
-            "yesterday": "昨日",
-            "minutesAgo": "分前",
-            "hoursAgo": "時前",
-            "sunday": "日曜日",
-            "monday": "月曜日",
-            "tuesday": "火曜日",
-            "wednesday": "水曜日",
-            "thursday": "木曜日",
-            "friday": "金曜日",
-            "saturday": "土曜日"
+            "yesterday": "昨日"
         },
         "portal": {
             "title": "ポータル",
@@ -104,19 +96,11 @@
         },
         "schedule": {
             "title": "スケジュール",
-            "button": {
-                "dateTime": {
-                    "cancel": "キャンセル",
-                    "done": "選択"
-                }
-            },
             "facilities": {
-                "title": "施設一覧",
-                "today": "今日"
+                "title": "施設一覧" 
             },
             "index": {
-                "allDay": "終日",
-                "today": "今日",
+                "allDay": "終日", 
                 "facilities": "施設一覧"
             }
         }

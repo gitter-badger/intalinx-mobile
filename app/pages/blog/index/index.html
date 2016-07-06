@@ -15,10 +15,10 @@
     </ion-refresher>
     <ion-list>
         <button ion-item detail-none (click)="openDetail(community)" *ngFor="let community of communityListForTop">
-            <!-- こっちは四角 -->
+            <!-- avatar square -->
             <ion-thumbnail item-left class="avatar">
                 <!--<ion-icon name="person" class="avatar"></ion-icon>-->
-                <!-- こっちは丸形　<ion-avatar item-left class="avatar">-->
+                <!-- avatar circled　<ion-avatar item-left class="avatar">-->
                 <img src="{{community.createUserAvatar}}" />
                 <p>{{community.createUserName}}</p>
             </ion-thumbnail>

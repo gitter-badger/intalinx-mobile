@@ -17,12 +17,6 @@ import {ScheduleIndexPage} from '../schedule/index/index';
 import {AboutPage} from '../about/about';
 import {FacilitiesPage} from '../schedule/facilities/facilities';
 
-/*
-  Generated class for the PortalPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Page({
   templateUrl: 'build/pages/portal/portal.html',
   providers: [
