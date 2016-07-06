@@ -5,14 +5,8 @@ import 'rxjs/Rx';
 
 import {IonicApp, NavController, Alert} from 'ionic-angular';
 
-import {Util} from '../../../utils/util';
+import {Util} from '../utils/util';
 
-/*
-  Generated class for the AppsService provider.
-
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular 2 DI.
-*/
 export class NotificationService {
 
     static get parameters() {
@@ -30,7 +24,6 @@ export class NotificationService {
         this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
     }
 
-    // トップ画面について、ブログリストを取得します
     getNotificationListForTop(position, isNeedRegistNotExistsReadStatus) {
         let rowsPerpage = 10;
         if (this.data) {
@@ -38,9 +31,7 @@ export class NotificationService {
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/get_notification_list_for_top_request.xml').then(req => {
-
-
+            this.util.getRequestXml('./assets/requests/notification/get_notification_list_for_top_request.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
 
                 let cursorNode = this.util.selectXMLNode(objRequest, ".//*[local-name()='cursor']");
@@ -59,12 +50,12 @@ export class NotificationService {
                         notifications.push(this.util.xml2json(notificationOutputs[i]).NotificationOutputForTop);
                     }
 
-                    notifications.forEach(function(element) {
-                        if (element.createUserAvatar.toString().indexOf("data:image") != 0) {
-                            element.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                    notifications.forEach(function(notification) {
+                        if (!notification.createUserAvatar || notification.createUserAvatar.toString().indexOf("data:image") != 0) {
+                            notification.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
                         }
-                        this.util.fromNowForNotification(element.publishStartDate).then(data => {
-                            element.publishStartDate = data;
+                        this.util.fromNowForNotification(notification.publishStartDate).then(data => {
+                            notification.publishStartDate = data;
                         });
                     }, this);
 
@@ -80,7 +71,7 @@ export class NotificationService {
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/get_not_read_notification_count_by_self.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/notification/get_not_read_notification_count_by_self.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
                 req = this.util.xml2string(objRequest);
 
@@ -101,7 +92,7 @@ export class NotificationService {
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/get_notification_detail_by_notification_id_request.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/notification/get_notification_detail_by_notification_id_request.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
 
                 this.util.setNodeText(objRequest, ".//*[local-name()='notificationID']", notificationID);
@@ -127,8 +118,9 @@ export class NotificationService {
     
     updateReadStatus(notificationID, status){
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/update_read_status.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/notification/update_read_status.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
+                
                 this.util.setNodeText(objRequest, ".//*[local-name()='notificationId']", notificationID);
                 this.util.setNodeText(objRequest, ".//*[local-name()='status']", status);
                 req = this.util.xml2string(objRequest);

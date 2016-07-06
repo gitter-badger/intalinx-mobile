@@ -4,7 +4,7 @@
     $cell-width: 200px;
     $cell-height: 60px;
     $cell-padding: 6px;
-    // 三日のデータの表示の幅
+    // the whoile width of data-grid
     $content-width: 7200px;
     height: 100%;
     ion-col {
@@ -23,16 +23,36 @@
         * {
             font-size: 2rem;
         }
+        .to {
+            opacity: .7;
+        }
+    }
+    .header-frame {
+        width: 100%;
     }
     .header {
-        border-bottom: $grey-border;
+        width: inherit;
         .timezone {
             height: $cell-height;
             width: $cell-width;
             padding: $cell-padding;
-            border-right: $grey-border;
+            border-right: $grey-border; 
+            border-bottom: $grey-border; 
             font-size: 2.5rem;
+            background: white;
+            padding-top: 15px;
+            padding-left: 10px;
         }
+        .stable-date-container {
+            width: 0px;
+            .stable-date{
+                position: relative;
+                width: 150px;
+                padding: $cell-padding;
+                z-index: 11;
+            }
+        }
+        
         .days-period-container {
             overflow: hidden;
             .days-col {
@@ -43,13 +63,15 @@
             }
             .period-col {
                 padding: $cell-padding;
-                border-right: $grey-border;
                 border-top: $grey-border;
+                border-right: $grey-border;
+                border-bottom: $grey-border;
                 height: 30px;
-                z-index: 9;
+                text-align: center;
             }
         }
     }
+    
     .contents {
         border: $grey-border;
         overflow: hidden;
@@ -57,35 +79,34 @@
             padding: 0px;
         }
         .sepcialday{
-            background-color: LIGHTSALMON;
+            background-color: #FFEFE5;
         }
         .saturday {
-            background-color: SILVER;
+            background-color: #EBF0F6;
         }
         
         ion-row {
-            .device-use-row {
+            .facility-use-row-width {
                 width: $content-width;
             }
         }
         .body {
-            // overflow: auto;
             display: flex;
             justify-content: space-around;
             flex-direction: row;
             flex-wrap: nowrap;
-            // flex-direction: column;
             align-items: stretch;
-            .device-grid{
+            .facility-grid{
                 width: $cell-width;
                 ion-row {
                     width: $cell-width;
                 }
                 .facility-list {
-                    border-top: $grey-border;
                     border-right: $grey-border;
+                    border-bottom: $grey-border;
                     height: $cell-height;
                     padding: 6px;
+                    line-height: 22px;
                     
                     .facility-color {
                         position: relative;
@@ -95,10 +116,10 @@
                     }
                 }
             }
-            .date-grid-container {
+            .data-grid-container {
                 overflow: auto;
                 ion-row {
-                    .device-use-row {
+                    .facility-use-row-width {
                         width: $content-width;
                     }
                 }
@@ -110,7 +131,7 @@
                         position: relative;
                         width: 0px;
                         border-right: $red-border;
-                        z-index: 7;
+                        z-index: 9;
                     }
                 }
                 .block-container {
@@ -129,12 +150,13 @@
                             word-break: break-all;
                             white-space: normal;
                             text-align: left;
+                            z-index: 8;
                         }
                     }
                 }
                 .facility-use-cell {
-                    border-top: $grey-border;
                     border-right: $grey-border;
+                    border-bottom: $grey-border;
                     height: $cell-height;
                 }
             }

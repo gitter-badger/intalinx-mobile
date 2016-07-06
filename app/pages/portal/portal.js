@@ -3,12 +3,12 @@ import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
 import {Util} from '../../utils/util';
 
-import {AppsService} from '../../providers/apps-service/apps-service'; 
-import {UserService} from '../../providers/user-service/user-service';
-import {BlogService} from '../../providers/blog/blog-service/blog-service'; 
-import {NotificationService} from '../../providers/notification/notification-service/notification-service';
-import {ScheduleService} from '../../providers/schedule/schedule-service/schedule-service';
-import {AboutService} from '../../providers/about-service/about-service';
+import {AppsService} from '../../providers/apps-service'; 
+import {UserService} from '../../providers/user-service';
+import {BlogService} from '../../providers/blog-service'; 
+import {NotificationService} from '../../providers/notification-service';
+import {ScheduleService} from '../../providers/schedule-service';
+import {AboutService} from '../../providers/about-service';
 
 import {BlogIndexPage} from '../blog/index/index';
 import {ProfileIndexPage} from '../profile/index/index';
@@ -17,12 +17,6 @@ import {ScheduleIndexPage} from '../schedule/index/index';
 import {AboutPage} from '../about/about';
 import {FacilitiesPage} from '../schedule/facilities/facilities';
 
-/*
-  Generated class for the PortalPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Page({
   templateUrl: 'build/pages/portal/portal.html',
   providers: [
@@ -66,14 +60,8 @@ export class PortalPage {
     }
     
     this.appsService.load().then(data => {
-        this.app.initializeMenu(data);
-        // set root to blog.
-        this.nav.setRoot(BlogIndexPage);
-
-        // when the app is runing as a native app. remove about page.
-        if (!platform.is('cordova')) {
-            data.pop();
-        } else {
+        // check latest version from http://pgyer.com/.
+        if (platform.is('cordova')) {
             this.aboutService.getVersion().then(data => {
                 this.version = data;
                 this.aboutService.getLatestVersion().then(data => {
@@ -86,6 +74,41 @@ export class PortalPage {
                 });
             });
         }
+
+        let menuIdNeedToRemove = [];
+        // remove about page for real device.
+        if (!platform.is('cordova')) {
+            menuIdNeedToRemove.push("about");
+        }
+        // remove notification, calendar, profile for real device.
+        if (platform.is('tablet')) {
+            menuIdNeedToRemove.push("notification");
+            menuIdNeedToRemove.push("schedule");
+            menuIdNeedToRemove.push("profile");
+        } else {
+            menuIdNeedToRemove.push("facilities");
+        }
+
+        // remove unnecessary menu.
+        data.forEach(function(currentValue, index, array){
+            for(let i = 0; i < menuIdNeedToRemove.length; i++) {
+                if (currentValue.componentsId === menuIdNeedToRemove[i]) {
+                    data.splice(index, 1);
+                    menuIdNeedToRemove.splice(i, 1);
+                    break;
+                }
+            }
+        })
+
+        this.app.initializeMenu(data);
+        if (!platform.is('tablet')) {
+            // set root to blog.
+            this.nav.setRoot(BlogIndexPage);
+        } else {
+            // set root to facilities on tablet
+            this.nav.setRoot(FacilitiesPage);
+        }
+
     });
     
     this.userService.getUserDetailsFromUser().then(data => {

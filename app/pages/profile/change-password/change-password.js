@@ -5,7 +5,7 @@ import {NgForm} from '@angular/common';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 import {Util} from '../../../utils/util';
 
-import {UserService} from '../../../providers/user-service/user-service';
+import {UserService} from '../../../providers/user-service';
 
 @Page({
     templateUrl: 'build/pages/profile/change-password/change-password.html',

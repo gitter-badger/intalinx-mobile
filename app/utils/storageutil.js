@@ -1,18 +1,3 @@
-// refer : https://developer.mozilla.org/ja/docs/Web/API/Document/cookie
-/*\
-|*|  A complete cookies reader/writer framework with full unicode support.
-|*|
-|*|  https://developer.mozilla.org/en-US/docs/DOM/document.cookie
-|*|
-|*|  Syntaxes:
-|*|
-|*|  * set(name, value[, end[, path[, domain[, secure]]]])
-|*|  * get(name)
-|*|  * remove(name[, path])
-|*|  * has(name)
-|*|  * keys()
-|*|
-\*/
 export class StorageUtil {
     
     static get constants() {

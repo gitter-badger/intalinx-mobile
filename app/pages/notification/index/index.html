@@ -15,10 +15,10 @@
     </ion-refresher>
     <ion-list>
         <button ion-item detail-none (click)="openDetail(notification)" *ngFor="let notification of notificationListForTop">
-            <!-- こっちは四角 -->
+            <!-- avatar square -->
             <ion-thumbnail item-left class="avatar">
                 <!--<ion-icon name="person" class="avatar"></ion-icon>-->
-                <!-- こっちは丸形　<ion-avatar item-left class="avatar">-->
+                <!-- avator circled　<ion-avatar item-left class="avatar">-->
                 <img src="{{notification.createUserAvatar}}" />
                 <p>{{notification.createUserName}}</p>
             </ion-thumbnail>

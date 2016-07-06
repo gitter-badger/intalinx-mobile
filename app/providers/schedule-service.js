@@ -5,7 +5,7 @@ import 'rxjs/Rx';
 
 import {IonicApp, NavController, Alert} from 'ionic-angular';
 
-import {Util} from '../../../utils/util';
+import {Util} from '../utils/util';
 
 export class ScheduleService {
 
@@ -25,7 +25,6 @@ export class ScheduleService {
         this.specialDaysData = null;
     }
 
-    // トップ画面について、ブログリストを取得します
     getUserLocaleSettings(userID) {
         if (this.userLocaleSettingsData) {
             // already loaded data
@@ -94,7 +93,7 @@ export class ScheduleService {
         });
     }
     
-    getEventsForDevice(eventInputForDeviceAndGroup) {
+    getEventsForFacility(eventInputForFacilityAndGroup) {
         if (this.data) {
             // already loaded data
             return Promise.resolve(this.data);
@@ -104,17 +103,17 @@ export class ScheduleService {
                 let objRequest = this.util.parseXml(req);
                 
                 // startTime/endTime--
-                // selType--施設一覧画面の施設・スケジュール画面のグループのため取得するデータ--device/group--groupの場合はデータなし
-                this.util.setNodeText(objRequest, ".//*[local-name()='startTime']", eventInputForDeviceAndGroup.startTime);
-                this.util.setNodeText(objRequest, ".//*[local-name()='endTime']", eventInputForDeviceAndGroup.endTime);
-                this.util.setNodeText(objRequest, ".//*[local-name()='selType']", eventInputForDeviceAndGroup.selType);
+                // selType--value--device/group--"when set group, cannot get anything.
+                this.util.setNodeText(objRequest, ".//*[local-name()='startTime']", eventInputForFacilityAndGroup.startTime);
+                this.util.setNodeText(objRequest, ".//*[local-name()='endTime']", eventInputForFacilityAndGroup.endTime);
+                this.util.setNodeText(objRequest, ".//*[local-name()='selType']", eventInputForFacilityAndGroup.selType);
                 
                 req = this.util.xml2string(objRequest);
                 
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
                     let targetLists = this.util.selectXMLNodes(objResponse, ".//*[local-name()='TargetList']");
-                    let devicesAndEvents = {};
+                    let facilitiesAndEvents = {};
                     let facilityList = new Array();
                     let eventList = new Array();
                     let participantsOfEvent = new Array();
@@ -136,7 +135,7 @@ export class ScheduleService {
                             let showEventContent = {
                                 "title": eventObject.title, 
                                 "participants": participantsOfEvent,
-                                "deviceName": eventObject.deviceName,
+                                "facilityName": eventObject.deviceName,
                                 "startTime": eventObject.startTime,
                                 "endTime": eventObject.endTime
                             };
@@ -149,10 +148,10 @@ export class ScheduleService {
                         };
                         facilityList.push(facilityObject);
                     }
-                    devicesAndEvents = {
+                    facilitiesAndEvents = {
                         "facilities": facilityList
                     };
-                    resolve(devicesAndEvents);
+                    resolve(facilitiesAndEvents);
                 });
             });
         });
@@ -166,8 +165,8 @@ export class ScheduleService {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_special_days.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
-                // locale--告別--";"でスプリットします。JP/CN/US三つのデータがあります。
-                // start/end--休日検索の開始時間・終了時間timestamp類型
+                // locale--separator--";". Avaliable value - JP/CN/US
+                // start/end--type--timestamp 
                 this.util.setNodeText(objRequest, ".//*[local-name()='locale']", request.locale);
                 this.util.setNodeText(objRequest, ".//*[local-name()='start']", request.start);
                 this.util.setNodeText(objRequest, ".//*[local-name()='end']", request.end);

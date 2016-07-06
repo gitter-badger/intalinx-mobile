@@ -19,11 +19,6 @@
                 margin: auto;
             }
         }
-        // min-width: 25rem;
-        // .display-year-month {
-        //     min-width: 20rem;
-        // }
-        
     }
     ion-buttons[end] {
         min-width: 60%;
@@ -45,13 +40,9 @@
     ion-slides {
         width: 100%;
         max-height: 50%;
-        // ion-slide.calendar.swiper-slide.swiper-slide-active {
-        //     height: auto;
-        // }
     }
     .calendar {
         display: block;
-        // position: fixed;
         top: 0px;
         background-color: rgb(248, 248, 248);
         ion-col {
@@ -119,7 +110,6 @@
         .event-in-past-time {
             color: $secondary-text-color;
         }
-        
     }
 }
 
