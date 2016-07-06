@@ -40,6 +40,15 @@ export class DetailPage {
             "unrepliedCommentcontent": ""
         }
 
+        this.getCommunityDetailByCommunityID();
+        this.getReplyContentListByCommunityID();
+    }
+
+    addComment() {
+        this.nav.push(AddCommentPage, { "sendData": this.sendData });
+    }
+
+    getCommunityDetailByCommunityID() {
         this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
             this.title = data.title;
             this.content = data.content;
@@ -53,11 +62,6 @@ export class DetailPage {
             this.isScrollToTopButtonVisible = false;
 
         });
-        this.getReplyContentListByCommunityID();
-    }
-
-    addComment() {
-        this.nav.push(AddCommentPage, { "sendData": this.sendData });
     }
 
     getReplyContentListByCommunityID() {

@@ -2,10 +2,10 @@
     <ion-title>{{"app.blog.detail" | translate}}</ion-title>
 </ion-navbar>
 <ion-content class="blog-detail">
-    <div class="loading" [style.display]="isLoadCompleted ? 'none' : 'block'">
+    <div class="loading" [hidden]="isLoadCompleted">
         <ion-spinner name="dots"></ion-spinner>
     </div>
-    <div [style.display]="isLoadCompleted ? 'block' : 'none'">
+    <div [hidden]="!isLoadCompleted">
         <ion-item no-lines>
             <h2 class="title">{{title}}</h2>
         </ion-item>
@@ -27,7 +27,6 @@
             </button>
         </ion-item>
         <div class="contents" [innerHTML]="content"></div>
-
         <ion-list>
             <ion-item class="comment" *ngFor="let comment of comments">
                 <ion-item class="status">
@@ -48,9 +47,9 @@
         </ion-infinite-scroll>
     </div>
 </ion-content>
-<button fab fab-right fab-bottom secondary [style.display]="isLoadCompleted ? 'block' : 'none'" (click)="addComment()">
+<button fab fab-right fab-bottom secondary [hidden]="!isLoadCompleted" (click)="addComment()">
     <ion-icon name="add"></ion-icon>
 </button>
-<button class="detail scroll-to-top" fab fab-right fab-bottom [style.display]="isScrollToTopButtonVisible ? 'block' : 'none'" (click)="scrollToDetailPageTop()">
+<button class="detail scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">
     <ion-icon name="arrow-up"></ion-icon>
 </button>

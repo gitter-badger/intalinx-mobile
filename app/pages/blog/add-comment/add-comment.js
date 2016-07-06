@@ -1,7 +1,5 @@
 import {Page, IonicApp, Modal, NavController, NavParams, Alert, ViewController, Platform} from 'ionic-angular';
 
-import {NgForm} from '@angular/common';
-
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
 import {BlogService} from '../../../providers/blog-service';
@@ -62,11 +60,6 @@ export class AddCommentPage {
         } else {
             this.isDisabled = true;
         }
-    }
-    
-    onPageDidEnter () {
-        let height = document.getElementById("addComment").offsetHeight;
-        document.getElementsByTagName("textarea")[0].style.height = (height - 32)  + "px";
     }
 
     changeContent() {
