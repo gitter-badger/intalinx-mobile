@@ -5,8 +5,8 @@ import 'rxjs/Rx';
 
 import {IonicApp, NavController, Alert} from 'ionic-angular';
 
-import {Util} from '../../utils/util';
-import {SSO} from '../../utils/sso';
+import {Util} from '../utils/util';
+import {SSO} from '../utils/sso';
 
 export class UserService {
 

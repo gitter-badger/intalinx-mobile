@@ -3,7 +3,7 @@ import {Http, Headers, RequestOptions} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx';
 import {IonicApp, Platform} from 'ionic-angular';
-import {Util} from '../../utils/util';
+import {Util} from '../utils/util';
 import {AppVersion} from 'ionic-native';
 
 export class AboutService {

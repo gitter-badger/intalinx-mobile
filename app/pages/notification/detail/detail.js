@@ -3,7 +3,7 @@ import {Component, ViewChild} from '@angular/core';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
-import {NotificationService} from '../../../providers/notification/notification-service/notification-service';
+import {NotificationService} from '../../../providers/notification-service';
 import {Util} from '../../../utils/util';
 
 @Page({

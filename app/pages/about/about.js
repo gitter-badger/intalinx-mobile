@@ -3,8 +3,8 @@ import {Page, IonicApp, Platform, NavController, Content} from 'ionic-angular';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
 import {Util} from '../../utils/util';
-import { HTTP_PROVIDERS } from '@angular/http';
-import {AboutService} from '../../providers/about-service/about-service';
+import {HTTP_PROVIDERS} from '@angular/http';
+import {AboutService} from '../../providers/about-service';
 
 @Page({
   templateUrl: 'build/pages/about/about.html',

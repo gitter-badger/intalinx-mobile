@@ -5,7 +5,7 @@ import 'rxjs/Rx';
 
 import {IonicApp, NavController, Alert} from 'ionic-angular';
 
-import {Util} from '../../../utils/util';
+import {Util} from '../utils/util';
 
 export class NotificationService {
 
@@ -50,12 +50,12 @@ export class NotificationService {
                         notifications.push(this.util.xml2json(notificationOutputs[i]).NotificationOutputForTop);
                     }
 
-                    notifications.forEach(function(element) {
-                        if (element.createUserAvatar.toString().indexOf("data:image") != 0) {
-                            element.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                    notifications.forEach(function(notification) {
+                        if (!notification.createUserAvatar || notification.createUserAvatar.toString().indexOf("data:image") != 0) {
+                            notification.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
                         }
-                        this.util.fromNowForNotification(element.publishStartDate).then(data => {
-                            element.publishStartDate = data;
+                        this.util.fromNowForNotification(notification.publishStartDate).then(data => {
+                            notification.publishStartDate = data;
                         });
                     }, this);
 

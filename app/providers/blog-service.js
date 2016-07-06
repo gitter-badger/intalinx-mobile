@@ -5,7 +5,7 @@ import 'rxjs/Rx';
 
 import {IonicApp, NavController, Alert} from 'ionic-angular';
 
-import {Util} from '../../../utils/util';
+import {Util} from '../utils/util';
 
 export class BlogService {
 
@@ -52,12 +52,12 @@ export class BlogService {
                         communities.push(this.util.xml2json(communityOutputs[i]).CommunityOutput);
                     }
 
-                    communities.forEach(function(element) {
-                        if (element.createUserAvatar.toString().indexOf("data:image") != 0) {
-                            element.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                    communities.forEach(function(community) {
+                        if (!community.createUserAvatar || community.createUserAvatar.toString().indexOf("data:image") != 0) {
+                            community.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
                         }
-                        this.util.fromNow(element.publishStartDate).then(data => {
-                            element.publishStartDate = data;
+                        this.util.fromNow(community.publishStartDate).then(data => {
+                            community.publishStartDate = data;
                         });
                     }, this);
 
@@ -172,12 +172,12 @@ export class BlogService {
                         replyContents.push(this.util.xml2json(rreplyContentOutputs[i]).ReplyContentOutput);
                     }
                     
-                    replyContents.forEach(function(element) {
-                        if (element.userAvatar.toString().indexOf("data:image") != 0) {
-                            element.userAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                    replyContents.forEach(function(replyContent) {
+                        if (!replyContent.userAvatar || replyContent.userAvatar.toString().indexOf("data:image") != 0) {
+                            replyContent.userAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
                         }
-                        this.util.fromNow(element.createDate).then(data => {
-                            element.createDate = data;
+                        this.util.fromNow(replyContent.createDate).then(data => {
+                            replyContent.createDate = data;
                         });
                     }, this);
                     

@@ -3,8 +3,8 @@ import {Http} from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx';
 import {IonicApp} from 'ionic-angular';
-import {BlogService} from '../../providers/blog/blog-service/blog-service';
-import {NotificationService} from '../../providers/notification/notification-service/notification-service';
+import {BlogService} from './blog-service';
+import {NotificationService} from './notification-service';
 
 export class AppsService {
 

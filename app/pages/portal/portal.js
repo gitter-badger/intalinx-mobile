@@ -3,12 +3,12 @@ import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
 import {Util} from '../../utils/util';
 
-import {AppsService} from '../../providers/apps-service/apps-service'; 
-import {UserService} from '../../providers/user-service/user-service';
-import {BlogService} from '../../providers/blog/blog-service/blog-service'; 
-import {NotificationService} from '../../providers/notification/notification-service/notification-service';
-import {ScheduleService} from '../../providers/schedule/schedule-service/schedule-service';
-import {AboutService} from '../../providers/about-service/about-service';
+import {AppsService} from '../../providers/apps-service'; 
+import {UserService} from '../../providers/user-service';
+import {BlogService} from '../../providers/blog-service'; 
+import {NotificationService} from '../../providers/notification-service';
+import {ScheduleService} from '../../providers/schedule-service';
+import {AboutService} from '../../providers/about-service';
 
 import {BlogIndexPage} from '../blog/index/index';
 import {ProfileIndexPage} from '../profile/index/index';

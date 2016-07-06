@@ -3,7 +3,7 @@ import {ViewChild} from '@angular/core';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
-import {BlogService} from '../../../providers/blog/blog-service/blog-service';
+import {BlogService} from '../../../providers/blog-service';
 
 import {DetailPage} from '../detail/detail';
 

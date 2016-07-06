@@ -5,7 +5,7 @@ import 'rxjs/Rx';
 
 import {IonicApp, NavController, Alert} from 'ionic-angular';
 
-import {Util} from '../../../utils/util';
+import {Util} from '../utils/util';
 
 export class ScheduleService {
 

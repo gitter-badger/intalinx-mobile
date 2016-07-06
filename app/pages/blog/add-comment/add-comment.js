@@ -4,7 +4,7 @@ import {NgForm} from '@angular/common';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
-import {BlogService} from '../../../providers/blog/blog-service/blog-service';
+import {BlogService} from '../../../providers/blog-service';
 
 import {Util} from '../../../utils/util';
 

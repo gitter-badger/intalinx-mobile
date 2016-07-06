@@ -5,7 +5,7 @@ import {TranslatePipe} from 'ng2-translate/ng2-translate';
 import {ChangePasswordPage} from '../change-password/change-password';
 import {ChangeAvatarPage} from '../change-avatar/change-avatar';
 
-import {UserService} from '../../../providers/user-service/user-service';
+import {UserService} from '../../../providers/user-service';
 import {Util} from '../../../utils/util';
 
 @Page({

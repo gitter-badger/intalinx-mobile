@@ -4,7 +4,7 @@ import {NgForm} from '@angular/common';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
-import {UserService} from '../../providers/user-service/user-service';
+import {UserService} from '../../providers/user-service';
 import {Util} from '../../utils/util';
 import {PortalPage} from '../portal/portal';
 

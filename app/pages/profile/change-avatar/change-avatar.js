@@ -2,7 +2,7 @@ import {Page, IonicApp, NavController, Loading, Modal, Toast, Alert, NavParams, 
 import {ViewChild, NgZone} from '@angular/core'
 import * as EXIF from 'exif-js';
 
-import {UserService} from '../../../providers/user-service/user-service';
+import {UserService} from '../../../providers/user-service';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 import {Util} from '../../../utils/util';
 
