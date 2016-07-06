@@ -1,11 +1,4 @@
-.upload-input {
-    opacity:0; 
-    position: absolute;
-    right: 0;
-    width: 32px;
-    height: 32px;
-    bottom: 0;
-}
+
 .change-avatar {
     img {
         position: absolute;
@@ -15,5 +8,13 @@
         right: 0;
         margin: auto;
         min-width: 100%
+    }
+    .upload-input {
+        opacity:0; 
+        position: absolute;
+        right: 0;
+        width: 32px;
+        height: 32px;
+        bottom: 0;
     }
 }
