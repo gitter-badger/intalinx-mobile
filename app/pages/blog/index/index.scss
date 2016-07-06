@@ -2,7 +2,6 @@
 @import "../pages/blog/add-comment/add-comment";
 
 .blog-index {
-    -webkit-user-select: auto;
     .avatar {
         height: 4em;
         img {
@@ -16,11 +15,9 @@
             text-align: center;
         }
     }
-    
     .title {
         white-space: pre-wrap;
     }
-    
     .status {
         text-align: center;
         width: 6rem;
@@ -32,7 +29,6 @@
             background-color: red;
             margin-bottom: 4px;
         }
-        
         .new-reply {
             @extend .new;
             background-color: rgb(255,140,0);
@@ -40,7 +36,6 @@
     }
     
 }
-
 .ios {
     .blog-index {
         .status{
@@ -50,7 +45,6 @@
         }
     }
 }
-
 .md {
     .blog-index {
         .avatar{
@@ -69,5 +63,3 @@
         }
     }
 }
-
-
