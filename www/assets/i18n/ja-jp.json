@@ -24,7 +24,11 @@
             "YYYYMM": "{{YYYY}}年{{MM}}月",
             "MMDD": "{{MM}}月{{DD}}日",
             "today": "今日",
-            "yesterday": "昨日" 
+            "yesterday": "昨日",
+            "daily": "毎日",
+            "weeekly": "毎週",
+            "monthly": "毎月",
+            "day": "日"
         },
         "portal": {
             "title": "ポータル",
@@ -96,12 +100,31 @@
         },
         "schedule": {
             "title": "スケジュール",
+            "public": "一般公開",
+            "private": "限定公開",
+            "confidential": "非公開",
+            "location": "場所",
+            "time": "時間",
+            "start": "開始",
+            "end": "終了",
+            "allDay": "終日",
+            "repeat": "繰り返し",
+            "summary": "内容",
+            "participant": "参加者",
+            "facility": "施設",
+            "createUser": "登録者",
+            "updateUser": "更新者",
+            "colon": "：",
             "facilities": {
                 "title": "施設一覧" 
             },
             "index": {
                 "allDay": "終日", 
                 "facilities": "施設一覧"
+            },
+            "eventDetail": {
+                "title": "イベントの詳細",
+                "delete": "イベントを削除"
             }
         }
     }
