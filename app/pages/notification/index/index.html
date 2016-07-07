@@ -7,7 +7,7 @@
     </ion-title>
 </ion-navbar>
 <ion-content class="notification-index">
-    <div class="loading" [style.display]="isLoadCompleted ? 'none' : 'block'">
+    <div class="loading" [hidden]="isLoadCompleted">
         <ion-spinner name="dots"></ion-spinner>
     </div>
     <ion-refresher (refresh)="doRefresh($event)">
@@ -15,10 +15,7 @@
     </ion-refresher>
     <ion-list>
         <button ion-item detail-none (click)="openDetail(notification)" *ngFor="let notification of notificationListForTop">
-            <!-- avatar square -->
             <ion-thumbnail item-left class="avatar">
-                <!--<ion-icon name="person" class="avatar"></ion-icon>-->
-                <!-- avator circled　<ion-avatar item-left class="avatar">-->
                 <img src="{{notification.createUserAvatar}}" />
                 <p>{{notification.createUserName}}</p>
             </ion-thumbnail>
@@ -33,6 +30,6 @@
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ion-content>
-<button class="scroll-to-top" fab fab-right fab-bottom [style.display]="isScrollToTopButtonVisible ? 'block' : 'none'" (click)="scrollToIndexPageTop()">
+<button class="scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToIndexPageTop()">
     <ion-icon name="arrow-up"></ion-icon>
 </button>

@@ -1,7 +1,9 @@
 <ion-navbar *navbar>
     <ion-title>{{ "app.blog.comment.add" | translate }}</ion-title>
     <ion-buttons end>
-        <button class="save-comment" disabled={{isDisabled}} (click)="saveComment()">{{ "app.blog.comment.reply" | translate }}</button>
+        <button class="save-comment" disabled={{isDisabled}} (click)="saveComment()">
+            {{ "app.blog.comment.reply" | translate }}
+        </button>
     </ion-buttons>
 </ion-navbar>
 <ion-content padding id="addComment" class="add-comment">

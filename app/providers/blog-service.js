@@ -1,10 +1,5 @@
-import {Injectable, Inject} from '@angular/core';
 import {Http} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/Rx';
-
 import {IonicApp, NavController, Alert} from 'ionic-angular';
-
 import {Util} from '../utils/util';
 
 export class BlogService {
@@ -32,7 +27,6 @@ export class BlogService {
         }
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/blog/get_community_list_for_top_request.xml').then(req => {
-
 
                 let objRequest = this.util.parseXml(req);
 

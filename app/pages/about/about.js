@@ -1,17 +1,17 @@
 import {Page, IonicApp, Platform, NavController, Content} from 'ionic-angular';
-
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
 import {Util} from '../../utils/util';
-import {HTTP_PROVIDERS} from '@angular/http';
+
 import {AboutService} from '../../providers/about-service';
 
 @Page({
-  templateUrl: 'build/pages/about/about.html',
-  providers: [Util, 
-             AboutService,
-             HTTP_PROVIDERS],
-  pipes: [TranslatePipe]
+    templateUrl: 'build/pages/about/about.html',
+    providers: [
+        Util, 
+        AboutService
+    ],
+    pipes: [TranslatePipe]
 })
 
 export class AboutPage {
@@ -32,25 +32,25 @@ export class AboutPage {
         this.getUpgradeUrl();
     }
     
-  getVersionInfo() {
-      this.aboutService.getVersion().then(data => {
-          this.version = data;
-      });
-      
-      this.aboutService.getLatestVersion().then(data => {
-          this.latestVersion = data;
-      });
-  }
+    getVersionInfo() {
+        this.aboutService.getVersion().then(data => {
+            this.version = data;
+        });
+        
+        this.aboutService.getLatestVersion().then(data => {
+            this.latestVersion = data;
+        });
+    }
 
-  getUpgradeUrl() {
-      this.aboutService.getUpgradeUrl().then(data => {
-          this.upgradeUrl = data;
-      });
-  }
+    getUpgradeUrl() {
+        this.aboutService.getUpgradeUrl().then(data => {
+            this.upgradeUrl = data;
+        });
+    }
 
-  openUpgradeUrl() {
-      if (this.version == this.latestVersion) {
-          return false;
-      }
-  }
+    openUpgradeUrl() {
+        if (this.version == this.latestVersion) {
+            return false;
+        }
+    }
 }

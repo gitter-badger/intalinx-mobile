@@ -16,6 +16,7 @@ import {Util} from '../../../utils/util';
     ],
     pipes: [TranslatePipe]
 })
+
 export class ProfileIndexPage {
     static get parameters() {
         return [[IonicApp], [NavController], [UserService], [ViewController], [Platform]];

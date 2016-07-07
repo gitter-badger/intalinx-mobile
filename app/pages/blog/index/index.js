@@ -11,12 +11,16 @@ import {Util} from '../../../utils/util';
 
 @Page({
     templateUrl: 'build/pages/blog/index/index.html',
-    providers: [BlogService, Util],
+    providers: [
+        BlogService, 
+        Util
+    ],
     pipes: [TranslatePipe],
     queries: {
         pageContent: new ViewChild(Content)
     }
 })
+
 export class BlogIndexPage {
 
     static get parameters() {
@@ -52,7 +56,7 @@ export class BlogIndexPage {
         let position = this.communityListForTop.length;
         let isNeedRegistNotExistsReply = false;
         this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
-            if (data && data[0]) {
+            if (data && data.length > 0) {
                 this.communityListForTop = this.communityListForTop.concat(data);
             }
             infiniteScroll.complete();

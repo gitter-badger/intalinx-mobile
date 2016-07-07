@@ -8,12 +8,16 @@ import {Util} from '../../../utils/util';
 
 @Page({
     templateUrl: 'build/pages/notification/detail/detail.html',
-    providers: [NotificationService, Util],
+    providers: [
+        NotificationService,
+        Util
+    ],
     pipes: [TranslatePipe],
     queries: {
         pageContent: new ViewChild(Content)
     }
 })
+
 export class DetailPage {
 
     static get parameters() {
@@ -33,6 +37,10 @@ export class DetailPage {
 
         this.notificationService = notificationService;
 
+        this.getNotificationDetailByNotificationID();        
+    }
+
+    getNotificationDetailByNotificationID() {
         this.notificationService.getNotificationDetailByNotificationID(this.id).then(data => {
             this.title = data.title;
             this.content = data.content;
@@ -50,9 +58,6 @@ export class DetailPage {
 
     onPageLoaded() {
         this.pageLoadTime = new Date().getTime();
-    }
-
-    onPageWillEnter() {
     }
 
     onPageWillUnload() {

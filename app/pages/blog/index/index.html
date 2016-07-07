@@ -6,19 +6,16 @@
         {{"app.blog.title" | translate}}
     </ion-title>
 </ion-navbar>
-<ion-content class="blog-index">
-    <div class="loading" [style.display]="isLoadCompleted ? 'none' : 'block'">
+<ion-content class="blog-index" >
+    <div class="loading" [hidden]="isLoadCompleted">
         <ion-spinner name="dots"></ion-spinner>
     </div>
     <ion-refresher (refresh)="doRefresh($event)">
         <ion-refresher-content refreshingSpinner="circles"> </ion-refresher-content>
     </ion-refresher>
     <ion-list>
-        <button ion-item detail-none (click)="openDetail(community)" *ngFor="let community of communityListForTop">
-            <!-- avatar square -->
+        <button ion-item detail-none *ngFor="let community of communityListForTop" (click)="openDetail(community)">
             <ion-thumbnail item-left class="avatar">
-                <!--<ion-icon name="person" class="avatar"></ion-icon>-->
-                <!-- avatar circled　<ion-avatar item-left class="avatar">-->
                 <img src="{{community.createUserAvatar}}" />
                 <p>{{community.createUserName}}</p>
             </ion-thumbnail>
@@ -34,6 +31,6 @@
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ion-content>
-<button class="scroll-to-top" fab fab-right fab-bottom [style.display]="isScrollToTopButtonVisible ? 'block' : 'none'" (click)="scrollToIndexPageTop()">
+<button class="scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToIndexPageTop()">
     <ion-icon name="arrow-up"></ion-icon>
 </button>

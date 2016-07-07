@@ -1,7 +1,4 @@
-import {Injectable, Inject} from '@angular/core';
 import {Http} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/Rx';
 import {IonicApp} from 'ionic-angular';
 import {BlogService} from './blog-service';
 import {NotificationService} from './notification-service';

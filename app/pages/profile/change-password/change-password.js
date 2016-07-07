@@ -15,6 +15,7 @@ import {UserService} from '../../../providers/user-service';
     ],
     pipes: [TranslatePipe]
 })
+
 export class ChangePasswordPage {
     static get parameters() {
         return [[IonicApp], [NavController], [UserService], [ViewController], [Platform]];
@@ -41,9 +42,6 @@ export class ChangePasswordPage {
                 this.nav.pop();
             }
         });
-    }
-
-    onPageWillEnter() {
     }
 
     changePassword() {

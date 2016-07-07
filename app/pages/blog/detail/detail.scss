@@ -1,75 +1,61 @@
-$padding-top: 16px;
-$padding-left: 16px;
-$padding-right: 16px;
-$padding-bottom: 16px;
-
 .blog-detail {
-  -webkit-user-select: auto;
-  .title {
-    display: block;
-    line-height: 1.2;
-    font-size: 2.0rem;
-    color: #222;
-    font-weight: bold;
-    white-space: pre-wrap;
-  }
-  .status {
-    color: #666;
-    ion-label {
-      margin: 0px;
+    .title {
+        line-height: 1.2;
+        font-size: 2.0rem;
+        color: #222;
+        font-weight: bold;
+        white-space: pre-wrap;
     }
-    .item-inner {
-      border-bottom: 0px;
-      padding-right: $padding-right;
-    }
-  }
-  .status.item {
-    min-height: 0;
-    .avatar img {
-        width: 4rem;
-        height: 4rem;
-    }
-  }
-  .contents {
-    padding-right: $padding-right;
-    padding-left: $padding-left;
-    padding-bottom: $padding-bottom;
-  }
-  .item-button {
-      color: #666;
-      padding: 0px;
-  }
-  .comment {
-    .item-inner {
-      border: 0px;
-      ion-label {
-        margin-top: 8px;
-        margin-bottom: 8px;
-        img {
-            width: 5.6rem;
-            height: 5.6rem; 
+    .status {
+        color: #666;
+        .avatar img {
+            width: 6rem;
+            height: 6rem;
         }
-      }
-      .avatar {
-        font-size: 2em;
-        color: #eee;
-      }
-      ion-card {
-        margin: 2px;
-        ion-card-content {
-            white-space: normal;
-            padding: 8px;
+        .time {
+            font-size: 12px;
         }
-      }
+        ion-label {
+          margin: 0px;
+        }
+        .item-inner {
+          border-bottom: 0px;
+        }
     }
-  }
-  ion-list {
-    margin-bottom: -53px;
-    .item:last-child, ion-item-sliding:last-child .item {
-      border-bottom: 0px;
+    .item-button {
+        color: #666;
+        padding: 0px;
     }
-  }
-}
-.detail.scroll-to-top {
-  bottom: 88px;
+    .comment {
+        .item-inner {
+            border: 0px;
+            ion-label {
+                margin-top: 8px;
+                margin-bottom: 8px;
+                img {
+                    width: 5.6rem;
+                    height: 5.6rem; 
+                }
+            }
+            .avatar {
+                font-size: 2em;
+                color: #eee;
+            }
+            ion-card {
+                margin: 2px;
+                ion-card-content {
+                    white-space: normal;
+                    padding: 8px;
+                }
+            }
+        }
+    }
+    ion-list {
+        .item:last-child, ion-item-sliding:last-child .item {
+            border-bottom: 0px;
+        }
+    }
+    &.scroll-to-top {
+        bottom: 88px;
+    }
 }
