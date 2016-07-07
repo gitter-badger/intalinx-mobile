@@ -7,6 +7,13 @@
     }
     .status {
         color: #666;
+        .avatar img {
+            width: 4rem;
+            height: 4rem;
+        }
+        .time {
+            font-size: 12px;
+        }
         .item-inner {
             border-bottom: 0px;
         }
