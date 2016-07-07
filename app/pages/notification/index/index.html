@@ -15,10 +15,10 @@
     </ion-refresher>
     <ion-list>
         <button ion-item detail-none (click)="openDetail(notification)" *ngFor="let notification of notificationListForTop">
-            <ion-thumbnail item-left class="avatar">
+            <ion-avatar item-left>
                 <img src="{{notification.createUserAvatar}}" />
-                <p>{{notification.createUserName}}</p>
-            </ion-thumbnail>
+            </ion-avatar>
+            <p>{{notification.createUserName}}</p>
             <h2 class="title">{{notification.title}}</h2>
             <div item-right class="status">
                 <ion-badge class="new" *ngIf="notification.readStatus=='NOT_READ'">{{"app.notification.newNotification" | translate}}</ion-badge>
