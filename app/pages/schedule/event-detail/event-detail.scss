@@ -1,5 +1,5 @@
 .event-detail {
-    .title {
+    .event-title {
         display: block;
         line-height: 1.2;
         font-size: 2.0rem;
@@ -12,5 +12,13 @@
         float: left;
         width: 33%;
         text-align: left;
+    }
+    
+    .event-contents-title {
+        line-height: 1.2;
+        font-size: 1.8rem;
+        color: #222;
+        font-weight: bold;
+        white-space: pre-wrap;
     }
 }

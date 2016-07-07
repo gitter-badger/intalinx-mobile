@@ -17,14 +17,18 @@
             "ok": "ok",
             "back": "back",
             "cancel": "cancel",
-            "select": "select", 
-            "done": "select" 
+            "select": "select",
+            "done": "select"
         },
         "date": {
             "YYYYMM": "{{MM}}/{{YYYY}}",
             "MMDD": "{{MM}}/{{DD}}",
             "today": "Today",
-            "yesterday": "Yesterday" 
+            "yesterday": "Yesterday",
+            "daily": "Daily",
+            "weeekly": "Weeekly",
+            "monthly": "Monthly",
+            "day": ""
         },
         "portal": {
             "title": "Portal",
@@ -84,7 +88,7 @@
             }
         },
         "notification": {
-            "title": "notification",
+            "title": "Notification",
             "detail": "Details",
             "newNotification": "new"
         },
@@ -96,12 +100,31 @@
         },
         "schedule": {
             "title": "Schedule",
+            "public": "Public",
+            "private": "Private",
+            "confidential": "Confidential",
+            "location": "Location",
+            "time": "Time",
+            "start": "Start",
+            "end": "End",
+            "allDay": "AllDay",
+            "repeat": "Repeat",
+            "summary": "Summary",
+            "participant": "Participant",
+            "facility": "Facilities",
+            "createUser": "Create User",
+            "updateUser": "Update User",
+            "colon": "：",
             "facilities": {
-                "title": "Facilities" 
+                "title": "Facilities"
             },
             "index": {
-                "allDay": "all-day", 
+                "allDay": "all-day",
                 "facilities": "Facilities"
+            },
+            "eventDetail": {
+                "title": "Event Detail",
+                "delete": "Delete the event"
             }
         }
     }

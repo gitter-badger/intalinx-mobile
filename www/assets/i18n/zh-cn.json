@@ -7,7 +7,7 @@
             },
             "info": {
                 "title": "提示",
-                "versionTooOld": "有新的版本更新。" 
+                "versionTooOld": "有新的版本更新。"
             }
         },
         "action": {
@@ -17,14 +17,18 @@
             "ok": "OK",
             "back": "返回",
             "cancel": "取消",
-            "select": "选择", 
-            "done": "选择" 
+            "select": "选择",
+            "done": "选择"
         },
         "date": {
             "YYYYMM": "{{YYYY}}年{{MM}}月",
             "MMDD": "{{MM}}月{{DD}}日",
             "today": "今天",
-            "yesterday": "昨天" 
+            "yesterday": "昨天",
+            "daily": "每天",
+            "weeekly": "每周",
+            "monthly": "每月",
+            "day": "日"
         },
         "portal": {
             "title": "主页",
@@ -97,12 +101,31 @@
         },
         "schedule": {
             "title": "日程",
+            "public": "普通公开",
+            "private": "指定公开",
+            "confidential": "不公开",
+            "location": "地点",
+            "time": "时间",
+            "start": "开始",
+            "end": "结束",
+            "allDay": "全天",
+            "repeat": "重复时间",
+            "summary": "内容",
+            "participant": "参加者",
+            "facility": "设施",
+            "createUser": "创建者",
+            "updateUser": "变更者",
+            "colon": "：",
             "facilities": {
-                "title": "设施一览" 
+                "title": "设施一览"
             },
             "index": {
-                "allDay": "全天", 
+                "allDay": "全天",
                 "facilities": "设施一览"
+            },
+            "eventDetail": {
+                "title": "事件详细",
+                "delete": "删除事件"
             }
         }
     }

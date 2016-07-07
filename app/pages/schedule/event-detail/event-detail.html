@@ -1,81 +1,60 @@
-<!--
-  Generated template for the EventDetailPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-navbar *navbar>
-    <ion-title>イベントの詳細</ion-title>
-    <ion-buttons end>
-        <button class="edit-event-detail" (click)="editEventDetail()">編集</button>
+    <ion-title>{{"app.schedule.eventDetail.title" | translate}}</ion-title>
+    <ion-buttons end [hidden]="!isLoadCompleted">
+        <button class="edit-event-detail" (click)="editEventDetail()">{{"app.action.edit" | translate}}</button>
     </ion-buttons>
 </ion-navbar>
 
 <ion-content padding class="event-detail">
-    <ion-item no-lines>
-        <h2 class="title">{{title}}</h2>
-    </ion-item>
-    <ion-item no-lines>
-        {{location}}
-    </ion-item>
-    <ion-item no-lines [hidden]="startDay==endDay">
-        開始：{{startDay}}({{startWeekDayMin}}){{startTime}}
-    </ion-item>
-    <ion-item no-lines [hidden]="isAllDay!='true'">
-        終了：{{endDay}}({{endWeekDayMin}}){{endTime}}
-    </ion-item>
-    <ion-item no-lines [hidden]="startDay!=endDay">
-        {{startDateAndWeekDay}}
-    </ion-item>
-    <ion-item no-lines [hidden]="startDay!=endDay">
-        {{startTime}}~{{endTime}}
-    </ion-item>
-    <ion-item no-lines [hidden]="isAllDay!='true'">
-        終日
-    </ion-item>
-    <ion-item no-lines [hidden]="isRepeat!='true'">
-        繰り返し：{{repeatTypeName}}{{repeatValueName}}[{{repeatStartTime}}~{{repeatEndTime}}]
-    </ion-item>
-    <ion-item no-lines [hidden]="!categoryName">
-        {{categoryName}}
-    </ion-item>
-    <ion-item no-lines [hidden]="!visibilityTypeName">
-        {{visibilityTypeName}}
-    </ion-item>
-    
-    <!--<button ion-item (click)="showCategories()">
-        カテゴリ
-    </button>
-    <button ion-item (click)="showVisibilityTypes()">
-        公開制限
-    </button>
-    <button ion-item (click)="showMembers()">
-        参加者
-    </button>
-    <button ion-item (click)="showMembers()">
-        施設
-    </button>-->
-    <ion-item no-lines>
-        <h2>参加者：</h2>
-        <div class="participant-name" *ngFor="let participantName of participantNames">
-            {{participantName}}
-        </div>
-        <!--<ion-row *ngFor="let participantName of participantNames">
-            <ion-col>{{participantName}}</ion-col>
-        </ion-row>-->
-    </ion-item>
-    <ion-item no-lines [hidden]="!createUserName">
-        <h2>登録者：</h2>
-        {{createUserName}}({{createDateTime}})
-    </ion-item>
-    <ion-item no-lines [hidden]="!updateUserName">
-        <h2>更新者：</h2>
-        {{updateUserName}}({{updateDateTime}})
-    </ion-item>
+    <div class="loading" [hidden]="isLoadCompleted">
+        <ion-spinner name="dots"></ion-spinner>
+    </div>
+    <div [hidden]="!isLoadCompleted">
+        <ion-item no-lines>
+            <h2 class="event-title"><span [hidden]="!categoryName">【{{categoryName}}】</span>【{{visibilityTypeName}}】{{title}}</h2>
+        </ion-item>
+        <ion-item no-lines>
+            <h2 class="event-contents-title">{{"app.schedule.location" | translate}}{{"app.schedule.colon" | translate}}</h2> {{location}}
+        </ion-item>
+        <ion-item no-lines [hidden]="startDay==endDay">
+            <h2 class="event-contents-title">{{"app.schedule.time" | translate}}{{"app.schedule.colon" | translate}}</h2>
+            <div><span>{{"app.schedule.start" | translate}}{{"app.schedule.colon" | translate}}{{startDay}}({{startWeekDayMin}})</span><span [hidden]="isAllDay=='true'||isRepeat=='true'">{{startTime}}</span></div>
+            <div [hidden]="isAllDay=='true'">{{"app.schedule.end" | translate}}{{"app.schedule.colon" | translate}}{{endDay}}({{endWeekDayMin}})<span [hidden]="isAllDay=='true'||isRepeat=='true'">{{endTime}}</span></div>
+            <div [hidden]="isAllDay!='true'">{{"app.schedule.allDay" | translate}}</div>
+            <div [hidden]="isRepeat!='true'">{{"app.schedule.repeat" | translate}}{{"app.schedule.colon" | translate}}{{repeatTypeName}}{{repeatValueName}}[{{repeatStartTime}}~{{repeatEndTime}}]</div>
+        </ion-item>
+        <ion-item no-lines [hidden]="startDay!=endDay">
+            <h2 class="event-contents-title">{{"app.schedule.time" | translate}}{{"app.schedule.colon" | translate}}</h2>
+            <div>{{startDateAndWeekDay}}</div>
+            <div>{{startTime}}~{{endTime}}</div>
+            <div [hidden]="isRepeat!='true'">{{"app.schedule.repeat" | translate}}{{"app.schedule.colon" | translate}}{{repeatTypeName}}{{repeatValueName}}[{{repeatStartTime}}~{{repeatEndTime}}]</div>
+        </ion-item>
+        <ion-item no-lines [hidden]="!summary">
+            <h2 class="event-contents-title">{{"app.schedule.summary" | translate}}{{"app.schedule.colon" | translate}}</h2> {{summary}}
+        </ion-item>
+        <ion-item no-lines [hidden]="!participantNames">
+            <h2 class="event-contents-title">{{"app.schedule.participant" | translate}}{{"app.schedule.colon" | translate}}</h2>
+            <div class="participant-name" *ngFor="let participantName of participantNames">
+                {{participantName}}
+            </div>
+        </ion-item>
+        <ion-item no-lines [hidden]="!deviceNames">
+            <h2 class="event-contents-title">{{"app.schedule.facility" | translate}}{{"app.schedule.colon" | translate}}</h2>
+            <div class="device-name" *ngFor="let deviceName of deviceNames">
+                {{deviceName}}
+            </div>
+        </ion-item>
+        <ion-item no-lines [hidden]="!createUserName">
+            <h2 class="event-contents-title">{{"app.schedule.createUser" | translate}}{{"app.schedule.colon" | translate}}</h2> {{createUserName}}({{createDateTime}})
+        </ion-item>
+        <ion-item no-lines [hidden]="!updateUserName">
+            <h2 class="event-contents-title">{{"app.schedule.updateUser" | translate}}{{"app.schedule.colon" | translate}}</h2> {{updateUserName}}({{updateDateTime}})
+        </ion-item>
+    </div>
 </ion-content>
 
-<ion-toolbar position="bottom">
+<ion-toolbar position="bottom" [hidden]="!isLoadCompleted">
     <ion-buttons text-center>
-        <button (click)="deleteEvent()">イベントを削除</button>
+        <button (click)="deleteEvent()">{{"app.schedule.eventDetail.delete" | translate}}</button>
     </ion-buttons>
 </ion-toolbar>

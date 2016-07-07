@@ -1,4 +1,4 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import {IonicApp, Page, NavController, NavParams} from 'ionic-angular';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
@@ -6,12 +6,6 @@ import {ScheduleService} from '../../../providers/schedule-service';
 
 import {Util} from '../../../utils/util';
 
-/*
-  Generated class for the EventDetailPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Page({
     templateUrl: 'build/pages/schedule/event-detail/event-detail.html',
     providers: [
@@ -22,15 +16,17 @@ import {Util} from '../../../utils/util';
 })
 export class EventDetailPage {
     static get parameters() {
-        return [[NavController], [NavParams], [ScheduleService]];
+        return [[IonicApp], [NavController], [NavParams], [ScheduleService]];
     }
 
-    constructor(nav, params, scheduleService) {
+    constructor(app, nav, params, scheduleService) {
+        this.app = app;
         this.nav = nav;
         this.params = params;
         this.scheduleService = scheduleService;
         this.event = this.params.get("event");
         this.eventId = this.event.eventID;
+        this.isLoadCompleted = false;
         this.getEventByEventId();
     }
 
@@ -42,21 +38,22 @@ export class EventDetailPage {
 
             this.setRepeatContentsByRepeatRule(repeatRule);
 
-            this.startDay = moment(event.startTime, "X").format("LL");//
+            this.startDay = moment(event.startTime, "X").format("LL");
             this.startDateAndWeekDay = moment(event.startTime, "X").format("LLdddd");
             this.startWeekDayMin = moment.weekdaysMin(true)[moment(event.startTime, "X").format("d")];
-            this.startTime = moment(event.startTime, "X").format("HH:mm");//
-            this.endDay = moment(event.endTime, "X").format("LL");//
+            this.startTime = moment(event.startTime, "X").format("HH:mm");
+            this.endDay = moment(event.endTime, "X").format("LL");
             this.endDateAndWeekDay = moment(event.endTime, "X").format("LLdddd");
-            this.endWeekDayMin = moment.weekdays(true)[moment(event.endTime, "X").format("d")];
-            this.endTime = moment(event.endTime, "X").format("HH:mm");//
+            this.endWeekDayMin = moment.weekdaysMin(true)[moment(event.endTime, "X").format("d")];
+            this.endTime = moment(event.endTime, "X").format("HH:mm");
 
             let deviceIds = event.deviceID;
-            debugger
-            this.scheduleService.getDevicesByDeviceIds(deviceIds).then(deviceNames => {
-                this.deviceNames = deviceNames;
-            });
-            
+            if (deviceIds) {
+                this.scheduleService.getDevicesByDeviceIds(deviceIds).then(deviceNames => {
+                    this.deviceNames = deviceNames;
+                });
+            }
+
             let visibility = event.visibility;
             this.setVisibilityTypeNameByVisibility(visibility);
             this.categoryID = event.categoryID;
@@ -66,23 +63,15 @@ export class EventDetailPage {
             this.title = event.title;
             this.location = event.location;
             this.summary = event.summary;
-            this.status = event.status;
-            this.isReminder = event.isReminder;
-            this.reminderRule = event.reminderRule;
-            this.createUserID = event.createUserID;
-            this.createUserName = event.createUserName;
-            this.createDateTime = moment(event.createDate, "X").format("LL HH:MM:SS");
+            this.createDateTime = moment(event.createDate).format("LL HH:MM:SS");
             this.updateUserID = event.updateUserID;
             this.updateUserName = event.updateUserName;
-            this.updateDateTime = moment(event.updateDate, "X").format("LL HH:MM:SS");
+            this.updateDateTime = moment(event.updateDate).format("LL HH:MM:SS");
 
             let participants = event.Participant;
-            this.participantNames = new Array();
-            for (let i = 0; i < participants.length; i++) {
-                this.participantNames.push(participants[i].userName);
-            }
+            this.setParticipantNames(participants);
+            this.isLoadCompleted = true;
         });
-
     }
 
     setRepeatContentsByRepeatRule(repeatRule) {
@@ -93,29 +82,49 @@ export class EventDetailPage {
             this.repeatStartTime = repeatRules[2].substr(0, 2) + ":" + repeatRules[2].substr(2, 4);
             this.repeatEndTime = repeatRules[3].substr(0, 2) + ":" + repeatRules[3].substr(2, 4)
             if (this.repeatType == "DAILY") {
-                this.repeatTypeName = "毎日";
-                this.repeatValueName = "";
+                this.app.translate.get('app.date.daily').subscribe(message => {
+                    this.repeatTypeName = message;
+                    this.repeatValueName = "";
+                });
             } else if (this.repeatType == "WEEKLY") {
-                this.repeatTypeName = "毎週";
-                this.repeatValueName = moment.weekdays(true)[Number(repeatValue)]
+                this.app.translate.get('app.date.weeekly').subscribe(message => {
+                    this.repeatTypeName = message;
+                    this.repeatValueName = moment.weekdays(true)[Number(repeatValue)]
+                });
             } else if (this.repeatType == "MONTHLY") {
-                this.repeatTypeName = "毎月";
-                this.repeatValueName = repeatValue + "日";
+                this.app.translate.get('app.date.monthly', 'app.date.day').subscribe(message => {
+                    this.repeatTypeName = message['app.date.monthly'];
+                    this.repeatValueName = repeatValue + ['app.date.day']
+                });
             }
         }
     }
 
     setVisibilityTypeNameByVisibility(visibility) {
         if (visibility == "public") {
-            this.visibilityTypeName = "一般公開";
+            this.app.translate.get('app.schedule.public').subscribe(message => {
+                this.visibilityTypeName = message;
+            });
         } else if (visibility == "private") {
-            this.visibilityTypeName = "限定公開";
+            this.app.translate.get('app.schedule.private').subscribe(message => {
+                this.visibilityTypeName = message;
+            });
         } else if (visibility == "confidential") {
-            this.visibilityTypeName = "非公開";
+            this.app.translate.get('app.schedule.confidential').subscribe(message => {
+                this.visibilityTypeName = message;
+            });
         }
     }
 
+    setParticipantNames(participants) {
+        this.participantNames = new Array();
+        if (Array.isArray(participants)) {
+            for (let i = 0; i < participants.length; i++) {
+                this.participantNames.push(participants[i].userName);
+            }
+        } else {
+            this.participantNames.push(participants.userName);
+        }
 
-
-
+    }
 }

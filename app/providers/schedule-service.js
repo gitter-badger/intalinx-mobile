@@ -18,7 +18,7 @@ export class ScheduleService {
         this.app = app;
         this.nav = nav;
         this.util = util;
-        
+
         this.data = null;
         this.userLocaleSettingsData = null;
         this.userDetailsData = null;
@@ -43,13 +43,13 @@ export class ScheduleService {
                     let userSettings = this.util.selectXMLNodes(objResponse, ".//*[local-name()='UserSettingOutput']");
                     let localeString = "";
                     if (userSettings.length > 0) {
-                        var showJapanHoliday = this.util.getNodeText(userSettings[0],  ".//*[local-name()='isShowJapanHoiday']");
-                        var showChinaHoliday = this.util.getNodeText(userSettings[0],  ".//*[local-name()='isShowChinaHoliday']");
-                        var showAmericaHoliday = this.util.getNodeText(userSettings[0],  ".//*[local-name()='isShowAmericaHoliday']");
+                        var showJapanHoliday = this.util.getNodeText(userSettings[0], ".//*[local-name()='isShowJapanHoiday']");
+                        var showChinaHoliday = this.util.getNodeText(userSettings[0], ".//*[local-name()='isShowChinaHoliday']");
+                        var showAmericaHoliday = this.util.getNodeText(userSettings[0], ".//*[local-name()='isShowAmericaHoliday']");
                         // JP/CN/US
                         if (showJapanHoliday == "true") {
                             localeString += "JP;";
-                        } 
+                        }
                         if (showChinaHoliday == "true") {
                             localeString += "CN;";
                         }
@@ -62,7 +62,7 @@ export class ScheduleService {
             });
         });
     }
-    
+
     getIsAdmin() {
         if (this.userDetailsData) {
             // already loaded data
@@ -71,17 +71,17 @@ export class ScheduleService {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_user_details.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
-                
+
                 req = this.util.xml2string(objRequest);
 
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
 
-                    let oRoleNodes = this.util.selectXMLNodes(objResponse,  ".//*[local-name()='Role']");
+                    let oRoleNodes = this.util.selectXMLNodes(objResponse, ".//*[local-name()='Role']");
                     let isAdmin = false;
                     if (oRoleNodes) {
                         for (var i = 0; i < oRoleNodes.length; i++) {
-                            var role =this.util.getNodeText(oRoleNodes[i], "./");
+                            var role = this.util.getNodeText(oRoleNodes[i], "./");
                             if (role == "MyCalAdmin") {
                                 isAdmin = true;
                             }
@@ -92,7 +92,7 @@ export class ScheduleService {
             });
         });
     }
-    
+
     getEventsForFacility(eventInputForFacilityAndGroup) {
         if (this.data) {
             // already loaded data
@@ -101,15 +101,15 @@ export class ScheduleService {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_events_for_device_and_group.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
-                
+
                 // startTime/endTime--
                 // selType--value--device/group--"when set group, cannot get anything.
                 this.util.setNodeText(objRequest, ".//*[local-name()='startTime']", eventInputForFacilityAndGroup.startTime);
                 this.util.setNodeText(objRequest, ".//*[local-name()='endTime']", eventInputForFacilityAndGroup.endTime);
                 this.util.setNodeText(objRequest, ".//*[local-name()='selType']", eventInputForFacilityAndGroup.selType);
-                
+
                 req = this.util.xml2string(objRequest);
-                
+
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
                     let targetLists = this.util.selectXMLNodes(objResponse, ".//*[local-name()='TargetList']");
@@ -117,23 +117,23 @@ export class ScheduleService {
                     let facilityList = new Array();
                     let eventList = new Array();
                     let participantsOfEvent = new Array();
-                    
-                    for(let i = 0; i < targetLists.length; i++) {
+
+                    for (let i = 0; i < targetLists.length; i++) {
                         let targetIdString = this.util.getNodeText(targetLists[i], ".//*[local-name()='targetID']");
                         let targetNameString = this.util.getNodeText(targetLists[i], ".//*[local-name()='targetName']");
-                        
+
                         let eventLists = this.util.selectXMLNodes(targetLists[i], ".//*[local-name()='eventList']");
                         eventList = [];
-                        for(let j = 0; j < eventLists.length; j++) {
+                        for (let j = 0; j < eventLists.length; j++) {
                             participantsOfEvent = [];
                             let participantNodes = this.util.selectXMLNodes(eventLists[j], ".//*[local-name()='Participant']");
-                            for(let k = 0; k < participantNodes.length; k++) {
+                            for (let k = 0; k < participantNodes.length; k++) {
                                 let participant = this.util.xml2json(participantNodes[k]).Participant;
                                 participantsOfEvent.push(participant.userName);
                             }
                             let eventObject = this.util.xml2json(eventLists[j]).eventList;
                             let showEventContent = {
-                                "title": eventObject.title, 
+                                "title": eventObject.title,
                                 "participants": participantsOfEvent,
                                 "facilityName": eventObject.deviceName,
                                 "startTime": eventObject.startTime,
@@ -156,7 +156,7 @@ export class ScheduleService {
             });
         });
     }
-    
+
     getSpecialDays(request) {
         if (this.specialDaysData) {
             // already loaded data
@@ -170,14 +170,14 @@ export class ScheduleService {
                 this.util.setNodeText(objRequest, ".//*[local-name()='locale']", request.locale);
                 this.util.setNodeText(objRequest, ".//*[local-name()='start']", request.start);
                 this.util.setNodeText(objRequest, ".//*[local-name()='end']", request.end);
-                
+
                 req = this.util.xml2string(objRequest);
-                
+
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
                     let holidayOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='HolidayOutput']");
                     let holidays = new Array();
-                    for(let i = 0; i < holidayOutputs.length; i++) {
+                    for (let i = 0; i < holidayOutputs.length; i++) {
                         holidays.push(this.util.xml2json(holidayOutputs[i]).HolidayOutput);
                     }
                     resolve(holidays);
@@ -275,7 +275,7 @@ export class ScheduleService {
             });
         });
     }
-    
+
     searchSpecialDaysByDisplayedMonth(searchSpecialDaysRequires) {
         if (this.data) {
             // already loaded data
@@ -292,7 +292,7 @@ export class ScheduleService {
             });
         });
     }
-    
+
     getSpecialDaysInSelectedDay(searchSpecialDaysRequires, selectedDay) {
         if (this.data) {
             // already loaded data
@@ -311,54 +311,31 @@ export class ScheduleService {
             });
         });
     }
-    
+
     getEventByEventId(eventId) {
-       if (this.data) {
+        if (this.data) {
             // already loaded data
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            // this.util.getRequestXml('./assets/requests/schedule/get_event_by_event_id.xml').then(req => {
-            //     let objRequest = this.util.parseXml(req);
-            //     this.util.setNodeText(objRequest, ".//*[local-name()='eventID']", eventId);
-                
-            //     req = this.util.xml2string(objRequest);
-                
-                // this.util.callCordysWebservice(req).then(data => {
-                    
-                    // let objResponse = this.util.parseXml(data);
-                    // let eventOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='EventOutput']");
-                    // let event = this.util.xml2json(eventOutput).EventOutput;
-                    // resolve(event);
-                // });
-        //     });
-        // this.util.getRequestXml('./mocks/scheduleservice/events.json').then(req => {
-        //         let objResponse = this.util.parseXml(req);
-        //        let eventOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='EventOutput']");
-               
-        //        let events = new Array();
-        //        for (let i = 0; i < eventOutputs.length; i++) {
-        //             let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
-        //             let event = {
-        //                  startTime: moment.unix(eventOutput.startTime).format("HH:MM"),
-        //                 endTime: moment.unix(eventOutput.endTime).format("HH:MM"),
-        //                 title: eventOutput.title
-        //              }
-        //                 events.push(event);             
-        //             }
-        //            resolve(events);
-        //      });
-        
-            this.util.getRequestXml('./mocks/scheduleservice/event.json').then(data => {
-                let objRequest = this.util.parseXml(data);
-                let eventOutput = this.util.selectXMLNode(objRequest, ".//*[local-name()='EventOutput']");
-                let event = this.util.xml2json(eventOutput).EventOutput;
-                resolve(event);
+            this.util.getRequestXml('./assets/requests/schedule/get_event_by_event_id.xml').then(req => {
+                let objRequest = this.util.parseXml(req);
+                this.util.setNodeText(objRequest, ".//*[local-name()='eventID']", eventId);
+
+                req = this.util.xml2string(objRequest);
+
+                this.util.callCordysWebservice(req).then(data => {
+
+                    let objResponse = this.util.parseXml(data);
+                    let eventOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='EventOutput']");
+                    let event = this.util.xml2json(eventOutput).EventOutput;
+                    resolve(event);
+                });
             });
         });
-        
+
     }
-    
+
     getCategoryList() {
         if (this.data) {
             // already loaded data
@@ -371,14 +348,14 @@ export class ScheduleService {
 
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
-                    let categoryOutput  = this.util.selectXMLNode(objResponse, ".//*[local-name()='CategoryOutput']");
+                    let categoryOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='CategoryOutput']");
                     let categories = this.util.xml2json(categoryOutput).CategoryOutput;
                     resolve(categories);
                 });
             });
         });
     }
-    
+
     getCategoryNameByCategoryId(categoryId) {
         if (this.data) {
             // already loaded data
@@ -399,7 +376,7 @@ export class ScheduleService {
             });
         });
     }
-    
+
     getDeviceList() {
         if (this.data) {
             // already loaded data
@@ -409,35 +386,31 @@ export class ScheduleService {
             this.util.getRequestXml('./assets/requests/schedule/get_device_list.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
                 req = this.util.xml2string(objRequest);
-debugger
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
-                    let deviceOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='DeviceOutput']");
-                    let device = this.util.xml2json(deviceOutput).DeviceOutput;
-                    resolve(device);
+                    let deviceOutput = this.util.selectXMLNodes(objResponse, ".//*[local-name()='DeviceOutput']");
+                    resolve(deviceOutput);
                 });
             });
         });
     }
-    
+
     getDevicesByDeviceIds(deviceIds) {
         if (this.data) {
             // already loaded data
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.getDeviceList().then(data => {
+            let deviceIdsArray = deviceIds.split(",");
+
+            this.getDeviceList().then(deviceOutputs => {
                 let deviceNames = new Array();
-                debugger
-                // let fixedCategories = data.FixedCategory;
-                // let otherCategories = data.OtherCategoryList;
-                // let categories = data.FixedCategory.concat(data.OtherCategoryList);
-                // let categoryName;
-                // categories.forEach(function(element) {
-                //     if (element.categoryID == categoryId) {
-                //         categoryName = element.categoryName;
-                //     }
-                // }, this);
+                for (let i = 0; i < deviceOutputs.length; i++) {
+                    let device = this.util.xml2json(deviceOutputs[i]).DeviceOutput;
+                    if (deviceIdsArray.includes(device.deviceID)) {
+                        deviceNames.push(device.deviceName);
+                    }
+                }
                 resolve(deviceNames);
             });
         });

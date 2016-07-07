@@ -16,12 +16,12 @@
                   <repeatRule>DAILY;0;1500;1530</repeatRule>
                   <startTime>1467709200</startTime>
                   <endTime>1467716400</endTime>
-                  <deviceID>00008</deviceID>
+                  <deviceID>00008,00009,00019</deviceID>
                   <visibility>public</visibility>
                   <categoryID>100002</categoryID>
                   <title>TOC研修</title>
                   <location>東京本社　4F TV会議室</location>
-                  <summary />
+                  <summary>制約理論を教育に適用しているTOC</summary>
                   <status />
                   <isReminder />
                   <reminderRule />
@@ -31,8 +31,6 @@
                   <updateUserID>wang</updateUserID>
                   <updateUserName>王　甜甜</updateUserName>
                   <updateDate>2016-07-05T10:36:44.0</updateDate>
-                  <updateUserID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" null="true" xsi:nil="true" />
-                  <updateDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" null="true" xsi:nil="true" />
                   <Participant xmlns="http://schemas.intasect.co.jp/mycal/service/event" xmlns:eve="http://schemas.intasect.co.jp/mycal/service/event" eve:seqId="119032">
                         <userID>111147</userID>
                         <userName>王　茜</userName>
