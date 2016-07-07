@@ -6,6 +6,20 @@
     $cell-padding: 6px;
     // the whoile width of data-grid
     $content-width: 7200px;
+    $background-0: rgb(210, 80, 127);
+    $background-1: rgb(100, 149, 237);
+    $background-2: rgb(153, 50, 204);
+    $background-3: rgb(241, 169, 160);
+    $background-4: rgb(255, 140, 0);
+    $background-5: rgb(46, 139, 87);
+    $background-6: rgb(105, 105, 105);
+    $background-7: rgb(249, 191, 59);
+    $background-8: rgb(122, 231, 191);
+    $background-9: rgb(15, 35, 80);
+    $background-10: rgb(135, 38, 87);
+    $background-11: rgb(227, 38, 54);
+    $background-12: rgb(137, 91, 138);
+    
     height: 100%;
     ion-col {
         padding: 0px;
@@ -27,47 +41,54 @@
             opacity: .7;
         }
     }
-    .header-frame {
-        width: 100%;
-    }
     .header {
-        width: inherit;
-        .timezone {
-            height: $cell-height;
-            width: $cell-width;
-            padding: $cell-padding;
-            border-right: $grey-border; 
-            border-bottom: $grey-border; 
-            font-size: 2.5rem;
-            background: white;
-            padding-top: 15px;
-            padding-left: 10px;
-        }
-        .stable-date-container {
-            width: 0px;
-            .stable-date{
-                position: relative;
-                width: 150px;
+        width: 100%;
+        .header-grid {
+            width: inherit;
+            .timezone {
+                height: $cell-height;
+                width: $cell-width;
                 padding: $cell-padding;
-                z-index: 11;
+                border-right: $grey-border; 
+                border-bottom: $grey-border; 
+                font-size: 2.2rem;
+                padding-top: 15px;
+                padding-left: 10px;
             }
-        }
-        
-        .days-period-container {
-            overflow: hidden;
-            .days-col {
-                padding: $cell-padding;
-                border-right: $grey-border;
-                padding-left: 5px;
-                height: 30px;
+            .fixed-date-container {
+                width: 0px;
+                .fixed-date{
+                    position: relative;
+                    width: 150px;
+                    padding: $cell-padding;
+                    z-index: 11;
+                }
             }
-            .period-col {
-                padding: $cell-padding;
-                border-top: $grey-border;
-                border-right: $grey-border;
-                border-bottom: $grey-border;
-                height: 30px;
-                text-align: center;
+            
+            .days-period-container {
+                overflow: hidden;
+                ion-row {
+                    width: $content-width;
+                }
+                .days-col {
+                    padding: $cell-padding;
+                    border-right: $grey-border;
+                    padding-left: 5px;
+                    height: 30px;
+                }
+                .period-col-container {
+                    display: flex;
+                    align-items: flex-start;
+                    flex-grow: 1;
+                    .period-col {
+                        padding: $cell-padding;
+                        border-top: $grey-border;
+                        border-right: $grey-border;
+                        border-bottom: $grey-border;
+                        height: 30px;
+                        text-align: center;
+                    }
+                }
             }
         }
     }
@@ -85,11 +106,6 @@
             background-color: #EBF0F6;
         }
         
-        ion-row {
-            .facility-use-row-width {
-                width: $content-width;
-            }
-        }
         .body {
             display: flex;
             justify-content: space-around;
@@ -107,26 +123,82 @@
                     height: $cell-height;
                     padding: 6px;
                     line-height: 22px;
-                    
-                    .facility-color {
-                        position: relative;
+                    word-break: keep-all;
+                    overflow: hidden;
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: flex-start;
+                    .facility-color-box {
+                        display: flex;
                         height: 16px;
-                        width: 16px;
-                        margin-right: 2px;
+                        min-width: 16px;
+                        margin-right: 2px; 
+                        background: grey; 
+                        color: grey;
+                    }
+                    .facility-color0 {
+                        background: $background-0; 
+                        color: $background-0; 
+                    }
+                    .facility-color1 {
+                        background: $background-1; 
+                        color: $background-1; 
+                    }
+                    .facility-color2 {
+                        background: $background-2; 
+                        color: $background-2; 
+                    }
+                    .facility-color3 {
+                        background: $background-3; 
+                        color: $background-3; 
+                    }
+                    .facility-color4 {
+                        background: $background-4; 
+                        color: $background-4; 
+                    }
+                    .facility-color5 {
+                        background: $background-5; 
+                        color: $background-5; 
+                    }
+                    .facility-color6 {
+                        background: $background-6; 
+                        color: $background-6; 
+                    }
+                    .facility-color7 {
+                        background: $background-7; 
+                        color: $background-7; 
+                    }
+                    .facility-color8 {
+                        background: $background-8; 
+                        color: $background-8; 
+                    }
+                    .facility-color9 {
+                        background: $background-9; 
+                        color: $background-9; 
+                    }
+                    .facility-color10 {
+                        background: $background-10; 
+                        color: $background-10; 
+                    }
+                    .facility-color11 {
+                        background: $background-11; 
+                        color: $background-11; 
+                    }
+                    .facility-color12 {
+                        background: $background-12; 
+                        color: $background-12; 
                     }
                 }
             }
             .data-grid-container {
                 overflow: auto;
                 ion-row {
-                    .facility-use-row-width {
-                        width: $content-width;
-                    }
+                    width: $content-width;
                 }
-                .now-line-container {
+                .current-line-container {
                     height: 0px;
                     margin-left: -2px;
-                    .now-line {
+                    .current-line {
                         display: block;
                         position: relative;
                         width: 0px;
@@ -151,14 +223,62 @@
                             white-space: normal;
                             text-align: left;
                             z-index: 8;
+                            color: white;
+                            background: grey;
+                        }
+                        
+                        .event-color0 {
+                            background: $background-0; 
+                        }
+                        .event-color1 {
+                            background: $background-1; 
+                        }
+                        .event-color2 {
+                            background: $background-2; 
+                        }
+                        .event-color3 {
+                            background: $background-3; 
+                        }
+                        .event-color4 {
+                            background: $background-4; 
+                        }
+                        .event-color5 {
+                            background: $background-5; 
+                        }
+                        .event-color6 {
+                            background: $background-6; 
+                        }
+                        .event-color7 {
+                            background: $background-7; 
+                        }
+                        .event-color8 {
+                            background: $background-8; 
+                        }
+                        .event-color9 {
+                            background: $background-9; 
+                        }
+                        .event-color10 {
+                            background: $background-10; 
+                        }
+                        .event-color11 {
+                            background: $background-11; 
+                        }
+                        .event-color12 {
+                            background: $background-12; 
                         }
                     }
                 }
-                .facility-use-cell {
-                    border-right: $grey-border;
-                    border-bottom: $grey-border;
-                    height: $cell-height;
+                .facility-time-col-container {
+                    display: flex;
+                    align-items: flex-start;
+                    flex-grow: 1;
+                    .facility-time-cell {
+                        border-right: $grey-border;
+                        border-bottom: $grey-border;
+                        height: $cell-height;
+                    }
                 }
+                
             }
         }
     }
