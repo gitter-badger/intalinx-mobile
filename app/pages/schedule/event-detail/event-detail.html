@@ -11,7 +11,7 @@
     </div>
     <div [hidden]="!isLoadCompleted">
         <ion-item no-lines>
-            <h2 class="event-title">【{{categoryName}}】【{{visibilityTypeName}}】{{title}}</h2>
+            <h2 class="event-title"><span [hidden]="!categoryName">【{{categoryName}}】</span>【{{visibilityTypeName}}】{{title}}</h2>
         </ion-item>
         <ion-item no-lines>
             <h2 class="event-contents-title">{{"app.schedule.location" | translate}}{{"app.schedule.colon" | translate}}</h2> {{location}}
