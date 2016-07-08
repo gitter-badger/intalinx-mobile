@@ -124,8 +124,13 @@
                 "facilities": "设施一览"
             },
             "eventDetail": {
-                "title": "事件详细",
-                "delete": "删除事件"
+                "title": "事件详细"
+            },
+            "deleteEvent": "删除事件",
+            "deleteRepeatEvent": {
+                "title": "此为重复事件。",
+                "deleteEventOfSelectedDay": "仅删除当天的事件",
+                "deleteAllEvents": "删除所有的事件"
             }
         }
     }

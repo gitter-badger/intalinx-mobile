@@ -123,8 +123,13 @@
                 "facilities": "施設一覧"
             },
             "eventDetail": {
-                "title": "イベントの詳細",
-                "delete": "イベントを削除"
+                "title": "イベントの詳細"
+            },
+            "deleteEvent": "イベントを削除",
+            "deleteRepeatEvent": {
+                "title": "これは繰り返しイベントです。",
+                "deleteEventOfSelectedDay": "当該日付のイベントのみを削除",
+                "deleteAllEvents": "全てのイベントを削除"
             }
         }
     }
