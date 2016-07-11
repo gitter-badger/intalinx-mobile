@@ -1,0 +1,28 @@
+<!--<ion-navbar *navbar>
+  <ion-title>select-participants</ion-title>
+</ion-navbar>-->
+
+<ion-toolbar>
+  <ion-title>関係者選択</ion-title>
+  <ion-buttons end>
+    <button (click)="dismiss()">閉じる
+      <!--<span primary showWhen="ios">閉じる</span>
+      <ion-icon name="md-close" showWhen="android,windows"></ion-icon>-->
+    </button>
+  </ion-buttons>
+</ion-toolbar>
+
+<ion-content padding class="select-participants">
+    <ion-list>
+        <ion-item *ngFor="let org of orgs">
+            <!--<ion-label>{{org.organizationName}}</ion-label>
+            <ion-select [(ngModel)] = "curSelectUser" multiple="true" 
+                        okText='{{"app.action.ok" | translate}}' 
+                        cancelText='{{"app.action.cancel" | translate}}'>
+                 <ion-option *ngFor="let user of users" value='{{user.userId}}'
+                             ng-change="selectedUpdated()">{{user.userName}}</ion-option>         
+            </ion-select>-->
+            <button clear (click)="openOrgUsers(org.organizationCode)">{{org.organizationName}}</button>
+        </ion-item>
+    </ion-list>
+</ion-content>

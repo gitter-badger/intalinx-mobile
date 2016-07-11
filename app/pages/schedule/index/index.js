@@ -8,6 +8,7 @@ import {ScheduleService} from '../../../providers/schedule-service';
 import {UserService} from '../../../providers/user-service';
 
 import {EventDetailPage} from '../event-detail/event-detail';
+import {EditEventPage} from '../edit-event/edit-event'
 
 import {Util} from '../../../utils/util';
 
@@ -92,6 +93,9 @@ export class ScheduleIndexPage {
             // ,
             // autoHeight: true
         }
+        
+        // for test
+        this.addEvent();
     }
     
     changeCalendar(event) {
@@ -272,6 +276,12 @@ export class ScheduleIndexPage {
     
     openEventDetail(event) {
         this.nav.push(EventDetailPage, {
+            "event": event
+        });
+    }
+    
+    addEvent() {
+        this.nav.push(EditEventPage, {
             "event": event
         });
     }

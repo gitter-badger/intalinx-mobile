@@ -1,3 +1,29 @@
 .edit-event {
-
+    ion-label{
+        margin-left : 0px;
+        margin-right : 0px;
+    }
+    ion-datetime {
+        padding-left : 0px;
+        padding-right : 0px;
+    }
+    .text-input {
+        margin: 0px;
+    }
+    .choose-particent{
+        width: 90%;
+        margin-right: 0px;
+    }
+    .inputArea{
+        // height: 80%;
+    }
+    .inputContent{
+        height: 80px;
+        textarea.text-input {
+            height: 95%;
+        }
+    }
+    .repeat-section {
+        padding-left: 20px;
+    }
 }

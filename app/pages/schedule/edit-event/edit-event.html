@@ -1,7 +1,133 @@
 <ion-navbar *navbar>
-  <ion-title>editEvent</ion-title>
+  <ion-title [hidden]="!isNewEvent">{{"app.schedule.editEvent.title.new" | translate}}</ion-title>
+  <ion-title [hidden]="isNewEvent">{{"app.schedule.editEvent.title.edit" | translate}}</ion-title>
+  <!--<button light right>追加</button>-->
+  <ion-buttons end [hidden]="!isNewEvent">
+        <button (click)="addEvent()">{{ "app.schedule.editEvent.saveEvent.new" | translate }}</button>
+  </ion-buttons>
+  <ion-buttons end [hidden]="isNewEvent">
+        <button (click)="saveEvent()">{{ "app.schedule.editEvent.saveEvent.edit" | translate }}</button>
+  </ion-buttons>
 </ion-navbar>
 
-<ion-content padding class="edit-event">
-  
+<ion-content class="edit-event">
+    <ion-item>
+        <!-- 予定 -->
+        <ion-label fixed>{{"app.schedule.editEvent.eventTitle" | translate}}</ion-label>
+        <ion-input  placeholder='{{"app.schedule.editEvent.pleaseInputTitle" | translate }}' 
+                    [(ngModel)]="event.title" (ngModelChange)="changeTitle($event)"></ion-input>
+    </ion-item>
+    <div [hidden]="event.isAllDay || event.isRepeat">
+        <ion-item>
+            <!-- 開始 普通-->
+            <ion-label fixed>{{"app.schedule.editEvent.startTime" | translate}}</ion-label>
+            <ion-datetime displayFormat="YYYY/MM/DD HH:mm" [(ngModel)] = "event.startTime"
+                          minuteValues="00, 15, 30, 45"
+                          (ngModelChange)="changeStartTime($event)"></ion-datetime>
+        </ion-item>
+        <ion-item>
+            <!-- 終了 普通-->
+            <ion-label fixed>{{"app.schedule.editEvent.endTime" | translate}}</ion-label>
+            <ion-datetime displayFormat="YYYY/MM/DD HH:mm" [(ngModel)] = "event.endTime"
+                          minuteValues="00, 15, 30, 45"
+                          (ngModelChange)="changeEndTime($event)"></ion-datetime>
+        </ion-item>
+    </div>
+    <div [hidden]="!event.isAllDay && !event.isRepeat">
+        <ion-item>
+            <!-- 開始 終日-->
+            <ion-label fixed>{{"app.schedule.editEvent.startTime" | translate}}</ion-label>
+            <ion-datetime displayFormat="YYYY/MM/DD" [(ngModel)] = "event.startTime"></ion-datetime>
+        </ion-item>
+        <ion-item>
+            <!-- 終了 終日-->
+            <ion-label fixed>{{"app.schedule.editEvent.endTime" | translate}}</ion-label>
+            <ion-datetime displayFormat="YYYY/MM/DD" [(ngModel)] = "event.endTime"></ion-datetime>
+        </ion-item>
+    </div>
+    <ion-item>
+        <!-- 終日 -->
+        <ion-label fixed>{{"app.schedule.editEvent.isAllDay" | translate}}</ion-label>
+        <ion-toggle id="isRepeatToggle" [(ngModel)]="event.isAllDay" (click)="changeIsAllDay($event)"></ion-toggle>
+    </ion-item>
+    <ion-item>
+        <!-- 繰り返す -->
+        <ion-label fixed>{{"app.schedule.editEvent.isRepeat" | translate}}</ion-label>
+        <ion-toggle id="isAlldayToggle" [(ngModel)]="event.isRepeat" (click)="changeIsRepeat($event)"></ion-toggle>
+    </ion-item>
+    <!-- ******************** 繰り返すイベントのルール ***************** -->
+    <div id="repeatSection" [hidden]="!event.isRepeat" class="repeat-section">
+        <ion-item>
+            <ion-label>繰り返すルール</ion-label>
+            <ion-select [(ngModel)]="repeatTime">
+                <ion-option *ngFor="let repeatRule of repeatRules" value={{repeatRule.value}}>{{repeatRule.description}}</ion-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <!-- 開始 -->
+            <ion-label fixed>{{"app.schedule.editEvent.startTime" | translate}}</ion-label>
+            <ion-datetime displayFormat="HH:mm" [(ngModel)] = "event.startTime"
+                          minuteValues="00, 15, 30, 45"></ion-datetime>
+        </ion-item>
+        <ion-item>
+            <!-- 終了 -->
+            <ion-label fixed>{{"app.schedule.editEvent.endTime" | translate}}</ion-label>
+            <ion-datetime displayFormat="HH:mm" [(ngModel)] = "event.endTime"
+                          minuteValues="00, 15, 30, 45"></ion-datetime>
+        </ion-item>
+    </div>
+    <!-- ******************** 繰り返すイベントのルール ***************** -->
+    <!-- カテゴリ popup-selection alert -->
+      <ion-list>
+          <ion-item>
+              <ion-label>{{"app.schedule.editEvent.category.title" | translate}}</ion-label>
+              <ion-select [(ngModel)] = "event.categoryID"
+                          okText='{{"app.action.ok" | translate}}' 
+                          cancelText='{{"app.action.cancel" | translate}}'>
+                  <!-- There is no initial value, bucause of translation. -->
+                  <ion-option value="100001">{{"app.schedule.editEvent.category.rest" | translate}}</ion-option>
+                  <ion-option value="100002">{{"app.schedule.editEvent.category.conference" | translate}}</ion-option>
+                  <ion-option value="100003">{{"app.schedule.editEvent.category.goOut" | translate}}</ion-option>
+                  <ion-option value="100004">{{"app.schedule.editEvent.category.businessTrip" | translate}}</ion-option>
+                  <ion-option value="100005">{{"app.schedule.editEvent.category.seminar" | translate}}</ion-option>
+                  <ion-option value="100006">{{"app.schedule.editEvent.category.visit" | translate}}</ion-option>
+              </ion-select>
+          </ion-item>
+      </ion-list>
+    <ion-item class = "inputArea">
+        <!-- 場所 -->
+        <ion-label fixed>{{"app.schedule.editEvent.location" | translate}}</ion-label>
+        <ion-input [(ngModel)]="event.eventName" (ngModelChange)="changeEventName($event)"></ion-input>
+    </ion-item>
+    <ion-item class = "inputContent">
+        <!-- 内容 -->
+        <ion-label fixed>{{"app.schedule.editEvent.summary" | translate}}</ion-label>
+        <ion-textarea placeholder='{{"app.schedule.editEvent.pleaseInputSummary" | translate }}' [(ngModel)]="event.summary"></ion-textarea>
+    </ion-item>
+    
+      <ion-list>
+          <ion-item>
+              <ion-label>{{"app.schedule.editEvent.visibility.title" | translate}}</ion-label>
+              <ion-select [(ngModel)] = "event.visibility" multiple="false" 
+                          interface = "action-sheet" 
+                          okText='{{"app.action.ok" | translate}}' 
+                          cancelText='{{"app.action.cancel" | translate}}'
+                          alertOptions="visibilities">
+                  <!-- There is no initial value, bucause of translation. -->
+                  <!--<ion-option value="public" checked="true">{{"app.schedule.editEvent.visibility.public" | translate}}</ion-option>
+                  <ion-option value="limitPublic">{{"app.schedule.editEvent.visibility.limitPublic" | translate}}</ion-option>
+                  <ion-option value="private">{{"app.schedule.editEvent.visibility.private" | translate}}</ion-option>-->
+                  <ion-option *ngFor="let visible of visibilities" value={{visible.value}}>{{visible.description}}</ion-option>
+              </ion-select>
+          </ion-item>
+      </ion-list>
+<ion-item>
+<!-- 参加者 -->
+<!-- contact contacts person person-add people 五つのiconがあります -->
+<ion-icon name="contacts"></ion-icon>
+<button outline class="choose-particent" (click) = "chooseParticipant()"></button>
+</ion-item>
+<!-- 施設 -->
+<button block outline (click) = "chooseDevice()">{{"app.schedule.editEvent.device" | translate}}<ion-icon name="arrow-down"></ion-icon>
+</button>
 </ion-content>
