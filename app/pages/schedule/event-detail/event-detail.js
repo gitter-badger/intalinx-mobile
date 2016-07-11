@@ -159,22 +159,12 @@ export class EventDetailPage {
                     this.deleteEventRequires.isFromRepeatToSpecial = true;
                     this.deleteEventRequires.startTime = moment(this.selectedDay + " " + this.repeatStartTime).unix()
                     this.deleteEventRequires.endTime = moment(this.selectedDay + " " + this.repeatEndTime).unix();
-                    this.scheduleService.deleteEvent(this.deleteEventRequires).then(data => {
-                        if (data=="true") {
-                            this.sendData.isRefreshFlag = true;
-                            this.nav.pop();
-                        }
-                    });
+                    this.deleteTheEvent();
                 }
             },{
                 text: deleteAllEvents,
                 handler: () => {
-                    this.scheduleService.deleteEvent(this.deleteEventRequires).then(data => {
-                        if (data=="true") {
-                            this.sendData.isRefreshFlag = true;
-                            this.nav.pop();
-                        }
-                    });
+                    this.deleteTheEvent();
                 }
             },{
                 text: cancelButton,
@@ -197,12 +187,7 @@ export class EventDetailPage {
             {
                 text: deleteEvent,
                 handler: () => {
-                    this.scheduleService.deleteEvent(this.deleteEventRequires).then(data => {
-                        if (data=="true") {
-                            this.sendData.isRefreshFlag = true;
-                            this.nav.pop();
-                        }
-                    });
+                    this.deleteTheEvent();
                 }
             },{
                 text: cancelButton,
@@ -214,5 +199,40 @@ export class EventDetailPage {
         });
         this.nav.present(actionSheet);
          });
+    }
+    
+    deleteTheEvent() {
+        this.scheduleService.deleteEvent(this.deleteEventRequires).then(data => {
+            if (data=="true") {
+                this.setDaysOfDeletedEvent();
+                this.sendData.isRefreshFlag = true;
+                this.nav.pop();
+            }
+        });
+    }
+    
+    setDaysOfDeletedEvent() {
+        let daysOfDeletedEvent = new Array();
+        if (this.isRepeat=="true"&&!this.deleteEventRequires.isFromRepeatToSpecial) {
+            let monthOfSelectedDay = moment(this.selectedDay).format("YYYY/MM");
+            let monthStartDate = moment(this.selectedDay).startOf("months").format("YYYY/MM/DD");
+            let monthEndDate = moment(this.selectedDay).endOf("months").format("YYYY/MM/DD");
+            let startDay = Number(moment(this.eventStartTime, "X").format("D"));
+            let endDay = Number(moment(this.eventEndTime, "X").format("D"));
+            if (moment(moment.unix(this.eventStartTime).format("YYYY/MM/DD")).isBefore(monthStartDate)) {
+                startDay = Number(moment(monthStartDate).format("D"));
+            }
+            if (moment(moment.unix(this.eventEndTime).format("YYYY/MM/DD")).isAfter(monthEndDate)) {
+                endDay = Number(moment(monthEndDate).format("D"));
+            }
+            
+            for (let i = startDay; i <= endDay; i++) {
+                daysOfDeletedEvent.push(i.toString());
+            }
+            
+        } else {
+            daysOfDeletedEvent.push(moment(this.selectedDay).format("D"));
+        }
+        this.sendData.daysOfDeletedEvent = daysOfDeletedEvent;
     }
 }

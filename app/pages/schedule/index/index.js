@@ -201,8 +201,8 @@ export class ScheduleIndexPage {
         this.scheduleService.searchEventsByDisplayedMonth(this.searchEventsRequires).then(eventsDays => {
  
             this.scheduleService.searchSpecialDaysByDisplayedMonth(this.searchHolidaysRequires).then(specialDays => {
-                // eventsDays = eventsDays.concat(specialDays);
-                // this.daysOfEvents = Array.from(new Set(eventsDays));
+                eventsDays = eventsDays.concat(specialDays);
+                this.daysOfEvents = Array.from(new Set(eventsDays));
                 this.daysOfEvents = eventsDays;
             });
         });
@@ -279,6 +279,7 @@ export class ScheduleIndexPage {
         this.sendData = {
             "selectedDay": this.selectedDay,
             "eventId": event.eventID,
+            "daysOfDeletedEvent": "",
             "isRefreshFlag": false
         }
         this.nav.push(EventDetailPage, {
@@ -294,10 +295,11 @@ export class ScheduleIndexPage {
         let isRefreshFlag = this.sendData.isRefreshFlag;
         if (isRefreshFlag == true) {
             this.searchEventsAndSpecialDaysBySelectedDay(this.sendData.selectedDay);
-            let day = moment(this.sendData.selectedDay).format("D");
-            let i = this.daysOfEvents.indexOf(day);
-            if(i != -1) {
-                this.daysOfEvents.splice(i, 1);
+            for (let i = 0; i < this.sendData.daysOfDeletedEvent.length; i++) {
+                let index = this.daysOfEvents.indexOf(this.sendData.daysOfDeletedEvent[i]);
+                if(index != -1) {
+                    this.daysOfEvents.splice(index, 1);
+                }
             }
         }
     }
