@@ -26,75 +26,60 @@ export class SelectParticipantsPage {
     this.navParams = navParams;
     this.scheduleService = scheduleService
     
-    this.orgs = this.getOrganizationList();
-    this.users = this.getHumanResourceUserInfoList();
+    this.orgs = this.getOrganizationAndUsers();
     this.selectedUserIDs = new Array();
     this.curSelectUser = "";
-    this.orgUsers = new Array();
-    
-    // for test
-    // this.orgUsers = this.users;
+    this.selectedUserCount = 0;
+    this.selectUser = new Array();
   }
   
-  getOrganizationList() {
-      this.scheduleService.getOrganizationList().then(data => {
-          this.orgs = data;
-      });
-  }
-  
-  getHumanResourceUserInfoList() {
-      this.scheduleService.getHumanResourceUserInfoList().then(data => {
-          this.users = data;
-      });
-  }
-  
-  openOrgUsers(orgId) {
-      let orgName="test";
-      this.getOrgUsers(orgId);
-      let alert = Alert.create();
-      alert.setTitle(orgName);
-      let curUsers = this.orgUsers;
-      for(let i = 0; i < curUsers.length; i++)
-      {
-          let curUser = curUsers[i];
-          alert.addInput({
-            type: 'checkbox',
-            label: curUser.userName,
-            value: curUser.userId
+  getOrganizationAndUsers() {
+      this.scheduleService.getOrganizationList().then(orgs => {
+          
+          this.scheduleService.getHumanResourceUserInfoList().then(users => {
+            this.orgsWithUsers = new Array();
+            for (let i = 0; i < orgs.length; i++) {
+                let usersInOrg = new Array();
+                for (let j = 0; j < users.length; j++) {
+                    if (orgs[i].organizationCode == users[j].assignOrgCd) {
+                        let user = {
+                            "userId": users[j].userId,
+                            "userName": users[j].userName,
+                            "assignOrgCd": users[j].assignOrgCd,
+                            "isSelected": false,
+                        }
+                        usersInOrg.push(user);
+                    }
+                }
+                let orgWithUsers = {
+                    organizationCode: orgs[i].organizationCode,
+                    organizationName: orgs[i].organizationName,
+                    users: usersInOrg
+                }
+                this.orgsWithUsers.push(orgWithUsers);
+            }
           });
-      }
-      this.app.translate.get(["app.action.cancel", "app.action.ok"]).subscribe(message => {
-      let ok = message['app.action.ok'];
-      let cancel = message['app.action.cancel'];
-      alert.addButton(cancel);
-      alert.addButton({
-          text: ok,
-          handler: data => {
-            for(let i=0; i < data.length; i++) {
-                this.selectedUserIDs.push(data[i]);
-            };
-          }
       });
-      this.nav.present(alert);
-      });
-  }
-  selectedUpdated() {
-      this.getOrgUsers(orgId);
-  }
-  
-  getOrgUsers(orgId) {
-      let usersInOrg = new Array();
-      let allUsers = this.users;
-      for(let i = 0; i < allUsers.length; i++) {
-          let curUser = allUsers[i];
-          // if(curUser.orgId == orgId) {
-              usersInOrg.push(curUser);
-          // }
-      }
-      this.orgUsers = usersInOrg;
   }
   
   dismiss() {
       this.viewCtrl.dismiss(this.selectedUserIDs);
+  }
+  
+   searchUsers() {
+      
+  }
+  
+  changeSelectedUser(user) {
+      if (user.isSelected == true) {
+          this.selectUser.push(user);
+          this.selectedUserCount++;
+      } else {
+          let index = this.selectUser.indexOf(user);
+          if(index != -1) {
+              this.selectUser.splice(index, 1);
+          }
+          this.selectedUserCount--;
+      }
   }
 }
