@@ -416,6 +416,7 @@ export class ScheduleService {
         });
     }
     
+<<<<<<< HEAD
     getOrganizationList() {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_organanization_list.xml').then(req => {
@@ -482,6 +483,36 @@ export class ScheduleService {
                     let returnOutPut = this.util.selectXMLNode(objResponse, ".//*[local-name()='return']");
                     let returnData = this.util.xml2json(returnOutPut).return;
                     resolve(returnData);
+                });
+            });
+        });
+    }
+    deleteEvent(deleteEventRequires) {
+        if (this.data) {
+            // already loaded data
+            return Promise.resolve(this.data);
+        }
+        return new Promise(resolve => {
+
+            let eventId = deleteEventRequires.eventId;
+            let isFromRepeatToSpecial = deleteEventRequires.isFromRepeatToSpecial;
+            this.util.getRequestXml('./assets/requests/schedule/delete_event.xml').then(req => {
+                let objRequest = this.util.parseXml(req);
+                this.util.setNodeText(objRequest, ".//*[local-name()='eventID']", eventId);
+                // delete the event of the selecte dday
+				this.util.setNodeText(objRequest, ".//*[local-name()='isFromRepeatToSpecial']", "" + isFromRepeatToSpecial);
+				if (isFromRepeatToSpecial) {
+					this.util.setNodeText(objRequest, ".//*[local-name()='parentEventID']", eventId);
+					this.util.setNodeText(objRequest, ".//*[local-name()='oldStartTime']", deleteEventRequires.startTime);
+					this.util.setNodeText(objRequest, ".//*[local-name()='oldEndTime']", deleteEventRequires.endTime);
+					this.util.setNodeText(objRequest, ".//*[local-name()='startTime']", -1);
+					this.util.setNodeText(objRequest, ".//*[local-name()='endTime']", -1);
+				}
+
+                req = this.util.xml2string(objRequest);
+                this.util.callCordysWebservice(req).then(data => {
+
+                    resolve("true");
                 });
             });
         });

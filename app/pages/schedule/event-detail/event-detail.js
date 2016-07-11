@@ -1,4 +1,4 @@
-import {IonicApp, Page, NavController, NavParams} from 'ionic-angular';
+import {IonicApp, Page, ActionSheet, NavController, NavParams} from 'ionic-angular';
 
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
@@ -24,8 +24,9 @@ export class EventDetailPage {
         this.nav = nav;
         this.params = params;
         this.scheduleService = scheduleService;
-        this.event = this.params.get("event");
-        this.eventId = this.event.eventID;
+        this.sendData = this.params.get("sendData");
+        this.eventId = this.sendData.eventId;
+        this.selectedDay = this.sendData.selectedDay;
         this.isLoadCompleted = false;
         this.getEventByEventId();
     }
@@ -38,6 +39,8 @@ export class EventDetailPage {
 
             this.setRepeatContentsByRepeatRule(repeatRule);
 
+            this.eventStartTime = event.startTime;
+            this.eventEndTime = event.endTime;
             this.startDay = moment(event.startTime, "X").format("LL");
             this.startDateAndWeekDay = moment(event.startTime, "X").format("LLdddd");
             this.startWeekDayMin = moment.weekdaysMin(true)[moment(event.startTime, "X").format("d")];
@@ -125,6 +128,111 @@ export class EventDetailPage {
         } else {
             this.participantNames.push(participants.userName);
         }
-
+    }
+    
+    deleteEvent() {
+        this.deleteEventRequires = {
+            "eventId": this.eventId,
+            "isFromRepeatToSpecial": false,
+            "startTime": "",
+            "endTime": ""
+        }
+        if (this.isRepeat=="true") {
+            this.presentDeleteRepeatEventActionSheet();
+        } else {
+            this.presentDeleteNotRepeatEventActionSheet();
+        }
+    }
+    
+    presentDeleteRepeatEventActionSheet() {
+        this.app.translate.get(["app.schedule.deleteRepeatEvent.title", "app.schedule.deleteRepeatEvent.deleteEventOfSelectedDay", "app.schedule.deleteRepeatEvent.deleteAllEvents", "app.action.cancel"]).subscribe(message => {
+            let title = message['app.schedule.deleteRepeatEvent.title'];
+            let deleteEventOfSelectedDay = message['app.schedule.deleteRepeatEvent.deleteEventOfSelectedDay'];
+            let deleteAllEvents = message['app.schedule.deleteRepeatEvent.deleteAllEvents'];
+            let cancelButton = message['app.action.cancel'];
+            let actionSheet = ActionSheet.create({
+            title: title,
+            buttons: [
+            {
+                text: deleteEventOfSelectedDay,
+                handler: () => {
+                    this.deleteEventRequires.isFromRepeatToSpecial = true;
+                    this.deleteEventRequires.startTime = moment(this.selectedDay + " " + this.repeatStartTime).unix()
+                    this.deleteEventRequires.endTime = moment(this.selectedDay + " " + this.repeatEndTime).unix();
+                    this.deleteTheEvent();
+                }
+            },{
+                text: deleteAllEvents,
+                handler: () => {
+                    this.deleteTheEvent();
+                }
+            },{
+                text: cancelButton,
+                handler: () => {
+                    
+                }
+            }
+            ]
+        });
+        this.nav.present(actionSheet);
+        });
+    }
+    
+    presentDeleteNotRepeatEventActionSheet() {
+         this.app.translate.get(["app.schedule.deleteEvent", "app.action.cancel"]).subscribe(message => {
+            let deleteEvent = message['app.schedule.deleteEvent'];
+            let cancelButton = message['app.action.cancel'];
+            let actionSheet = ActionSheet.create({
+            buttons: [
+            {
+                text: deleteEvent,
+                handler: () => {
+                    this.deleteTheEvent();
+                }
+            },{
+                text: cancelButton,
+                handler: () => {
+                    
+                }
+            }
+            ]
+        });
+        this.nav.present(actionSheet);
+         });
+    }
+    
+    deleteTheEvent() {
+        this.scheduleService.deleteEvent(this.deleteEventRequires).then(data => {
+            if (data=="true") {
+                this.setDaysOfDeletedEvent();
+                this.sendData.isRefreshFlag = true;
+                this.nav.pop();
+            }
+        });
+    }
+    
+    setDaysOfDeletedEvent() {
+        let daysOfDeletedEvent = new Array();
+        if (this.isRepeat=="true"&&!this.deleteEventRequires.isFromRepeatToSpecial) {
+            let monthOfSelectedDay = moment(this.selectedDay).format("YYYY/MM");
+            let monthStartDate = moment(this.selectedDay).startOf("months").format("YYYY/MM/DD");
+            let monthEndDate = moment(this.selectedDay).endOf("months").format("YYYY/MM/DD");
+            let startDay = Number(moment(this.eventStartTime, "X").format("D"));
+            let endDay = Number(moment(this.eventEndTime, "X").format("D"));
+            if (moment(moment.unix(this.eventStartTime).format("YYYY/MM/DD")).isBefore(monthStartDate)) {
+                startDay = Number(moment(monthStartDate).format("D"));
+            }
+            if (moment(moment.unix(this.eventEndTime).format("YYYY/MM/DD")).isAfter(monthEndDate)) {
+                endDay = Number(moment(monthEndDate).format("D"));
+            }
+            
+            for (let i = startDay; i <= endDay; i++) {
+                daysOfDeletedEvent.push(i.toString());
+            }
+            
+        } else {
+            daysOfDeletedEvent.push(moment(this.selectedDay).format("D"));
+        }
+        this.sendData.daysOfDeletedEvent = daysOfDeletedEvent;
     }
 }

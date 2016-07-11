@@ -38,24 +38,6 @@ export class ScheduleIndexPage {
         
         this.scheduleService = scheduleService;
         this.userService = userService;
-
-        this.weekdays = moment.weekdaysMin(true);
-        // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
-        if (this.app.userLang == "ja" || this.app.userLang == "ja-jp") {
-            this.isFirstDayMonday = true;
-            let sunday = this.weekdays[0];
-            this.weekdays.shift();
-            this.weekdays.push(sunday);
-        } else {
-            this.isFirstDayMonday = false;
-        }
-        this.today = moment().format('YYYY/MM/D');
-        this.yearMonth = moment().format('YYYY-MM');
-        this.minDisplayDate = Number(moment().format('YYYY')) - 5 + "-01";
-        this.maxDisplayDate = Number(moment().format('YYYY')) + 5 + "-12";
-        //this month
-        let firstDateWeek = moment(this.yearMonth);
-        this.selectedDay = this.today;
         
         this.searchEventsRequires = {
             "categoryID":  null,
@@ -76,13 +58,11 @@ export class ScheduleIndexPage {
             "start": null,
             "end": null
         }
-        // let userId =this.app.user.userId;
-        this.userService.getUserId().then(userId => {
-            this.searchEventsRequires.userId = userId;
-            this.getLocalsFromSetting().then(local => {
-                this.showCalendar(firstDateWeek);
-            });
-        });
+        this.sendData = {
+            "selectedDay": "",
+            "eventId": "",
+            "isRefreshFlag": false
+        }
         
         this.defaultNumber = 0;
         this.cachedSlidesOnOneSide = 1;
@@ -90,12 +70,33 @@ export class ScheduleIndexPage {
         this.calendarSlideOptions = {
             direction: 'vertical',
             initialSlide: this.cachedSlidesOnOneSide
-            // ,
-            // autoHeight: true
         }
         
-        // for test
-        this.addEvent();
+        this.weekdays = moment.weekdaysMin(true);
+        // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
+        if (this.app.userLang == "ja" || this.app.userLang == "ja-jp") {
+            this.isFirstDayMonday = true;
+            let sunday = this.weekdays[0];
+            this.weekdays.shift();
+            this.weekdays.push(sunday);
+        } else {
+            this.isFirstDayMonday = false;
+        }
+        this.today = moment().format('YYYY/MM/D');
+        this.yearMonth = moment().format('YYYY-MM');
+        this.minDisplayDate = Number(moment().format('YYYY')) - 5 + "-01";
+        this.maxDisplayDate = Number(moment().format('YYYY')) + 5 + "-12";
+        //this month
+        let firstDateWeek = moment(this.yearMonth);
+        this.selectedDay = this.today;
+        
+        // let userId =this.app.user.userId;
+        this.userService.getUserId().then(userId => {
+            this.searchEventsRequires.userId = userId;
+            this.getLocalsFromSetting().then(local => {
+                this.showCalendar(firstDateWeek);
+            });
+        });
     }
     
     changeCalendar(event) {
@@ -203,6 +204,7 @@ export class ScheduleIndexPage {
             this.scheduleService.searchSpecialDaysByDisplayedMonth(this.searchHolidaysRequires).then(specialDays => {
                 eventsDays = eventsDays.concat(specialDays);
                 this.daysOfEvents = Array.from(new Set(eventsDays));
+                this.daysOfEvents = eventsDays;
             });
         });
     }
@@ -275,14 +277,38 @@ export class ScheduleIndexPage {
 	}
     
     openEventDetail(event) {
+        this.sendData = {
+            "selectedDay": this.selectedDay,
+            "eventId": event.eventID,
+            "daysOfDeletedEvent": "",
+            "isRefreshFlag": false
+        }
         this.nav.push(EventDetailPage, {
-            "event": event
+            "sendData": this.sendData
         });
     }
     
+<<<<<<< HEAD
     addEvent() {
         this.nav.push(EditEventPage, {
             "event": event
         });
+=======
+    onPageWillLeave() {
+        this.sendData.isRefreshFlag = false;
+    }
+    
+    onPageWillEnter() {
+        let isRefreshFlag = this.sendData.isRefreshFlag;
+        if (isRefreshFlag == true) {
+            this.searchEventsAndSpecialDaysBySelectedDay(this.sendData.selectedDay);
+            for (let i = 0; i < this.sendData.daysOfDeletedEvent.length; i++) {
+                let index = this.daysOfEvents.indexOf(this.sendData.daysOfDeletedEvent[i]);
+                if(index != -1) {
+                    this.daysOfEvents.splice(index, 1);
+                }
+            }
+        }
+>>>>>>> f302f775b6b2f49897d659249a656a582ecc00b2
     }
 }

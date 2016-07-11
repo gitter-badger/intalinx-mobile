@@ -170,6 +170,12 @@
                     "new": "追加", 
                     "edit": "保存"
                 }
+            },
+            "deleteEvent": "イベントを削除",
+            "deleteRepeatEvent": {
+                "title": "これは繰り返しイベントです。",
+                "deleteEventOfSelectedDay": "当該日付のイベントのみを削除",
+                "deleteAllEvents": "全てのイベントを削除"
             }
         }
     }
