@@ -416,7 +416,6 @@ export class ScheduleService {
         });
     }
     
-<<<<<<< HEAD
     getOrganizationList() {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_organanization_list.xml').then(req => {

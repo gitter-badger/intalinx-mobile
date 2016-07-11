@@ -288,12 +288,12 @@ export class ScheduleIndexPage {
         });
     }
     
-<<<<<<< HEAD
     addEvent() {
         this.nav.push(EditEventPage, {
             "event": event
         });
-=======
+    }
+    
     onPageWillLeave() {
         this.sendData.isRefreshFlag = false;
     }
@@ -309,6 +309,5 @@ export class ScheduleIndexPage {
                 }
             }
         }
->>>>>>> f302f775b6b2f49897d659249a656a582ecc00b2
     }
 }
