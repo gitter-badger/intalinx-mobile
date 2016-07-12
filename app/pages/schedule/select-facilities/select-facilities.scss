@@ -1,0 +1,8 @@
+.select-facilities {
+    ion-list + ion-list {
+        margin-top: 0;
+    }
+}
+button[disabled]{
+    opacity: 0.4;
+}

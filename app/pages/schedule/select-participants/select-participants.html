@@ -1,26 +1,23 @@
-<!--<ion-navbar *navbar>
-  <ion-title>select-participants</ion-title>
-</ion-navbar>-->
-
 <ion-toolbar>
     <ion-buttons start>
         <button (click)="close()">
-            取り消し
+            {{"app.action.cancel" | translate}}
         </button>
     </ion-buttons>
-    <ion-title>関係者選択</ion-title>
+    <ion-title>{{"app.schedule.selectParticipants" | translate}}</ion-title>
     <ion-buttons end>
-        <button (click)="selectUsers()">
-            選択<span [hidden]="selectedUserCount<=0">({{selectedUserCount}})</span>
+        <button (click)="selectUsers()" [disabled]="selectedUserCount<=0">
+            {{"app.action.done" | translate}}
+            <span [hidden]="selectedUserCount<=0">({{selectedUserCount}})</span>
         </button>
     </ion-buttons>
 </ion-toolbar>
-<ion-searchbar class="search-event" (input)="findUsers($event)" [hideCancelButton]=true>
+<ion-searchbar (input)="findUsers($event)" [hideCancelButton]=true>
     <ion-icon name="search"></ion-icon>
 </ion-searchbar>
 <ion-content padding class="select-participants">
     <ion-list [hidden]="isSearching!=true">
-        <ion-item *ngFor="let user of allUserMembers">
+        <ion-item *ngFor="let user of foundUserMembers">
             <ion-checkbox [(ngModel)]="user.isSelected" (ngModelChange)="changeSelectedUser(user)"></ion-checkbox>
             <ion-avatar item-left>
                 <img src="img/default">

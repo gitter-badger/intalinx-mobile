@@ -24,11 +24,9 @@ export class SelectParticipantsPage {
         this.viewCtrl = viewCtrl;
         this.platform = platform;
         this.navParams = navParams;
-        this.scheduleService = scheduleService
+        this.scheduleService = scheduleService;
 
-        this.orgs = this.getOrganizationAndUsers();
-        this.selectedUserIDs = new Array();
-        this.curSelectUser = "";
+        this.getOrganizationAndUsers();
         this.selectedUserCount = 0;
         this.selectedUser = new Array();
     }
@@ -67,9 +65,9 @@ export class SelectParticipantsPage {
         this.isSearching = true;
         let userName = event.value;
 
-        this.allUserMembers = this.allUsers;
+        this.foundUserMembers = this.allUsers;
         if (userName && userName.trim() != '') {
-            this.allUserMembers = this.allUserMembers.filter((user) => {
+            this.foundUserMembers = this.foundUserMembers.filter((user) => {
                 return (user.userName.toLowerCase().indexOf(userName.toLowerCase()) > -1);
             })
         } else {

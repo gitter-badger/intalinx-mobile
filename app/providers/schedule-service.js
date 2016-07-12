@@ -523,4 +523,23 @@ export class ScheduleService {
             });
         });
     }
+
+    getDeviceListForSelect() {
+        return new Promise(resolve => {
+            this.getDeviceList().then(deviceOutputs => {
+                let facilities = new Array();
+                    for (let i = 0; i < deviceOutputs.length; i++) {
+                        let deviceOutput = this.util.xml2json(deviceOutputs[i]).DeviceOutput;
+                        let facility = {
+                            "facilityId": deviceOutput.deviceID,
+                            "facilityName": deviceOutput.deviceName,
+                            "description": deviceOutput.description,
+                            "isSelected": false,
+                        }
+                        facilities.push(facility);
+                    }
+                resolve(facilities);
+            });
+        });
+    }
 }
