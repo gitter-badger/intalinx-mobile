@@ -415,7 +415,7 @@ export class ScheduleService {
             });
         });
     }
-    
+
     getOrganizationList() {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_organanization_list.xml').then(req => {
@@ -429,15 +429,15 @@ export class ScheduleService {
                     for (let i = 0; i < organizationOutputs.length; i++) {
                         orgs.push(this.util.xml2json(organizationOutputs[i]).OrganizationOutput);
                     }
-                    
+
                     orgs.forEach(function(element) {
-                        if(element.parentOrganizationCode && element.parentOrganizationCode != "") {
+                        if (element.parentOrganizationCode && element.parentOrganizationCode != "") {
                             let curParentOrganizationCode = element.parentOrganizationCode;
-                            for(let index = 0; index < orgs.length ; index++) {
-                                if(orgs[index].organizationCode == curParentOrganizationCode) {
+                            for (let index = 0; index < orgs.length; index++) {
+                                if (orgs[index].organizationCode == curParentOrganizationCode) {
                                     let parentOrganizationName = orgs[index].organizationName;
                                     let curOrganizationName = element.organizationName;
-                                    element.organizationName = parentOrganizationName 
+                                    element.organizationName = parentOrganizationName
                                         + "・" + curOrganizationName;
                                     break;
                                 }
@@ -450,7 +450,7 @@ export class ScheduleService {
             });
         });
     }
-    
+
     getHumanResourceUserInfoList() {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_human_resource_user_info_list.xml').then(req => {
@@ -458,18 +458,25 @@ export class ScheduleService {
                 req = this.util.xml2string(objRequest);
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
-                    
+
                     let userOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='UserOutput']");
                     let usrs = new Array();
                     for (let i = 0; i < userOutputs.length; i++) {
-                        usrs.push(this.util.xml2json(userOutputs[i]).UserOutput);
+                        let userOutput = this.util.xml2json(userOutputs[i]).UserOutput;
+                        let user = {
+                            "userId": userOutput.userId,
+                            "userName": userOutput.userName,
+                            "assignOrgCd": userOutput.assignOrgCd,
+                            "isSelected": false,
+                        }
+                        usrs.push(user);
                     }
                     resolve(usrs);
                 });
             });
         });
     }
-    
+
     addEvent() {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/add_event.xml').then(req => {
@@ -499,20 +506,39 @@ export class ScheduleService {
                 let objRequest = this.util.parseXml(req);
                 this.util.setNodeText(objRequest, ".//*[local-name()='eventID']", eventId);
                 // delete the event of the selecte dday
-				this.util.setNodeText(objRequest, ".//*[local-name()='isFromRepeatToSpecial']", "" + isFromRepeatToSpecial);
-				if (isFromRepeatToSpecial) {
-					this.util.setNodeText(objRequest, ".//*[local-name()='parentEventID']", eventId);
-					this.util.setNodeText(objRequest, ".//*[local-name()='oldStartTime']", deleteEventRequires.startTime);
-					this.util.setNodeText(objRequest, ".//*[local-name()='oldEndTime']", deleteEventRequires.endTime);
-					this.util.setNodeText(objRequest, ".//*[local-name()='startTime']", -1);
-					this.util.setNodeText(objRequest, ".//*[local-name()='endTime']", -1);
-				}
+                this.util.setNodeText(objRequest, ".//*[local-name()='isFromRepeatToSpecial']", "" + isFromRepeatToSpecial);
+                if (isFromRepeatToSpecial) {
+                    this.util.setNodeText(objRequest, ".//*[local-name()='parentEventID']", eventId);
+                    this.util.setNodeText(objRequest, ".//*[local-name()='oldStartTime']", deleteEventRequires.startTime);
+                    this.util.setNodeText(objRequest, ".//*[local-name()='oldEndTime']", deleteEventRequires.endTime);
+                    this.util.setNodeText(objRequest, ".//*[local-name()='startTime']", -1);
+                    this.util.setNodeText(objRequest, ".//*[local-name()='endTime']", -1);
+                }
 
                 req = this.util.xml2string(objRequest);
                 this.util.callCordysWebservice(req).then(data => {
 
                     resolve("true");
                 });
+            });
+        });
+    }
+
+    getDeviceListForSelect() {
+        return new Promise(resolve => {
+            this.getDeviceList().then(deviceOutputs => {
+                let facilities = new Array();
+                    for (let i = 0; i < deviceOutputs.length; i++) {
+                        let deviceOutput = this.util.xml2json(deviceOutputs[i]).DeviceOutput;
+                        let facility = {
+                            "facilityId": deviceOutput.deviceID,
+                            "facilityName": deviceOutput.deviceName,
+                            "description": deviceOutput.description,
+                            "isSelected": false,
+                        }
+                        facilities.push(facility);
+                    }
+                resolve(facilities);
             });
         });
     }

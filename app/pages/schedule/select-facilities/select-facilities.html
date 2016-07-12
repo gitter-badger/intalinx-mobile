@@ -1,0 +1,31 @@
+<ion-toolbar>
+    <ion-buttons start>
+        <button (click)="close()">
+             {{"app.action.cancel" | translate}}
+        </button>
+    </ion-buttons>
+    <ion-title>{{"app.schedule.selectFacilities" | translate}}</ion-title>
+    <ion-buttons end>
+        <button (click)="selectFacilities()" [disabled]="selectedFacilityCount<=0">
+            {{"app.action.done" | translate}}
+            <span [hidden]="selectedFacilityCount<=0">({{selectedFacilityCount}})</span>
+        </button>
+    </ion-buttons>
+</ion-toolbar>
+<ion-searchbar (input)="findFacilities($event)" [hideCancelButton]=true>
+        <ion-icon name="search"></ion-icon>
+    </ion-searchbar>
+<ion-content padding class="select-facilities">
+    <ion-list [hidden]="isSearching!=true">
+        <ion-item *ngFor="let facility of foundFacilities">
+            <ion-checkbox [(ngModel)]="facility.isSelected" (ngModelChange)="changeSelectedFacility(facility)"></ion-checkbox>
+            <ion-label>{{facility.facilityName}}</ion-label>
+        </ion-item>
+    </ion-list>
+    <ion-list [hidden]="isSearching==true">
+        <ion-item *ngFor="let facility of facilities">
+            <ion-checkbox [(ngModel)]="facility.isSelected" (ngModelChange)="changeSelectedFacility(facility)"></ion-checkbox>
+            <ion-label>{{facility.facilityName}}</ion-label>
+        </ion-item>
+    </ion-list>
+</ion-content>

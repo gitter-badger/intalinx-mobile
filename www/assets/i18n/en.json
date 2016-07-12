@@ -115,6 +115,8 @@
             "createUser": "Create User",
             "updateUser": "Update User",
             "colon": "：",
+            "selectFacilities": "Select Facilities",
+            "selectParticipants": "Select Participants",
             "facilities": {
                 "title": "Facilities"
             },

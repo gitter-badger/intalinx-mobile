@@ -116,6 +116,8 @@
             "createUser": "创建者",
             "updateUser": "变更者",
             "colon": "：",
+            "selectFacilities": "选择设施",
+            "selectParticipants": "选择出席者",
             "facilities": {
                 "title": "设施一览"
             },
