@@ -4,23 +4,32 @@
 
 <ion-toolbar>
     <ion-buttons start>
-        <button (click)="dismiss()">
+        <button (click)="close()">
             取り消し
         </button>
     </ion-buttons>
-  <ion-title>関係者選択</ion-title>
-  <ion-buttons end>
-        <button>
+    <ion-title>関係者選択</ion-title>
+    <ion-buttons end>
+        <button (click)="selectUsers()">
             選択<span [hidden]="selectedUserCount<=0">({{selectedUserCount}})</span>
         </button>
     </ion-buttons>
 </ion-toolbar>
-<ion-searchbar class="search-event" (click)="searchUsers()">
-        <ion-icon name="search"></ion-icon>
-    </ion-searchbar>
+<ion-searchbar class="search-event" (input)="findUsers($event)" [hideCancelButton]=true>
+    <ion-icon name="search"></ion-icon>
+</ion-searchbar>
 <ion-content padding class="select-participants">
-    <ion-item-group *ngFor="let orgWithUsers of orgsWithUsers">
-        <ion-item-divider light>{{orgWithUsers.organizationName}}</ion-item-divider>
+    <ion-list [hidden]="isSearching!=true">
+        <ion-item *ngFor="let user of allUserMembers">
+            <ion-checkbox [(ngModel)]="user.isSelected" (ngModelChange)="changeSelectedUser(user)"></ion-checkbox>
+            <ion-avatar item-left>
+                <img src="img/default">
+            </ion-avatar>
+            <ion-label>{{user.userName}}</ion-label>
+        </ion-item>
+    </ion-list>
+    <ion-item-group [hidden]="isSearching==true" *ngFor="let orgWithUsers of orgsWithUsers">
+        <ion-item-divider>{{orgWithUsers.organizationName}}</ion-item-divider>
         <ion-item *ngFor="let user of orgWithUsers.users">
             <ion-checkbox [(ngModel)]="user.isSelected" (ngModelChange)="changeSelectedUser(user)"></ion-checkbox>
             <ion-avatar item-left>

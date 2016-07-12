@@ -7,79 +7,89 @@ import {Util} from '../../../utils/util';
 import {ScheduleService} from '../../../providers/schedule-service';
 
 @Page({
-  templateUrl: 'build/pages/schedule/select-participants/select-participants.html',
-  providers:[Util,
-             ScheduleService],
-  pipes:[TranslatePipe]
+    templateUrl: 'build/pages/schedule/select-participants/select-participants.html',
+    providers: [Util,
+        ScheduleService],
+    pipes: [TranslatePipe]
 })
 export class SelectParticipantsPage {
-  static get parameters() {
-    return [[IonicApp], [NavController], [Util], [ViewController], [Platform], [NavParams], [ScheduleService]];
-  }
+    static get parameters() {
+        return [[IonicApp], [NavController], [Util], [ViewController], [Platform], [NavParams], [ScheduleService]];
+    }
 
-  constructor(app, nav, util, viewCtrl, platform, navParams, scheduleService) {
-    this.app = app;
-    this.nav = nav;
-    this.util = util;
-    this.viewCtrl = viewCtrl;
-    this.platform = platform;
-    this.navParams = navParams;
-    this.scheduleService = scheduleService
-    
-    this.orgs = this.getOrganizationAndUsers();
-    this.selectedUserIDs = new Array();
-    this.curSelectUser = "";
-    this.selectedUserCount = 0;
-    this.selectUser = new Array();
-  }
-  
-  getOrganizationAndUsers() {
-      this.scheduleService.getOrganizationList().then(orgs => {
-          
-          this.scheduleService.getHumanResourceUserInfoList().then(users => {
-            this.orgsWithUsers = new Array();
-            for (let i = 0; i < orgs.length; i++) {
-                let usersInOrg = new Array();
-                for (let j = 0; j < users.length; j++) {
-                    if (orgs[i].organizationCode == users[j].assignOrgCd) {
-                        let user = {
-                            "userId": users[j].userId,
-                            "userName": users[j].userName,
-                            "assignOrgCd": users[j].assignOrgCd,
-                            "isSelected": false,
+    constructor(app, nav, util, viewCtrl, platform, navParams, scheduleService) {
+        this.app = app;
+        this.nav = nav;
+        this.util = util;
+        this.viewCtrl = viewCtrl;
+        this.platform = platform;
+        this.navParams = navParams;
+        this.scheduleService = scheduleService
+
+        this.orgs = this.getOrganizationAndUsers();
+        this.selectedUserIDs = new Array();
+        this.curSelectUser = "";
+        this.selectedUserCount = 0;
+        this.selectedUser = new Array();
+    }
+
+    getOrganizationAndUsers() {
+        this.scheduleService.getOrganizationList().then(orgs => {
+
+            this.scheduleService.getHumanResourceUserInfoList().then(users => {
+                // all users
+                this.allUsers = users;
+                
+                this.orgsWithUsers = new Array();
+                for (let i = 0; i < orgs.length; i++) {
+                    let usersInOrg = new Array();
+                    for (let j = 0; j < users.length; j++) {
+                        if (orgs[i].organizationCode == users[j].assignOrgCd) {
+                            usersInOrg.push(users[j]);
                         }
-                        usersInOrg.push(user);
                     }
+                    let orgWithUsers = {
+                        organizationCode: orgs[i].organizationCode,
+                        organizationName: orgs[i].organizationName,
+                        users: usersInOrg
+                    }
+                    this.orgsWithUsers.push(orgWithUsers);
                 }
-                let orgWithUsers = {
-                    organizationCode: orgs[i].organizationCode,
-                    organizationName: orgs[i].organizationName,
-                    users: usersInOrg
-                }
-                this.orgsWithUsers.push(orgWithUsers);
+            });
+        });
+    }
+
+    close() {
+        this.viewCtrl.dismiss();
+    }
+
+    findUsers(event) {
+        this.isSearching = true;
+        let userName = event.value;
+
+        this.allUserMembers = this.allUsers;
+        if (userName && userName.trim() != '') {
+            this.allUserMembers = this.allUserMembers.filter((user) => {
+                return (user.userName.toLowerCase().indexOf(userName.toLowerCase()) > -1);
+            })
+        } else {
+            this.isSearching = false;
+        }
+    }
+    changeSelectedUser(user) {
+        if (user.isSelected == true) {
+            this.selectedUser.push(user);
+            this.selectedUserCount++;
+        } else {
+            let index = this.selectedUser.indexOf(user);
+            if (index != -1) {
+                this.selectedUser.splice(index, 1);
             }
-          });
-      });
-  }
-  
-  dismiss() {
-      this.viewCtrl.dismiss(this.selectedUserIDs);
-  }
-  
-   searchUsers() {
-      
-  }
-  
-  changeSelectedUser(user) {
-      if (user.isSelected == true) {
-          this.selectUser.push(user);
-          this.selectedUserCount++;
-      } else {
-          let index = this.selectUser.indexOf(user);
-          if(index != -1) {
-              this.selectUser.splice(index, 1);
-          }
-          this.selectedUserCount--;
-      }
-  }
+            this.selectedUserCount--;
+        }
+    }
+
+    selectUsers() {
+        this.viewCtrl.dismiss(this.selectedUser);
+    }
 }
