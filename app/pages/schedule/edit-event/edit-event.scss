@@ -10,12 +10,34 @@
     .text-input {
         margin: 0px;
     }
-    .choose-particent{
-        width: 90%;
-        margin-right: 0px;
+    
+    .participants {
+        border: 1px solid #c8c7cc;
+        // margin-top: 5px;
+        // margin-left: 5px;
+        margin: auto;
+        margin-top: 5px;    
+        width: 95%;
+        height: 120px;
+        .item-inner {
+            border: 0;
+        }
+        .participant-avator {
+            border-radius: 5px;
+        }
+        .participant-name {
+            font-size: 1.0rem;
+        }
+        .add-particent {
+            border: 1px solid #c8c7cc;
+            border-radius: 5px;
+            margin: auto;
+            font-size: 15px;
+        }
     }
-    .inputArea{
-        // height: 80%;
+    
+    .input-area{
+        height: 20px;
     }
     .inputContent{
         height: 80px;
