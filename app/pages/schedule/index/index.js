@@ -40,23 +40,23 @@ export class ScheduleIndexPage {
         this.userService = userService;
         
         this.searchEventsRequires = {
-            "categoryID":  null,
-            "isRepeat": null,
-            "startTime": null,
-            "endTime": null,
-            "deviceID": null,
-            "visibility": null,
-            "title": null,
-            "summary": null,
-            "location": null,
-            "timezone": null,
-            "selType": null,
-            "userId": null
+            "categoryID":  "",
+            "isRepeat": "",
+            "startTime": "",
+            "endTime": "",
+            "deviceID": "",
+            "visibility": "",
+            "title": "",
+            "summary": "",
+            "location": "",
+            "timezone": "",
+            "selType": "",
+            "userId": ""
         }
         this.searchHolidaysRequires = {
-            "locale": null,
-            "start": null,
-            "end": null
+            "locale": "",
+            "start": "",
+            "end": ""
         }
         this.sendData = {
             "selectedDay": "",
