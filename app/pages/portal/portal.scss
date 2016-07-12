@@ -84,10 +84,7 @@ button :disabled {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     -webkit-user-select: none;
 }
-input[type=text] {
-    -webkit-user-select: auto;
-}
-input[type=password] {
+input[type=text], input[type=password], textarea {
     -webkit-user-select: auto;
 }
 .portal {
