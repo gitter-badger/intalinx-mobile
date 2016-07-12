@@ -39,9 +39,8 @@ export class ProfileIndexPage {
 
     onPageWillEnter() {
         this.isLoadCompleted = false;
-        this.userService.getUserDetailsFromUser().then(data => {
+        this.userService.getUserDetails().then(data => {
             this.user = data;
-            this.app.user.userAvatar = data.userAvatar;
             this.isLoadCompleted = true;
         });
     }

@@ -4,9 +4,9 @@
       <ion-card secondary>
         <ion-item>
           <ion-avatar item-left>
-            <img src={{app.user.userAvatar}} />
+            <img src={{user.userAvatar}} />
           </ion-avatar>
-          <span>{{app.user.description}}</span>
+          <span>{{user.userName}}</span>
         </ion-item>
       </ion-card>
       <button ion-item *ngFor="let item of menus" (click)="openPage(item)">

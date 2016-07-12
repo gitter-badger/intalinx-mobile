@@ -133,7 +133,7 @@ export class PortalPage {
     }
 
     initializeUser() {
-        this.userService.getUserDetailsFromUser().then(data => {
+        this.userService.getUserDetails().then(data => {
             this.app.initializeUser(data);
         });
     }

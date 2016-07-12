@@ -86,7 +86,6 @@ export class UserService {
                     req = this.util.xml2string(objRequest);
 
                     this.util.callCordysWebservice(req).then(data => {
-
                         resolve("true");
                     });
                 });
@@ -127,51 +126,48 @@ export class UserService {
         return !passwordEmptyFault && arePasswordsSame;
     }
 
-    getUserDetailsFromUser() {
-        if (this.data) {
-            return Promise.resolve(this.data);
-        }
+    getUserDetails() {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/get_user_details_from_user.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/get_user_details.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
                 req = this.util.xml2string(objRequest);
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
                     let userOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='User']");
-                    let user = this.util.xml2json(userOutput).User;
-                    let userAvatar = user.ContactInformation.address;
+                    let originalUser = this.util.xml2json(userOutput).User;
+                    let userAvatar = originalUser.ContactInformation.address;
                     if (!userAvatar) {
                         userAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
                     }
-                    let returnUser = {
-                        "userName": user.UserName,
-                        "description": user.Description,
-                        "email": user.ContactInformation.email,
-                        "phone": user.ContactInformation.phone,
-                        "fax": user.ContactInformation.fax,
+                    let user = {
+                        "userId": originalUser.userName,
+                        "userName": originalUser.Description,
+                        "email": originalUser.ContactInformation.email,
+                        "phone": originalUser.ContactInformation.phone,
+                        "fax": originalUser.ContactInformation.fax,
                         "userAvatar": userAvatar,
-                        "company": user.ContactInformation.company
+                        "company": originalUser.ContactInformation.company
                     }
-                    resolve(returnUser);
+                    resolve(user);
                 });
             });
         });
     }
 
-    setUserDetailsIntoUser(description, email, phone, fax, address, company) {
+    setUserDetails(user) {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/set_user_details_into_user.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/set_user_details.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
-                this.util.setNodeText(objRequest, ".//*[local-name()='Description']", description);
-                this.util.setNodeText(objRequest, ".//*[local-name()='email']", email);
-                this.util.setNodeText(objRequest, ".//*[local-name()='phone']", phone);
-                this.util.setNodeText(objRequest, ".//*[local-name()='fax']", fax);
-                this.util.setNodeText(objRequest, ".//*[local-name()='address']", address);
-                this.util.setNodeText(objRequest, ".//*[local-name()='company']", company);
+                this.util.setNodeText(objRequest, ".//*[local-name()='Description']", user.userName);
+                this.util.setNodeText(objRequest, ".//*[local-name()='email']", user.email);
+                this.util.setNodeText(objRequest, ".//*[local-name()='phone']", user.phone);
+                this.util.setNodeText(objRequest, ".//*[local-name()='fax']", user.fax);
+                this.util.setNodeText(objRequest, ".//*[local-name()='address']", user.userAvatar);
+                this.util.setNodeText(objRequest, ".//*[local-name()='company']", user.company);
                 req = this.util.xml2string(objRequest);
 
                 this.util.callCordysWebservice(req).then(data => {
-                    resolve("true");
+                    resolve(user);
                 });
             });
         });
@@ -179,34 +175,22 @@ export class UserService {
 
     changeUserAvatar(userAvatar) {
         return new Promise(resolve => {
-            this.getUserDetailsFromUser().then(user => {
-                this.setUserDetailsIntoUser(user.description, user.email, user.phone, user.fax, userAvatar, user.company).then(data => {
-                    if (data == "true") {
-                        resolve("true");
-                    }
+            this.getUserDetails().then(user => {
+                user.userAvatar = userAvatar;
+                this.setUserDetails(user).then(user => {
+                    resolve(user);
                 });
             });
         });
     }
     
     getUserId() {
-        if (this.data) {
-            return Promise.resolve(this.data);
+        if (this.user) {
+            return Promise.resolve(this.user.userId);
         }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/get_user_details.xml').then(req => {
-                let objRequest = this.util.parseXml(req);
-                req = this.util.xml2string(objRequest);
-                
-                this.util.callCordysWebservice(req).then(data => {
-                    let objResponse = this.util.parseXml(data);
-
-                    let userOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='user']");
-                    let user = this.util.xml2json(userOutput).user;
-                    let userId = this.util.getUserIdFromAuthUserDn(user.authuserdn);
-                    
-                    resolve(userId);
-                });
+            this.getUserDetails().then(user => {
+                resolve(user.userId);
             });
         });
     }

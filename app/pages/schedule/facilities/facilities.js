@@ -5,12 +5,14 @@ import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
 import {Util} from '../../../utils/util';
 import {ScheduleService} from '../../../providers/schedule-service';
+import {UserService} from '../../../providers/user-service';
 
 @Page({
   templateUrl: 'build/pages/schedule/facilities/facilities.html',
   providers: [
       Util,
-      ScheduleService
+      ScheduleService,
+      UserService
   ],
   pipes: [TranslatePipe],
   queries: {
@@ -19,14 +21,15 @@ import {ScheduleService} from '../../../providers/schedule-service';
 })
 export class FacilitiesPage {
     static get parameters() {
-        return [[IonicApp], [NavController], [Util], [ScheduleService]];
+        return [[IonicApp], [NavController], [Util], [ScheduleService], [UserService]];
     }
 
-    constructor(app, nav, util, scheduleService) {
+    constructor(app, nav, util, scheduleService, userService) {
         this.app = app;
         this.nav = nav;
         this.util = util;
         this.scheduleService = scheduleService;
+        this.userService = userService;
         
         // initialize data
         this.initControlData();
@@ -66,11 +69,13 @@ export class FacilitiesPage {
         
         // to get user's settings.
         // Regardless the size of words, just to get the settings about locale. 
-        let userId =this.app.user.userName; // this.app.user.userId;
-        this.scheduleService.getUserLocaleSettings(userId).then(data => {
-            this.locale = data;
-            this.getSpecialDays();
-        });
+        this.userService.getUserId().then(userId => {
+            this.scheduleService.getUserLocaleSettings(userId).then(data => {
+                this.locale = data;
+                this.getSpecialDays();
+            });
+        }); 
+        
         this.getEvents();
         // to get the orientation of facility.
         // let orientation = window.screen.orientation;
@@ -190,6 +195,7 @@ export class FacilitiesPage {
             this.getSpecialDays();
             this.getEvents();
             this.setTransverseScroll();
+            this.lastActionTime = moment().unix();
         }
     }
     

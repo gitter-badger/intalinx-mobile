@@ -162,21 +162,24 @@ export class ChangeAvatarPage {
                 content: content
             });
              this.nav.present(upLoading).then(() => {
-                this.userService.changeUserAvatar(this.userAvatar).then(data => {
-                    if (data == "true") {
-                        this.app.translate.get(["app.profile.message.success.changeAvatar"]).subscribe(message => {
-                            let content = message['app.profile.message.success.changeAvatar'];
-                            let toast = Toast.create({
-                                message: content,
-                                duration: 3000,
-                                cssClass: 'middle'
-                            });
-                            // this.nav.present(toast);
-                        });
+                this.userService.changeUserAvatar(this.userAvatar).then(user => {
+                    if (user) {
                         this.isSelectChange = false;
                         this.fileInput.nativeElement.value = '';
+                        this.app.initializeUser(user);
+                        this.app.translate.get(["app.profile.message.success.changeAvatar"]).subscribe(message => {
+                            let content = message['app.profile.message.success.changeAvatar'];
+                            setTimeout(() => {
+                                let toast = Toast.create({
+                                    message: content,
+                                    duration: 3000,
+                                    cssClass: 'middle'
+                                });
+                                this.nav.present(toast);
+                            }, 500);
+                        });
                     }
-                    upLoading.dismiss();
+                    upLoading.dismiss();    
                     this.isLoadCompleted = true;
                 }, function(){
                     upLoading.dismiss();

@@ -5,9 +5,9 @@ import {TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe}
 import {LoginPage} from './pages/login/login';
 
 @App({
-    templateUrl: 'build/app.html', //'<ion-nav [root]="rootPage"></ion-nav>',
+    templateUrl: 'build/app.html',
     config: {
-        // "BASE_URL": "http://www.intalinx.cn/home/intalinxcloud/",
+        //"BASE_URL": "https://iscsys.intasect.co.jp/home/InternalSystem/",
         "BASE_URL": "http://192.168.11.29/home/InternalSystem/",
         "GATEWAY_URL": "com.eibus.web.soap.Gateway.wcp",
         "PRE_LOGIN_INFO_URL": "com.eibus.sso.web.authentication.PreLoginInfo.wcp",
@@ -68,7 +68,7 @@ export class IntaLinx {
             "userAvatar": this.userAvatarImageUrl + this.userAvatarDefaultImage
         };
         let menus = [];
-        this.app.user = user;
+        this.user = user;
         this.menus = menus;     
         
         this.app.redirectLoginPage = this.redirectLoginPage(this);
@@ -119,7 +119,7 @@ export class IntaLinx {
 
     initializeUser(that) {
         return function(user) {
-            that.app.user = user;
+            that.user = user;
         }
     }
     
