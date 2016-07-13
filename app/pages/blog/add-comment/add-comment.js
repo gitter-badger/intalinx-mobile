@@ -55,11 +55,7 @@ export class AddCommentPage {
     }
 
     onPageWillEnter() {
-        if (this.comment.content && this.util.deleteEmSpaceEnSpaceNewLineInCharacter(this.comment.content) != "") {
-            this.isDisabled = null;
-        } else {
-            this.isDisabled = true;
-        }
+        this.changeContent();
     }
 
     changeContent() {
@@ -68,5 +64,13 @@ export class AddCommentPage {
         } else {
             this.isDisabled = true;
         }
+        this.autoResizeContent();
+    }
+
+    autoResizeContent() {
+        let textarea = document.querySelector(".add-comment textarea");
+        if (textarea.scrollHeight > 0) {
+            textarea.style.height = textarea.scrollHeight + "px";
+        } 
     }
 }
