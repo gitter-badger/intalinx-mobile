@@ -61,6 +61,14 @@ export class Util {
         return XmlUtil.setXMLAttribute(elementNode, attributeNamespace, attributeName, attributeValue);
     }
     
+    createXMLElement(xmlDocument, namespaceURI, qualifiedName) {
+        return XmlUtil.createElementNS(xmlDocument, namespaceURI, qualifiedName);
+    }
+    
+    appendXMLNode(fromNode, toNode) {
+        return XmlUtil.appendXMLNode(fromNode, toNode);
+    }
+    
     callCordysWebserviceUseAnonymous(request) {
         let useAnonymous = true;
         return this.callCordysWebservice(request, useAnonymous);
