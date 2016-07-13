@@ -140,7 +140,7 @@ export class UserService {
                         userAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
                     }
                     let user = {
-                        "userId": originalUser.userName,
+                        "userId": originalUser.UserName,
                         "userName": originalUser.Description,
                         "email": originalUser.ContactInformation.email,
                         "phone": originalUser.ContactInformation.phone,
