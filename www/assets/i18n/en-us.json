@@ -18,7 +18,8 @@
             "back": "back",
             "cancel": "cancel",
             "select": "select",
-            "done": "select"
+            "done": "select",
+            "search": "search"
         },
         "date": {
             "YYYYMM": "{{MM}}/{{YYYY}}",

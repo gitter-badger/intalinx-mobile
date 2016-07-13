@@ -18,7 +18,8 @@
             "back": "返回",
             "cancel": "取消",
             "select": "选择",
-            "done": "选择"
+            "done": "选择",
+            "search": "搜索"
         },
         "date": {
             "YYYYMM": "{{YYYY}}年{{MM}}月",

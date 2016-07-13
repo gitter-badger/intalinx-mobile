@@ -18,7 +18,8 @@
             "back": "戻る",
             "cancel": "キャンセル",
             "select": "選択", 
-            "done": "選択" 
+            "done": "選択",
+            "search": "検索"
         },
         "date": {
             "YYYYMM": "{{YYYY}}年{{MM}}月",
