@@ -266,7 +266,7 @@ export class ScheduleService {
                 for (let i = 0; i < eventOutputs.length; i++) {
                     let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
                     let startDay = Number(moment(eventOutput.startTime, "X").format("D"));
-                    let endDay = Number(moment(eventOutput.endTime, "X").format("D"));
+                    let endDay = Number(moment(eventOutput.endTime, "X").format("D"));     
                     for (let i = startDay; i <= endDay; i++) {
                         days.push(i.toString());
                     }
@@ -328,10 +328,10 @@ export class ScheduleService {
                     let objResponse = this.util.parseXml(data);
                     let eventOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='EventOutput']");
                     let event = this.util.xml2json(eventOutput).EventOutput;
-                    
+
                     let participants = [];
                     let participantNodes = this.util.selectXMLNodes(objResponse, ".//*[local-name()='Participant']");
-                    for(let i = 0; i < participantNodes.length; i++) {
+                    for (let i = 0; i < participantNodes.length; i++) {
                         participants.push(this.util.xml2json(participantNodes[i]).Participant);
                     }
                     let returnData = {
@@ -339,6 +339,7 @@ export class ScheduleService {
                         "participants": participants
                     }
                     resolve(returnData);
+                    resolve(event);
                 });
             });
         });
@@ -360,10 +361,10 @@ export class ScheduleService {
                     let normalCategory = this.util.selectXMLNodes(objResponse, ".//*[local-name()='FixedCategory']");
                     let otherCategories = this.util.selectXMLNodes(objResponse, ".//*[local-name()='OtherCategoryList']");
                     let categories = new Array();
-                    for(let i = 0; i < normalCategory.length; i++) {
+                    for (let i = 0; i < normalCategory.length; i++) {
                         categories.push(this.util.xml2json(normalCategory[i]).FixedCategory);
                     }
-                    for(let i = 0; i < otherCategories.length; i++) {
+                    for (let i = 0; i < otherCategories.length; i++) {
                         categories.push(this.util.xml2json(otherCategories[i]).OtherCategoryList);
                     }
                     resolve(categories);
@@ -378,10 +379,7 @@ export class ScheduleService {
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.getCategoryList().then(data => {
-                let fixedCategories = data.FixedCategory;
-                let otherCategories = data.OtherCategoryList;
-                let categories = data.FixedCategory.concat(data.OtherCategoryList);
+            this.getCategoryList().then(categories => {
                 let categoryName;
                 categories.forEach(function(element) {
                     if (element.categoryID == categoryId) {
@@ -393,7 +391,7 @@ export class ScheduleService {
         });
     }
 
-    getDeviceList() {
+    getDeviceListWithoutTranferToJson() {
         if (this.data) {
             // already loaded data
             return Promise.resolve(this.data);
@@ -405,14 +403,25 @@ export class ScheduleService {
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
                     let deviceOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='DeviceOutput']");
-                    
-                    let facilities = [];
-                    for(let i = 0; i < deviceOutputs.length; i++) 
-                    {
-                        facilities.push(this.util.xml2json(deviceOutputs[i]).DeviceOutput);
-                    }
-                    resolve(facilities);
+
+                    resolve(deviceOutputs);
                 });
+            });
+        });
+    }
+
+    getDeviceList() {
+        if (this.data) {
+            // already loaded data
+            return Promise.resolve(this.data);
+        }
+        return new Promise(resolve => {
+            this.getDeviceListWithoutTranferToJson.then(deviceOutputs => {
+                let facilities = [];
+                for (let i = 0; i < deviceOutputs.length; i++) {
+                    facilities.push(this.util.xml2json(deviceOutputs[i]).DeviceOutput);
+                }
+                resolve(facilities);
             });
         });
     }
@@ -425,7 +434,7 @@ export class ScheduleService {
         return new Promise(resolve => {
             let deviceIdsArray = deviceIds.split(",");
 
-            this.getDeviceList().then(deviceOutputs => {
+            this.getDeviceListWithoutTranferToJson().then(deviceOutputs => {
                 let deviceNames = new Array();
                 for (let i = 0; i < deviceOutputs.length; i++) {
                     let device = this.util.xml2json(deviceOutputs[i]).DeviceOutput;
@@ -437,7 +446,7 @@ export class ScheduleService {
             });
         });
     }
-    
+
     getOrganizationList() {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_organanization_list.xml').then(req => {
@@ -451,15 +460,15 @@ export class ScheduleService {
                     for (let i = 0; i < organizationOutputs.length; i++) {
                         orgs.push(this.util.xml2json(organizationOutputs[i]).OrganizationOutput);
                     }
-                    
+
                     orgs.forEach(function(element) {
-                        if(element.parentOrganizationCode && element.parentOrganizationCode != "") {
+                        if (element.parentOrganizationCode && element.parentOrganizationCode != "") {
                             let curParentOrganizationCode = element.parentOrganizationCode;
-                            for(let index = 0; index < orgs.length; index++) {
-                                if(orgs[index].organizationCode == curParentOrganizationCode) {
+                            for (let index = 0; index < orgs.length; index++) {
+                                if (orgs[index].organizationCode == curParentOrganizationCode) {
                                     let parentOrganizationName = orgs[index].organizationName;
                                     let curOrganizationName = element.organizationName;
-                                    element.organizationName = parentOrganizationName 
+                                    element.organizationName = parentOrganizationName
                                         + "・" + curOrganizationName;
                                     break;
                                 }
@@ -472,7 +481,7 @@ export class ScheduleService {
             });
         });
     }
-    
+
     getHumanResourceUserInfoList() {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_human_resource_user_info_list.xml').then(req => {
@@ -480,7 +489,7 @@ export class ScheduleService {
                 req = this.util.xml2string(objRequest);
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
-                    
+
                     let userOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='UserOutput']");
                     let usrs = new Array();
                     for (let i = 0; i < userOutputs.length; i++) {
@@ -498,13 +507,13 @@ export class ScheduleService {
             });
         });
     }
-    
+
     addEvent(event, participants) {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/schedule/add_event.xml').then(req => { 
+            this.util.getRequestXml('./assets/requests/schedule/add_event.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
                 req = this.util.xml2string(objRequest);
-                
+
                 this.util.setNodeText(req, ".//*[local-name()='categoryID']", event.categoryID);
                 this.util.setNodeText(req, ".//*[local-name()='isAllDay']", event.isAllDay);
                 this.util.setNodeText(req, ".//*[local-name()='isRepeat']", event.isRepeat);
@@ -522,61 +531,61 @@ export class ScheduleService {
                 this.util.setNodeText(req, ".//*[local-name()='isDeviceRepeatWarned']", event.isDeviceRepeatWarned);
                 this.util.setNodeText(req, ".//*[local-name()='isEventRepeatWarned']", event.isEventRepeatWarned);
                 // add paticipants to the request.
-				let oEventOutput = this.util.selectXMLNode(req, ".//*[local-name()='EventOutput']");
-				let iLen = participants.length;
+                let oEventOutput = this.util.selectXMLNode(req, ".//*[local-name()='EventOutput']");
+                let iLen = participants.length;
                 debugger
                 // Is this definetion ok?
                 let curEventNamespace = "http://schemas.intasect.co.jp/mycal/service/event";
-				if (iLen > 0) {
-					for (var i = 0; i < iLen; i++) {
-						let curParticipant = participants[i];
+                if (iLen > 0) {
+                    for (var i = 0; i < iLen; i++) {
+                        let curParticipant = participants[i];
                         var oParticipant = this.util.createXMLElement(oEventOutput, curEventNamespace, "Participant");
-						var oUserID = this.util.createXMLElement(oParticipant, curEventNamespace, "userID");
-						var oUserName = this.util.createXMLElement(oParticipant, curEventNamespace, "userName");
-						this.util.setNodeText(oUserID, curParticipant.userID);
-						this.util.appendXMLNode(oUserID, oParticipant);
-						this.util.setNodeText(oUserName, curParticipant.userName);
-						this.util.appendXMLNode(oUserName, oParticipant);
-						this.util.appendXMLNode(oParticipant, oEventOutput);
-					}
-				}
+                        var oUserID = this.util.createXMLElement(oParticipant, curEventNamespace, "userID");
+                        var oUserName = this.util.createXMLElement(oParticipant, curEventNamespace, "userName");
+                        this.util.setNodeText(oUserID, curParticipant.userID);
+                        this.util.appendXMLNode(oUserID, oParticipant);
+                        this.util.setNodeText(oUserName, curParticipant.userName);
+                        this.util.appendXMLNode(oUserName, oParticipant);
+                        this.util.appendXMLNode(oParticipant, oEventOutput);
+                    }
+                }
                 debugger
                 this.util.callCordysWebservice(req).then(data => {
                     let objResponse = this.util.parseXml(data);
                     debugger
-                //     if (!oBdiObject.soapFaultOccurred) {
-				// 	gsData.setChildPageChanged(true);
-				// 	CordysUtil.success(MyCalUtil.getMessage("MYCAL_ERROR_0020006"));
-				// 	CordysUtil.closeModal();
-				// }　else　{
-				// 	var sWarnMesssageCode = oBdiObject.warnCode;
-				// 	var sWarnMesssageInfo = oBdiObject.warnMessage;
-				// 	if (sWarnMesssageCode && sWarnMesssageCode.indexOf("WARN003") > -1)　{
-				// 		// 繰り返し予定は存在なし
-				// 		var sMessages = convertWarningMessage(sWarnMesssageInfo);
-				// 		CordysUtil.error(sMessages);
-				// 	} else if (sWarnMesssageCode && sWarnMesssageCode.indexOf("WARN002") > -1) {
-				// 		// 予定重複
-                //         var okHandler = function() {
-				// 			var isDeviceRepeatWarned = false;
-				// 			var isEventRepeatWarned = true;
-                //             return addEvent(isDeviceRepeatWarned, isEventRepeatWarned);
-                //         }
-                //         var sMessages = convertWarningMessage(sWarnMesssageInfo);
-				// 		CordysUtil.confirm(sMessages,okHandler);
-                //     } else if　(sWarnMesssageCode && sWarnMesssageCode.indexOf("WARN001") > -1) {
-				// 		// 施設重複
-                //         var okHandler = function() {
-				// 			var isDeviceRepeatWarned = true;
-				// 			var isEventRepeatWarned = true;
-                //             return addEvent(isDeviceRepeatWarned, isEventRepeatWarned);
-                //         }
-                //         var sMessages = convertWarningMessage(sWarnMesssageInfo);
-				// 		CordysUtil.confirm(sMessages,okHandler);
-				// 	} else　{
-				// 		CordysUtil.systemError();
-				// 	}
-				// }　
+                    //     if (!oBdiObject.soapFaultOccurred) {
+                    // 	gsData.setChildPageChanged(true);
+                    // 	CordysUtil.success(MyCalUtil.getMessage("MYCAL_ERROR_0020006"));
+                    // 	CordysUtil.closeModal();
+                    // }　else　{
+                    // 	var sWarnMesssageCode = oBdiObject.warnCode;
+                    // 	var sWarnMesssageInfo = oBdiObject.warnMessage;
+                    // 	if (sWarnMesssageCode && sWarnMesssageCode.indexOf("WARN003") > -1)　{
+                    // 		// 繰り返し予定は存在なし
+                    // 		var sMessages = convertWarningMessage(sWarnMesssageInfo);
+                    // 		CordysUtil.error(sMessages);
+                    // 	} else if (sWarnMesssageCode && sWarnMesssageCode.indexOf("WARN002") > -1) {
+                    // 		// 予定重複
+                    //         var okHandler = function() {
+                    // 			var isDeviceRepeatWarned = false;
+                    // 			var isEventRepeatWarned = true;
+                    //             return addEvent(isDeviceRepeatWarned, isEventRepeatWarned);
+                    //         }
+                    //         var sMessages = convertWarningMessage(sWarnMesssageInfo);
+                    // 		CordysUtil.confirm(sMessages,okHandler);
+                    //     } else if　(sWarnMesssageCode && sWarnMesssageCode.indexOf("WARN001") > -1) {
+                    // 		// 施設重複
+                    //         var okHandler = function() {
+                    // 			var isDeviceRepeatWarned = true;
+                    // 			var isEventRepeatWarned = true;
+                    //             return addEvent(isDeviceRepeatWarned, isEventRepeatWarned);
+                    //         }
+                    //         var sMessages = convertWarningMessage(sWarnMesssageInfo);
+                    // 		CordysUtil.confirm(sMessages,okHandler);
+                    // 	} else　{
+                    // 		CordysUtil.systemError();
+                    // 	}
+                    // }　
 
                     let returnObject = this.util.selectXMLNode(objResponse, ".//*[local-name()='return']");
                     let returnData = this.util.xml2json(returnObject).return;
@@ -585,7 +594,7 @@ export class ScheduleService {
             });
         });
     }
-    
+
     deleteEvent(deleteEventRequires) {
         if (this.data) {
             // already loaded data
@@ -619,18 +628,18 @@ export class ScheduleService {
 
     getDeviceListForSelect() {
         return new Promise(resolve => {
-            this.getDeviceList().then(deviceOutputs => {
+            this.getDeviceListWithoutTranferToJson().then(deviceOutputs => {
                 let facilities = new Array();
-                    for (let i = 0; i < deviceOutputs.length; i++) {
-                        let deviceOutput = this.util.xml2json(deviceOutputs[i]).DeviceOutput;
-                        let facility = {
-                            "facilityId": deviceOutput.deviceID,
-                            "facilityName": deviceOutput.deviceName,
-                            "description": deviceOutput.description,
-                            "isSelected": false,
-                        }
-                        facilities.push(facility);
+                for (let i = 0; i < deviceOutputs.length; i++) {
+                    let deviceOutput = this.util.xml2json(deviceOutputs[i]).DeviceOutput;
+                    let facility = {
+                        "facilityId": deviceOutput.deviceID,
+                        "facilityName": deviceOutput.deviceName,
+                        "description": deviceOutput.description,
+                        "isSelected": false,
                     }
+                    facilities.push(facility);
+                }
                 resolve(facilities);
             });
         });
