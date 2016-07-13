@@ -87,5 +87,8 @@ button :disabled {
 input[type=text], input[type=password], textarea {
     -webkit-user-select: auto;
 }
+textarea {
+    resize: none;
+}
 .portal {
 }
