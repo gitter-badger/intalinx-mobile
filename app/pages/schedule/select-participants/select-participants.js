@@ -17,48 +17,49 @@ export class SelectParticipantsPage {
         return [[IonicApp], [NavController], [Util], [ViewController], [Platform], [NavParams], [ScheduleService]];
     }
 
-    constructor(app, nav, util, viewCtrl, platform, navParams, scheduleService) {
+    constructor(app, nav, util, viewCtrl, platform, params, scheduleService) {
         this.app = app;
         this.nav = nav;
         this.util = util;
         this.viewCtrl = viewCtrl;
         this.platform = platform;
-        this.navParams = navParams;
+        this.params = params;
         this.scheduleService = scheduleService;
 
-        this.getOrganizationAndUsers();
-        this.selectedUserCount = 0;
-        this.selectedUser = new Array();
-    }
-
-    getOrganizationAndUsers() {
-        this.scheduleService.getOrganizationList().then(orgs => {
-
-            this.scheduleService.getHumanResourceUserInfoList().then(users => {
-                // all users
-                this.allUsers = users;
-                
-                this.orgsWithUsers = new Array();
-                for (let i = 0; i < orgs.length; i++) {
-                    let usersInOrg = new Array();
-                    for (let j = 0; j < users.length; j++) {
-                        if (orgs[i].organizationCode == users[j].assignOrgCd) {
-                            usersInOrg.push(users[j]);
-                        }
-                    }
-                    let orgWithUsers = {
-                        organizationCode: orgs[i].organizationCode,
-                        organizationName: orgs[i].organizationName,
-                        users: usersInOrg
-                    }
-                    this.orgsWithUsers.push(orgWithUsers);
-                }
-            });
+        this.originUsers = this.params.get("participants");
+        this.getOrganizationAndUsers().then(data => {
+            this.selectedUsersCount = 0;
+            this.setOriginSelectedUsers();
         });
     }
 
-    close() {
-        this.viewCtrl.dismiss();
+    getOrganizationAndUsers() {
+        return new Promise(resolve => {
+            this.scheduleService.getOrganizationList().then(orgs => {
+
+                this.scheduleService.getHumanResourceUserInfoList().then(users => {
+                    // all users
+                    this.allUsers = users;
+
+                    this.orgsWithUsers = new Array();
+                    for (let i = 0; i < orgs.length; i++) {
+                        let usersInOrg = new Array();
+                        for (let j = 0; j < users.length; j++) {
+                            if (orgs[i].organizationCode == users[j].assignOrgCd) {
+                                usersInOrg.push(users[j]);
+                            }
+                        }
+                        let orgWithUsers = {
+                            organizationCode: orgs[i].organizationCode,
+                            organizationName: orgs[i].organizationName,
+                            users: usersInOrg
+                        }
+                        this.orgsWithUsers.push(orgWithUsers);
+                    }
+                    resolve("true");
+                });
+            });
+        });
     }
 
     findUsers(event) {
@@ -74,20 +75,46 @@ export class SelectParticipantsPage {
             this.isSearching = false;
         }
     }
+
     changeSelectedUser(user) {
         if (user.isSelected == true) {
-            this.selectedUser.push(user);
-            this.selectedUserCount++;
+            this.selectedUsers.push(user);
+            this.selectedUsersCount++;
         } else {
-            let index = this.selectedUser.indexOf(user);
+            let index = this.selectedUsers.indexOf(user);
             if (index != -1) {
-                this.selectedUser.splice(index, 1);
+                this.selectedUsers.splice(index, 1);
             }
-            this.selectedUserCount--;
+            this.selectedUsersCount--;
         }
     }
 
+    setOriginSelectedUsers() {
+        this.selectedUsers = new Array();
+        for (let i = 0; i < this.originUsers.length; i++) {
+            for (let j = 0; j < this.allUsers.length; j++) {
+                if (this.originUsers[i].userID == this.allUsers[j].userId) {
+                    this.allUsers[j].isSelected = true;
+                    this.selectedUsersCount++;
+                    this.selectedUsers.push(this.allUsers[j]);
+                }
+            }
+        }
+    }
+
+    close() {
+        this.viewCtrl.dismiss(this.originUsers);
+    }
+
     selectUsers() {
-        this.viewCtrl.dismiss(this.selectedUser);
+        let sendUsers = new Array();
+        this.selectedUsers.forEach(function(selectedUser) {
+            let user = {
+                "userID": selectedUser.userId,
+                "userName": selectedUser.userName
+            }
+            sendUsers.push(user);
+        });
+        this.viewCtrl.dismiss(sendUsers);
     }
 }

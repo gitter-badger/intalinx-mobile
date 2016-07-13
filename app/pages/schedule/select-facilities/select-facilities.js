@@ -17,28 +17,32 @@ export class SelectFacilitiesPage {
         return [[IonicApp], [NavController], [Util], [ViewController], [Platform], [NavParams], [ScheduleService]];
     }
 
-    constructor(app, nav, util, viewCtrl, platform, navParams, scheduleService) {
+    constructor(app, nav, util, viewCtrl, platform, params, scheduleService) {
         this.app = app;
         this.nav = nav;
         this.util = util;
         this.viewCtrl = viewCtrl;
         this.platform = platform;
-        this.navParams = navParams;
+        this.params = params;
         this.scheduleService = scheduleService;
 
-        this.getFacilities();
-        this.selectedFacilityCount = 0;
+        this.originFacilities = this.params.get("facilities");
+        this.getFacilities().then(data => {
+            this.selectedFacilityCount = 0;
+            this.setOriginSelectedFacilities();
+        });
+
         this.selectedFacilities = new Array();
     }
 
     getFacilities() {
-        this.scheduleService.getDeviceListForSelect().then(devices => {
-            this.facilities = devices;
-        });
-    }
+        return new Promise(resolve => {
+            this.scheduleService.getDeviceListForSelect().then(devices => {
+                this.facilities = devices;
+                resolve(this.facilities);
+            });
 
-    close() {
-        this.viewCtrl.dismiss();
+        });
     }
 
     findFacilities(event) {
@@ -68,7 +72,34 @@ export class SelectFacilitiesPage {
         }
     }
 
-    selectFacilities() {
-        this.viewCtrl.dismiss(this.selectedFacilities);
+    setOriginSelectedFacilities() {
+        this.selectedUser = new Array();
+        for (let i = 0; i < this.originFacilities.length; i++) {
+            for (let j = 0; j < this.facilities.length; j++) {
+                if (this.originFacilities[i].deviceID == this.facilities[j].facilityId) {
+                    this.facilities[j].isSelected = true;
+                    this.selectedFacilityCount++;
+                    this.selectedFacilities.push(this.facilities[j]);
+                }
+            }
+
+        }
     }
+
+    close() {
+        this.viewCtrl.dismiss(this.originFacilities);
+    }
+
+    selectFacilities() {
+        let sendFacilities = new Array();
+        this.selectedFacilities.forEach(function(selectedFacility) {
+            let facility = {
+                "deviceID": selectedFacility.facilityId,
+                "deviceName": selectedFacility.facilityName
+            }
+            sendFacilities.push(facility);
+        });
+        this.viewCtrl.dismiss(sendFacilities);
+    }
+
 }

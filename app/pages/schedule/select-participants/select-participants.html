@@ -6,9 +6,9 @@
     </ion-buttons>
     <ion-title>{{"app.schedule.selectParticipants" | translate}}</ion-title>
     <ion-buttons end>
-        <button (click)="selectUsers()" [disabled]="selectedUserCount<=0">
+        <button (click)="selectUsers()" [disabled]="selectedUsersCount<=0">
             {{"app.action.done" | translate}}
-            <span [hidden]="selectedUserCount<=0">({{selectedUserCount}})</span>
+            <span [hidden]="selectedUsersCount<=0">({{selectedUsersCount}})</span>
         </button>
     </ion-buttons>
 </ion-toolbar>
