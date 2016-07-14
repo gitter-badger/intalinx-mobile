@@ -4,18 +4,18 @@
             {{"app.action.cancel" | translate}}
         </button>
     </ion-buttons>
-    <ion-title>{{"app.schedule.selectParticipants" | translate}}</ion-title>
+    <ion-title>{{"app.schedule.selectUser" | translate}}</ion-title>
     <ion-buttons end>
-        <button (click)="selectUsers()" [disabled]="selectedUsersCount<=0">
+        <button (click)="selectUsers()" [disabled]="selectedUserCount<=0">
             {{"app.action.done" | translate}}
-            <span [hidden]="selectedUsersCount<=0">({{selectedUsersCount}})</span>
+            <span [hidden]="selectedUserCount<=0">({{selectedUserCount}})</span>
         </button>
     </ion-buttons>
 </ion-toolbar>
 <ion-searchbar (input)="findUsers($event)" [hideCancelButton]=true placeholder='{{"app.action.search" | translate}}'>
     <ion-icon name="search"></ion-icon>
 </ion-searchbar>
-<ion-content padding class="select-participants">
+<ion-content padding class="select-user">
     <ion-list [hidden]="isSearching!=true">
         <ion-item *ngFor="let user of foundUserMembers">
             <ion-checkbox [(ngModel)]="user.isSelected" (ngModelChange)="changeSelectedUser(user)"></ion-checkbox>

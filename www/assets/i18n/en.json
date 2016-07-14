@@ -18,7 +18,8 @@
             "back": "back",
             "cancel": "cancel",
             "select": "select",
-            "done": "select"
+            "done": "select",
+            "search": "search"
         },
         "date": {
             "YYYYMM": "{{MM}}/{{YYYY}}",
@@ -117,12 +118,14 @@
             "colon": "：",
             "selectFacilities": "Select Facilities",
             "selectParticipants": "Select Participants",
+            "selectUser": "Select User",
+            "scheduleOfPerson": "'s Schedule",
             "facilities": {
                 "title": "Facilities"
             },
             "index": {
                 "allDay": "all-day",
-                "facilities": "Facilities"
+                "mySchedule": "My Schedule"
             },
             "eventDetail": {
                 "title": "Event Detail"

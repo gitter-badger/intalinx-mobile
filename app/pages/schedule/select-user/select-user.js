@@ -7,12 +7,12 @@ import {Util} from '../../../utils/util';
 import {ScheduleService} from '../../../providers/schedule-service';
 
 @Page({
-    templateUrl: 'build/pages/schedule/select-participants/select-participants.html',
+    templateUrl: 'build/pages/schedule/select-user/select-user.html',
     providers: [Util,
         ScheduleService],
     pipes: [TranslatePipe]
 })
-export class SelectParticipantsPage {
+export class SelectUserPage {
     static get parameters() {
         return [[IonicApp], [NavController], [Util], [ViewController], [Platform], [NavParams], [ScheduleService]];
     }
@@ -26,11 +26,9 @@ export class SelectParticipantsPage {
         this.params = params;
         this.scheduleService = scheduleService;
 
-        this.originUsers = this.params.get("participants");
-        this.getOrganizationAndUsers().then(data => {
-            this.selectedUsersCount = 0;
-            this.setOriginSelectedUsers();
-        });
+        this.selectedUserCount = 0;
+        this.selectedUser = "";
+        this.getOrganizationAndUsers();
     }
 
     getOrganizationAndUsers() {
@@ -40,7 +38,7 @@ export class SelectParticipantsPage {
                 this.scheduleService.getHumanResourceUserInfoList().then(users => {
                     // all users
                     this.allUsers = users;
-
+                    // this.foundUserMembers = this.allUsers;
                     this.orgsWithUsers = new Array();
                     for (let i = 0; i < orgs.length; i++) {
                         let usersInOrg = new Array();
@@ -78,43 +76,24 @@ export class SelectParticipantsPage {
 
     changeSelectedUser(user) {
         if (user.isSelected == true) {
-            this.selectedUsers.push(user);
-            this.selectedUsersCount++;
-        } else {
-            let index = this.selectedUsers.indexOf(user);
-            if (index != -1) {
-                this.selectedUsers.splice(index, 1);
-            }
-            this.selectedUsersCount--;
-        }
-    }
-
-    setOriginSelectedUsers() {
-        this.selectedUsers = new Array();
-        for (let i = 0; i < this.originUsers.length; i++) {
-            for (let j = 0; j < this.allUsers.length; j++) {
-                if (this.originUsers[i].userID == this.allUsers[j].userId) {
-                    this.allUsers[j].isSelected = true;
-                    this.selectedUsersCount++;
-                    this.selectedUsers.push(this.allUsers[j]);
+            this.allUsers.forEach(function(everyuser) {
+                if (user.userId != everyuser.userId && everyuser.isSelected == true) {
+                    everyuser.isSelected = false;
                 }
-            }
+            });
+            this.selectedUser = user;
+            this.selectedUserCount = 1;
+        } else {
+            this.selectedUser = "";
+            this.selectedUserCount = 0;
         }
     }
 
     close() {
-        this.viewCtrl.dismiss(this.originUsers);
+        this.viewCtrl.dismiss();
     }
 
     selectUsers() {
-        let sendUsers = new Array();
-        this.selectedUsers.forEach(function(selectedUser) {
-            let user = {
-                "userID": selectedUser.userId,
-                "userName": selectedUser.userName
-            }
-            sendUsers.push(user);
-        });
-        this.viewCtrl.dismiss(sendUsers);
+        this.viewCtrl.dismiss(this.selectedUser);
     }
 }

@@ -18,7 +18,8 @@
             "back": "返回",
             "cancel": "取消",
             "select": "选择",
-            "done": "选择"
+            "done": "选择",
+            "search": "搜索"
         },
         "date": {
             "YYYYMM": "{{YYYY}}年{{MM}}月",
@@ -118,12 +119,14 @@
             "colon": "：",
             "selectFacilities": "选择设施",
             "selectParticipants": "选择出席者",
+            "selectUser": "选择要查看的用户",
+            "scheduleOfPerson": "的日程",
             "facilities": {
                 "title": "设施一览"
             },
             "index": {
                 "allDay": "全天",
-                "facilities": "设施一览"
+                "mySchedule": "我"
             },
             "eventDetail": {
                 "title": "事件详细"
