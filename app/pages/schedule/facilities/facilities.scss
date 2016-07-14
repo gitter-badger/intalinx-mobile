@@ -1,28 +1,43 @@
+
 .facilities {
     $grey-border: 1px solid #D7D7D7;
     $red-border: 2px solid red;
-    $cell-width: 200px;
+    $facility-list-width: 200px;
     $cell-height: 60px;
-    $cell-padding: 6px;
-    // the whoile width of data-grid
-    $content-width: 7200px;
-    $background-0: rgb(210, 80, 127);
-    $background-1: rgb(100, 149, 237);
-    $background-2: rgb(153, 50, 204);
-    $background-3: rgb(241, 169, 160);
-    $background-4: rgb(255, 140, 0);
-    $background-5: rgb(46, 139, 87);
-    $background-6: rgb(105, 105, 105);
-    $background-7: rgb(249, 191, 59);
-    $background-8: rgb(122, 231, 191);
-    $background-9: rgb(15, 35, 80);
-    $background-10: rgb(135, 38, 87);
-    $background-11: rgb(227, 38, 54);
-    $background-12: rgb(137, 91, 138);
+    $cell-width: 120px;
     
-    height: 100%;
-    ion-col {
-        padding: 0px;
+    $cell-padding: 6px;
+    $event-height: 60px;
+    $event-padding: 3px;
+    $event-margin: 0px;
+    $background-color-list :
+        rgb(210, 80, 127),
+        rgb(100, 149, 237),
+        rgb(153, 50, 204),
+        rgb(241, 169, 160),
+        rgb(255, 140, 0),
+        rgb(46, 139, 87),
+        rgb(105, 105, 105),
+        rgb(249, 191, 59),
+        rgb(122, 231, 191),
+        rgb(15, 35, 80),
+        rgb(135, 38, 87),
+        rgb(227, 38, 54),
+        rgb(137, 91, 138);
+
+    @mixin generate-color($prefix: false) {
+        @each $color in $background-color-list {
+            $i: index($background-color-list, $color) - 1;
+            @if ($prefix) {
+                #{$prefix}.color#{$i} {
+                    background-color: $color;
+                }
+            } @else {
+                .color#{$i} {
+                    background-color: $color;
+                }
+            }            
+        }
     }
     .from-to {
         ion-datetime {
@@ -41,63 +56,22 @@
             opacity: .7;
         }
     }
-    .header {
-        width: 100%;
-        .header-grid {
-            width: inherit;
-            .timezone {
-                height: $cell-height;
-                width: $cell-width;
-                padding: $cell-padding;
-                border-right: $grey-border; 
-                border-bottom: $grey-border; 
-                font-size: 2.2rem;
-                padding-top: 15px;
-                padding-left: 10px;
-            }
-            .fixed-date-container {
-                width: 0px;
-                .fixed-date{
-                    position: relative;
-                    width: 150px;
-                    padding: $cell-padding;
-                    z-index: 11;
-                }
-            }
-            
-            .days-period-container {
-                overflow: hidden;
-                ion-row {
-                    width: $content-width;
-                }
-                .days-col {
-                    padding: $cell-padding;
-                    border-right: $grey-border;
-                    padding-left: 5px;
-                    height: 30px;
-                }
-                .period-col-container {
-                    display: flex;
-                    align-items: flex-start;
-                    flex-grow: 1;
-                    .period-col {
-                        padding: $cell-padding;
-                        border-top: $grey-border;
-                        border-right: $grey-border;
-                        border-bottom: $grey-border;
-                        height: 30px;
-                        text-align: center;
-                    }
-                }
-            }
-        }
-    }
     
-    .contents {
-        border: $grey-border;
+    .ganttview {
+        padding: 0px;
         overflow: hidden;
+        display: flex;
+        flex-direction: row;
+        border: $grey-border;
         ion-grid {
             padding: 0px;
+        }
+        .fixed-header {
+            position: fixed;
+            background-color: #fff;
+            z-index: 12;
+            border-bottom: $grey-border;
+            overflow: hidden;
         }
         .sepcialday{
             background-color: #FFEFE5;
@@ -105,180 +79,139 @@
         .saturday {
             background-color: #EBF0F6;
         }
-        
-        .body {
-            display: flex;
-            justify-content: space-around;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            align-items: stretch;
-            .facility-grid{
-                width: $cell-width;
-                ion-row {
-                    width: $cell-width;
-                }
-                .facility-list {
-                    border-right: $grey-border;
-                    border-bottom: $grey-border;
-                    height: $cell-height;
-                    padding: 6px;
-                    line-height: 22px;
-                    word-break: keep-all;
-                    overflow: hidden;
+        .facility-list {
+            flex-grow: 0;
+            flex-shrink: 0;
+            flex-basis: $facility-list-width;
+            flex-direction: column;
+            .facility-list-header {
+                .timezone {
                     display: flex;
-                    align-items: flex-start;
-                    justify-content: flex-start;
-                    .facility-color-box {
+                    align-items: center;
+                    height: $cell-height;
+                    padding: $cell-padding;
+                    font-size: 2.2rem;
+                }
+            }
+            .facility {
+                border-top: $grey-border;
+                padding: 6px;
+                height: $cell-height;
+                word-break: keep-all;
+                overflow: hidden;
+                display: flex;
+                align-items: flex-start;
+                justify-content: flex-start;
+                div {
+                    display: flex;
+                    flex-shrink: 0;
+                    width: 16px;
+                    height: 16px;
+                    background: grey;
+                    margin-right: 6px;
+                }
+                @include generate-color();
+            }
+        }
+        .ganttview-slide {
+            overflow: auto;
+            border-left: $grey-border;
+            .now-line {
+                height: 0px;
+                margin-left: -2px;
+                .line {
+                    height: 100%;
+                    display: block;
+                    position: relative;
+                    width: 0px;
+                    border-right: $red-border;
+                    z-index: 9;
+                }
+            } 
+            .ganttview-day-time-header {
+                display: flex;
+                flex-direction: column;
+                .fixed-date{
+                    height: 30px;
+                    position: absolute;
+                    padding: $cell-padding;
+                    padding-bottom: 3px;
+                    z-index: 11;
+                    background-color: #fff;
+                    width: auto;
+                }
+                .day-container {
+                    display: flex;
+                    flex-direction: row;
+                    height: $cell-height / 2;
+                    .day {
+                        flex-grow: 1;
+                        line-height: $cell-height / 2;
+                        border-right: $grey-border;
+                        padding-left: $cell-padding;
+                    }
+                }
+                .time-container {
+                    display: flex;
+                    flex-direction: row;
+                    height: $cell-height / 2;
+                    .day {
                         display: flex;
-                        height: 16px;
-                        min-width: 16px;
-                        margin-right: 2px; 
-                        background: grey; 
-                        color: grey;
-                    }
-                    .facility-color0 {
-                        background: $background-0; 
-                        color: $background-0; 
-                    }
-                    .facility-color1 {
-                        background: $background-1; 
-                        color: $background-1; 
-                    }
-                    .facility-color2 {
-                        background: $background-2; 
-                        color: $background-2; 
-                    }
-                    .facility-color3 {
-                        background: $background-3; 
-                        color: $background-3; 
-                    }
-                    .facility-color4 {
-                        background: $background-4; 
-                        color: $background-4; 
-                    }
-                    .facility-color5 {
-                        background: $background-5; 
-                        color: $background-5; 
-                    }
-                    .facility-color6 {
-                        background: $background-6; 
-                        color: $background-6; 
-                    }
-                    .facility-color7 {
-                        background: $background-7; 
-                        color: $background-7; 
-                    }
-                    .facility-color8 {
-                        background: $background-8; 
-                        color: $background-8; 
-                    }
-                    .facility-color9 {
-                        background: $background-9; 
-                        color: $background-9; 
-                    }
-                    .facility-color10 {
-                        background: $background-10; 
-                        color: $background-10; 
-                    }
-                    .facility-color11 {
-                        background: $background-11; 
-                        color: $background-11; 
-                    }
-                    .facility-color12 {
-                        background: $background-12; 
-                        color: $background-12; 
+                        flex-direction: row;
+                        flex-grow: 1;           
+                        .time {
+                            flex-grow: 1;
+                            flex-basis: $cell-width;
+                            line-height: $cell-height / 2;
+                            border-right: $grey-border;
+                            border-top: $grey-border;
+                            padding-left: $cell-padding;
+                        }
                     }
                 }
             }
-            .data-grid-container {
-                overflow: auto;
-                ion-row {
-                    width: $content-width;
-                }
-                .current-line-container {
-                    height: 0px;
-                    margin-left: -2px;
-                    .current-line {
-                        display: block;
-                        position: relative;
-                        width: 0px;
-                        border-right: $red-border;
-                        z-index: 9;
-                    }
-                }
-                .block-container {
-                    height: 0px;
-                    div{
-                        height: $cell-height;
-                        padding-top: 3px;
-                        padding-bottom: 9px;
-                        .init-event {
-                            display: block;
-                            position: relative;
-                            overflow: hidden;
-                            margin-bottom: 0px;
-                            height: 48px;
-                            padding: 6px;
-                            word-break: break-all;
-                            white-space: normal;
-                            text-align: left;
-                            z-index: 8;
-                            color: white;
-                            background: grey;
-                        }
-                        
-                        .event-color0 {
-                            background: $background-0; 
-                        }
-                        .event-color1 {
-                            background: $background-1; 
-                        }
-                        .event-color2 {
-                            background: $background-2; 
-                        }
-                        .event-color3 {
-                            background: $background-3; 
-                        }
-                        .event-color4 {
-                            background: $background-4; 
-                        }
-                        .event-color5 {
-                            background: $background-5; 
-                        }
-                        .event-color6 {
-                            background: $background-6; 
-                        }
-                        .event-color7 {
-                            background: $background-7; 
-                        }
-                        .event-color8 {
-                            background: $background-8; 
-                        }
-                        .event-color9 {
-                            background: $background-9; 
-                        }
-                        .event-color10 {
-                            background: $background-10; 
-                        }
-                        .event-color11 {
-                            background: $background-11; 
-                        }
-                        .event-color12 {
-                            background: $background-12; 
-                        }
-                    }
-                }
-                .facility-time-col-container {
+            .ganttview-grid {
+                display: flex;
+                flex-direction: column;
+                float: left;
+                .row {
                     display: flex;
-                    align-items: flex-start;
-                    flex-grow: 1;
-                    .facility-time-cell {
-                        border-right: $grey-border;
-                        border-bottom: $grey-border;
-                        height: $cell-height;
+                    flex-direction: row;
+                    height: $cell-height;
+                    .day {
+                        display: flex;
+                        flex-direction: row;
+                        flex-grow: 1;
+                        .time {
+                            flex-grow: 1;
+                            flex-basis: $cell-width;
+                            border-right: $grey-border;
+                            border-top: $grey-border;
+                        }
                     }
                 }
-                
+            }
+            .ganttview-events {
+                .event-container {
+                    height: $event-height;
+                    padding-top: 0px;
+                    .event {
+                        height: $event-height;
+                        position: relative;
+                        z-index: 8;
+                        color: white;
+                        background: grey;
+                        padding: $event-padding;
+                        .event-text {
+                            height: 100%;
+                            text-align: left;
+                            position: absolute;
+                            overflow: hidden;
+                            word-break: break-all;
+                        }
+                        @include generate-color('&');
+                    }
+                }
             }
         }
     }

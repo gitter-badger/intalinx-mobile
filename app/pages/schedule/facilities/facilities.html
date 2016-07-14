@@ -8,7 +8,7 @@
     </ion-buttons>
 </ion-navbar>
 
-<ion-content padding class="facilities" (scroll)="scrollHeader($event)">
+<ion-content padding class="facilities">
     <div class="toolbar">
         <button item-left clear (click)="selectPerviousDay()">
             <ion-icon name="arrow-back"></ion-icon>
@@ -20,7 +20,7 @@
                           doneText=" {{'app.action.done' | translate}} " 
                           cancelText=" {{'app.action.cancel' | translate}} " 
                           [(ngModel)] = "fromDate" 
-                          (ngModelChange)="changeStartDate($event)">
+                          (ngModelChange)="refresh()">
                 </ion-datetime>
             </button>
             <span class="from-to-text">-</span>
@@ -38,75 +38,63 @@
         <ion-spinner></ion-spinner>
     </div>
     
-    <div class="contents" [hidden]="!isLoadCompleted">
-        <div class="header">
-            <ion-grid class="header-grid">
-                <ion-row>
-                    <div class="timezone">{{timeZone}}</div>
-                    <div class="fixed-date-container" [hidden]="!showFixedDate">
-                        <div class="fixed-date">
-                            time
-                        </div>
+    <div class="ganttview" [style.visibility]="!isLoadCompleted ? 'hidden' : ''">
+        <div class="facility-list">
+            <div class="facility-list-header">
+                <div class="timezone">{{timeZone}}</div>
+            </div>
+            <ion-row *ngFor="let facility of facilities; let i=index;">
+                <ion-col class="facility">
+                    <div class="color{{i}}">
                     </div>
-                    <ion-col class="days-period-container">
-                        <ion-row>
-                            <ion-col *ngFor="let showDate of showDates" 
-                                    class="days-col {{(showDates.isSepcialDay || showDates.isSunday) ? 'sepcialday' : ''}} {{(showDate.isSaturday) ? 'saturday' : ''}}">
-                                    {{showDate.showDate}}
-                            </ion-col>
-                        </ion-row>
-                        <ion-row>
-                            <div class="period-col-container" *ngFor="let showDate of showDates">
-                                <ion-col *ngFor="let time of dateTimes">
-                                <div class="period-col {{(showDate.isSepcialDay || showDate.isSunday) ? 'sepcialday' : ''}} {{(showDate.isSaturday) ? 'saturday' : ''}}">
-                                    {{time}}
-                                </div>
-                                </ion-col>
-                            </div>                            
-                        </ion-row>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
-        </div>
-        <ion-grid class="body">
-            <ion-row>
-                <div class="facility-grid">
-                    <ion-row *ngFor="let facility of facilities; let i=index;">
-                        <ion-col>
-                            <div class="facility-list">
-                                <div class="facility-color-box facility-color{{i}}">
-                                </div>
-                                {{facility.targetName}}
-                            </div>
-                        </ion-col>
-                    </ion-row>
-                </div>
-                <ion-col class="data-grid-container" (scroll)="syncBodyAndHeaderScrollLeft($event)">
-                    <div class="current-line-container">
-                        <div class="current-line" [hidden]="!isNeedShowNowLine">
-                        </div>
-                    </div>
-                    <div class="block-container">
-                        <div *ngFor="let facility of facilities; let i=index;">
-                            <button *ngFor="let event of facility.events;" class="init-event event-color{{i}}" 
-                                [style.width]="event.timeLength" 
-                                [style.margin-left]="event.eventMarginLeft" 
-                                [style.margin-top]= "event.eventMarginTop"
-                                (click)="showDetail(event)">
-                            {{event.title}}
-                            </button>
-                        </div>
-                    </div>
-                    <ion-row *ngFor="let facility of facilities">
-                        <div class="facility-time-col-container" *ngFor="let showDate of showDates">
-                                <ion-col *ngFor="let time of dateTimes">
-                                    <div class="facility-time-cell {{(showDate.isSepcialDay || showDate.isSunday) ? 'sepcialday' : ''}} {{(showDate.isSaturday) ? 'saturday' : ''}}">
-                                    </div>
-                                </ion-col>
-                        </div>
-                    </ion-row>
+                    <span>{{facility.targetName}}</span>
                 </ion-col>
             </ion-row>
-        </ion-grid>
+        </div>
+        <div class="ganttview-slide" (scroll)="onGanttviewSlideScrollLeft($event)">
+            <div class="now-line">
+                <div class="line" [ngStyle]="setNowLineStyles()"></div>
+            </div>
+            <div class="ganttview-day-time-header">
+                <div [style.width]="dataGridWidth + 'px'">
+                    <div [hidden]="!showFixedDate" class="fixed-date">
+                        {{fixedDate}}
+                    </div>
+                    <div class="day-container">
+                        <div *ngFor="let date of displayDates" class="day {{(date.isSepcialDay || date.isSunday) ? 'sepcialday' : ''}} {{(date.isSaturday) ? 'saturday' : ''}}" >
+                            {{date.displayDate}}
+                        </div>
+                    </div>
+                    <div class="time-container">
+                        <div class="day" *ngFor="let date of displayDates">
+                            <div *ngFor="let time of dateTimes" class="time {{(date.isSepcialDay || date.isSunday) ? 'sepcialday' : ''}} {{(date.isSaturday) ? 'saturday' : ''}}">
+                                {{time}}
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="ganttview-grid" [style.width]="dataGridWidth + 'px'">
+                <div *ngFor="let facility of facilities" class="row">
+                    <div class="day" *ngFor="let date of displayDates">
+                        <div *ngFor="let time of dateTimes" class="time {{(date.isSepcialDay || date.isSunday) ? 'sepcialday' : ''}} {{(date.isSaturday) ? 'saturday' : ''}}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ganttview-events" [style.width]="dataGridWidth + 'px'">
+                <div *ngFor="let facility of facilities; let i=index;" class="event-container">
+                    <div *ngFor="let event of facility.events" class="event color{{i}}" 
+                        [style.width]="event.timeLength" 
+                        [style.margin-left]="event.eventMarginLeft" 
+                        [style.margin-top]= "event.eventMarginTop"
+                        (click)="showDetail(event)">
+                        <div class="event-text">
+                            {{event.title}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </ion-content>

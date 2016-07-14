@@ -32,37 +32,47 @@ export class FacilitiesPage {
         this.userService = userService;
         
         // initialize data
-        this.initControlData();
-        this.loadData();
+        this.initVariable();
+        this.loadRemoteData();
         this.startAutoRefresh();
     }
     
-    initControlData() {
-        this.showFixedDate = false;
-        this.timeZone = "UTC" + moment().format("Z");
-        // the width of one hour
-        this.oneHourWidth = 100;
-        this.eventHeight = 48;
-        this.facilityHeight = 60;
-        this.displayDays = 3; 
-        this.dataGridWidth = 24 * this.displayDays * this.oneHourWidth;
-        
-        // Set the today to start date.
-        this.fromDate = moment().format("YYYY-MM-DD");
-        this.changeShowDates();
-        
-        this.dateTimes = new Array();
-        for(let j = 0; j < 24; j++) {
-            this.dateTimes.push(j+":00");
-        }
-    }
-    
-    loadData() {
+    initVariable() {
+        // if nobody make an action, refresh whole page every 5 minutes.
+        this.refreshWholePageInterval = 60 * 5;
+        this.lastActionTime = moment().unix();
+        this.now = moment().unix();
+
         this.isAdmin = false;
         this.locale = "";
         this.specialDays = new Array();
         this.facilities = new Array();
+
+        this.showFixedDate = false;
+        this.timeZone = "UTC" + moment().format("Z");
+        // the width of one hour
+        this.oneHourWidth = 120;
+        this.eventHeight = 60;
+        this.facilityHeight = 60;
+        this.displayDaysNumber = 3;
+        this.dataGridWidth = 24 * this.displayDaysNumber * this.oneHourWidth;
+        // start work at 7:00.
+        this.workStartTime = 7;
+
+        // Set the today to start date.
+        this.today = moment().format("YYYY-MM-DD");
+        this.fromDate = this.today;
+        this.setDisplayDates();
         
+        this.dateTimes = new Array();
+        for(let j = 0; j < 24; j++) {
+            this.dateTimes.push(j + ":00");
+        }
+    }
+    
+    loadRemoteData() {
+        this.isLoadCompleted = false;
+
         this.scheduleService.getIsAdmin().then(data => {
             this.isAdmin = data;
         });
@@ -76,127 +86,73 @@ export class FacilitiesPage {
             });
         }); 
         
-        this.getEvents();
-        // to get the orientation of facility.
-        // let orientation = window.screen.orientation;
-    }
-  
-    startAutoRefresh() {
-        // 5 seconds
-        this.refreshInterval = 1000*5;
-        // refresh whole page every 5 minutes.
-        this.refreshScrollAndEventsTime = 60*5;
-        this.isFirstLoad = true;
-        this.isNeedShowNowLine = false;
-        this.headerHeight = 100;
-        this.navHeaderHeight = 80;
-        this.animateId = "";
-        this.hadScrolled = 0;
-        this.hadScrolledFromTop = 0;
-        
-        this.lastActionTime = moment().unix();
-        this.now = moment().unix();
-        let refreshEvent = function(that) {
-            return setInterval(function() {
-                that.refresh();
-            }, that.refreshInterval);
-        }
-        
-        this.refreshIntervalID  = refreshEvent(this); 
-    }
-    
-    getEvents() {
-        let eventInputForFacilityAndGroup = {
-            startTime: this.giStart,  // 8-digit number
-            endTime: this.giEnd,  // 8-digit number
-            selType: "device" // facility
-        }
-        this.scheduleService.getEventsForFacility(eventInputForFacilityAndGroup).then(data => {
+        this.scheduleService.getEventsForFacility(this.fromDateTime, this.toDateTime).then(data => {
             let facilitiesAndevents = data;
             this.facilities = facilitiesAndevents.facilities;
-            let viewStartTime = this.giStart;
+            let viewStartTime = this.fromDateTime;
           
             for(let i = 0; i < this.facilities.length; i++) {
                 let lineEvents = this.facilities[i].events;
                 for(let j = 0; j < lineEvents.length; j++) {
-                    viewStartTime = this.giStart;
+                    viewStartTime = this.fromDateTime;
                     if(j != 0) {
                         lineEvents[j].eventMarginTop = "-" + this.eventHeight + "px";
                     }
                     if(parseInt(lineEvents[j].startTime) > viewStartTime) {
                         viewStartTime = parseInt(lineEvents[j].startTime);
                     }
-                  
-                    lineEvents[j].eventMarginLeft = this.calculateTimeWidth(this.giStart, viewStartTime);
+                    lineEvents[j].eventMarginLeft = this.calculateTimeWidth(this.fromDateTime, viewStartTime);
                     lineEvents[j].timeLength = this.calculateTimeWidth(viewStartTime, lineEvents[j].endTime);
                 }
-                
                 this.facilities[i].events = lineEvents;
             }
-            this.isLoadCompleted = true;
+            this.setGanttviewSlideScrollToNow();
         });
+    }
+  
+    startAutoRefresh() {
+        let refreshEvent = function(that) {
+            return setInterval(function() {
+                // if nobody make an action, refresh whole page every 5 minutes.
+                that.now = moment().unix();
+                let pastTime = that.now - that.lastActionTime;
+                if(pastTime >= that.refreshWholePageInterval){
+                    // reset fromDate to today.
+                    this.fromDate = that.today;
+                    that.refresh();
+                }
+            }, that.refreshWholePageInterval);
+        }
+        refreshEvent(this); 
     }
   
     getSpecialDays() {
-        let getSpecialDaysRequeset = {
-            locale: this.locale,  // locale settings
-            start: this.giStart,  // 8-digit number
-            end: this.giEnd,  // 8-digit number
-        };
-        this.scheduleService.getSpecialDays(getSpecialDaysRequeset).then(data => {
-            this.specialDays = data;
-            this.setSpecialDays();
-        });
-    }
-  
-    // Adding special background color to Sat. Sun. and public holiday.
-    setSpecialDays() {
-        for(let i = 0; i < this.displayDays; i++) {
-            this.showDates[i].isSaturday = false;
-            this.showDates[i].isSunday = false;
-            this.showDates[i].isSepcialDay = false;
-            
-            let currentDay = "";
-            if(moment(this.showDates[i].date).day() == 6) {
-                this.showDates[i].isSaturday = true;
-            } else if(moment(this.showDates[i].date).day() == 0) {
-                this.showDates[i].isSunday = true;
-            } else {
-                for(let k = 0; k < this.specialDays.length; k++) {
-                    currentDay = moment.unix(this.specialDays[k].startDay).format("YYYY-MM-DD");
-                    if(currentDay == this.showDates[i].date) {
-                        this.showDates[i].isSepcialDay = true;
+        this.scheduleService.getSpecialDays(this.locale, this.fromDateTime, this.toDateTime).then(data => {
+            for(let i = 0; i < this.displayDaysNumber; i++) {
+                for(let k = 0; k < data.length; k++) {
+                    let currentDay = moment.unix(data[k].startDay).format("YYYY-MM-DD");
+                    if(currentDay == this.displayDates[i].date) {
+                        this.displayDates[i].isSepcialDay = true;
                     }
                 }
             }
+        });
+    }
+
+    setNowLineStyles() {
+        if (this.today == this.fromDate) {
+            let styles = {
+                'margin-left': this.calculateTimeWidth(this.fromDateTime, this.now),
+                'height': this.facilityHeight * this.facilities.length + "px"
+            }
+            return styles;
         }
     }
     
     refresh() {
-        this.now = moment().unix();
-        let pastTime = this.now - this.lastActionTime;
-        var nowLine = document.querySelector(".facilities .contents .data-grid-container .current-line");
-        nowLine.style.marginLeft = this.calculateTimeWidth(this.giStart, this.now);
-        
-        if(this.isFirstLoad) {
-            nowLine.style.height = (this.facilityHeight * this.facilities.length) + "px";
-            this.setTransverseScroll();
-            var contentsHeaderGrid = document.querySelector(".facilities .contents .header-grid");
-            var navHeader = document.querySelector(".toolbar");
-            this.navHeaderHeight = navHeader.offsetHeight;
-            this.headerHeight = contentsHeaderGrid.offsetTop;
-            this.isFirstLoad = false;
-        } else if(pastTime >= this.refreshScrollAndEventsTime){
-            let today = moment().format("YYYY-MM-DD");
-            if(this.showDates[0].date != today) {
-                this.showDates[0].date = today;
-                this.changeStartDate();
-            }
-            this.getSpecialDays();
-            this.getEvents();
-            this.setTransverseScroll();
-            this.lastActionTime = moment().unix();
-        }
+        this.lastActionTime = moment().unix();
+        this.setDisplayDates();
+        this.loadRemoteData();
     }
     
     onPageLoaded () {
@@ -204,158 +160,149 @@ export class FacilitiesPage {
     }
     
     ngAfterViewInit() {
-        this.pageContent.addScrollListener(this.fixHeaderOnScrollY(this));
+        this.pageContent.addScrollListener(this.displayFixedHeader(this));
+    }
+
+    displayFixedHeader(that) {
+        return function() {
+            that.lastActionTime = moment().unix();
+            let ganttview = document.querySelector(".facilities .ganttview");
+            let gantviewSlide = document.querySelector(".facilities .ganttview .ganttview-slide");
+            let facilityList = document.querySelector(".facilities .facility-list");
+            let facilitiesHeader = document.querySelector(".facilities .ganttview .facility-list-header");
+            let dayTimeHeader = document.querySelector(".facilities .ganttview .ganttview-day-time-header");
+
+            let toolbar = document.querySelector(".facilities-page .toolbar");
+            if (this.scrollTop > ganttview.offsetTop) {
+                facilitiesHeader.style.top = toolbar.clientHeight + "px";
+                facilitiesHeader.className = "facility-list-header fixed-header";
+                facilitiesHeader.style.width = facilityList.clientWidth + "px";
+
+                dayTimeHeader.style.top = toolbar.clientHeight + "px";
+                dayTimeHeader.style.width = gantviewSlide.clientWidth + "px";
+                dayTimeHeader.className = "ganttview-day-time-header fixed-header";
+            } else {
+                facilitiesHeader.className = "facility-list-header";
+                dayTimeHeader.className = "ganttview-day-time-header";
+            }
+            that.onGanttviewSlideScrollLeft();
+        }       
+    }
+
+    setGanttviewSlideScrollToNow() {
+        if (this.today == this.fromDate) {
+            let realScroll = function(that){
+                return function() {
+                    let minScrollLeft = (that.workStartTime - 2) * that.oneHourWidth;
+                    let transFromNow = that.calculateTimeWidth(that.fromDateTime, that.now);
+                    let ganttviewSlide = document.querySelector(".facilities .ganttview .ganttview-slide");
+                    transFromNow = parseInt(transFromNow) - that.oneHourWidth * 2;
+                    if (transFromNow > minScrollLeft) {
+                        ganttviewSlide.scrollLeft = transFromNow;
+                    } else {
+                        ganttviewSlide.scrollLeft = minScrollLeft;
+                    }
+                    that.isLoadCompleted = true;
+                }
+            }
+            setTimeout(realScroll(this), 1000);
+        } else {
+            this.isLoadCompleted = true;
+        }
+    }
+
+    resetGanttviewSlideScroll() {
+        let ganttviewSlide = document.querySelector(".facilities .ganttview .ganttview-slide");
+        ganttviewSlide.scrollLeft = 0;
     }
     
     resetToToday() {
         this.fromDate = moment().format("YYYY-MM-DD");
-        this.changeStartDate();
+        this.refresh();
     }
     
     selectPerviousDay() {
-        this.fromDate = moment.unix(this.giStart).add(-1, "d").format("YYYY-MM-DD");
-        this.changeStartDate();
+        this.fromDate = moment.unix(this.fromDateTime).add(-1, "d").format("YYYY-MM-DD");
+        this.refresh();
     }
     
     selectNextDay() {
-        this.fromDate = moment.unix(this.giStart).add(1, "d").format("YYYY-MM-DD");
-        this.changeStartDate();
+        this.fromDate = moment.unix(this.fromDateTime).add(1, "d").format("YYYY-MM-DD");
+        this.refresh();
     }
     
-    changeStartDate() {
-        this.lastActionTime = moment().unix();
-        this.isFirstLoad = true;
-        this.isLoadCompleted = false;
+    setDisplayDates() {
         this.isNeedShowNowLine = false;
-        
-        this.changeShowDates();
-        this.getEvents();
-        this.getSpecialDays();
-    }
-    
-    changeShowDates() {
-        this.giStart = moment(this.fromDate).hour(0).minute(0).second(0).unix();
-        this.giEnd = moment.unix(this.giStart).add(this.displayDays - 1, "d").unix();
-        
-        this.showDates = new Array();
-        for(let i = 0; i < this.displayDays; i++) {
-            let date = moment.unix(this.giStart).add(i, "d");
-            let showDate = {
+        this.fromDateTime = moment(this.fromDate).hour(0).minute(0).second(0).unix();
+        this.toDateTime = moment.unix(this.fromDateTime).add(this.displayDaysNumber - 1, "d").unix();
+
+        this.displayDates = new Array();
+        for(let i = 0; i < this.displayDaysNumber; i++) {
+            let date = moment.unix(this.fromDateTime).add(i, "d");
+            let displayDate = {
                 date: date.format("YYYY-MM-DD"),  // ion-datetime cannot recognize '/', so should use '-' here.
-                showDate: moment(date).format("YYYY/MM/DD") + "(" + moment(date).format("ddd") + ")", 
+                displayDate: moment(date).format("YYYY/MM/DD") + "(" + moment(date).format("ddd") + ")", 
                 isSepcialDay: false,
-                isSaturday: false,
-                isSunday: false
+                isSaturday: moment(date).day() == 6,
+                isSunday: moment(date).day() == 0
             }
-            this.showDates.push(showDate);
+            this.displayDates.push(displayDate);
         }
-        this.toDate = this.showDates[this.displayDays - 1].date;
+        this.toDate = this.displayDates[this.displayDaysNumber - 1].date;
+
+        // if not display today, then reset scroll to 0. 
+        if (this.fromDate != this.today) {
+            this.resetGanttviewSlideScroll();
+        }
     }
-    
-    fixHeaderOnScrollY(that) {
-        return function() {
-            that.lastActionTime = moment().unix();
-            var pageDataBody = document.querySelector(".facilities .contents .body");
-            var contentsHeaderGrid = document.querySelector(".facilities .contents .header-grid");
-            var contentsHeader = document.querySelector(".facilities .header"); 
-            if (this.scrollTop > that.headerHeight) {
-                contentsHeaderGrid.style.top=that.navHeaderHeight + "px";
-                contentsHeaderGrid.style.position= "fixed";
-                contentsHeaderGrid.style.background = "white";
-                contentsHeader.style.width = pageDataBody.offsetWidth + "px";
-                contentsHeaderGrid.style.zIndex = 10;
-            } else {
-                contentsHeaderGrid.removeAttribute("style");
-                contentsHeader.style.width = "100%";
-            }
-        }       
-    }
-    
-    syncBodyAndHeaderScrollLeft() {
+
+    onGanttviewSlideScrollLeft() {
         this.lastActionTime = moment().unix();
-        var daysPeriod = document.querySelector(".facilities .days-period-container");
-        var dataGrid = document.querySelector(".facilities .contents .data-grid-container"); 
-        var fixedDate = document.querySelector(".facilities .header .fixed-date"); 
-        let scrollToLeft = dataGrid.scrollLeft; 
-        daysPeriod.scrollLeft = scrollToLeft;
-        let wholeDayWidth = this.oneHourWidth * 24;
-        for(let i = 0; i < this.displayDays; i++) {
-            let scrollWholeDayWidth = wholeDayWidth * i;
-            if(scrollToLeft > (scrollWholeDayWidth + this.oneHourWidth) 
-              && scrollToLeft < (scrollWholeDayWidth + wholeDayWidth - this.oneHourWidth)) {
-                this.showFixedDate = true;
-                fixedDate.innerHTML = this.showDates[i].showDate;
-                break;
-            } else {
-                this.showFixedDate = false;
-            }
-        }
+        this.displayFixedDate();
+        this.syncGanttviewGridAndHeaderScrollLeft();
     }
-  
-    setTransverseScroll() {
-        let transverseScroll = 7 * this.oneHourWidth;
-        let transFromNow = this.calculateTimeWidth(this.giStart, this.now);
-        transFromNow = parseInt(transFromNow.substring(0, transFromNow.indexOf("px")));
-        if(this.isFirstLoad) {
-            if(transFromNow != 0 && transFromNow < this.dataGridWidth) {
-                this.isNeedShowNowLine = true;
-            }
+
+    syncGanttviewGridAndHeaderScrollLeft() {
+        if (document.querySelector(".facilities .fixed-header")) {
+            let scrollableContainer = document.querySelector(".facilities .ganttview .ganttview-day-time-header");
+            let ganttviewSlide = document.querySelector(".facilities .ganttview .ganttview-slide");
+            let scrollToLeft = ganttviewSlide.scrollLeft; 
+            scrollableContainer.scrollLeft = scrollToLeft;
         }
-        
-        // Setting the position of scroll bar to two hours before now.
-        transFromNow = transFromNow - 2 * this.oneHourWidth;
-        if(transFromNow > transverseScroll && transFromNow < this.dataGridWidth) {
-            transverseScroll = transFromNow;
-        }
-        var dataGrid = document.querySelector(".facilities .contents .data-grid-container");
-        // dataGrid.scrollLeft = transverseScroll;
-        let hadBeenScrolled = dataGrid.scrollLeft;
-        this.animateId = this.addScrollLeftInterval(this, transverseScroll, hadBeenScrolled); 
     }
     
+    displayFixedDate() {
+        let ganttviewSlide = document.querySelector(".facilities .ganttview .ganttview-slide");
+        let scrollLeft = ganttviewSlide.scrollLeft; 
+        
+        let oneDayWidth = this.oneHourWidth * 24;
+        if (scrollLeft > 0) {
+            let i = Math.floor(scrollLeft / oneDayWidth);
+            // when scroll to the end of the day, if the left width is smaller than fixedDateWidth, then hide fix date.
+            // If do not do that, the fix date will cover the next day text.
+            if (((i + 1)* oneDayWidth - scrollLeft) < this.fixedDateWidth) {
+                this.showFixedDate = false;
+            } else {
+                this.showFixedDate = true;
+                this.fixedDate = this.displayDates[i].displayDate;
+                this.fixedDateWidth = document.querySelector(".facilities .ganttview .ganttview-slide .fixed-date").clientWidth;
+            }
+        } else {
+            this.showFixedDate = false;
+        }
+    }
+
     calculateTimeWidth(startTimestamp, endTimestamp) {
         let peroidWidth = 0;
         if(startTimestamp < endTimestamp) {
-            let secondsOfOneHour =  60*60;
+            let secondsOfOneHour =  60 * 60;
             let spanMinutes = endTimestamp - startTimestamp;
             peroidWidth = spanMinutes / secondsOfOneHour * this.oneHourWidth;
         }
         peroidWidth = peroidWidth + "px";
         return peroidWidth;
     }
-    
-    addScrollLeftInterval(that, transverseScroll, hadBeenScrolled) {
-        this.hadScrolled = hadBeenScrolled;
-        if(hadBeenScrolled < transverseScroll) {
-            return setInterval(function() {
-                that.animateScrollRight(transverseScroll);
-            }, 1);
-        } else {
-            return setInterval(function() {
-                that.animateScrollLeft(transverseScroll);
-            }, 1);
-        }
-    }
-  
-    animateScrollLeft(scrollWidth) {
-        var dataGrid = document.querySelector(".facilities .contents .data-grid-container");
-        if(this.hadScrolled <= scrollWidth) {
-            clearInterval(this.animateId);
-        } else {
-            this.hadScrolled -= 10;
-            dataGrid.scrollLeft = this.hadScrolled;
-        }
-    }
-    
-    animateScrollRight(scrollWidth) {
-        var dataGrid = document.querySelector(".facilities .contents .data-grid-container");
-        if(this.hadScrolled >= scrollWidth) {
-            clearInterval(this.animateId);
-        } else {
-            this.hadScrolled += 10;
-            dataGrid.scrollLeft = this.hadScrolled;
-        }
-    }
+
     showDetail(eventInfo) {
         this.lastActionTime = moment().unix();
         let alert = Alert.create({
