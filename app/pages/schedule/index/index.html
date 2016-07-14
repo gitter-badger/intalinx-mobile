@@ -41,7 +41,7 @@
     <div class="loading" [hidden]="isHtmlLoadCompleted==true">
         <ion-spinner name="dots"></ion-spinner>
     </div>
-    <ion-slides #calendarSlides (willChange)="changeMonth($event)" [options]="calendarSlideOptions" [hidden]="isHtmlLoadCompleted==false">
+    <ion-slides #calendarSlides (willChange)="changeMonth($event)" [options]="calendarSlideOptions" [hidden]="isHtmlLoadCompleted!=true">
         <ion-slide class="calendar" *ngFor="let n of numbers">
             <ion-grid>
                 <ion-row *ngFor="let week of calendar">
