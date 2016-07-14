@@ -266,7 +266,7 @@ export class ScheduleService {
                 for (let i = 0; i < eventOutputs.length; i++) {
                     let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
                     let startDay = Number(moment(eventOutput.startTime, "X").format("D"));
-                    let endDay = Number(moment(eventOutput.endTime, "X").format("D"));   
+                    let endDay = Number(moment(eventOutput.endTime, "X").format("D"));
                     // the start time is before the month
                     if (Number(eventOutput.startTime) < searchEventsRequires.startTime) {
                         startDay = Number(moment(searchEventsRequires.startTime, "X").format("D"));
@@ -293,8 +293,10 @@ export class ScheduleService {
             this.getSpecialDays(searchSpecialDaysRequires).then(holidays => {
                 let days = new Array();
                 for (let i = 0; i < holidays.length; i++) {
-                    let startDay = moment(holidays[i].startDay, "X").format("D");
-                    days.push(startDay);
+                    let startTime = holidays[i].startDay;
+                    if (Number(startTime) > searchSpecialDaysRequires.start && Number(startTime) < searchSpecialDaysRequires.end) {
+                        days.push(moment(startTime, "X").format("D"));
+                    }
                 }
                 resolve(days);
             });
