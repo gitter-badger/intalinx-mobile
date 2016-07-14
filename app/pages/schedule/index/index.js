@@ -1,4 +1,4 @@
-import {Page, IonicApp, NavController, ViewController, Platform, Slides} from 'ionic-angular';
+import {Page, IonicApp, NavController, ViewController, Platform, Slides, Modal} from 'ionic-angular';
 import {ViewChild} from '@angular/core';
 import {NgForm, ngClass} from '@angular/common';
 
@@ -9,6 +9,8 @@ import {UserService} from '../../../providers/user-service';
 
 import {EventDetailPage} from '../event-detail/event-detail';
 import {EditEventPage} from '../edit-event/edit-event'
+
+import {SelectUserPage} from '../select-user/select-user'
 
 import {Util} from '../../../utils/util';
 
@@ -91,8 +93,11 @@ export class ScheduleIndexPage {
         this.selectedDay = this.today;
         
         // let userId =this.app.user.userId;
-        this.userService.getUserId().then(userId => {
-            this.searchEventsRequires.userId = userId;
+        this.userService.getUserDetails().then(user => {
+            this.myUserId = user.userId;
+            this.myUserName = user.userName;
+            this.searchEventsRequires.userId = user.userId;
+            this.selectedUserName = user.userName;
             this.getLocalsFromSetting().then(local => {
                 this.showCalendar(firstDateWeek);
             });
@@ -292,6 +297,32 @@ export class ScheduleIndexPage {
         this.nav.push(EditEventPage, {
             "event": event
         });
+    }
+    
+    selectUser() {
+        let selectUserModal = Modal.create(SelectUserPage);
+        selectUserModal.onDismiss(data => {
+            if (data) {
+                this.searchEventsRequires.userId = data.userId;
+                this.selectedUserName = data.userName;
+                this.showCalendar(moment(this.yearMonth));
+            }
+        });
+        this.nav.present(selectUserModal);
+    }
+    
+    showToday() {
+        this.selectedDay = this.today;
+        this.yearMonth = moment().format('YYYY-MM');
+        //this month
+        let firstDateWeek = moment(this.yearMonth);
+        this.showCalendar(moment(this.yearMonth));
+    }
+    
+    showMySchedule() {
+        this.searchEventsRequires.userId = this.myUserId;
+        this.selectedUserName = this.myUserName;
+        this.showCalendar(moment(this.yearMonth));
     }
     
     onPageWillLeave() {

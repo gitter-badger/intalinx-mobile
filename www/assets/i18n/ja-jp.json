@@ -118,12 +118,14 @@
             "colon": "：",
             "selectFacilities": "施設を選択",
             "selectParticipants": "参加者を選択",
+            "selectUser": "検索対象を選択",
+            "scheduleOfPerson": "のスケジュール",
             "facilities": {
                 "title": "施設一覧" 
             },
             "index": {
                 "allDay": "終日", 
-                "facilities": "施設一覧"
+                "mySchedule": "本人"
             },
             "eventDetail": {
                 "title": "イベントの詳細"

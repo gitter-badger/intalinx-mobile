@@ -2,7 +2,8 @@
     <button menuToggle>
         <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{ "app.schedule.title" | translate }}</ion-title>
+    <ion-title [hidden]="isHtmlLoadCompleted==true">{{ "app.schedule.title" | translate }}</ion-title>
+    <ion-title [hidden]="isHtmlLoadCompleted!=true">{{selectedUserName}}{{ "app.schedule.scheduleOfPerson" | translate }}</ion-title>
     <ion-buttons end>
         <button>
             <ion-icon name="more" aria-label="more"></ion-icon>
@@ -91,13 +92,13 @@
     </ion-scroll>
 </ion-content>
 <ion-toolbar position="bottom">
-    <ion-segment class="month-people-bottom-buttons">
-        <ion-segment-button class="button-show-people" (ionSelect)="showPeople()">
+    <ion-segment class="month-calendar-bottom-buttons">
+        <ion-segment-button class="button-select-user" (click)="selectUser()">
             <ion-icon name="ios-people"></ion-icon>
         </ion-segment-button>
-        <ion-segment-button class="button-show-today" (ionSelect)="showToday()">{{ "app.date.today" | translate }}
+        <ion-segment-button class="button-show-today" (click)="showToday()">{{ "app.date.today" | translate }}
         </ion-segment-button>
-        <ion-segment-button class="button-show-facilities" (ionSelect)="showFacilities()">{{ "app.schedule.index.facilities" | translate }}
+        <ion-segment-button class="button-show-my-schedule" (click)="showMySchedule()">{{ "app.schedule.index.mySchedule" | translate }}
         </ion-segment-button>
     </ion-segment>
 </ion-toolbar>
