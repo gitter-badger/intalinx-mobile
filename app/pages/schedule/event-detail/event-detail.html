@@ -11,14 +11,20 @@
     </div>
     <div [hidden]="!isLoadCompleted">
         <ion-item no-lines>
-            <h2 class="event-title"><span [hidden]="!categoryName">【{{categoryName}}】</span>【{{visibilityTypeName}}】{{title}}</h2>
+            <h2 class="event-title">
+                <span [hidden]="!categoryName">【{{categoryName}}】</span>
+                <span [hidden]="!visibilityTypeName">【{{visibilityTypeName}}】</span>
+                {{title}}
+            </h2>
         </ion-item>
-        <ion-item no-lines  [hidden]="!location">
+        <ion-item no-lines [hidden]="!location">
             <h2 class="event-contents-title">{{"app.schedule.location" | translate}}{{"app.schedule.colon" | translate}}</h2> {{location}}
         </ion-item>
         <ion-item no-lines [hidden]="startDay==endDay">
             <h2 class="event-contents-title">{{"app.schedule.time" | translate}}{{"app.schedule.colon" | translate}}</h2>
-            <div><span>{{"app.schedule.start" | translate}}{{"app.schedule.colon" | translate}}{{startDay}}({{startWeekDayMin}})</span><span [hidden]="isAllDay=='true'||isRepeat=='true'">{{startTime}}</span></div>
+            <div><span>{{"app.schedule.start" | translate}}{{"app.schedule.colon" | translate}}{{startDay}}({{startWeekDayMin}})</span>
+                <span [hidden]="isAllDay=='true'||isRepeat=='true'">{{startTime}}</span>
+            </div>
             <div>{{"app.schedule.end" | translate}}{{"app.schedule.colon" | translate}}{{endDay}}({{endWeekDayMin}})<span [hidden]="isAllDay=='true'||isRepeat=='true'">{{endTime}}</span></div>
             <div [hidden]="isAllDay!='true'">{{"app.schedule.allDay" | translate}}</div>
             <div [hidden]="isRepeat!='true'">{{"app.schedule.repeat" | translate}}{{"app.schedule.colon" | translate}}{{repeatTypeName}}{{repeatValueName}}[{{repeatStartTime}}~{{repeatEndTime}}]</div>
