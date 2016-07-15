@@ -11,14 +11,16 @@
             }
         },
         "action": {
-            "edit": "編集",
+            "edit": "編集", 
             "delete": "削除",
             "save": "保存",
             "ok": "はい",
             "back": "戻る",
             "cancel": "キャンセル",
             "select": "選択", 
-            "done": "選択" 
+            "done": "選択", 
+            "yes": "はい", 
+            "no": "いいえ" 
         },
         "date": {
             "YYYYMM": "{{YYYY}}年{{MM}}月",
@@ -100,6 +102,37 @@
         },
         "schedule": {
             "title": "スケジュール",
+            "event": {
+                "title": "タイトル", 
+                "schedule": "予定",
+                "start": "開始",
+                "end": "終了",
+                "startDate": "開始日付",
+                "endDate": "終了日付",
+                "startTime": "開始時間",
+                "endTime": "終了時間",
+                "allDay": "終日",
+                "repeat": "繰り返す", 
+                "category": "カテゴリ",
+                "location": "場所",
+                "summary": "内容",
+                "participant": "参加者",
+                "device": "施設"
+            },
+            "repeatRules": {
+                "title": "繰り返し規則", 
+                "weekDay": "曜日", 
+                "monthDay": "日付", 
+                "daily": "毎日", 
+                "weekly": "毎週", 
+                "monthly": "毎月"
+            },
+            "visibility": {
+                "title": "公開制限",
+                "public": "一般公開",
+                "limitPublic": "限定公開",
+                "private": "非公開"
+            },
             "public": "一般公開",
             "private": "限定公開",
             "confidential": "非公開",
@@ -133,45 +166,21 @@
                     "new": "予定新規", 
                     "edit": "予定編集"
                 },
-                "eventTitle": "予定",
-                "pleaseInputTitle": "タイトルを入力してください。",
-                "startTime": "開始",
-                "endTime": "終了",
-                "isAllDay": "終日",
-                "isRepeat": "繰り返す",
-                "repeatRules": {
-                    "everyDay": "毎日", 
-                    "everyWeek": "毎週", 
-                    "everyMonth": "毎月"
-                },
-                "category": {
-                    "title": "カテゴリ",
-                    "rest": "休暇",
-                    "conference": "会議",
-                    "goOut": "外出",
-                    "businessTrip": "出張",
-                    "seminar": "勉強会",
-                    "visit": "来社"
-                },
-                "location": "場所",
-                "summary": "内容",
-                "pleaseInputSummary": "予定内容を入力してください",
-                "visibility": {
-                    "title": "公開制限",
-                    "public": "一般公開",
-                    "limitPublic": "限定公開",
-                    "private": "非公開"
-                },
-                "participant": "参加者",
-                "device": "施設",
-                "error": {
-                    "eventTitleNecessary": "予定のタイトルを入力してください！",
-                    "endTimeBigger": "終了時間は開始時間以後に選択してください！"
-                },
                 "saveEvent": {
                     "new": "追加", 
                     "edit": "保存"
-                }
+                },
+                "message": {
+                    "eventTitleNecessary": "予定のタイトルを入力してください！", 
+                    "pleaseInputSummary": "予定内容を入力してください", 
+                    "endTimeShouldBeLater": "終了時間は開始時間以後に選択してください！",
+                    "repeatEndTimeShouldBeLater": "繰り返す終了時間は開始時間以後に選択してください！",
+                    "addEventSuccess": "予定追加完了しました。",
+                    "updateEventSuccess": "予定更新完了しました。"
+                },
+                "selectRepeatEventUpdateFlag": "編集・削除の対象を選択してください。", 
+                "selectAll": "全ての予定", 
+                "selectSpecial": "当該日付の予定のみ"
             },
             "deleteEvent": "イベントを削除",
             "deleteRepeatEvent": {

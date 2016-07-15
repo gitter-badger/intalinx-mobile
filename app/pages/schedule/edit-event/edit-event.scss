@@ -1,51 +1,48 @@
 .edit-event {
-    ion-label{
-        margin-left : 0px;
-        margin-right : 0px;
-    }
+    $sub-catalogue-margin: 35px;
+    
     ion-datetime {
         padding-left : 0px;
         padding-right : 0px;
+        margin-right: 8px;
     }
-    .text-input {
-        margin: 0px;
+    
+    .item-select ion-label {
+        color: #000;
+    }
+    
+    .separation-section {
+        height: 20px;
+        // background: #D3D3D3;// LightGrey
+    }
+    .repeat-edit-warn {
+        font-size: 2rem;
+        border: #ebccd1;
+        color: #a94442;
+        background: #f2dede;
+    }
+    
+    .repeat-section {
+        margin-left: $sub-catalogue-margin;
     }
     
     .participants {
-        border: 1px solid #c8c7cc;
-        // margin-top: 5px;
-        // margin-left: 5px;
-        margin: auto;
-        margin-top: 5px;    
-        width: 95%;
-        height: 120px;
-        .item-inner {
-            border: 0;
+        .participant-title {
+            font-size: 1.7rem;
+            color: #000;
         }
-        .participant-avator {
-            border-radius: 5px;
-        }
-        .participant-name {
-            font-size: 1.0rem;
-        }
-        .add-particent {
-            border: 1px solid #c8c7cc;
-            border-radius: 5px;
-            margin: auto;
-            font-size: 15px;
+        .participant-list {
+            margin-left: $sub-catalogue-margin;
         }
     }
     
-    .input-area{
-        height: 20px;
-    }
-    .inputContent{
-        height: 80px;
-        textarea.text-input {
-            height: 95%;
+    .devices {
+        .device-title {
+            font-size: 1.7rem;
+            color: #000;
         }
-    }
-    .repeat-section {
-        padding-left: 20px;
+        .device-list {
+            margin-left: $sub-catalogue-margin;
+        }
     }
 }

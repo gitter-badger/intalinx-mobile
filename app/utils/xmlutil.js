@@ -192,6 +192,10 @@ export class XmlUtil {
 		}
 	}
     
+    static createElementWithNS(namespaceURI, qualifiedName) {
+		return document.createElementNS(namespaceURI, qualifiedName)
+	}
+    
 	static getNodeText(node, xpath, defaultValue, namespaces) {
 		if (node && (node = XmlUtil.selectXMLNode(node, xpath, namespaces))) {
 			return (XmlUtil.getTextContent(node) || defaultValue);
