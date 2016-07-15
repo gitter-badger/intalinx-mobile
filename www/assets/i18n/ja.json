@@ -18,14 +18,11 @@
             "back": "戻る",
             "cancel": "キャンセル",
             "select": "選択", 
-<<<<<<< HEAD
-            "done": "選択", 
+            
             "yes": "はい", 
-            "no": "いいえ" 
-=======
-            "done": "選択",
+            "no": "いいえ", 
+            "done": "選択", 
             "search": "検索"
->>>>>>> 4422ac34add27d4df87ada07ddda63bcbbc72922
         },
         "date": {
             "YYYYMM": "{{YYYY}}年{{MM}}月",
