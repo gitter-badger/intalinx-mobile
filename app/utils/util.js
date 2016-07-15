@@ -107,15 +107,16 @@ export class Util {
                     resolve(data);
                 }, error => {
                     if (error.status == "500" && error.type == "2") {
-                        let responseText = error.text();
-                        let responseNode = this.parseXml(responseText);
-                        this.changeErrorMessageOfWebservice(this.getNodeText(responseNode, ".//*[local-name()='faultstring']")).then(message => {
-                            this.presentModal(message);
-                        });
+                        // let responseText = error.text();
+                        // let responseNode = this.parseXml(responseText);
+                        // this.changeErrorMessageOfWebservice(this.getNodeText(responseNode, ".//*[local-name()='faultstring']")).then(message => {
+                        //     this.presentModal(message);
+                        // });
+                        reject(error);
                     } else {
                         this.presentSystemErrorModal();
                     }
-                    reject(error);
+                    //reject(error);
                 });
         });
     }
