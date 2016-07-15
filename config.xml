@@ -77,6 +77,9 @@
   <preference name="SplashScreenDelay" value="3000"/>
   <preference name="FadeSplashScreen" value="false"/>
   <preference name="orientation" value="landscape"/>
+  <!-- for tablet -->
+  <preference name="orientation" value="landscape"/>
+  <preference name="Fullscreen" value="true" />
   <feature name="StatusBar">
     <param name="ios-package" onload="true" value="CDVStatusBar"/>
   </feature>

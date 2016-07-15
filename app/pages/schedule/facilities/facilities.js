@@ -16,7 +16,13 @@ import {UserService} from '../../../providers/user-service';
   ],
   pipes: [TranslatePipe],
   queries: {
-      pageContent: new ViewChild(Content)
+      pageContent: new ViewChild('pageContent'),
+      ganttview: new ViewChild('ganttview'),
+      facilityList: new ViewChild('facilityList'),
+      facilityListHeader: new ViewChild('facilityListHeader'),
+      ganttviewSlide: new ViewChild('ganttviewSlide'),
+      ganttviewDayTimeHeader: new ViewChild('ganttviewDayTimeHeader'),
+      ganttviewFixedDate: new ViewChild('ganttviewFixedDate')
   }
 })
 export class FacilitiesPage {
@@ -48,13 +54,12 @@ export class FacilitiesPage {
         this.specialDays = new Array();
         this.facilities = new Array();
 
-        this.showFixedDate = false;
         this.timeZone = "UTC" + moment().format("Z");
         // the width of one hour
         this.oneHourWidth = 120;
         this.eventHeight = 60;
         this.facilityHeight = 60;
-        this.displayDaysNumber = 3;
+        this.displayDaysNumber = 2;
         this.dataGridWidth = 24 * this.displayDaysNumber * this.oneHourWidth;
         // start work at 7:00.
         this.workStartTime = 7;
@@ -63,6 +68,10 @@ export class FacilitiesPage {
         this.today = moment().format("YYYY-MM-DD");
         this.fromDate = this.today;
         this.setDisplayDates();
+        this.showFixedDate = false;
+        this.fixedDate = this.displayDates[0];
+
+        this.headerFixed = false;
         
         this.dateTimes = new Array();
         for(let j = 0; j < 24; j++) {
@@ -118,7 +127,7 @@ export class FacilitiesPage {
                 let pastTime = that.now - that.lastActionTime;
                 if(pastTime >= that.refreshWholePageInterval){
                     // reset fromDate to today.
-                    this.fromDate = that.today;
+                    that.fromDate = that.today;
                     that.refresh();
                 }
             }, that.refreshWholePageInterval);
@@ -166,25 +175,24 @@ export class FacilitiesPage {
     displayFixedHeader(that) {
         return function() {
             that.lastActionTime = moment().unix();
-            let ganttview = document.querySelector(".facilities .ganttview");
-            let gantviewSlide = document.querySelector(".facilities .ganttview .ganttview-slide");
-            let facilityList = document.querySelector(".facilities .facility-list");
-            let facilitiesHeader = document.querySelector(".facilities .ganttview .facility-list-header");
-            let dayTimeHeader = document.querySelector(".facilities .ganttview .ganttview-day-time-header");
+            if (this.scrollTop > that.ganttview.nativeElement.offsetTop) {
+                that.facilityListHeader.nativeElement.style.top = that.pageContent.getContentDimensions().contentTop + "px";
+                that.facilityListHeader.nativeElement.className = "facility-list-header fixed-header";
+                that.facilityListHeader.nativeElement.style.width = that.facilityList.nativeElement.clientWidth + "px";
 
-            let toolbar = document.querySelector(".facilities-page .toolbar");
-            if (this.scrollTop > ganttview.offsetTop) {
-                facilitiesHeader.style.top = toolbar.clientHeight + "px";
-                facilitiesHeader.className = "facility-list-header fixed-header";
-                facilitiesHeader.style.width = facilityList.clientWidth + "px";
+                that.ganttviewDayTimeHeader.nativeElement.style.top = that.pageContent.getContentDimensions().contentTop + "px";
+                that.ganttviewDayTimeHeader.nativeElement.style.width = that.ganttviewSlide.nativeElement.clientWidth + "px";
+                that.ganttviewDayTimeHeader.nativeElement.className = "ganttview-day-time-header fixed-header";
 
-                dayTimeHeader.style.top = toolbar.clientHeight + "px";
-                dayTimeHeader.style.width = gantviewSlide.clientWidth + "px";
-                dayTimeHeader.className = "ganttview-day-time-header fixed-header";
+                that.ganttviewFixedDate.nativeElement.style.position = "fixed";
+                that.headerFixed = true;
             } else {
-                facilitiesHeader.className = "facility-list-header";
-                dayTimeHeader.className = "ganttview-day-time-header";
+                that.facilityListHeader.nativeElement.className = "facility-list-header";
+                that.ganttviewDayTimeHeader.nativeElement.className = "ganttview-day-time-header";
+                that.ganttviewFixedDate.nativeElement.style.position = "absolute";
+                that.headerFixed = false;
             }
+
             that.onGanttviewSlideScrollLeft();
         }       
     }
@@ -195,12 +203,11 @@ export class FacilitiesPage {
                 return function() {
                     let minScrollLeft = (that.workStartTime - 2) * that.oneHourWidth;
                     let transFromNow = that.calculateTimeWidth(that.fromDateTime, that.now);
-                    let ganttviewSlide = document.querySelector(".facilities .ganttview .ganttview-slide");
                     transFromNow = parseInt(transFromNow) - that.oneHourWidth * 2;
                     if (transFromNow > minScrollLeft) {
-                        ganttviewSlide.scrollLeft = transFromNow;
+                        that.ganttviewSlide.nativeElement.scrollLeft = (transFromNow);
                     } else {
-                        ganttviewSlide.scrollLeft = minScrollLeft;
+                        that.ganttviewSlide.nativeElement.scrollLeft = (minScrollLeft);
                     }
                     that.isLoadCompleted = true;
                 }
@@ -212,8 +219,7 @@ export class FacilitiesPage {
     }
 
     resetGanttviewSlideScroll() {
-        let ganttviewSlide = document.querySelector(".facilities .ganttview .ganttview-slide");
-        ganttviewSlide.scrollLeft = 0;
+        this.ganttviewSlide.nativeElement.scrollLeft = 0;
     }
     
     resetToToday() {
@@ -258,23 +264,18 @@ export class FacilitiesPage {
 
     onGanttviewSlideScrollLeft() {
         this.lastActionTime = moment().unix();
-        this.displayFixedDate();
         this.syncGanttviewGridAndHeaderScrollLeft();
+        this.displayFixedDate();
     }
 
     syncGanttviewGridAndHeaderScrollLeft() {
-        if (document.querySelector(".facilities .fixed-header")) {
-            let scrollableContainer = document.querySelector(".facilities .ganttview .ganttview-day-time-header");
-            let ganttviewSlide = document.querySelector(".facilities .ganttview .ganttview-slide");
-            let scrollToLeft = ganttviewSlide.scrollLeft; 
-            scrollableContainer.scrollLeft = scrollToLeft;
+        if (this.headerFixed) {
+            this.ganttviewDayTimeHeader.nativeElement.scrollLeft = this.ganttviewSlide.nativeElement.scrollLeft;
         }
     }
     
     displayFixedDate() {
-        let ganttviewSlide = document.querySelector(".facilities .ganttview .ganttview-slide");
-        let scrollLeft = ganttviewSlide.scrollLeft; 
-        
+        let scrollLeft = this.ganttviewSlide.nativeElement.scrollLeft; 
         let oneDayWidth = this.oneHourWidth * 24;
         if (scrollLeft > 0) {
             let i = Math.floor(scrollLeft / oneDayWidth);
@@ -284,8 +285,8 @@ export class FacilitiesPage {
                 this.showFixedDate = false;
             } else {
                 this.showFixedDate = true;
-                this.fixedDate = this.displayDates[i].displayDate;
-                this.fixedDateWidth = document.querySelector(".facilities .ganttview .ganttview-slide .fixed-date").clientWidth;
+                this.fixedDate = this.displayDates[i];
+                this.fixedDateWidth = this.ganttviewFixedDate.nativeElement.clientWidth;
             }
         } else {
             this.showFixedDate = false;
@@ -298,6 +299,9 @@ export class FacilitiesPage {
             let secondsOfOneHour =  60 * 60;
             let spanMinutes = endTimestamp - startTimestamp;
             peroidWidth = spanMinutes / secondsOfOneHour * this.oneHourWidth;
+            if (peroidWidth > this.dataGridWidth) {
+                peroidWidth = this.dataGridWidth;
+            }
         }
         peroidWidth = peroidWidth + "px";
         return peroidWidth;

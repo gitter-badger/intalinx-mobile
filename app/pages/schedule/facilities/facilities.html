@@ -1,14 +1,4 @@
-<ion-navbar *navbar>
-    <button menuToggle>
-        <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>{{"app.schedule.facilities.title" | translate}}</ion-title>
-    <ion-buttons right>
-        <button (click)="resetToToday()">{{"app.date.today" | translate}}</button>
-    </ion-buttons>
-</ion-navbar>
-
-<ion-content padding class="facilities">
+<ion-content #pageContent padding class="facilities">
     <div class="toolbar">
         <button item-left clear (click)="selectPerviousDay()">
             <ion-icon name="arrow-back"></ion-icon>
@@ -38,9 +28,9 @@
         <ion-spinner></ion-spinner>
     </div>
     
-    <div class="ganttview" [style.visibility]="!isLoadCompleted ? 'hidden' : ''">
-        <div class="facility-list">
-            <div class="facility-list-header">
+    <div #ganttview class="ganttview" overflow-scroll="true" [style.visibility]="!isLoadCompleted ? 'hidden' : ''">
+        <div #facilityList class="facility-list">
+            <div #facilityListHeader class="facility-list-header">
                 <div class="timezone">{{timeZone}}</div>
             </div>
             <ion-row *ngFor="let facility of facilities; let i=index;">
@@ -51,14 +41,14 @@
                 </ion-col>
             </ion-row>
         </div>
-        <div class="ganttview-slide" (scroll)="onGanttviewSlideScrollLeft($event)">
+        <div #ganttviewSlide overflow-scroll="true" class="ganttview-slide" (scroll)="onGanttviewSlideScrollLeft($event)">
             <div class="now-line">
                 <div class="line" [ngStyle]="setNowLineStyles()"></div>
             </div>
-            <div class="ganttview-day-time-header">
+            <div #ganttviewDayTimeHeader class="ganttview-day-time-header">
                 <div [style.width]="dataGridWidth + 'px'">
-                    <div [hidden]="!showFixedDate" class="fixed-date">
-                        {{fixedDate}}
+                    <div #ganttviewFixedDate [hidden]="!showFixedDate" class="ganttview-fixed-date {{(fixedDate.isSepcialDay || fixedDate.isSunday) ? 'sepcialday' : ''}} {{(fixedDate.isSaturday) ? 'saturday' : ''}}">
+                        {{fixedDate.displayDate}}
                     </div>
                     <div class="day-container">
                         <div *ngFor="let date of displayDates" class="day {{(date.isSepcialDay || date.isSunday) ? 'sepcialday' : ''}} {{(date.isSaturday) ? 'saturday' : ''}}" >
