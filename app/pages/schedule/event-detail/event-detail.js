@@ -100,7 +100,7 @@ export class EventDetailPage {
             } else if (this.repeatType == "MONTHLY") {
                 this.app.translate.get('app.date.monthly', 'app.date.day').subscribe(message => {
                     this.repeatTypeName = message['app.date.monthly'];
-                    this.repeatValueName = repeatValue + ['app.date.day']
+                    this.repeatValueName = repeatValue + message['app.date.day'];
                 });
             }
         }
