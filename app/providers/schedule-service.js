@@ -25,7 +25,7 @@ export class ScheduleService {
         this.specialDaysData = null;
     }
 
-    getUserLocaleSettings(userID) {
+    getUserLocaleSettings(userId) {
         if (this.userLocaleSettingsData) {
             // already loaded data
             return Promise.resolve(this.userSettingsData);
@@ -34,7 +34,7 @@ export class ScheduleService {
             this.util.getRequestXml('./assets/requests/schedule/get_user_settings.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
 
-                this.util.setNodeText(objRequest, ".//*[local-name()='userID']", userID);
+                this.util.setNodeText(objRequest, ".//*[local-name()='userID']", userId);
 
                 req = this.util.xml2string(objRequest);
 
@@ -322,7 +322,7 @@ export class ScheduleService {
         });
     }
 
-    getEventByEventId(eventId) {
+    getEventByEventId(eventID) {
         if (this.data) {
             // already loaded data
             return Promise.resolve(this.data);
@@ -330,7 +330,7 @@ export class ScheduleService {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_event_by_event_id.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
-                this.util.setNodeText(objRequest, ".//*[local-name()='eventID']", eventId);
+                this.util.setNodeText(objRequest, ".//*[local-name()='eventID']", eventID);
 
                 req = this.util.xml2string(objRequest);
 
@@ -338,7 +338,6 @@ export class ScheduleService {
                     let objResponse = this.util.parseXml(data);
                     let eventOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='EventOutput']");
                     let event = this.util.xml2json(eventOutput).EventOutput;
-
                     let participants = [];
                     let participantNodes = this.util.selectXMLNodes(objResponse, ".//*[local-name()='Participant']");
                     for (let i = 0; i < participantNodes.length; i++) {
@@ -426,12 +425,32 @@ export class ScheduleService {
             return Promise.resolve(this.data);
         }
         return new Promise(resolve => {
-            this.getDeviceListWithoutTranferToJson.then(deviceOutputs => {
+            this.getDeviceListWithoutTranferToJson().then(deviceOutputs => {
                 let facilities = [];
                 for (let i = 0; i < deviceOutputs.length; i++) {
                     facilities.push(this.util.xml2json(deviceOutputs[i]).DeviceOutput);
                 }
                 resolve(facilities);
+            });
+        });
+    }
+    
+    getDeviceListByDeviceIDs(deviceIDs) {
+        if (this.data) {
+            // already loaded data
+            return Promise.resolve(this.data);
+        }
+        return new Promise(resolve => {
+            let deviceIDArray = deviceIDs.split(",");
+            this.getDeviceListWithoutTranferToJson().then(deviceOutputs => {
+                let deviceArray = [];
+                for (let i = 0; i < deviceOutputs.length; i++) {
+                    let device = this.util.xml2json(deviceOutputs[i]).DeviceOutput;
+                    if(deviceIDArray.includes(device.deviceID)) {
+                        deviceArray.push(device);
+                    }
+                }
+                resolve(deviceArray);
             });
         });
     }
@@ -519,87 +538,134 @@ export class ScheduleService {
     }
 
     addEvent(event, participants) {
-        return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/schedule/add_event.xml').then(req => {
+        return new Promise((resolve, reject) => {
+            this.util.getRequestXml('./assets/requests/schedule/add_event.xml').then(req => { 
                 let objRequest = this.util.parseXml(req);
-                req = this.util.xml2string(objRequest);
-
-                this.util.setNodeText(req, ".//*[local-name()='categoryID']", event.categoryID);
-                this.util.setNodeText(req, ".//*[local-name()='isAllDay']", event.isAllDay);
-                this.util.setNodeText(req, ".//*[local-name()='isRepeat']", event.isRepeat);
-                this.util.setNodeText(req, ".//*[local-name()='repeatRule']", event.repeatRule);
-                this.util.setNodeText(req, ".//*[local-name()='startTime']", event.startTime);
-                this.util.setNodeText(req, ".//*[local-name()='endTime']", event.endTime);
-                this.util.setNodeText(req, ".//*[local-name()='deviceID']", event.deviceID);
-                this.util.setNodeText(req, ".//*[local-name()='visibility']", event.visibility);
-                // this.util.setNodeText(req, ".//*[local-name()='isReminder']", "");
-                // this.util.setNodeText(req, ".//*[local-name()='reminderRule']", "");
-                this.util.setNodeText(req, ".//*[local-name()='title']", event.title);
-                this.util.setNodeText(req, ".//*[local-name()='summary']", event.summary);
-                this.util.setNodeText(req, ".//*[local-name()='location']", event.location);
-                this.util.setNodeText(req, ".//*[local-name()='status']", event.status);
-                this.util.setNodeText(req, ".//*[local-name()='isDeviceRepeatWarned']", event.isDeviceRepeatWarned);
-                this.util.setNodeText(req, ".//*[local-name()='isEventRepeatWarned']", event.isEventRepeatWarned);
+                
+                this.util.setNodeText(objRequest, ".//*[local-name()='categoryID']", event.categoryID);
+                this.util.setNodeText(objRequest, ".//*[local-name()='isAllDay']", event.isAllDay);
+                this.util.setNodeText(objRequest, ".//*[local-name()='isRepeat']", event.isRepeat);
+                this.util.setNodeText(objRequest, ".//*[local-name()='repeatRule']", event.repeatRule);
+                this.util.setNodeText(objRequest, ".//*[local-name()='startTime']", event.startTime);
+                this.util.setNodeText(objRequest, ".//*[local-name()='endTime']", event.endTime);
+                this.util.setNodeText(objRequest, ".//*[local-name()='deviceID']", event.deviceID);
+                this.util.setNodeText(objRequest, ".//*[local-name()='visibility']", event.visibility);
+                // this.util.setNodeText(objRequest, ".//*[local-name()='isReminder']", "");
+                // this.util.setNodeText(objRequest, ".//*[local-name()='reminderRule']", "");
+                this.util.setNodeText(objRequest, ".//*[local-name()='title']", event.title);
+                this.util.setNodeText(objRequest, ".//*[local-name()='summary']", event.summary);
+                this.util.setNodeText(objRequest, ".//*[local-name()='location']", event.location);
+                this.util.setNodeText(objRequest, ".//*[local-name()='status']", event.status);
+                this.util.setNodeText(objRequest, ".//*[local-name()='isDeviceRepeatWarned']", event.isDeviceRepeatWarned);
+                this.util.setNodeText(objRequest, ".//*[local-name()='isEventRepeatWarned']", event.isEventRepeatWarned);
                 // add paticipants to the request.
-                let oEventOutput = this.util.selectXMLNode(req, ".//*[local-name()='EventOutput']");
-                let iLen = participants.length;
-                debugger
-                // Is this definetion ok?
-                let curEventNamespace = "http://schemas.intasect.co.jp/mycal/service/event";
-                if (iLen > 0) {
-                    for (var i = 0; i < iLen; i++) {
-                        let curParticipant = participants[i];
-                        var oParticipant = this.util.createXMLElement(oEventOutput, curEventNamespace, "Participant");
-                        var oUserID = this.util.createXMLElement(oParticipant, curEventNamespace, "userID");
-                        var oUserName = this.util.createXMLElement(oParticipant, curEventNamespace, "userName");
-                        this.util.setNodeText(oUserID, curParticipant.userID);
-                        this.util.appendXMLNode(oUserID, oParticipant);
-                        this.util.setNodeText(oUserName, curParticipant.userName);
-                        this.util.appendXMLNode(oUserName, oParticipant);
-                        this.util.appendXMLNode(oParticipant, oEventOutput);
-                    }
-                }
-                debugger
-                this.util.callCordysWebservice(req).then(data => {
+				let oEventOutput = this.util.selectXMLNode(objRequest, ".//*[local-name()='EventOutput']");
+				let iLen = participants.length;
+                
+                // The namespace about schedule's participant
+                let participantNamespace = "http://schemas.intasect.co.jp/mycal/service/event";
+				if (iLen > 0) {
+					for (var i = 0; i < iLen; i++) {
+						let curParticipant = participants[i];
+                        var oParticipant = this.util.createXMLElement(oEventOutput, participantNamespace, "Participant");
+						var oUserID = this.util.createXMLElement(oParticipant, participantNamespace, "userID");
+						var oUserName = this.util.createXMLElement(oParticipant, participantNamespace, "userName");
+						this.util.setTextContent(oUserID, curParticipant.userID);
+						this.util.appendXMLNode(oUserID, oParticipant);
+						this.util.setTextContent(oUserName, curParticipant.userName);
+						this.util.appendXMLNode(oUserName, oParticipant);
+						this.util.appendXMLNode(oParticipant, oEventOutput);
+					}
+				}
+                
+                req = this.util.xml2string(objRequest);
+                this.util.callCordysWebserviceWithoutShowError(req).then(data => {
                     let objResponse = this.util.parseXml(data);
-                    debugger
-                    //     if (!oBdiObject.soapFaultOccurred) {
-                    // 	gsData.setChildPageChanged(true);
-                    // 	CordysUtil.success(MyCalUtil.getMessage("MYCAL_ERROR_0020006"));
-                    // 	CordysUtil.closeModal();
-                    // }　else　{
-                    // 	var sWarnMesssageCode = oBdiObject.warnCode;
-                    // 	var sWarnMesssageInfo = oBdiObject.warnMessage;
-                    // 	if (sWarnMesssageCode && sWarnMesssageCode.indexOf("WARN003") > -1)　{
-                    // 		// 繰り返し予定は存在なし
-                    // 		var sMessages = convertWarningMessage(sWarnMesssageInfo);
-                    // 		CordysUtil.error(sMessages);
-                    // 	} else if (sWarnMesssageCode && sWarnMesssageCode.indexOf("WARN002") > -1) {
-                    // 		// 予定重複
-                    //         var okHandler = function() {
-                    // 			var isDeviceRepeatWarned = false;
-                    // 			var isEventRepeatWarned = true;
-                    //             return addEvent(isDeviceRepeatWarned, isEventRepeatWarned);
-                    //         }
-                    //         var sMessages = convertWarningMessage(sWarnMesssageInfo);
-                    // 		CordysUtil.confirm(sMessages,okHandler);
-                    //     } else if　(sWarnMesssageCode && sWarnMesssageCode.indexOf("WARN001") > -1) {
-                    // 		// 施設重複
-                    //         var okHandler = function() {
-                    // 			var isDeviceRepeatWarned = true;
-                    // 			var isEventRepeatWarned = true;
-                    //             return addEvent(isDeviceRepeatWarned, isEventRepeatWarned);
-                    //         }
-                    //         var sMessages = convertWarningMessage(sWarnMesssageInfo);
-                    // 		CordysUtil.confirm(sMessages,okHandler);
-                    // 	} else　{
-                    // 		CordysUtil.systemError();
-                    // 	}
-                    // }　
-
-                    let returnObject = this.util.selectXMLNode(objResponse, ".//*[local-name()='return']");
-                    let returnData = this.util.xml2json(returnObject).return;
+                    
+                    let returnObject = this.util.selectXMLNode(objResponse, ".//*[local-name()='addEvent']");
+                    let returnData = this.util.xml2json(returnObject).addEvent.addEvent; 
                     resolve(returnData);
+                }, err => {
+                    
+                    let errResponse = this.util.parseXml(err.text());
+                    
+                    let faultCode = this.util.getNodeText(errResponse, ".//*[local-name()='faultcode']");
+                    let faultString = this.util.getNodeText(errResponse, ".//*[local-name()='faultstring']")
+                    let returnData = {
+                        "faultcode": faultCode,
+                        "faultstring": faultString
+                    }; 
+                    reject(returnData);
+                });
+            });
+        });
+    }
+    
+    updateEvent(event, participants) {
+        return new Promise((resolve, reject) => {
+            this.util.getRequestXml('./assets/requests/schedule/update_event.xml').then(req => {
+                let objRequest = this.util.parseXml(req);
+                
+                this.util.setNodeText(objRequest, ".//*[local-name()='eventID']", event.eventID);
+                this.util.setNodeText(objRequest, ".//*[local-name()='categoryID']", event.categoryID);
+                this.util.setNodeText(objRequest, ".//*[local-name()='isAllDay']", event.isAllDay);
+                this.util.setNodeText(objRequest, ".//*[local-name()='isRepeat']", event.isRepeat);
+                this.util.setNodeText(objRequest, ".//*[local-name()='repeatRule']", event.repeatRule);
+                this.util.setNodeText(objRequest, ".//*[local-name()='startTime']", event.startTime);
+                this.util.setNodeText(objRequest, ".//*[local-name()='endTime']", event.endTime);
+                this.util.setNodeText(objRequest, ".//*[local-name()='deviceID']", event.deviceID);
+                this.util.setNodeText(objRequest, ".//*[local-name()='visibility']", event.visibility);
+                // this.util.setNodeText(objRequest, ".//*[local-name()='isReminder']", "");
+                // this.util.setNodeText(objRequest, ".//*[local-name()='reminderRule']", "");
+                this.util.setNodeText(objRequest, ".//*[local-name()='title']", event.title);
+                this.util.setNodeText(objRequest, ".//*[local-name()='summary']", event.summary);
+                this.util.setNodeText(objRequest, ".//*[local-name()='location']", event.location);
+                this.util.setNodeText(objRequest, ".//*[local-name()='status']", event.status);
+                this.util.setNodeText(objRequest, ".//*[local-name()='isDeviceRepeatWarned']", event.isDeviceRepeatWarned);
+                this.util.setNodeText(objRequest, ".//*[local-name()='isEventRepeatWarned']", event.isEventRepeatWarned);
+                this.util.setNodeText(objRequest, ".//*[local-name()='parentEventID']", event.parentEventID);
+                this.util.setNodeText(objRequest, ".//*[local-name()='oldStartTime']", event.oldStartTime);
+                this.util.setNodeText(objRequest, ".//*[local-name()='oldEndTime']", event.oldEndTime);
+                this.util.setNodeText(objRequest, ".//*[local-name()='isFromRepeatToSpecial']", event.isFromRepeatToSpecial);
+                
+                // add paticipants to the request.
+				let oEventOutput = this.util.selectXMLNode(objRequest, ".//*[local-name()='EventOutput']");
+				let iLen = participants.length;
+                
+                // The namespace about schedule's participant
+                let participantNamespace = "http://schemas.intasect.co.jp/mycal/service/event";
+				if (iLen > 0) {
+					for (var i = 0; i < iLen; i++) {
+						let curParticipant = participants[i];
+                        var oParticipant = this.util.createXMLElement(oEventOutput, participantNamespace, "Participant");
+						var oUserID = this.util.createXMLElement(oParticipant, participantNamespace, "userID");
+						var oUserName = this.util.createXMLElement(oParticipant, participantNamespace, "userName");
+						this.util.setTextContent(oUserID, curParticipant.userID);
+						this.util.appendXMLNode(oUserID, oParticipant);
+						this.util.setTextContent(oUserName, curParticipant.userName);
+						this.util.appendXMLNode(oUserName, oParticipant);
+						this.util.appendXMLNode(oParticipant, oEventOutput);
+					}
+				}
+                
+                req = this.util.xml2string(objRequest);
+                this.util.callCordysWebserviceWithoutShowError(req).then(data => {
+                    let objResponse = this.util.parseXml(data);
+                    
+                    let returnObject = this.util.selectXMLNode(objResponse, ".//*[local-name()='updateEvent']");
+                    let returnData = this.util.xml2json(returnObject).updateEvent.updateEvent; 
+                    resolve(returnData);
+                }, err => {
+                    
+                    let errResponse = this.util.parseXml(err.text());
+                    
+                    let faultCode = this.util.getNodeText(errResponse, ".//*[local-name()='faultcode']");
+                    let faultString = this.util.getNodeText(errResponse, ".//*[local-name()='faultstring']")
+                    let returnData = {
+                        "faultcode": faultCode,
+                        "faultstring": faultString
+                    }; 
+                    reject(returnData);
                 });
             });
         });
