@@ -74,7 +74,7 @@ export class Util {
         return this.callCordysWebservice(request, useAnonymous);
     }
 
-    callCordysWebservice(request, useAnonymous) {
+    callCordysWebservice(request, useAnonymous, hideError) {
         if (!useAnonymous) {
             // If there is not a saml artifact in cookie, then redirect to Login page.
             let sso = new SSO(this, this.app.config);
@@ -99,16 +99,15 @@ export class Util {
                     resolve(data);
                 }, error => {
                     if (error.status == "500" && error.type == "2") {
-                        // let responseText = error.text();
-                        // let responseNode = this.parseXml(responseText);
-                        // this.changeErrorMessageOfWebservice(this.getNodeText(responseNode, ".//*[local-name()='faultstring']")).then(message => {
-                        //     this.presentModal(message);
-                        // });
-                        reject(error);
+                        if (!hideError) {
+                            let responseText = error.text();
+                            let responseNode = this.parseXml(responseText);
+                            this.presentModal(this.getNodeText(responseNode, ".//*[local-name()='faultstring']"));
+                        }
                     } else {
                         this.presentSystemErrorModal();
                     }
-                    //reject(error);
+                    reject(error);
                 });
         });
     }
