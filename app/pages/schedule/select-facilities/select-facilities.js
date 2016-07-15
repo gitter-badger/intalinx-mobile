@@ -26,7 +26,7 @@ export class SelectFacilitiesPage {
         this.params = params;
         this.scheduleService = scheduleService;
 
-        this.originFacilities = this.params.get("facilities");
+        this.originFacilities = this.params.get("devices");
         this.getFacilities().then(data => {
             this.selectedFacilityCount = 0;
             this.setOriginSelectedFacilities();
