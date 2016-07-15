@@ -64,7 +64,6 @@ export class Util {
     setXMLAttribute(elementNode, attributeNamespace, attributeName, attributeValue) {
         return XmlUtil.setXMLAttribute(elementNode, attributeNamespace, attributeName, attributeValue);
     }
-<<<<<<< HEAD
     
     createXMLElementNS(xmlDocument, namespaceURI, qualifiedName) {
         return XmlUtil.createElementNS(xmlDocument, namespaceURI, qualifiedName);
@@ -73,14 +72,7 @@ export class Util {
     createXMLElement(xmlDocument, namespaceURI, qualifiedName) {
         return XmlUtil.createElementWithNS(namespaceURI, qualifiedName);
     }
-    
-=======
 
-    createXMLElement(xmlDocument, namespaceURI, qualifiedName) {
-        return XmlUtil.createElementNS(xmlDocument, namespaceURI, qualifiedName);
-    }
-
->>>>>>> 4422ac34add27d4df87ada07ddda63bcbbc72922
     appendXMLNode(fromNode, toNode) {
         return XmlUtil.appendXMLNode(fromNode, toNode);
     }
@@ -127,7 +119,6 @@ export class Util {
                 });
         });
     }
-<<<<<<< HEAD
     
     callCordysWebserviceWithoutShowError(request, useAnonymous) {
         if (!useAnonymous) {
@@ -157,8 +148,6 @@ export class Util {
                 });
         });
     } 
-=======
->>>>>>> 4422ac34add27d4df87ada07ddda63bcbbc72922
 
     callCordysWebserviceWithUrl(url, request) {
         return new Promise(resolve => {
