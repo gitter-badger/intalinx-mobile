@@ -2,12 +2,13 @@
     <button menuToggle>
         <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>{{ "app.schedule.title" | translate }}</ion-title>
-    <ion-buttons end>
+    <ion-title [hidden]="isHtmlLoadCompleted==true">{{ "app.schedule.title" | translate }}</ion-title>
+    <ion-title [hidden]="isHtmlLoadCompleted!=true">{{selectedUserName}}{{ "app.schedule.scheduleOfPerson" | translate }}</ion-title>
+    <!--<ion-buttons end>
         <button>
             <ion-icon name="more" aria-label="more"></ion-icon>
         </button>
-    </ion-buttons>
+    </ion-buttons>-->
 </ion-navbar>
 <ion-toolbar no-border-top class="year-month-tool">
     <ion-buttons start>
@@ -40,9 +41,9 @@
     <div class="loading" [hidden]="isHtmlLoadCompleted==true">
         <ion-spinner name="dots"></ion-spinner>
     </div>
-    <ion-slides #calendarSlides (willChange)="changeMonth($event)" [options]="calendarSlideOptions" [hidden]="isHtmlLoadCompleted==false">
+    <ion-slides #calendarSlides (willChange)="changeMonth($event)" [options]="calendarSlideOptions">
         <ion-slide class="calendar" *ngFor="let n of numbers">
-            <ion-grid>
+            <ion-grid  [hidden]="isHtmlLoadCompleted==false">
                 <ion-row *ngFor="let week of calendar">
                     <ion-col *ngFor="let day of week" (mouseover)="searchEventsAndSpecialDaysBySelectedDay(day.format('YYYY/MM/D'))">
                         <div class="day-default" [ngClass]="{'day-not-this-month': day.format('YYYY-MM')!=yearMonth,
@@ -91,13 +92,13 @@
     </ion-scroll>
 </ion-content>
 <ion-toolbar position="bottom">
-    <ion-segment class="month-people-bottom-buttons">
-        <ion-segment-button class="button-show-people" (ionSelect)="showPeople()">
+    <ion-segment class="month-calendar-bottom-buttons">
+        <ion-segment-button class="button-select-user" (click)="selectUser()">
             <ion-icon name="ios-people"></ion-icon>
         </ion-segment-button>
-        <ion-segment-button class="button-show-today" (ionSelect)="showToday()">{{ "app.date.today" | translate }}
+        <ion-segment-button class="button-show-today" (click)="showToday()">{{ "app.date.today" | translate }}
         </ion-segment-button>
-        <ion-segment-button class="button-show-facilities" (ionSelect)="showFacilities()">{{ "app.schedule.index.facilities" | translate }}
+        <ion-segment-button class="button-show-my-schedule" (click)="showMySchedule()">{{ "app.schedule.index.mySchedule" | translate }}
         </ion-segment-button>
     </ion-segment>
 </ion-toolbar>

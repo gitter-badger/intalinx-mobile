@@ -93,7 +93,7 @@ export class ScheduleService {
         });
     }
 
-    getEventsForFacility(eventInputForFacilityAndGroup) {
+    getEventsForFacility(startTime, endTime) {
         if (this.data) {
             // already loaded data
             return Promise.resolve(this.data);
@@ -104,9 +104,9 @@ export class ScheduleService {
 
                 // startTime/endTime--
                 // selType--value--device/group--"when set group, cannot get anything.
-                this.util.setNodeText(objRequest, ".//*[local-name()='startTime']", eventInputForFacilityAndGroup.startTime);
-                this.util.setNodeText(objRequest, ".//*[local-name()='endTime']", eventInputForFacilityAndGroup.endTime);
-                this.util.setNodeText(objRequest, ".//*[local-name()='selType']", eventInputForFacilityAndGroup.selType);
+                this.util.setNodeText(objRequest, ".//*[local-name()='startTime']", startTime);
+                this.util.setNodeText(objRequest, ".//*[local-name()='endTime']", endTime);
+                this.util.setNodeText(objRequest, ".//*[local-name()='selType']", 'device');
 
                 req = this.util.xml2string(objRequest);
 
@@ -157,7 +157,7 @@ export class ScheduleService {
         });
     }
 
-    getSpecialDays(request) {
+    getSpecialDays(locale, fromDateTime, toDateTime) {
         if (this.specialDaysData) {
             // already loaded data
             return Promise.resolve(this.specialDaysData);
@@ -167,9 +167,9 @@ export class ScheduleService {
                 let objRequest = this.util.parseXml(req);
                 // locale--separator--";". Avaliable value - JP/CN/US
                 // start/end--type--timestamp 
-                this.util.setNodeText(objRequest, ".//*[local-name()='locale']", request.locale);
-                this.util.setNodeText(objRequest, ".//*[local-name()='start']", request.start);
-                this.util.setNodeText(objRequest, ".//*[local-name()='end']", request.end);
+                this.util.setNodeText(objRequest, ".//*[local-name()='locale']", locale);
+                this.util.setNodeText(objRequest, ".//*[local-name()='start']", fromDateTime);
+                this.util.setNodeText(objRequest, ".//*[local-name()='end']", toDateTime);
 
                 req = this.util.xml2string(objRequest);
 
@@ -266,7 +266,7 @@ export class ScheduleService {
                 for (let i = 0; i < eventOutputs.length; i++) {
                     let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
                     let startDay = Number(moment(eventOutput.startTime, "X").format("D"));
-                    let endDay = Number(moment(eventOutput.endTime, "X").format("D"));   
+                    let endDay = Number(moment(eventOutput.endTime, "X").format("D"));
                     // the start time is before the month
                     if (Number(eventOutput.startTime) < searchEventsRequires.startTime) {
                         startDay = Number(moment(searchEventsRequires.startTime, "X").format("D"));
@@ -293,8 +293,10 @@ export class ScheduleService {
             this.getSpecialDays(searchSpecialDaysRequires).then(holidays => {
                 let days = new Array();
                 for (let i = 0; i < holidays.length; i++) {
-                    let startDay = moment(holidays[i].startDay, "X").format("D");
-                    days.push(startDay);
+                    let startTime = holidays[i].startDay;
+                    if (Number(startTime) > searchSpecialDaysRequires.start && Number(startTime) < searchSpecialDaysRequires.end) {
+                        days.push(moment(startTime, "X").format("D"));
+                    }
                 }
                 resolve(days);
             });

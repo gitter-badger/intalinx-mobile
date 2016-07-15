@@ -47,7 +47,10 @@
     .calendar {
         display: block;
         top: 0px;
-        background-color: rgb(248, 248, 248);
+        ion-grid {
+            padding: 0px;
+            background-color: rgb(248, 248, 248);
+        }
         ion-col {
             padding: 0px;
             .day-default {
@@ -116,7 +119,7 @@
     }
 }
 
-.month-people-bottom-buttons {
+.month-calendar-bottom-buttons {
     .segment-button {
         max-width: none;
         border: none;
@@ -127,10 +130,10 @@
             font-size: 2.8rem;
         }
     }
-    .button-show-people {
+    .button-select-user {
         text-align: left;
     }
-    .button-show-facilities {
+    .button-show-my-schedule {
         text-align: right;
     }
 }

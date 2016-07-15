@@ -6,13 +6,13 @@
     </ion-buttons>
     <ion-title>{{"app.schedule.selectFacilities" | translate}}</ion-title>
     <ion-buttons end>
-        <button (click)="selectFacilities()" [disabled]="selectedFacilityCount<=0">
+        <button (click)="selectFacilities()">
             {{"app.action.done" | translate}}
             <span [hidden]="selectedFacilityCount<=0">({{selectedFacilityCount}})</span>
         </button>
     </ion-buttons>
 </ion-toolbar>
-<ion-searchbar (input)="findFacilities($event)" [hideCancelButton]=true>
+<ion-searchbar (input)="findFacilities($event)" [hideCancelButton]=true placeholder='{{"app.action.search" | translate}}'>
         <ion-icon name="search"></ion-icon>
     </ion-searchbar>
 <ion-content padding class="select-facilities">
