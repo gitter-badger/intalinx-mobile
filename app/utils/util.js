@@ -79,10 +79,11 @@ export class Util {
 
     callCordysWebserviceUseAnonymous(request) {
         let useAnonymous = true;
-        return this.callCordysWebservice(request, useAnonymous);
+        let hideError = false;
+        return this.callCordysWebservice(request, hideError, useAnonymous);
     }
 
-    callCordysWebservice(request, useAnonymous, hideError) {
+    callCordysWebservice(request, hideError, useAnonymous) {
         if (!useAnonymous) {
             // If there is not a saml artifact in cookie, then redirect to Login page.
             let sso = new SSO(this, this.app.config);
@@ -119,35 +120,6 @@ export class Util {
                 });
         });
     }
-    
-    callCordysWebserviceWithoutShowError(request, useAnonymous) {
-        if (!useAnonymous) {
-            // If there is not a saml artifact in cookie, then redirect to Login page.
-            let sso = new SSO(this, this.app.config);
-            if (!sso.loggedOn()) {
-                // redirect to Login page.
-                this.app.redirectLoginPage();
-                return;
-            }
-        }
-        return new Promise((resolve, reject) => {
-            let url = this.app.config.get("BASE_URL") + this.app.config.get("GATEWAY_URL");
-            if (!useAnonymous) {
-                url = url + "?" + this.app.config.get("SAMLART_NAME") + "=" +
-                this.getSAMLart(this.app.config.get("SAML_ARTIFACT_STORAGE_NAME"));
-                url = url + "&language=" + this.app.userLang;
-            } else {
-                url = url + "?language=" + this.app.userLang;
-            }
-            this.http.post(url, request)
-                .map(res => res.text())
-                .subscribe(data => {
-                    resolve(data);
-                }, error => {
-                    reject(error);
-                });
-        });
-    } 
 
     callCordysWebserviceWithUrl(url, request) {
         return new Promise(resolve => {

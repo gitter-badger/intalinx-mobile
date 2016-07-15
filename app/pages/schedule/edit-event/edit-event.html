@@ -51,6 +51,7 @@
             <ion-label>{{"app.schedule.event.startTime" | translate}}</ion-label>
             <ion-datetime displayFormat="YYYY/MM/DD HH:mm" 
                           [(ngModel)] = "startTime"
+                          min="2004-01-01" max="2080-12-31" 
                           minuteValues="00, 15, 30, 45" 
                           doneText='{{"app.action.done" | translate}}' 
                           cancelText='{{"app.action.cancel" | translate}}'></ion-datetime>
@@ -58,7 +59,9 @@
         <ion-item>
             <!-- end normal-->
             <ion-label>{{"app.schedule.event.endTime" | translate}}</ion-label>
-            <ion-datetime displayFormat="YYYY/MM/DD HH:mm" [(ngModel)] = "endTime"
+            <ion-datetime displayFormat="YYYY/MM/DD HH:mm" 
+                          [(ngModel)] = "endTime"
+                          min="2004-01-01" max="2080-12-31" 
                           minuteValues="00, 15, 30, 45" 
                           doneText='{{"app.action.done" | translate}}' 
                           cancelText='{{"app.action.cancel" | translate}}'></ion-datetime>
@@ -70,6 +73,7 @@
             <ion-label>{{"app.schedule.event.startDate" | translate}}</ion-label>
             <ion-datetime displayFormat="YYYY/MM/DD" 
                           [(ngModel)] = "startTime" 
+                          min="2004-01-01" max="2080-12-31" 
                           doneText='{{"app.action.done" | translate}}' 
                           cancelText='{{"app.action.cancel" | translate}}'></ion-datetime>
         </ion-item>
@@ -78,6 +82,7 @@
             <ion-label>{{"app.schedule.event.endDate" | translate}}</ion-label>
             <ion-datetime displayFormat="YYYY/MM/DD" 
                           [(ngModel)] = "endTime" 
+                          min="2004-01-01" max="2080-12-31" 
                           doneText='{{"app.action.done" | translate}}' 
                           cancelText='{{"app.action.cancel" | translate}}'></ion-datetime>
         </ion-item>
