@@ -424,7 +424,9 @@ export class EditEventPage {
             this.event.startTime = saveStartTime;
             this.event.endTime = saveEndTime;
             // calculate the days of adding event
-            this.setDaysOfAddedEvent();
+            if (this.sendDataToAddEvent) {
+                this.setDaysOfAddedEvent();
+            }
             resolve(true);
         });
     }
