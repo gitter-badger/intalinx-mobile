@@ -26,9 +26,9 @@ export class EventDetailPage {
         this.nav = nav;
         this.params = params;
         this.scheduleService = scheduleService;
-        this.sendData = this.params.get("sendData");
-        this.eventId = this.sendData.eventId;
-        this.selectedDay = this.sendData.selectedDay;
+        this.sendDataToShowOrDeleteEvent = this.params.get("sendDataToShowOrDeleteEvent");
+        this.eventId = this.sendDataToShowOrDeleteEvent.eventId;
+        this.selectedDay = this.sendDataToShowOrDeleteEvent.selectedDay;
         this.isLoadCompleted = false;
         this.sendDataToEditEvent = {
             "eventId": "",
@@ -209,7 +209,7 @@ export class EventDetailPage {
         this.scheduleService.deleteEvent(this.deleteEventRequires).then(data => {
             if (data == "true") {
                 this.setDaysOfDeletedEvent();
-                this.sendData.isRefreshFlag = true;
+                this.sendDataToShowOrDeleteEvent.isRefreshFlag = true;
                 this.nav.pop();
             }
         });
@@ -237,7 +237,7 @@ export class EventDetailPage {
         } else {
             daysOfDeletedEvent.push(moment(this.selectedDay).format("D"));
         }
-        this.sendData.daysOfDeletedEvent = daysOfDeletedEvent;
+        this.sendDataToShowOrDeleteEvent.daysOfDeletedEvent = daysOfDeletedEvent;
     }
 
     editEvent() {
