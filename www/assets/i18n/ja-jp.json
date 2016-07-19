@@ -136,8 +136,8 @@
                 "private": "非公開"
             },
             "public": "一般公開",
-            "private": "限定公開",
-            "confidential": "非公開",
+            "private": "非公開",
+            "confidential": "限定公開",
             "location": "場所",
             "time": "時間",
             "start": "開始",

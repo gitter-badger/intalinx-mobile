@@ -103,7 +103,7 @@ export class EventDetailPage {
                     this.repeatValueName = moment.weekdays(true)[Number(repeatValue)]
                 });
             } else if (this.repeatType == "MONTHLY") {
-                this.app.translate.get('app.date.monthly', 'app.date.day').subscribe(message => {
+                this.app.translate.get(['app.date.monthly', 'app.date.day']).subscribe(message => {
                     this.repeatTypeName = message['app.date.monthly'];
                     this.repeatValueName = repeatValue + message['app.date.day'];
                 });
