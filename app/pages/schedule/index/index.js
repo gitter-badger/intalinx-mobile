@@ -60,9 +60,16 @@ export class ScheduleIndexPage {
             "start": "",
             "end": ""
         }
-        this.sendData = {
+        this.sendDataToShowOrDeleteEvent = {
             "selectedDay": "",
             "eventId": "",
+            "daysOfDeletedEvent": "",
+            "isRefreshFlag": false
+        }
+
+        this.sendDataToAddEvent = {
+            "selectedDay": "",
+            "daysOfAddedEvent": "",
             "isRefreshFlag": false
         }
         
@@ -282,20 +289,17 @@ export class ScheduleIndexPage {
 	}
     
     openEventDetail(event) {
-        this.sendData = {
-            "selectedDay": this.selectedDay,
-            "eventId": event.eventID,
-            "daysOfDeletedEvent": "",
-            "isRefreshFlag": false
-        }
+        this.sendDataToShowOrDeleteEvent.selectedDay = this.selectedDay;
+        this.sendDataToShowOrDeleteEvent.eventId = event.eventID;
         this.nav.push(EventDetailPage, {
-            "sendData": this.sendData
+            "sendDataToShowOrDeleteEvent": this.sendDataToShowOrDeleteEvent
         });
     }
     
     addEvent() {
+        this.sendDataToAddEvent.selectedDay = this.selectedDay;
         this.nav.push(EditEventPage, {
-            "event": event
+            "sendDataToAddEvent": this.sendDataToAddEvent
         });
     }
     
@@ -325,20 +329,26 @@ export class ScheduleIndexPage {
         this.showCalendar(moment(this.yearMonth));
     }
     
-    onPageWillLeave() {
-        this.sendData.isRefreshFlag = false;
-    }
-    
     onPageWillEnter() {
-        let isRefreshFlag = this.sendData.isRefreshFlag;
+        debugger
+        // enter page after deleting event
+        let isRefreshFlag = this.sendDataToShowOrDeleteEvent.isRefreshFlag;
         if (isRefreshFlag == true) {
-            this.searchEventsAndSpecialDaysBySelectedDay(this.sendData.selectedDay);
-            for (let i = 0; i < this.sendData.daysOfDeletedEvent.length; i++) {
-                let index = this.daysOfEvents.indexOf(this.sendData.daysOfDeletedEvent[i]);
+            this.searchEventsAndSpecialDaysBySelectedDay(this.sendDataToShowOrDeleteEvent.selectedDay);
+            for (let i = 0; i < this.sendDataToShowOrDeleteEvent.daysOfDeletedEvent.length; i++) {
+                let index = this.daysOfEvents.indexOf(this.sendDataToShowOrDeleteEvent.daysOfDeletedEvent[i]);
                 if(index != -1) {
                     this.daysOfEvents.splice(index, 1);
                 }
             }
+            this.sendData.isRefreshFlag = false;
+        }
+        // enter page after adding event
+        let isRefreshFlagFromAddEvent = this.sendDataToAddEvent.isRefreshFlag;
+        if (isRefreshFlagFromAddEvent == true) {
+            this.searchEventsAndSpecialDaysBySelectedDay(this.sendDataToAddEvent.selectedDay);
+            this.daysOfEvents = this.daysOfEvents.concat(this.sendDataToAddEvent.daysOfAddedEvent);
+            this.sendDataToAddEvent.isRefreshFlag = false;
         }
     }
 }
