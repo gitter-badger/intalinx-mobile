@@ -15,8 +15,7 @@ export class NotificationService {
         this.data = null;
         this.util = util;
         
-        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
-        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
+        this.userDefaultAvatarImageUrl = this.app.config.get("USER_DEFAULT_AVATAR_IMAGE_URL");
     }
 
     getNotificationListForTop(position, isNeedRegistNotExistsReadStatus) {
@@ -47,7 +46,7 @@ export class NotificationService {
 
                     notifications.forEach(function(notification) {
                         if (!notification.createUserAvatar || notification.createUserAvatar.toString().indexOf("data:image") != 0) {
-                            notification.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                            notification.createUserAvatar = this.userDefaultAvatarImageUrl;
                         }
                         this.util.fromNowForNotification(notification.publishStartDate).then(data => {
                             notification.publishStartDate = data;
@@ -100,7 +99,7 @@ export class NotificationService {
                     let notificationOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='NotificationOutput']");
                     let notification = this.util.xml2json(notificationOutput).NotificationOutput;
                     if (!notification.createUserAvatar || notification.createUserAvatar.toString().indexOf("data:image") != 0) {
-                        notification.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                        notification.createUserAvatar = this.userDefaultAvatarImageUrl;
                     }
                     this.util.fromNowForNotification(notification.publishStartDate).then(data => {
                         notification.publishStartDate = data;

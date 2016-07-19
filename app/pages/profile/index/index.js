@@ -29,11 +29,10 @@ export class ProfileIndexPage {
         this.view = view;
         this.platform = platform;
 
-        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
-        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
+        this.userDefaultAvatarImageUrl = this.app.config.get("USER_DEFAULT_AVATAR_IMAGE_URL");
 
         this.user = {
-            "userAvatar": this.userAvatarImageUrl + this.userAvatarDefaultImage
+            "userAvatar": this.userDefaultAvatarImageUrl
         };
     }
 

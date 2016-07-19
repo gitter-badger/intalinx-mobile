@@ -15,8 +15,7 @@ export class BlogService {
         this.data = null;
         this.util = util;
         
-        this.userAvatarImageUrl = this.app.config.get("USER_AVATAR_IMAGE_URL");
-        this.userAvatarDefaultImage = this.app.config.get("USER_AVATAR_DEFAULT_IMAGE");
+        this.userDefaultAvatarImageUrl = this.app.config.get("USER_DEFAULT_AVATAR_IMAGE_URL");
     }
 
     getCommunityListForTop(position, isNeedRegistNotExistsReply) {
@@ -48,7 +47,7 @@ export class BlogService {
 
                     communities.forEach(function(community) {
                         if (!community.createUserAvatar || community.createUserAvatar.toString().indexOf("data:image") != 0) {
-                            community.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                            community.createUserAvatar = this.userDefaultAvatarImageUrl;
                         }
                         this.util.fromNow(community.publishStartDate).then(data => {
                             community.publishStartDate = data;
@@ -126,7 +125,7 @@ export class BlogService {
                     let communityOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='CommunityOutput']");
                     let community = this.util.xml2json(communityOutput).CommunityOutput;
                     if (!community.createUserAvatar || community.createUserAvatar.toString().indexOf("data:image") != 0) {
-                        community.createUserAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                        community.createUserAvatar = this.userDefaultAvatarImageUrl;
                     }
                     
                     this.util.fromNow(community.createDate).then(data => {
@@ -168,7 +167,7 @@ export class BlogService {
                     
                     replyContents.forEach(function(replyContent) {
                         if (!replyContent.userAvatar || replyContent.userAvatar.toString().indexOf("data:image") != 0) {
-                            replyContent.userAvatar = this.userAvatarImageUrl + this.userAvatarDefaultImage;
+                            replyContent.userAvatar = this.userDefaultAvatarImageUrl;
                         }
                         this.util.fromNow(replyContent.createDate).then(data => {
                             replyContent.createDate = data;

@@ -1,21 +1,21 @@
 <ion-navbar *navbar class="login-navbar">
     <div class="logo">
-        <h3 primary>IntaLin<b primary-text>X</b></h3>
+        <h3 primary (click)="presentPopover($event)">IntaLin<b primary-text>X</b></h3>
     </div>
 </ion-navbar>
 <ion-content padding  class="login">
     <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
         <ion-item>
-            <ion-label floating id="loginId">{{ "app.login.loginId" | translate }}</ion-label>
-            <ion-input type="text" [(ngModel)]="user.loginId" (ngModelChange)="changeUser($event)"></ion-input>
+            <ion-label floating>{{ "app.login.loginId" | translate }}</ion-label>
+            <ion-input type="text" name="user.loginID" [(ngModel)]="user.loginID" (ngModelChange)="changeUser($event)"></ion-input>
         </ion-item>
         <ion-item>
-            <ion-label floating id="password">{{ "app.login.password" | translate }}</ion-label>
-            <ion-input type="password" [(ngModel)]="user.password" (ngModelChange)="changeUser($event)"></ion-input>
+            <ion-label floating>{{ "app.login.password" | translate }}</ion-label>
+            <ion-input type="password" name="user.password" [(ngModel)]="user.password" (ngModelChange)="changeUser($event)"></ion-input>
         </ion-item>
         <ion-item no-lines class="remember-loginId">
             <ion-label>{{ "app.login.rememberLoginId" | translate }}</ion-label>
-            <ion-checkbox checked="false" [(ngModel)]="user.rememberLoginId"></ion-checkbox>
+            <ion-checkbox checked="false" name="user.remeberLoginID" [(ngModel)]="user.rememberLoginID"></ion-checkbox>
         </ion-item>
         <button disabled={{isDisabled}} full type="submit">{{ "app.login.login" | translate }}</button>
     </form>

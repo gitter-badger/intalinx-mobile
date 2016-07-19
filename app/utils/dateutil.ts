@@ -1,44 +1,56 @@
+import {Injectable} from '@angular/core';
+
+import {TranslateService} from 'ng2-translate/ng2-translate';
+
+import * as moment from 'moment';
+import 'moment/locale/ja';
+import 'moment/locale/zh-cn';
+
+@Injectable()
 export class DateUtil {
 
-    static transferCordysDateStringToUTC(sValue) {
-        var fields = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/.exec(sValue);
-        --fields[2]; // month is zero based
-        return new Date(Date.UTC(fields[1], fields[2], fields[3], fields[4], fields[5], fields[6]));
+    constructor(private translate: TranslateService) {
     }
 
-    static getUTCDate() {
+    transferCordysDateStringToUTC(v: string) {
+        let fields = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/.exec(v);
+        fields[2] = String(Number(fields[2]) - 1); // month is zero based
+        return new Date(Date.UTC(Number(fields[1]), Number(fields[2]), Number(fields[3]), Number(fields[4]), Number(fields[5]), Number(fields[6])));
+    }
+
+    getUTCDate(): string {
         let oDate = new Date();
 
         // handle date part
-        let dateSep = "-";
+        let dateSep = '-';
         let day = oDate.getUTCDate();
         let month = oDate.getUTCMonth() + 1;
         let sDay = (day < 10) ? '0' + day : day;
         let sMonth = (month < 10) ? '0' + month : month;
-        let sValue = oDate.getUTCFullYear() + dateSep + sMonth + dateSep + sDay + "T";
+        let sValue = oDate.getUTCFullYear() + dateSep + sMonth + dateSep + sDay + 'T';
 
         // handle time part
-        let timeSep = ":";
+        let timeSep = ':';
         let hours = oDate.getUTCHours();
         let minutes = oDate.getUTCMinutes();
         let seconds = oDate.getUTCSeconds();
         let sHours = (hours < 10) ? '0' + hours : hours;
         let sMinutes = (minutes < 10) ? '0' + minutes : minutes;
         let sSeconds = (seconds < 10) ? '0' + seconds : seconds;
-        sValue += sHours + timeSep + sMinutes + timeSep + sSeconds + "Z";
+        sValue += sHours + timeSep + sMinutes + timeSep + sSeconds + 'Z';
 
         return sValue;
     }
     
-    static fromNow(cordysDate, translateService) {
-        return DateUtil.fromNowCoreLogic(cordysDate, translateService);
+    fromNow(cordysDate: string): Promise<string> {
+        return this.fromNowCoreLogic(cordysDate);
     }
     
-    static fromNowForNotification(cordysDate, translateService) {
-        return DateUtil.fromNowCoreLogic(cordysDate, translateService, true);
+    fromNowForNotification(cordysDate: string): Promise<string> {
+        return this.fromNowCoreLogic(cordysDate, true);
     }
 
-    static fromNowCoreLogic(cordysDate, translateService, hideTime) {
+    fromNowCoreLogic(cordysDate: string, hideTime = false): Promise<string> {
         return new Promise(resolve => {
             let date = moment(cordysDate, 'YYYY/MM/DDTHH:mm:ss.SSS');
             if (cordysDate.indexOf('T') < 0) {
@@ -53,9 +65,8 @@ export class DateUtil {
             // after today 12:00 am
             if (nowWithoutTime.isSame(dateWithoutTime)) {
                 if (hideTime) {
-                    translateService.get('app.date.today').subscribe(message => {
+                    this.translate.get('app.date.today').subscribe(message => {
                         resolve(message);
-                        console.log("message")
                     });
                 } else {
                     resolve(date.fromNow());
@@ -65,7 +76,7 @@ export class DateUtil {
             // after yesterday 12:00 am
             // 昨日 12:00 / 昨天 12:00 / Yesterday 12:00
             if (moment(nowWithoutTime).subtract(1, 'days').isSame(dateWithoutTime)) {
-                translateService.get('app.date.yesterday').subscribe(message => {
+                this.translate.get('app.date.yesterday').subscribe(message => {
                     if (hideTime) {
                         resolve(message);
                     } else {
@@ -88,10 +99,10 @@ export class DateUtil {
                 (moment(nowWithoutTime).subtract(182, 'days').isSame(dateWithoutTime) || 
                 moment(nowWithoutTime).subtract(182, 'days').isBefore(dateWithoutTime))) {
                 let parameter = {
-                    "MM": (date.month() + 1),
-                    "DD": date.date()
+                    'MM': (date.month() + 1),
+                    'DD': date.date()
                 };
-                translateService.get('app.date.MMDD', parameter).subscribe(message => {
+                this.translate.get('app.date.MMDD', parameter).subscribe(message => {
                     resolve(message);
                 });
             }
@@ -99,10 +110,10 @@ export class DateUtil {
             // 183days before 12:00am
             if (moment(nowWithoutTime).subtract(183, 'days').isAfter(dateWithoutTime)) {
                 let parameter = {
-                    "YYYY" : date.year(),
-                    "MM": (date.month() + 1)
+                    'YYYY' : date.year(),
+                    'MM': (date.month() + 1)
                 };
-                translateService.get('app.date.YYYYMM', parameter).subscribe(message => {
+                this.translate.get('app.date.YYYYMM', parameter).subscribe(message => {
                     resolve(message);
                 });
             }

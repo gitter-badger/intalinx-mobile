@@ -1,6 +1,5 @@
 .login-navbar {
     .toolbar-background {
-        background-color: #FFFFFF;
         border: 0px;
     }
     .logo {
@@ -8,6 +7,9 @@
     }
 }
 .login {
+    .item-input.ng-valid.input-has-value::after {
+        border-bottom-color: $primary-color; 
+    }
     .remember-loginId {
         height: 73px;
     }
