@@ -39,6 +39,11 @@
             }            
         }
     }
+
+    scroll-content {
+        padding-top: 0px;
+    }
+
     .from-to {
         ion-datetime {
             max-width: 100%;
@@ -62,9 +67,13 @@
         overflow: hidden;
         display: flex;
         flex-direction: row;
+        align-items: stretch;
         border: $grey-border;
-        ion-grid {
-            padding: 0px;
+        .sepcialday{
+            background-color: #FFEFE5 !important;
+        }
+        .saturday {
+            background-color: #EBF0F6 !important;
         }
         .fixed-header {
             position: fixed;
@@ -72,12 +81,6 @@
             z-index: 12;
             border-bottom: $grey-border;
             overflow: hidden;
-        }
-        .sepcialday{
-            background-color: #FFEFE5;
-        }
-        .saturday {
-            background-color: #EBF0F6;
         }
         .facility-list {
             flex-grow: 0;
@@ -114,8 +117,8 @@
             }
         }
         .ganttview-slide {
-            overflow: auto;
             border-left: $grey-border;
+            overflow: auto;
             .now-line {
                 height: 0px;
                 margin-left: -2px;
@@ -131,14 +134,14 @@
             .ganttview-day-time-header {
                 display: flex;
                 flex-direction: column;
-                .fixed-date{
+                .ganttview-fixed-date{
                     height: 30px;
                     position: absolute;
-                    padding: $cell-padding;
-                    padding-bottom: 3px;
+                    line-height: 30px;
                     z-index: 11;
                     background-color: #fff;
                     width: auto;
+                    padding-left: $cell-padding;
                 }
                 .day-container {
                     display: flex;
