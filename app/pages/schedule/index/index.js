@@ -65,6 +65,11 @@ export class ScheduleIndexPage {
             "eventId": "",
             "isRefreshFlag": false
         }
+
+        this.sendDataToAddEvent = {
+            "selectedDay": "",
+            "isRefreshFlag": false
+        }
         
         this.defaultNumber = 0;
         this.cachedSlidesOnOneSide = 1;
@@ -294,8 +299,9 @@ export class ScheduleIndexPage {
     }
     
     addEvent() {
+        this.sendDataToAddEvent.selectedDay = this.selectedDay;
         this.nav.push(EditEventPage, {
-            "event": event
+            "sendDataToAddEvent": this.sendDataToAddEvent
         });
     }
     
@@ -331,6 +337,7 @@ export class ScheduleIndexPage {
     
     onPageWillEnter() {
         let isRefreshFlag = this.sendData.isRefreshFlag;
+        let isRefreshFlagFromAddEvent = this.sendDataToAddEvent.isRefreshFlag;
         if (isRefreshFlag == true) {
             this.searchEventsAndSpecialDaysBySelectedDay(this.sendData.selectedDay);
             for (let i = 0; i < this.sendData.daysOfDeletedEvent.length; i++) {
@@ -339,6 +346,9 @@ export class ScheduleIndexPage {
                     this.daysOfEvents.splice(index, 1);
                 }
             }
+        }
+        if (isRefreshFlagFromAddEvent == true) {
+            this.searchEventsAndSpecialDaysBySelectedDay(this.sendDataToAddEvent.selectedDay);
         }
     }
 }
