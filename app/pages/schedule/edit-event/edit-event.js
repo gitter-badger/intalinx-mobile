@@ -37,10 +37,10 @@ export class EditEventPage {
 
     initTranslation() {
         this.app.translate.get(["app.schedule.visibility.public",
-            "app.schedule.visibility.limitPublic",
+            "app.schedule.visibility.confidential",
             "app.schedule.visibility.private"]).subscribe(message => {
                 this.visibilityPublic = message["app.schedule.visibility.public"];
-                this.visibilityLimitPublic = message["app.schedule.visibility.limitPublic"];
+                this.visibilityConfidential = message["app.schedule.visibility.confidential"];
                 this.visibilityPrivate = message["app.schedule.visibility.private"];
             });
         this.visibilities = [
@@ -49,8 +49,8 @@ export class EditEventPage {
                 description: this.visibilityPublic
             },
             {
-                value: "limitPublic",
-                description: this.visibilityLimitPublic
+                value: "confidential",
+                description: this.visibilityConfidential
             },
             {
                 value: "private",
@@ -481,11 +481,8 @@ export class EditEventPage {
     addEvent() {
         this.scheduleService.addEvent(this.event, this.participants).then(data => {
             if (data == "true") {
-                this.app.translate.get(["app.schedule.editEvent.message.addEventSuccess"]).subscribe(message => {
-                    let msg = message['app.schedule.editEvent.message.addEventSuccess'];
-                    this.sendDataToAddEvent.isRefreshFlag = true;
-                    this.showSuccessAlert(msg);
-                });
+                this.sendDataToAddEvent.isRefreshFlag = true;
+                this.nav.pop();
             } else {
                 this.showError(data);
             }
@@ -504,11 +501,8 @@ export class EditEventPage {
     updateEvent() {
         this.scheduleService.updateEvent(this.event, this.participants).then(data => {
             if (data == "true") {
-                this.app.translate.get(["app.schedule.editEvent.message.updateEventSuccess"]).subscribe(message => {
-                    let msg = message['app.schedule.editEvent.message.updateEventSuccess'];
-                    this.sendDataToEditEvent.isRefreshFlag = true;
-                    this.showSuccessAlert(msg);
-                });
+                this.sendDataToEditEvent.isRefreshFlag = true;
+                this.nav.pop();
             } else {
                 this.showError(data);
             }
@@ -542,22 +536,6 @@ export class EditEventPage {
         // newMessage: 
         // 下記の参加者は既に同じ時間帯の予定が入っています。</br>王　茜: 2016/07/14 08:45 ~ 2016/07/14 09:15</br>スケジュールを登録しますか？"
         return newMessage;
-    }
-
-    showSuccessAlert(content) {
-        let alert = Alert.create({
-            title: this.infoTitle,
-            subTitle: content,
-            buttons: [{
-                text: this.actionOk,
-                handler: () => {
-                    this.event.isEventRepeatWarned = false;
-                    this.event.isDeviceRepeatWarned = false;
-                    this.nav.pop();
-                }
-            }]
-        });
-        this.nav.present(alert);
     }
 
     confirmRepeatWarn(title, content, yes, no, faultCode, type) {

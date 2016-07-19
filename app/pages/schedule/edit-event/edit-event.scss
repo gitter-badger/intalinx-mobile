@@ -34,6 +34,16 @@
         .participant-list {
             margin-left: $sub-catalogue-margin;
         }
+        
+        button.item:not([detail-none]) .item-inner,
+        a.item:not([detail-none]) .item-inner,
+        .item[detail-push] .item-inner {
+            background-size: 0px, 0px;
+        }
+        
+        .ion-md-arrow-forward:before {
+            content: "\f3d1";
+        }
     }
     
     .devices {
@@ -43,6 +53,16 @@
         }
         .device-list {
             margin-left: $sub-catalogue-margin;
+        }
+        
+        button.item:not([detail-none]) .item-inner,
+        a.item:not([detail-none]) .item-inner,
+        .item[detail-push] .item-inner {
+            background-size: 0px, 0px;
+        }
+        
+        .ion-md-arrow-forward:before {
+            content: "\f3d1";
         }
     }
 }
