@@ -60,9 +60,16 @@ export class ScheduleIndexPage {
             "start": "",
             "end": ""
         }
-        this.sendData = {
+        this.sendDataToShowOrDeleteEvent = {
             "selectedDay": "",
             "eventId": "",
+            "daysOfDeletedEvent": "",
+            "isRefreshFlag": false
+        }
+
+        this.sendDataToAddEvent = {
+            "selectedDay": "",
+            "daysOfAddedEvent": "",
             "isRefreshFlag": false
         }
         
@@ -140,23 +147,34 @@ export class ScheduleIndexPage {
         let timeline = [];
         //calendar
         let calendar = [];
-        
-        // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
-        let cursor = 0;
+
+        // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.\
+        let indexOfFirstDayInWeek = 0;
+        let indexOfLastDayInWeek = 6;
         if (this.isFirstDayMonday && this.isFirstDayMonday == true) {
-            cursor = 1; 
+            indexOfFirstDayInWeek = 1;
+            indexOfLastDayInWeek = 0;
         }
         
         //day and weekday
-        for (let i=0+cursor; i<firstDayWeek; i++) {
-            timeline.push(moment(firstDateWeek).subtract(firstDayWeek-i, 'days'));
+        if (indexOfFirstDayInWeek == 1 && firstDayWeek == 0){
+            for (let i=indexOfFirstDayInWeek; i<7; i++) {
+                timeline.push(moment(firstDateWeek).subtract(7-i, 'days'));
+            }
+        } else {
+            for (let i=indexOfFirstDayInWeek; i<firstDayWeek; i++) {
+                timeline.push(moment(firstDateWeek).subtract(firstDayWeek-i, 'days'));
+            }
         }
         for (let i=0; i<daysInMonth; i++) {
             timeline.push(moment(firstDateWeek).add(i, 'days'));
         }
-        let lastDateWeek = moment(firstDateWeek).endOf('month').format('d');
-        for (let i=0; i<6-lastDateWeek+cursor; i++) {
-            timeline.push(moment(lastDateWeek).add(i, 'days'));
+        let lastDayWeek = moment(firstDateWeek).endOf('month').format('d');
+        let lastDateInMonth = moment(firstDateWeek).endOf('month');
+        if (lastDayWeek!=indexOfLastDayInWeek) {
+            for (let i=0; i<6-lastDayWeek+indexOfFirstDayInWeek; i++) {
+                timeline.push(moment(lastDateInMonth).add(i+1, 'days'));
+            }
         }
         //calendar
         for (let i=0; i<Math.ceil(timeline.length/7); i++) {
@@ -282,20 +300,17 @@ export class ScheduleIndexPage {
 	}
     
     openEventDetail(event) {
-        this.sendData = {
-            "selectedDay": this.selectedDay,
-            "eventId": event.eventID,
-            "daysOfDeletedEvent": "",
-            "isRefreshFlag": false
-        }
+        this.sendDataToShowOrDeleteEvent.selectedDay = this.selectedDay;
+        this.sendDataToShowOrDeleteEvent.eventId = event.eventID;
         this.nav.push(EventDetailPage, {
-            "sendData": this.sendData
+            "sendDataToShowOrDeleteEvent": this.sendDataToShowOrDeleteEvent
         });
     }
     
     addEvent() {
+        this.sendDataToAddEvent.selectedDay = this.selectedDay;
         this.nav.push(EditEventPage, {
-            "event": event
+            "sendDataToAddEvent": this.sendDataToAddEvent
         });
     }
     
@@ -325,20 +340,25 @@ export class ScheduleIndexPage {
         this.showCalendar(moment(this.yearMonth));
     }
     
-    onPageWillLeave() {
-        this.sendData.isRefreshFlag = false;
-    }
-    
     onPageWillEnter() {
-        let isRefreshFlag = this.sendData.isRefreshFlag;
+        // enter page after deleting event
+        let isRefreshFlag = this.sendDataToShowOrDeleteEvent.isRefreshFlag;
         if (isRefreshFlag == true) {
-            this.searchEventsAndSpecialDaysBySelectedDay(this.sendData.selectedDay);
-            for (let i = 0; i < this.sendData.daysOfDeletedEvent.length; i++) {
-                let index = this.daysOfEvents.indexOf(this.sendData.daysOfDeletedEvent[i]);
+            this.searchEventsAndSpecialDaysBySelectedDay(this.sendDataToShowOrDeleteEvent.selectedDay);
+            for (let i = 0; i < this.sendDataToShowOrDeleteEvent.daysOfDeletedEvent.length; i++) {
+                let index = this.daysOfEvents.indexOf(this.sendDataToShowOrDeleteEvent.daysOfDeletedEvent[i]);
                 if(index != -1) {
                     this.daysOfEvents.splice(index, 1);
                 }
             }
+            this.sendData.isRefreshFlag = false;
+        }
+        // enter page after adding event
+        let isRefreshFlagFromAddEvent = this.sendDataToAddEvent.isRefreshFlag;
+        if (isRefreshFlagFromAddEvent == true) {
+            this.searchEventsAndSpecialDaysBySelectedDay(this.sendDataToAddEvent.selectedDay);
+            this.daysOfEvents = this.daysOfEvents.concat(this.sendDataToAddEvent.daysOfAddedEvent);
+            this.sendDataToAddEvent.isRefreshFlag = false;
         }
     }
 }

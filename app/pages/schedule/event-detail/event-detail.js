@@ -26,10 +26,15 @@ export class EventDetailPage {
         this.nav = nav;
         this.params = params;
         this.scheduleService = scheduleService;
-        this.sendData = this.params.get("sendData");
-        this.eventId = this.sendData.eventId;
-        this.selectedDay = this.sendData.selectedDay;
+        this.sendDataToShowOrDeleteEvent = this.params.get("sendDataToShowOrDeleteEvent");
+        this.eventId = this.sendDataToShowOrDeleteEvent.eventId;
+        this.selectedDay = this.sendDataToShowOrDeleteEvent.selectedDay;
         this.isLoadCompleted = false;
+        this.sendDataToEditEvent = {
+            "eventId": "",
+            "selectedDay": "",
+            "isRefreshFlag": false
+        }
         this.getEventByEventId();
     }
 
@@ -98,7 +103,7 @@ export class EventDetailPage {
                     this.repeatValueName = moment.weekdays(true)[Number(repeatValue)]
                 });
             } else if (this.repeatType == "MONTHLY") {
-                this.app.translate.get('app.date.monthly', 'app.date.day').subscribe(message => {
+                this.app.translate.get(['app.date.monthly', 'app.date.day']).subscribe(message => {
                     this.repeatTypeName = message['app.date.monthly'];
                     this.repeatValueName = repeatValue + message['app.date.day'];
                 });
@@ -108,15 +113,15 @@ export class EventDetailPage {
 
     setVisibilityTypeNameByVisibility(visibility) {
         if (visibility == "public") {
-            this.app.translate.get('app.schedule.public').subscribe(message => {
+            this.app.translate.get('app.schedule.visibility.public').subscribe(message => {
                 this.visibilityTypeName = message;
             });
         } else if (visibility == "private") {
-            this.app.translate.get('app.schedule.private').subscribe(message => {
+            this.app.translate.get('app.schedule.visibility.private').subscribe(message => {
                 this.visibilityTypeName = message;
             });
         } else if (visibility == "confidential") {
-            this.app.translate.get('app.schedule.confidential').subscribe(message => {
+            this.app.translate.get('app.schedule.visibility.confidential').subscribe(message => {
                 this.visibilityTypeName = message;
             });
         }
@@ -204,15 +209,19 @@ export class EventDetailPage {
         this.scheduleService.deleteEvent(this.deleteEventRequires).then(data => {
             if (data == "true") {
                 this.setDaysOfDeletedEvent();
-                this.sendData.isRefreshFlag = true;
-                this.nav.pop();
+                this.sendDataToShowOrDeleteEvent.isRefreshFlag = true;
+                setTimeout(() => {
+                   this.nav.pop();
+                }, 500);
             }
         });
     }
 
     setDaysOfDeletedEvent() {
         let daysOfDeletedEvent = new Array();
-        if (this.isRepeat == "true" && !this.deleteEventRequires.isFromRepeatToSpecial) {
+        if (this.isRepeat == "true" && this.deleteEventRequires.isFromRepeatToSpecial) {
+            daysOfDeletedEvent.push(moment(this.selectedDay).format("D"));
+        } else {
             let monthOfSelectedDay = moment(this.selectedDay).format("YYYY/MM");
             let monthStartDate = moment(this.selectedDay).startOf("months").format("YYYY/MM/DD");
             let monthEndDate = moment(this.selectedDay).endOf("months").format("YYYY/MM/DD");
@@ -228,17 +237,23 @@ export class EventDetailPage {
             for (let i = startDay; i <= endDay; i++) {
                 daysOfDeletedEvent.push(i.toString());
             }
-
-        } else {
-            daysOfDeletedEvent.push(moment(this.selectedDay).format("D"));
         }
-        this.sendData.daysOfDeletedEvent = daysOfDeletedEvent;
+        this.sendDataToShowOrDeleteEvent.daysOfDeletedEvent = daysOfDeletedEvent;
     }
 
     editEvent() {
+        this.sendDataToEditEvent.eventId = this.eventId;
+        this.sendDataToEditEvent.selectedDay = this.selectedDay;
         this.nav.push(EditEventPage, {
-            "eventId": this.eventId,
-            "operateType": "edit"
+            "sendDataToEditEvent": this.sendDataToEditEvent
         });
+    }
+
+    onPageWillEnter() {
+        let isRefreshFlag = this.sendDataToEditEvent.isRefreshFlag;
+        if (isRefreshFlag == true) {
+            this.isLoadCompleted = false;
+            this.getEventByEventId();
+        }
     }
 }

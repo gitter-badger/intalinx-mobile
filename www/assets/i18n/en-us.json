@@ -18,6 +18,8 @@
             "back": "back",
             "cancel": "cancel",
             "select": "select",
+            "yes": "yes", 
+            "no": "no", 
             "done": "select",
             "search": "search"
         },
@@ -60,6 +62,7 @@
                     "title": "error",
                     "emptyPassword": "Password cannot be left empty.",
                     "mismatchPassword": "Password mismatch. Ensure to enter the same password  in both the text boxes.",
+                    
                     "avatarTooLarge": "Your avatar's file size is too large"
                 },
                 "success": {
@@ -101,20 +104,40 @@
         },
         "schedule": {
             "title": "Schedule",
-            "public": "Public",
-            "private": "Private",
-            "confidential": "Confidential",
-            "location": "Location",
+            "event": {
+                "title": "Title", 
+                "schedule": "Schedule",
+                "start": "Start",
+                "end": "End",
+                "startDate": "Start Date",
+                "endDate": "End Date",
+                "startTime": "Start Time",
+                "endTime": "End Time",
+                "allDay": "All Day",
+                "repeat": "Repeat", 
+                "category": "Category",
+                "location": "Location",
+                "summary": "Summary",
+                "participant": "Participants",
+                "device": "Devices",
+                "createUser": "Create User",
+                "updateUser": "Update User"
+            },
+            "repeatRules": {
+                "title": "Repeat Rule", 
+                "weekDay": "Weekday", 
+                "monthDay": "Date", 
+                "daily": "Daily", 
+                "weekly": "Weekly", 
+                "monthly": "Monthly"
+            },
+            "visibility": {
+                "title": "Visibility",
+                "public": "Public",
+                "confidential": "Limit Public",
+                "private": "Private"
+            },
             "time": "Time",
-            "start": "Start",
-            "end": "End",
-            "allDay": "AllDay",
-            "repeat": "Repeat",
-            "summary": "Summary",
-            "participant": "Participant",
-            "facility": "Facilities",
-            "createUser": "Create User",
-            "updateUser": "Update User",
             "colon": "：",
             "selectFacilities": "Select Facilities",
             "selectParticipants": "Select Participants",
@@ -128,7 +151,28 @@
                 "mySchedule": "My Schedule"
             },
             "eventDetail": {
-                "title": "Event Detail"
+                "title": "Event Detail",
+                "delete": "Delete The Event"
+            },
+            "editEvent": {
+                "title": {
+                    "new": "New Event", 
+                    "edit": "Edit Event"
+                },
+                "saveEvent": {
+                    "new": "Add", 
+                    "edit": "Save"
+                },
+                "message": {
+                    "eventTitleNecessary": "Please input the title of this schedule!",
+                    "endTimeShouldBeLater": "The end time should be later than start time!",
+                    "repeatEndTimeShouldBeLater": "The repeat start time should be later than start time!",
+                    "addEventSuccess": "The schedule had been saved.",
+                    "updateEventSuccess": "The schedule had been updated."
+                },
+                "selectRepeatEventUpdateFlag": "Please select the update object in this repeat schedule!", 
+                "selectAll": "All of the schedule", 
+                "selectSpecial": "Just the selected date"
             },
             "deleteEvent": "Delete Event",
             "deleteRepeatEvent": {

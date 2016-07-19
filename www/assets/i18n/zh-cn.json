@@ -17,7 +17,9 @@
             "ok": "OK",
             "back": "返回",
             "cancel": "取消",
-            "select": "选择",
+            "select": "选择", 
+            "yes": "是的", 
+            "no": "不是", 
             "done": "选择",
             "search": "搜索"
         },
@@ -102,20 +104,40 @@
         },
         "schedule": {
             "title": "日程",
-            "public": "普通公开",
-            "private": "指定公开",
-            "confidential": "不公开",
-            "location": "地点",
+            "event": {
+                "title": "标题", 
+                "schedule": "预订",
+                "start": "开始",
+                "end": "结束",
+                "startDate": "开始日期",
+                "endDate": "结束日期",
+                "startTime": "开始时间",
+                "endTime": "结束时间",
+                "allDay": "全天",
+                "repeat": "重复", 
+                "category": "类型",
+                "location": "位置",
+                "summary": "备注",
+                "participant": "参加者",
+                "device": "设施",
+                "createUser": "创建者",
+                "updateUser": "变更者"
+            },
+            "repeatRules": {
+                "title": "重复频率", 
+                "weekDay": "星期", 
+                "monthDay": "日期", 
+                "daily": "每天", 
+                "weekly": "每周", 
+                "monthly": "每月"
+            },
+            "visibility": {
+                "title": "公开权限",
+                "public": "公开",
+                "confidential": "部分公开",
+                "private": "不公开"
+            },
             "time": "时间",
-            "start": "开始",
-            "end": "结束",
-            "allDay": "全天",
-            "repeat": "重复时间",
-            "summary": "内容",
-            "participant": "参加者",
-            "facility": "设施",
-            "createUser": "创建者",
-            "updateUser": "变更者",
             "colon": "：",
             "selectFacilities": "选择设施",
             "selectParticipants": "选择出席者",
@@ -129,7 +151,28 @@
                 "mySchedule": "我"
             },
             "eventDetail": {
-                "title": "事件详细"
+                "title": "事件详细",
+                "delete": "删除"
+            },
+            "editEvent": {
+                "title": {
+                    "new": "予定新規", 
+                    "edit": "予定編集"
+                },
+                "saveEvent": {
+                    "new": "追加", 
+                    "edit": "保存"
+                },
+                "message": {
+                    "eventTitleNecessary": "请为预订输入标题", 
+                    "endTimeShouldBeLater": "结束时间需要在开始时间之后",
+                    "repeatEndTimeShouldBeLater": "重复的结束时间需要在开始时间之后",
+                    "addEventSuccess": "预订已保存",
+                    "updateEventSuccess": "预订已更新"
+                },
+                "selectRepeatEventUpdateFlag": "请选择本次更新的对象", 
+                "selectAll": "更新所有重复预订", 
+                "selectSpecial": "只更新当前选择的预订"
             },
             "deleteEvent": "删除事件",
             "deleteRepeatEvent": {
