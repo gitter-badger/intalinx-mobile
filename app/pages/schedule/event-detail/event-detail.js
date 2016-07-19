@@ -30,6 +30,11 @@ export class EventDetailPage {
         this.eventId = this.sendData.eventId;
         this.selectedDay = this.sendData.selectedDay;
         this.isLoadCompleted = false;
+        this.sendDataToEditEvent = {
+            "eventId": "",
+            "selectedDay": "",
+            "isRefreshFlag": false
+        }
         this.getEventByEventId();
     }
 
@@ -236,9 +241,18 @@ export class EventDetailPage {
     }
 
     editEvent() {
+        this.sendDataToEditEvent.eventId = this.eventId;
+        this.sendDataToEditEvent.selectedDay = this.selectedDay;
         this.nav.push(EditEventPage, {
-            "eventId": this.eventId,
-            "operateType": "edit"
+            "sendDataToEditEvent": this.sendDataToEditEvent
         });
+    }
+
+    onPageWillEnter() {
+        let isRefreshFlag = this.sendDataToEditEvent.isRefreshFlag;
+        if (isRefreshFlag == true) {
+            this.isLoadCompleted = false;
+            this.getEventByEventId();
+        }
     }
 }

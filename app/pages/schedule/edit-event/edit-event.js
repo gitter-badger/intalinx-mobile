@@ -122,11 +122,13 @@ export class EditEventPage {
         this.isOriginalRepeat = false;
         
         // Just to get event will get the "event" action, not our schedule.
-        if(this.params.get("eventId")) {
+        this.sendDataToEditEvent = this.params.get("sendDataToEditEvent");
+        this.sendDataToAddEvent = this.params.get("sendDataToAddEvent");
+
+        if(this.sendDataToEditEvent) {
             this.receivedData = {
-                "eventID": this.params.get("eventId"),
-                "operateType": this.params.get("operateType"),
-                "selectedDay": this.params.get("selectedDay")
+                "eventID": this.sendDataToEditEvent.eventId,
+                "selectedDay": this.sendDataToEditEvent.selectedDay
             };
             this.event = {
                 eventID: this.receivedData.eventID
@@ -477,7 +479,7 @@ export class EditEventPage {
            if(data == "true") {
                this.app.translate.get(["app.schedule.editEvent.message.addEventSuccess"]).subscribe(message => {
                     let msg = message['app.schedule.editEvent.message.addEventSuccess'];
-
+                    this.sendDataToAddEvent.isRefreshFlag = true;
                     this.showSuccessAlert(msg);
                 });
            } else {
@@ -500,7 +502,7 @@ export class EditEventPage {
            if(data == "true") {
                this.app.translate.get(["app.schedule.editEvent.message.updateEventSuccess"]).subscribe(message => {
                     let msg = message['app.schedule.editEvent.message.updateEventSuccess'];
-                    
+                    this.sendDataToEditEvent.isRefreshFlag = true;
                     this.showSuccessAlert(msg);
                 });
            } else {
