@@ -103,8 +103,8 @@
         "schedule": {
             "title": "日程",
             "public": "普通公开",
-            "private": "指定公开",
-            "confidential": "不公开",
+            "private": "不公开",
+            "confidential": "指定公开",
             "location": "地点",
             "time": "时间",
             "start": "开始",
