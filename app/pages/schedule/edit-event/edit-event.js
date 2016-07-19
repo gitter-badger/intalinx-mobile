@@ -375,16 +375,16 @@ export class EditEventPage {
 
     getTransInfoForDisplayAlert() {
         this.app.translate.get(["app.message.error.title",
-            "app.message.info.title",
-            "app.action.ok",
-            "app.action.yes",
-            "app.action.no"]).subscribe(message => {
-                this.errorTitle = message['app.message.error.title'];
-                this.infoTitle = message['app.message.error.title'];
-                this.actionOk = message['app.action.ok'];
-                this.actionYes = message['app.action.yes'];
-                this.actionNo = message['app.action.no'];
-            });
+                "app.message.info.title", 
+                "app.action.ok", 
+                "app.action.yes", 
+                "app.action.no"]).subscribe(message => {
+            this.errorTitle = message['app.message.error.title'];
+            this.infoTitle = message['app.message.info.title'];
+            this.actionOk = message['app.action.ok'];
+            this.actionYes = message['app.action.yes'];
+            this.actionNo = message['app.action.no'];
+        });
     }
 
     createSaveData() {

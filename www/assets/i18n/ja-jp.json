@@ -18,6 +18,8 @@
             "back": "戻る",
             "cancel": "キャンセル",
             "select": "選択", 
+            "yes": "はい", 
+            "no": "いいえ", 
             "done": "選択",
             "search": "検索"
         },
@@ -60,6 +62,7 @@
                     "title": "エラー",
                     "emptyPassword": "パスワードは空になることはできません。",
                     "mismatchPassword": "パスワードが一致しません。　両方のテキストボックスに同じパスワードを入力するを確認してください。",
+                    
                     "avatarTooLarge": "画像サイズが大きいですが、変更してください。"
                 },
                 "success": {
@@ -101,6 +104,37 @@
         },
         "schedule": {
             "title": "スケジュール",
+            "event": {
+                "title": "タイトル", 
+                "schedule": "予定",
+                "start": "開始",
+                "end": "終了",
+                "startDate": "開始日付",
+                "endDate": "終了日付",
+                "startTime": "開始時間",
+                "endTime": "終了時間",
+                "allDay": "終日",
+                "repeat": "繰り返す", 
+                "category": "カテゴリ",
+                "location": "場所",
+                "summary": "内容",
+                "participant": "参加者",
+                "device": "施設"
+            },
+            "repeatRules": {
+                "title": "繰り返し規則", 
+                "weekDay": "曜日", 
+                "monthDay": "日付", 
+                "daily": "毎日", 
+                "weekly": "毎週", 
+                "monthly": "毎月"
+            },
+            "visibility": {
+                "title": "公開制限",
+                "public": "一般公開",
+                "limitPublic": "限定公開",
+                "private": "非公開"
+            },
             "public": "一般公開",
             "private": "非公開",
             "confidential": "限定公開",
@@ -128,7 +162,28 @@
                 "mySchedule": "本人"
             },
             "eventDetail": {
-                "title": "イベントの詳細"
+                "title": "イベントの詳細",
+                "delete": "イベントを削除"
+            },
+            "editEvent": {
+                "title": {
+                    "new": "予定新規", 
+                    "edit": "予定編集"
+                },
+                "saveEvent": {
+                    "new": "追加", 
+                    "edit": "保存"
+                },
+                "message": {
+                    "eventTitleNecessary": "予定のタイトルを入力してください！", 
+                    "endTimeShouldBeLater": "終了時間は開始時間以後に選択してください！",
+                    "repeatEndTimeShouldBeLater": "繰り返す終了時間は開始時間以後に選択してください！",
+                    "addEventSuccess": "予定追加完了しました。",
+                    "updateEventSuccess": "予定更新完了しました。"
+                },
+                "selectRepeatEventUpdateFlag": "編集・削除の対象を選択してください。", 
+                "selectAll": "全ての予定", 
+                "selectSpecial": "当該日付の予定のみ"
             },
             "deleteEvent": "イベントを削除",
             "deleteRepeatEvent": {

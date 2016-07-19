@@ -579,7 +579,7 @@ export class ScheduleService {
 				}
                 
                 req = this.util.xml2string(objRequest);
-                this.util.callCordysWebserviceWithoutShowError(req).then(data => {
+                this.util.callCordysWebservice(req, true).then(data => {
                     let objResponse = this.util.parseXml(data);
                     
                     let returnObject = this.util.selectXMLNode(objResponse, ".//*[local-name()='addEvent']");
@@ -649,7 +649,7 @@ export class ScheduleService {
 				}
                 
                 req = this.util.xml2string(objRequest);
-                this.util.callCordysWebserviceWithoutShowError(req).then(data => {
+                this.util.callCordysWebservice(req, true).then(data => {
                     let objResponse = this.util.parseXml(data);
                     
                     let returnObject = this.util.selectXMLNode(objResponse, ".//*[local-name()='updateEvent']");
