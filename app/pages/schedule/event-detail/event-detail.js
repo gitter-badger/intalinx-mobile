@@ -210,14 +210,18 @@ export class EventDetailPage {
             if (data == "true") {
                 this.setDaysOfDeletedEvent();
                 this.sendDataToShowOrDeleteEvent.isRefreshFlag = true;
-                this.nav.pop();
+                setTimeout(() => {
+                   this.nav.pop();
+                }, 500);
             }
         });
     }
 
     setDaysOfDeletedEvent() {
         let daysOfDeletedEvent = new Array();
-        if (this.isRepeat == "true" && !this.deleteEventRequires.isFromRepeatToSpecial) {
+        if (this.isRepeat == "true" && this.deleteEventRequires.isFromRepeatToSpecial) {
+            daysOfDeletedEvent.push(moment(this.selectedDay).format("D"));
+        } else {
             let monthOfSelectedDay = moment(this.selectedDay).format("YYYY/MM");
             let monthStartDate = moment(this.selectedDay).startOf("months").format("YYYY/MM/DD");
             let monthEndDate = moment(this.selectedDay).endOf("months").format("YYYY/MM/DD");
@@ -233,9 +237,6 @@ export class EventDetailPage {
             for (let i = startDay; i <= endDay; i++) {
                 daysOfDeletedEvent.push(i.toString());
             }
-
-        } else {
-            daysOfDeletedEvent.push(moment(this.selectedDay).format("D"));
         }
         this.sendDataToShowOrDeleteEvent.daysOfDeletedEvent = daysOfDeletedEvent;
     }
