@@ -113,15 +113,15 @@ export class EventDetailPage {
 
     setVisibilityTypeNameByVisibility(visibility) {
         if (visibility == "public") {
-            this.app.translate.get('app.schedule.public').subscribe(message => {
+            this.app.translate.get('app.schedule.visibility.public').subscribe(message => {
                 this.visibilityTypeName = message;
             });
         } else if (visibility == "private") {
-            this.app.translate.get('app.schedule.private').subscribe(message => {
+            this.app.translate.get('app.schedule.visibility.private').subscribe(message => {
                 this.visibilityTypeName = message;
             });
         } else if (visibility == "confidential") {
-            this.app.translate.get('app.schedule.confidential').subscribe(message => {
+            this.app.translate.get('app.schedule.visibility.confidential').subscribe(message => {
                 this.visibilityTypeName = message;
             });
         }

@@ -119,7 +119,9 @@
                 "location": "場所",
                 "summary": "内容",
                 "participant": "参加者",
-                "device": "施設"
+                "device": "施設",
+                "createUser": "登録者",
+                "updateUser": "更新者"
             },
             "repeatRules": {
                 "title": "繰り返し規則", 
@@ -132,23 +134,10 @@
             "visibility": {
                 "title": "公開制限",
                 "public": "一般公開",
-                "limitPublic": "限定公開",
+                "confidential": "限定公開",
                 "private": "非公開"
             },
-            "public": "一般公開",
-            "private": "非公開",
-            "confidential": "限定公開",
-            "location": "場所",
             "time": "時間",
-            "start": "開始",
-            "end": "終了",
-            "allDay": "終日",
-            "repeat": "繰り返し",
-            "summary": "内容",
-            "participant": "参加者",
-            "facility": "施設",
-            "createUser": "登録者",
-            "updateUser": "更新者",
             "colon": "：",
             "selectFacilities": "施設を選択",
             "selectParticipants": "参加者を選択",

@@ -119,7 +119,9 @@
                 "location": "Location",
                 "summary": "Summary",
                 "participant": "Participants",
-                "device": "Devices"
+                "device": "Devices",
+                "createUser": "Create User",
+                "updateUser": "Update User"
             },
             "repeatRules": {
                 "title": "Repeat Rule", 
@@ -132,23 +134,10 @@
             "visibility": {
                 "title": "Visibility",
                 "public": "Public",
-                "limitPublic": "Limit Public",
+                "confidential": "Limit Public",
                 "private": "Private"
             },
-            "public": "Public",
-            "private": "Private",
-            "confidential": "Confidential",
-            "location": "Location",
             "time": "Time",
-            "start": "Start",
-            "end": "End",
-            "allDay": "AllDay",
-            "repeat": "Repeat",
-            "summary": "Summary",
-            "participant": "Participant",
-            "facility": "Facilities",
-            "createUser": "Create User",
-            "updateUser": "Update User",
             "colon": "：",
             "selectFacilities": "Select Facilities",
             "selectParticipants": "Select Participants",

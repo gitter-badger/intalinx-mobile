@@ -119,7 +119,9 @@
                 "location": "位置",
                 "summary": "备注",
                 "participant": "参加者",
-                "device": "设施"
+                "device": "设施",
+                "createUser": "创建者",
+                "updateUser": "变更者"
             },
             "repeatRules": {
                 "title": "重复频率", 
@@ -132,23 +134,10 @@
             "visibility": {
                 "title": "公开权限",
                 "public": "公开",
-                "limitPublic": "部分公开",
+                "confidential": "部分公开",
                 "private": "不公开"
             },
-            "public": "普通公开",
-            "private": "不公开",
-            "confidential": "指定公开",
-            "location": "地点",
             "time": "时间",
-            "start": "开始",
-            "end": "结束",
-            "allDay": "全天",
-            "repeat": "重复时间",
-            "summary": "内容",
-            "participant": "参加者",
-            "facility": "设施",
-            "createUser": "创建者",
-            "updateUser": "变更者",
             "colon": "：",
             "selectFacilities": "选择设施",
             "selectParticipants": "选择出席者",
