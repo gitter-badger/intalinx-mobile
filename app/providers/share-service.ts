@@ -6,6 +6,7 @@ export class ShareService {
     public initializeUser: any;
     public redirectLoginPage: any;
     public showMenu: any;
+    public notificationNewInformationCount: string;
 
     constructor() {
 
