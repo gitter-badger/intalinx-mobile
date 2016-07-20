@@ -1,32 +1,39 @@
-import {Page, IonicApp, NavController, Content, Modal, ViewController, Platform, NavParams, Alert} from 'ionic-angular';
-import {Component} from '@angular/core';
+// Third party library.
+import {Injectable, Component} from '@angular/core';
+import {NavController, NavParams, Content, Slides, Modal, ViewController} from 'ionic-angular';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
-import {TranslatePipe} from 'ng2-translate/ng2-translate';
+// Config.
+import {AppConfig} from '../../../appconfig';
 
+// Utils.
 import {Util} from '../../../utils/util';
-import {ScheduleService} from '../../../providers/schedule-service';
 
-@Page({
+// Services.
+import {ScheduleService} from '../../../providers/schedule-service';
+import {UserService} from '../../../providers/user-service';
+
+// Pages.
+import {EventDetailPage} from '../event-detail/event-detail';
+import {EditEventPage} from '../edit-event/edit-event';
+
+@Component({
     templateUrl: 'build/pages/schedule/select-participants/select-participants.html',
     providers: [Util,
-        ScheduleService],
-    pipes: [TranslatePipe]
+        ScheduleService]
 })
 export class SelectParticipantsPage {
-    static get parameters() {
-        return [[IonicApp], [NavController], [Util], [ViewController], [Platform], [NavParams], [ScheduleService]];
-    }
 
-    constructor(app, nav, util, viewCtrl, platform, params, scheduleService) {
-        this.app = app;
-        this.nav = nav;
-        this.util = util;
-        this.viewCtrl = viewCtrl;
-        this.platform = platform;
-        this.params = params;
-        this.scheduleService = scheduleService;
+    private originUsers: any;
+    private selectedUsers: any = new Array();
+    private selectedUsersCount: number;
+    private allUsers: any;
+    private orgsWithUsers: any = new Array();
+    private isSearching:  boolean;
+    private foundUserMembers: any;
 
-        this.originUsers = this.params.get("participants");
+    constructor(private nav: NavController, private viewCtrl: ViewController, private util: Util, private params: NavParams, private scheduleService: ScheduleService) {
+        this.originUsers = this.params.get('participants');
         this.getOrganizationAndUsers().then(data => {
             this.selectedUsersCount = 0;
             this.setOriginSelectedUsers();
@@ -35,17 +42,16 @@ export class SelectParticipantsPage {
 
     getOrganizationAndUsers() {
         return new Promise(resolve => {
-            this.scheduleService.getOrganizationList().then(orgs => {
+            this.scheduleService.getOrganizationList().then((orgs: any[]) => {
 
-                this.scheduleService.getHumanResourceUserInfoList().then(users => {
+                this.scheduleService.getHumanResourceUserInfoList().then((users: any[]) => {
                     // all users
                     this.allUsers = users;
 
-                    this.orgsWithUsers = new Array();
                     for (let i = 0; i < orgs.length; i++) {
                         let usersInOrg = new Array();
                         for (let j = 0; j < users.length; j++) {
-                            if (orgs[i].organizationCode == users[j].assignOrgCd) {
+                            if (orgs[i].organizationCode === users[j].assignOrgCd) {
                                 usersInOrg.push(users[j]);
                             }
                         }
@@ -56,18 +62,18 @@ export class SelectParticipantsPage {
                         }
                         this.orgsWithUsers.push(orgWithUsers);
                     }
-                    resolve("true");
+                    resolve('true');
                 });
             });
         });
     }
 
-    findUsers(event) {
+    findUsers(event: any) {
         this.isSearching = true;
         let userName = event.value;
 
         this.foundUserMembers = this.allUsers;
-        if (userName && userName.trim() != '') {
+        if (userName && userName.trim() !== '') {
             this.foundUserMembers = this.foundUserMembers.filter((user) => {
                 return (user.userName.toLowerCase().indexOf(userName.toLowerCase()) > -1);
             })
@@ -76,13 +82,13 @@ export class SelectParticipantsPage {
         }
     }
 
-    changeSelectedUser(user) {
-        if (user.isSelected == true) {
+    changeSelectedUser(user: any) {
+        if (user.isSelected === true) {
             this.selectedUsers.push(user);
             this.selectedUsersCount++;
         } else {
             let index = this.selectedUsers.indexOf(user);
-            if (index != -1) {
+            if (index !== -1) {
                 this.selectedUsers.splice(index, 1);
             }
             this.selectedUsersCount--;
@@ -90,10 +96,9 @@ export class SelectParticipantsPage {
     }
 
     setOriginSelectedUsers() {
-        this.selectedUsers = new Array();
         for (let i = 0; i < this.originUsers.length; i++) {
             for (let j = 0; j < this.allUsers.length; j++) {
-                if (this.originUsers[i].userID == this.allUsers[j].userId) {
+                if (this.originUsers[i].userID === this.allUsers[j].userID) {
                     this.allUsers[j].isSelected = true;
                     this.selectedUsersCount++;
                     this.selectedUsers.push(this.allUsers[j]);
@@ -110,8 +115,8 @@ export class SelectParticipantsPage {
         let sendUsers = new Array();
         this.selectedUsers.forEach(function(selectedUser) {
             let user = {
-                "userID": selectedUser.userId,
-                "userName": selectedUser.userName
+                'userID': selectedUser.userID,
+                'userName': selectedUser.userName
             }
             sendUsers.push(user);
         });
