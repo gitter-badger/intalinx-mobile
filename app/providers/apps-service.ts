@@ -2,12 +2,13 @@
 import {Http} from '@angular/http';
 
 // Services.
+import {ShareService} from '../../providers/share-service';
 import {BlogService} from './blog-service';
 import {NotificationService} from './notification-service';
 
 export class AppsService {
 
-    constructor(private http: Http, private blogService: BlogService, private notificationService: NotificationService) {
+    constructor(private http: Http, private share: ShareService, private blogService: BlogService, private notificationService: NotificationService) {
     }
 
     load() {
@@ -35,14 +36,14 @@ export class AppsService {
         if (item.componentsId === 'blog') {
             this.blogService.getNotReadCommunityCountBySelf().then(data => {
                 if (data) {
-                    this.app.blogNewInformationCount = data;
+                    this.share.blogNewInformationCount = data;
                 }
             });
         }
         if (item.componentsId === 'notification') {
             this.notificationService.getNotReadNotificationCountBySelf().then(data => {
                 if (data) {
-                    this.app.notificationNewInformationCount = data;
+                    this.share.notificationNewInformationCount = data;
                 }
             });
         }
