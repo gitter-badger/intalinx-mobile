@@ -95,7 +95,7 @@ export class ScheduleService {
                     let participantsOfEvent = new Array();
 
                     for (let i = 0; i < targetLists.length; i++) {
-                        let targetIdString = this.util.getNodeText(targetLists[i], './/*[local-name()=\'targetID\']');
+                        let targetIDString = this.util.getNodeText(targetLists[i], './/*[local-name()=\'targetID\']');
                         let targetNameString = this.util.getNodeText(targetLists[i], './/*[local-name()=\'targetName\']');
 
                         let eventLists = this.util.selectXMLNodes(targetLists[i], './/*[local-name()=\'eventList\']');
@@ -118,7 +118,7 @@ export class ScheduleService {
                             eventList.push(showEventContent);
                         }
                         let deviceObject = {
-                            'targetId': targetIdString,
+                            'targetID': targetIDString,
                             'targetName': targetNameString,
                             'events': eventList
                         };
@@ -244,7 +244,7 @@ export class ScheduleService {
         });
     }
 
-    getEventByEventId(eventID) {
+    getEventByEventID(eventID) {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_event_by_event_id.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -296,12 +296,12 @@ export class ScheduleService {
         });
     }
 
-    getCategoryNameByCategoryId(categoryId) {
+    getCategoryNameByCategoryID(categoryID) {
         return new Promise(resolve => {
             this.getCategoryList().then((categories: any) => {
                 let categoryName;
                 categories.forEach(function(element) {
-                    if (element.categoryID === categoryId) {
+                    if (element.categoryID === categoryID) {
                         categoryName = element.categoryName;
                     }
                 }, this);
@@ -353,15 +353,15 @@ export class ScheduleService {
         });
     }
 
-    getDevicesByDeviceIds(deviceIds) {
+    getDevicesByDeviceIDs(deviceIDs) {
         return new Promise(resolve => {
-            let deviceIdsArray = deviceIds.split(',');
+            let deviceIDsArray = deviceIDs.split(',');
 
             this.getDeviceListWithoutTranferToJson().then((deviceOutputs: string) => {
                 let deviceNames = new Array();
                 for (let i = 0; i < deviceOutputs.length; i++) {
                     let device = this.util.xml2json(deviceOutputs[i]).DeviceOutput;
-                    if (deviceIdsArray.includes(device.deviceID)) {
+                    if (deviceIDsArray.includes(device.deviceID)) {
                         deviceNames.push(device.deviceName);
                     }
                 }
@@ -568,15 +568,15 @@ export class ScheduleService {
     deleteEvent(deleteEventRequires) {
         return new Promise(resolve => {
 
-            let eventId = deleteEventRequires.eventId;
+            let eventID = deleteEventRequires.eventID;
             let isFromRepeatToSpecial = deleteEventRequires.isFromRepeatToSpecial;
             this.util.getRequestXml('./assets/requests/schedule/delete_event.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
-                this.util.setNodeText(objRequest, './/*[local-name()=\'eventID\']', eventId);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'eventID\']', eventID);
                 // delete the event of the selecte dday
                 this.util.setNodeText(objRequest, './/*[local-name()=\'isFromRepeatToSpecial\']', '' + isFromRepeatToSpecial);
                 if (isFromRepeatToSpecial) {
-                    this.util.setNodeText(objRequest, './/*[local-name()=\'parentEventID\']', eventId);
+                    this.util.setNodeText(objRequest, './/*[local-name()=\'parentEventID\']', eventID);
                     this.util.setNodeText(objRequest, './/*[local-name()=\'oldStartTime\']', deleteEventRequires.startTime);
                     this.util.setNodeText(objRequest, './/*[local-name()=\'oldEndTime\']', deleteEventRequires.endTime);
                     this.util.setNodeText(objRequest, './/*[local-name()=\'startTime\']', -1);
@@ -599,7 +599,7 @@ export class ScheduleService {
                 for (let i = 0; i < deviceOutputs.length; i++) {
                     let deviceOutput = this.util.xml2json(deviceOutputs[i]).DeviceOutput;
                     let device = {
-                        'deviceId': deviceOutput.deviceID,
+                        'deviceID': deviceOutput.deviceID,
                         'deviceName': deviceOutput.deviceName,
                         'description': deviceOutput.description,
                         'isSelected': false,
