@@ -1,52 +1,44 @@
-import {Http} from '@angular/http';
-import {IonicApp, NavController, Alert} from 'ionic-angular';
+// Third party library.
+import {NavController, Alert} from 'ionic-angular';
+import {TranslateService} from 'ng2-translate/ng2-translate';
+
+// Config.
+import {AppConfig} from '../appconfig';
+
+// Utils.
 import {Util} from '../utils/util';
 
 export class BlogService {
+    private userDefaultAvatarImageUrl = this.appConfig.get('USER_DEFAULT_AVATAR_IMAGE_URL');
 
-    static get parameters() {
-        return [[Http], [IonicApp], [NavController], [Util]];
+    constructor(private translate: TranslateService, private nav: NavController, private util: Util, private appConfig: AppConfig) {
     }
 
-    constructor(http, app, nav, util) {
-        this.http = http;
-        this.app = app;
-        this.nav = nav;
-        this.data = null;
-        this.util = util;
-        
-        this.userDefaultAvatarImageUrl = this.app.config.get("USER_DEFAULT_AVATAR_IMAGE_URL");
-    }
-
-    getCommunityListForTop(position, isNeedRegistNotExistsReply) {
+    getCommunityListForTop(position: number, isNeedRegistNotExistsReply: boolean): any {
         let rowsPerpage = 10;
-        if (this.data) {
-            // already loaded data.
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/blog/get_community_list_for_top_request.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/blog/get_community_list_for_top_request.xml').then((req: string) => {
 
                 let objRequest = this.util.parseXml(req);
 
-                let cursorNode = this.util.selectXMLNode(objRequest, ".//*[local-name()='cursor']");
-                this.util.setXMLAttribute(cursorNode, "", "position", position);
-                this.util.setXMLAttribute(cursorNode, "", "numRows", rowsPerpage);
+                let cursorNode = this.util.selectXMLNode(objRequest, './/*[local-name()=\'cursor\']');
+                this.util.setXMLAttribute(cursorNode, '', 'position', position);
+                this.util.setXMLAttribute(cursorNode, '', 'numRows', rowsPerpage);
 
-                this.util.setNodeText(objRequest, ".//*[local-name()='isNeedRegistNotExistsReply']", isNeedRegistNotExistsReply);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'isNeedRegistNotExistsReply\']', isNeedRegistNotExistsReply);
 
                 req = this.util.xml2string(objRequest);
 
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
-                    let communityOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='CommunityOutput']");
+                    let communityOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'CommunityOutput\']');
                     let communities = new Array();
                     for (let i = 0; i < communityOutputs.length; i++) {
                         communities.push(this.util.xml2json(communityOutputs[i]).CommunityOutput);
                     }
 
-                    communities.forEach(function(community) {
-                        if (!community.createUserAvatar || community.createUserAvatar.toString().indexOf("data:image") != 0) {
+                    communities.forEach(function (community) {
+                        if (!community.createUserAvatar || community.createUserAvatar.toString().indexOf('data:image') !== 0) {
                             community.createUserAvatar = this.userDefaultAvatarImageUrl;
                         }
                         this.util.fromNow(community.publishStartDate).then(data => {
@@ -60,22 +52,18 @@ export class BlogService {
         });
     }
 
-    insertReplyContent(comment) {
+    insertReplyContent(comment: any): any {
         let content = this.util.replaceHtmlTagCharacter(comment.content);
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/blog/insert_reply_content_request.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/blog/insert_reply_content_request.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
-                this.util.setNodeText(objRequest, ".//*[local-name()='communityID']", comment.communityID);
-                this.util.setNodeText(objRequest, ".//*[local-name()='content']", content);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'communityID\']', comment.communityID);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'content\']', content);
                 req = this.util.xml2string(objRequest);
 
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
-                    let insertReplyContent = this.util.selectXMLNode(objResponse, ".//*[local-name()='insertReplyContent']");
+                    let insertReplyContent = this.util.selectXMLNode(objResponse, './/*[local-name()=\'insertReplyContent\']');
                     let returnData = this.util.xml2json(insertReplyContent).insertReplyContent.insertReplyContent;
 
                     resolve(returnData);
@@ -85,49 +73,41 @@ export class BlogService {
     }
 
     // Getting the counting of unread blogs. 
-    getNotReadCommunityCountBySelf() {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
+    getNotReadCommunityCountBySelf(): any {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/blog/get_not_read_community_count_by_self.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/blog/get_not_read_community_count_by_self.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
                 req = this.util.xml2string(objRequest);
 
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
 
-                    let returnOutPut = this.util.selectXMLNode(objResponse, ".//*[local-name()='return']");
+                    let returnOutPut = this.util.selectXMLNode(objResponse, './/*[local-name()=\'return\']');
                     let returnData = this.util.xml2json(returnOutPut).return;
                     resolve(returnData);
                 });
             });
         });
     }
-    
-    getCommunityDetailByCommunityID(communityID) {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
+
+    getCommunityDetailByCommunityID(communityID: string): any {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/blog/get_community_detail_by_community_id_request.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/blog/get_community_detail_by_community_id_request.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
-                
-                this.util.setNodeText(objRequest, ".//*[local-name()='communityID']", communityID);
-                
+
+                this.util.setNodeText(objRequest, './/*[local-name()=\'communityID\']', communityID);
+
                 req = this.util.xml2string(objRequest);
 
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
 
-                    let communityOutput = this.util.selectXMLNode(objResponse, ".//*[local-name()='CommunityOutput']");
+                    let communityOutput = this.util.selectXMLNode(objResponse, './/*[local-name()=\'CommunityOutput\']');
                     let community = this.util.xml2json(communityOutput).CommunityOutput;
-                    if (!community.createUserAvatar || community.createUserAvatar.toString().indexOf("data:image") != 0) {
+                    if (!community.createUserAvatar || community.createUserAvatar.toString().indexOf('data:image') !== 0) {
                         community.createUserAvatar = this.userDefaultAvatarImageUrl;
                     }
-                    
+
                     this.util.fromNow(community.createDate).then(data => {
                         community.createDate = data;
                     });
@@ -136,106 +116,93 @@ export class BlogService {
             });
         });
     }
-    
-    getReplyContentListByCommunityID(communityID, position) {
+
+    getReplyContentListByCommunityID(communityID: string, position: number): any {
         // Setting the number of per drag.
         let rowsPerpage = 5;
-
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/blog/get_reply_content_list_by_community_id_request.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/blog/get_reply_content_list_by_community_id_request.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
 
-                let cursorNode = this.util.selectXMLNode(objRequest, ".//*[local-name()='cursor']");
-                this.util.setXMLAttribute(cursorNode, "", "position", position);
-                this.util.setXMLAttribute(cursorNode, "", "numRows", rowsPerpage);
-                this.util.setNodeText(objRequest, ".//*[local-name()='communityID']", communityID);
+                let cursorNode = this.util.selectXMLNode(objRequest, './/*[local-name()=\'cursor\']');
+                this.util.setXMLAttribute(cursorNode, '', 'position', position);
+                this.util.setXMLAttribute(cursorNode, '', 'numRows', rowsPerpage);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'communityID\']', communityID);
 
                 req = this.util.xml2string(objRequest);
 
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
 
-                    let rreplyContentOutputs = this.util.selectXMLNodes(objResponse, ".//*[local-name()='ReplyContentOutput']");
+                    let rreplyContentOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'ReplyContentOutput\']');
                     let replyContents = new Array();
                     for (let i = 0; i < rreplyContentOutputs.length; i++) {
                         replyContents.push(this.util.xml2json(rreplyContentOutputs[i]).ReplyContentOutput);
                     }
-                    
-                    replyContents.forEach(function(replyContent) {
-                        if (!replyContent.userAvatar || replyContent.userAvatar.toString().indexOf("data:image") != 0) {
+
+                    replyContents.forEach(function (replyContent) {
+                        if (!replyContent.userAvatar || replyContent.userAvatar.toString().indexOf('data:image') !== 0) {
                             replyContent.userAvatar = this.userDefaultAvatarImageUrl;
                         }
                         this.util.fromNow(replyContent.createDate).then(data => {
                             replyContent.createDate = data;
                         });
                     }, this);
-                    
-                    let cursor = this.util.selectXMLNode(objResponse, ".//*[local-name()='cursor']");
+
+                    let cursor = this.util.selectXMLNode(objResponse, './/*[local-name()=\'cursor\']');
                     cursor = this.util.xml2json(cursor);
                     if (cursor && cursor.cursor) {
                         cursor = cursor.cursor;
                     }
                     let result = {
-                        "cursor": cursor.$,
-                        "replyContents": replyContents
+                        'cursor': cursor.$,
+                        'replyContents': replyContents
                     };
                     resolve(result);
                 });
             });
         });
     }
-    
-    updateReplyStatus(communityID, status){
-        if (this.data) {
-            // already loaded data.
-            return Promise.resolve(this.data);
-        }
+
+    updateReplyStatus(communityID: string, status: string): any {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/blog/update_reply_status.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/blog/update_reply_status.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
-                
-                this.util.setNodeText(objRequest, ".//*[local-name()='communityID']", communityID);
-                this.util.setNodeText(objRequest, ".//*[local-name()='replystatus']", status);
+
+                this.util.setNodeText(objRequest, './/*[local-name()=\'communityID\']', communityID);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'replystatus\']', status);
                 req = this.util.xml2string(objRequest);
 
                 this.util.callCordysWebservice(req).then(data => {
-                    resolve("true");
+                    resolve('true');
                 });
             });
         });
     }
-    
-    updateNewReplyFlag(communityID, status) {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
+
+    updateNewReplyFlag(communityID: string, status: string): any {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/blog/update_new_reply_flag.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/blog/update_new_reply_flag.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
-                this.util.setNodeText(objRequest, ".//*[local-name()='communityID']", communityID);
-                this.util.setNodeText(objRequest, ".//*[local-name()='newReplyFlag']", status);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'communityID\']', communityID);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'newReplyFlag\']', status);
                 req = this.util.xml2string(objRequest);
 
                 this.util.callCordysWebservice(req).then(data => {
-                    resolve("true");
+                    resolve('true');
                 });
             });
         });
     }
-    
-    saveComment(comment) {
+
+    saveComment(comment: any): any {
         return new Promise(resolve => {
-            if (comment.content && this.util.deleteEmSpaceEnSpaceNewLineInCharacter(comment.content) != "") {
+            if (comment.content && this.util.deleteEmSpaceEnSpaceNewLineInCharacter(comment.content) !== '') {
                 this.insertReplyContent(comment).then(data => {
-                    if (data == "true") {
+                    if (data === 'true') {
                         resolve(data);
                     } else {
-                        this.app.translate.get(["app.blog.message.error.title", "app.message.error.systemError", "app.action.ok"]).subscribe(message => {
+                        this.translate.get(['app.blog.message.error.title', 'app.message.error.systemError', 'app.action.ok']).subscribe(message => {
                             let title = message['app.blog.message.error.title'];
                             let ok = message['app.action.ok'];
                             let content = message['app.message.error.systemError'];
@@ -250,7 +217,7 @@ export class BlogService {
                     }
                 });
             } else {
-                this.app.translate.get(["app.blog.message.error.title", "app.blog.message.error.noContent", "app.action.ok"]).subscribe(message => {
+                this.translate.get(['app.blog.message.error.title', 'app.blog.message.error.noContent', 'app.action.ok']).subscribe(message => {
                     let title = message['app.blog.message.error.title'];
                     let ok = message['app.action.ok'];
                     let content = message['app.blog.message.error.noContent'];

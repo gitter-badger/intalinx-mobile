@@ -1,47 +1,44 @@
-import {Page, IonicApp, Modal, NavController, NavParams, Alert, ViewController, Platform} from 'ionic-angular';
+// Third party library.
+import {Injectable, Component} from '@angular/core';
+import {NavController, NavParams} from 'ionic-angular';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
-import {TranslatePipe} from 'ng2-translate/ng2-translate';
-
-import {BlogService} from '../../../providers/blog-service';
-
+// Utils.
 import {Util} from '../../../utils/util';
 
+// Services.
+import {BlogService} from '../../../providers/blog-service';
+
+// Pages.
 import {DetailPage} from '../detail/detail';
 
-@Page({
+@Component({
     templateUrl: 'build/pages/blog/add-comment/add-comment.html',
     providers: [
         BlogService,
         Util
-    ],
-    pipes: [TranslatePipe]
+    ]
 })
+@Injectable()
 export class AddCommentPage {
-    static get parameters() {
-        return [[IonicApp], [NavController], [NavParams], [BlogService], [ViewController], [Platform], [Util]];
-    }
+    private sendData: any;
+    private id: string;
+    private comment: any;
+    private isDisabled: boolean;
 
-    constructor(app, nav, params, blogService, view, platform, util) {
-        this.app = app;
-        this.nav = nav;
-        this.view = view;
-        this.platform = platform;
-        this.blogService = blogService;
-        this.util = util;
-        this.params = params;
-        this.sendData = this.params.get("sendData");
+    constructor(private nav: NavController, private params: NavParams, private blogService: BlogService, private util: Util) {
+        this.sendData = this.params.get('sendData');
         this.id = this.sendData.id;
-
         this.comment = {
             communityID: this.id,
             content: this.sendData.unrepliedCommentcontent
-        }
+        };
     }
 
-    saveComment() {
+    saveComment(): void {
         this.isDisabled = true;
         this.blogService.saveComment(this.comment).then(data => {
-            if (data == "true") {
+            if (data === 'true') {
                 this.sendData.isRefreshFlag = true;
                 this.nav.pop();
             } else {
@@ -50,15 +47,15 @@ export class AddCommentPage {
         });
     }
 
-    onPageWillLeave() {
+    onPageWillLeave(): void {
         this.sendData.unrepliedCommentcontent = this.comment.content;
     }
 
-    onPageWillEnter() {
+    onPageWillEnter(): void {
         this.changeContent();
     }
 
-    changeContent() {
+    changeContent(): void {
         if (this.comment.content && this.util.deleteEmSpaceEnSpaceNewLineInCharacter(this.comment.content) != "") {
             this.isDisabled = null;
         } else {
@@ -67,10 +64,10 @@ export class AddCommentPage {
         this.autoResizeContent();
     }
 
-    autoResizeContent() {
-        let textarea = document.querySelector(".add-comment textarea");
+    autoResizeContent(): void {
+        let textarea = document.querySelector('.add-comment textarea');
         if (textarea.scrollHeight > 0) {
-            textarea.style.height = textarea.scrollHeight + "px";
-        } 
+            // textarea.style.height = textarea.scrollHeight + 'px';
+        }
     }
 }

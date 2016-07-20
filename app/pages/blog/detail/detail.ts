@@ -1,54 +1,73 @@
-import {Page, IonicApp, NavController, NavParams, ViewController, Platform, Content} from 'ionic-angular';
-import {Component, ViewChild} from '@angular/core';
+// Third party library.
+import {Injectable, Component, ViewChild} from '@angular/core';
+import {NavController, NavParams, Content} from 'ionic-angular';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
-import {TranslatePipe} from 'ng2-translate/ng2-translate';
-
-import {BlogService} from '../../../providers/blog-service';
-import {AddCommentPage} from '../add-comment/add-comment';
+// Utils.
 import {Util} from '../../../utils/util';
 
-@Page({
+// Services.
+import {BlogService} from '../../../providers/blog-service';
+import {ShareService} from '../../../providers/share-service';
+
+// Pages.
+import {AddCommentPage} from '../add-comment/add-comment';
+
+@Component({
     templateUrl: 'build/pages/blog/detail/detail.html',
     providers: [BlogService, Util],
-    pipes: [TranslatePipe],
-    queries: {
-        pageContent: new ViewChild(Content)
-    }
 })
+@Injectable()
 export class DetailPage {
+    @ViewChild(Content) pageContent: Content;
 
-    static get parameters() {
-        return [[IonicApp], [NavController], [NavParams], [BlogService], [ViewController], [Platform]];
-    }
+    private community: any;
+    private id: string;
+    private readStatus: string;
+    private newReplyFlag: string;
+    private sendData = {
+        'id': this.id,
+        'isRefreshFlag': false,
+        'unrepliedCommentcontent': ''
+    };
+    private title: string;
+    private content: string;
+    private createUserId: string;
+    private createDate: string;
+    private createUserName: string;
+    private createUserAvatar: string;
+    private status: string;
+    private readCount: string;
+    private isLoadCompleted: boolean;
+    private isScrollToTopButtonVisible: boolean;
 
-    constructor(app, nav, params, blogService, view, platform) {
-        this.app = app;
-        this.nav = nav;
-        this.params = params;
-        this.view = view;
-        this.platform = platform;
+    private comments: any;
+    private commentCount: string;
 
-        this.community = this.params.get("community");
+    private pageLoadTime: number;
+
+    constructor(private nav: NavController, private params: NavParams, private blogService: BlogService, private share: ShareService) {
+
+        this.community = this.params.get('community');
         this.id = this.community.communityID;
         this.readStatus = this.community.readStatus;
         this.newReplyFlag = this.community.newReplyFlag;
 
-        this.blogService = blogService;
-        this.sendData = {
-            "id": this.id,
-            "isRefreshFlag": false,
-            "unrepliedCommentcontent": ""
-        }
+        // this.sendData = {
+        //     'id': this.id,
+        //     'isRefreshFlag': false,
+        //     'unrepliedCommentcontent': ''
+        // }
 
         this.getCommunityDetailByCommunityID();
         this.getReplyContentListByCommunityID();
     }
 
-    addComment() {
-        this.nav.push(AddCommentPage, { "sendData": this.sendData });
+    addComment(): void {
+        this.nav.push(AddCommentPage, { 'sendData': this.sendData });
     }
 
-    getCommunityDetailByCommunityID() {
+    getCommunityDetailByCommunityID(): void {
         this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
             this.title = data.title;
             this.content = data.content;
@@ -64,7 +83,7 @@ export class DetailPage {
         });
     }
 
-    getReplyContentListByCommunityID() {
+    getReplyContentListByCommunityID(): void {
         let position = 0;
         this.blogService.getReplyContentListByCommunityID(this.id, position).then(data => {
             if (data) {
@@ -74,7 +93,7 @@ export class DetailPage {
         });
     }
 
-    doInfinite(infiniteScroll) {
+    doInfinite(infiniteScroll): void {
         let position = this.comments.length;
         this.blogService.getReplyContentListByCommunityID(this.id, position).then(data => {
             if (data && data.replyContents[0]) {
@@ -84,72 +103,72 @@ export class DetailPage {
         });
     }
 
-    onPageLoaded() {
+    onPageLoaded(): void {
         this.pageLoadTime = new Date().getTime();
     }
 
-    onPageWillEnter() {
+    onPageWillEnter(): void {
         let isRefreshFlag = this.sendData.isRefreshFlag;
-        if (isRefreshFlag == true) {
+        if (isRefreshFlag === true) {
             this.getReplyContentListByCommunityID();
         }
     }
 
-    onPageDidEnter() {
+    onPageDidEnter(): void {
         let isRefreshFlag = this.sendData.isRefreshFlag;
-        if (isRefreshFlag == true) {
+        if (isRefreshFlag === true) {
             this.pageContent.scrollToBottom();
-            this.sendData.unrepliedCommentcontent = "";
+            this.sendData.unrepliedCommentcontent = '';
         }
 
-        if (this.status == "PUBLISH" && this.newReplyFlag == "TRUE") {
+        if (this.status === 'PUBLISH' && this.newReplyFlag === 'TRUE') {
             this.updateNewReplyFlag();
         }
     }
 
-    onPageWillLeave() {
+    onPageWillLeave(): void {
         this.sendData.isRefreshFlag = false;
     }
 
-    onPageWillUnload() {
+    onPageWillUnload(): void {
         let now = new Date().getTime();
         let pageLoadingTime = now - this.pageLoadTime;
-        if (this.status == "PUBLISH" && this.readStatus == "NOT_READ" && pageLoadingTime >= 3000) {
+        if (this.status === 'PUBLISH' && this.readStatus === 'NOT_READ' && pageLoadingTime >= 3000) {
             this.updateReplyStatus();
         }
         this.isLoadCompleted = false;
         this.isScrollToTopButtonVisible = false;
     }
 
-    updateReplyStatus() {
-        let readStatus = "READ";
+    updateReplyStatus(): void {
+        let readStatus = 'READ';
         this.blogService.updateReplyStatus(this.id, readStatus).then(data => {
-            if (data == "true") {
+            if (data === 'true') {
                 this.community.readStatus = readStatus;
-                let blogNewInformationCount = Number(this.app.blogNewInformationCount);
-                this.app.blogNewInformationCount = blogNewInformationCount - 1;
+                let blogNewInformationCount = Number(this.share.blogNewInformationCount);
+                this.share.blogNewInformationCount = (blogNewInformationCount - 1).toString();
             }
         });
     }
 
-    updateNewReplyFlag() {
-        let newReplyFlag = "FALSE";
+    updateNewReplyFlag(): void {
+        let newReplyFlag = 'FALSE';
         this.blogService.updateNewReplyFlag(this.id, newReplyFlag).then(data => {
-            if (data == "true") {
+            if (data === 'true') {
                 this.community.newReplyFlag = newReplyFlag;
             }
         });
     }
 
-    ngAfterViewInit() {
+    ngAfterViewInit(): void {
         this.pageContent.addScrollListener(this.onPageScroll(this));
     }
 
-    scrollToDetailPageTop() {
+    scrollToDetailPageTop(): void {
         this.pageContent.scrollToTop();
     }
     
-    onPageScroll(that) {
+    onPageScroll(that): any {
         return function() {
             if (this.scrollTop > 200) {
                 that.isScrollToTopButtonVisible = true;
