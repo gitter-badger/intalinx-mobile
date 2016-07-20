@@ -1,12 +1,14 @@
-<ion-navbar *navbar class="change-avatar">
-    <ion-title>{{ "app.profile.changeAvatar" | translate }}</ion-title>
-    <ion-buttons end>
-        <button>
-            <ion-icon name="more"></ion-icon>
-        </button>
-        <input #fileInput type=file accept="image/*" (change)="onFileInputChange($event)" class="upload-input" />
-    </ion-buttons>
-</ion-navbar>
+<ion-header>
+    <ion-navbar class="change-avatar">
+        <ion-title>{{ "app.profile.changeAvatar" | translate }}</ion-title>
+        <ion-buttons end>
+            <button>
+                <ion-icon name="more"></ion-icon>
+            </button>
+            <input #fileInput type=file accept="image/*" (change)="onFileInputChange($event)" class="upload-input" />
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
 <ion-content padding class="change-avatar">
     <img src="{{userAvatar}}" />
 </ion-content>

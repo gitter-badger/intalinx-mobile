@@ -1,15 +1,16 @@
-<ion-navbar *navbar>
-  <ion-title [hidden]="!isNewEvent">{{"app.schedule.editEvent.title.new" | translate}}</ion-title>
-  <ion-title [hidden]="isNewEvent">{{"app.schedule.editEvent.title.edit" | translate}}</ion-title>
-  <!--<button light right>追加</button>-->
-  <ion-buttons end [hidden]="!isNewEvent">
-        <button (click)="saveEvent()">{{ "app.schedule.editEvent.saveEvent.new" | translate }}</button>
-  </ion-buttons>
-  <ion-buttons end [hidden]="isNewEvent">
-        <button (click)="saveEvent()">{{ "app.schedule.editEvent.saveEvent.edit" | translate }}</button>
-  </ion-buttons>
-</ion-navbar>
-
+<ion-header>
+    <ion-navbar>
+    <ion-title [hidden]="!isNewEvent">{{"app.schedule.editEvent.title.new" | translate}}</ion-title>
+    <ion-title [hidden]="isNewEvent">{{"app.schedule.editEvent.title.edit" | translate}}</ion-title>
+    <!--<button light right>追加</button>-->
+    <ion-buttons end [hidden]="!isNewEvent">
+            <button (click)="saveEvent()">{{ "app.schedule.editEvent.saveEvent.new" | translate }}</button>
+    </ion-buttons>
+    <ion-buttons end [hidden]="isNewEvent">
+            <button (click)="saveEvent()">{{ "app.schedule.editEvent.saveEvent.edit" | translate }}</button>
+    </ion-buttons>
+    </ion-navbar>
+</ion-header>
 <ion-content class="edit-event">
     <ion-list radio-group 
               [hidden]="event.eventID=='' || !isOriginalRepeat" 
