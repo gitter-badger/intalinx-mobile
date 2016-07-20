@@ -10,8 +10,8 @@ import {Util} from '../../utils/util';
 import {ShareService} from '../../providers/share-service';
 import {AppsService} from '../../providers/apps-service'; 
 import {UserService} from '../../providers/user-service';
-// import {BlogService} from '../../providers/blog-service'; 
-// import {NotificationService} from '../../providers/notification-service';
+import {BlogService} from '../../providers/blog-service'; 
+import {NotificationService} from '../../providers/notification-service';
 // import {ScheduleService} from '../../providers/schedule-service';
 // import {AboutService} from '../../providers/about-service';
 
@@ -27,8 +27,8 @@ import {DevicesPage} from '../schedule/devices/devices';
     providers: [
         AppsService,
         UserService,
-        //BlogService,
-        //NotificationService,
+        BlogService,
+        NotificationService,
         //ScheduleService,
         //AboutService
     ]

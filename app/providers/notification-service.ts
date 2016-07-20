@@ -1,3 +1,5 @@
+// Third party library.
+import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {NavController, Alert} from 'ionic-angular';
 
@@ -7,7 +9,7 @@ import {AppConfig} from '../appconfig';
 // Utils
 import {Util} from '../utils/util';
 
-
+@Injectable()
 export class NotificationService {
     private userDefaultAvatarImageUrl: string;
 

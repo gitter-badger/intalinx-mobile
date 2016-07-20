@@ -1,4 +1,5 @@
 // Third party library.
+import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 
 // Services.
@@ -6,6 +7,7 @@ import {ShareService} from './share-service';
 import {BlogService} from './blog-service';
 import {NotificationService} from './notification-service';
 
+@Injectable()
 export class AppsService {
 
     constructor(private http: Http, private share: ShareService, private blogService: BlogService, private notificationService: NotificationService) {

@@ -99,8 +99,8 @@ class IntaLinx {
 }
 
 ionicBootstrap(IntaLinx, [
-    disableDeprecatedForms(),
-    provideForms(),
+    // disableDeprecatedForms(),
+    // provideForms(),
     HTTP_PROVIDERS,
     {
         provide: TranslateLoader,

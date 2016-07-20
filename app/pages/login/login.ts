@@ -49,7 +49,6 @@ export class LoginPage {
 
     login() {
         this.isDisabled = true;
-        debugger;
         this.userService.authenticate(this.user.loginID, this.user.password).then(authenticationResult => {
             if (authenticationResult) {
                 if (this.user.rememberLoginID) {

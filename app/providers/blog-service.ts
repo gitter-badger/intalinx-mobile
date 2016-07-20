@@ -1,4 +1,5 @@
 // Third party library.
+import {Injectable} from '@angular/core';
 import {NavController, Alert} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 
@@ -8,6 +9,7 @@ import {AppConfig} from '../appconfig';
 // Utils.
 import {Util} from '../utils/util';
 
+@Injectable()
 export class BlogService {
     private userDefaultAvatarImageUrl = this.appConfig.get('USER_DEFAULT_AVATAR_IMAGE_URL');
 
