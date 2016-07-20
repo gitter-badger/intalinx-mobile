@@ -52,6 +52,9 @@ export class PortalPage {
         this.checkUpdate();
         this.loadApplications();
         this.initializeUser();
+        if (!this.share.showMenu) {
+            this.share.showMenu = this.showMenu(this);
+        }
     }
 
     checkUpdate() {
