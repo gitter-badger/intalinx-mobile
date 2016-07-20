@@ -13,13 +13,13 @@ import {UserService} from '../../providers/user-service';
 import {BlogService} from '../../providers/blog-service'; 
 import {NotificationService} from '../../providers/notification-service';
 // import {ScheduleService} from '../../providers/schedule-service';
-// import {AboutService} from '../../providers/about-service';
+import {AboutService} from '../../providers/about-service';
 
-// import {BlogIndexPage} from '../blog/index/index';
-// import {ProfileIndexPage} from '../profile/index/index';
+import {BlogIndexPage} from '../blog/index/index';
+import {ProfileIndexPage} from '../profile/index/index';
 // import {NotificationIndexPage} from '../notification/index/index';
 // import {ScheduleIndexPage} from '../schedule/index/index';
-// import {AboutPage} from '../about/about';
+import {AboutPage} from '../about/about';
 import {DevicesPage} from '../schedule/devices/devices';
 
 @Component({
@@ -42,9 +42,9 @@ export class PortalPage {
         'portal': PortalPage,
         //'notification' : NotificationIndexPage,
         //'blog' : BlogIndexPage,
-        // 'profile' : ProfileIndexPage,
+        'profile' : ProfileIndexPage,
         // 'schedule': ScheduleIndexPage,
-        // 'about': AboutPage,
+        'about': AboutPage,
         'devices': DevicesPage
     };
 
@@ -97,19 +97,18 @@ export class PortalPage {
                         break;
                     }
                 }
-            })
+            });
 
             this.share.initializeMenu(data);
 
             // set root page.
             if (!this.platform.is('tablet')) {
                 // set root to blog.
-                //this.nav.setRoot(BlogIndexPage);
+                this.nav.setRoot(BlogIndexPage);
             } else {
                 // set root to devices on tablet
                 this.nav.setRoot(DevicesPage);
             }
-            this.nav.setRoot(DevicesPage);
         });
     }
 

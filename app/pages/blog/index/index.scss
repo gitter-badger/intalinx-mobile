@@ -11,6 +11,10 @@
             margin: 0 auto;
         }
     }
+    ion-list > .item:first-child,
+    ion-list > .item-wrapper:first-child .item {
+        border-top: 0px;
+    }
     .title {
         white-space: pre-wrap;
     }
