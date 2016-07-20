@@ -1,58 +1,59 @@
-import {Page, IonicApp, NavController, Content} from 'ionic-angular';
-import {ViewChild} from '@angular/core';
-
+// Third party library.
+import {Injectable, Component, ViewChild} from '@angular/core';
+import {NavController, Content} from 'ionic-angular';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
-import {NotificationService} from '../../../providers/notification-service';
-
-import {DetailPage} from '../detail/detail';
-
+// Utils.
 import {Util} from '../../../utils/util';
 
+// Services.
+import {NotificationService} from '../../../providers/notification-service';
+import {ShareService} from '../../../providers/share-service';
 
-@Page({
+// Pages.
+import {DetailPage} from '../detail/detail';
+
+@Component({
     templateUrl: 'build/pages/notification/index/index.html',
     providers: [
         NotificationService, 
         Util
     ],
-    pipes: [TranslatePipe],
-    queries: {
-        pageContent: new ViewChild(Content)
-    }
+    pipes: [
+        TranslatePipe
+    ]
 })
 export class NotificationIndexPage {
+    @ViewChild(Content) pageContent: Content;
 
-    static get parameters() {
-        return [[IonicApp], [NavController], [NotificationService]];
-    }
+    private notificationListForTop: any;
+    private isLoadCompleted: boolean;
+    private isScrollToTopButtonVisible: boolean;
 
-    constructor(app, nav, notificationService) {
-        this.app = app;
-        this.nav = nav;
-        this.notificationService = notificationService;
-        
+    constructor(private share: ShareService, 
+                private nav: NavController, 
+                private notificationService: NotificationService) {
         this.getNotificationListForTop();
         this.getNotReadNotificationCountBySelf();
     }
     
-    onPageLoaded () {
+    onPageLoaded (): void {
         this.isLoadCompleted = false;
     }
 
-    openDetail(notification) {
+    openDetail(notification): void {
         this.nav.push(DetailPage, {
-            "notification": notification
+            'notification': notification
         });
     }
 
-    doRefresh(refresher) {
+    doRefresh(refresher): void {
         let isRefresh = true;
         this.getNotificationListForTop(refresher, isRefresh);
         this.getNotReadNotificationCountBySelf();
     }
 
-    doInfinite(infiniteScroll) {
+    doInfinite(infiniteScroll): void {
         let position = this.notificationListForTop.length;
         let isNeedRegistNotExistsReadStatus = false;
         this.notificationService.getNotificationListForTop(position, isNeedRegistNotExistsReadStatus).then(data => {
@@ -63,7 +64,7 @@ export class NotificationIndexPage {
         });
     }
 
-    getNotificationListForTop(refresher, isRefresh) {
+    getNotificationListForTop(refresher?, isRefresh?): void {
         let position = 0;
         let isNeedRegistNotExistsReadStatus = true;
         this.notificationService.getNotificationListForTop(position, isNeedRegistNotExistsReadStatus).then(data => {
@@ -76,23 +77,23 @@ export class NotificationIndexPage {
         });
     }
     
-    getNotReadNotificationCountBySelf() {
+    getNotReadNotificationCountBySelf(): void {
         this.notificationService.getNotReadNotificationCountBySelf().then(data => {
             if (data) {
-                this.app.notificationNewInformationCount = data;
+                this.share.notificationNewInformationCount = data;
             }
         });
     }
     
-    ngAfterViewInit() {
+    ngAfterViewInit(): void {
         this.pageContent.addScrollListener(this.onPageScroll(this));
     }
     
-    scrollToIndexPageTop() {
+    scrollToIndexPageTop(): void {
         this.pageContent.scrollToTop();
     }
     
-    onPageScroll(that) {
+    onPageScroll(that): any {
         return function() {
             if (this.scrollTop > 200) {
                 that.isScrollToTopButtonVisible = true;
