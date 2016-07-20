@@ -98,6 +98,6 @@ export class BlogIndexPage {
             } else {
                 that.isScrollToTopButtonVisible = false;
             }
-        }
+        };
     }
 }

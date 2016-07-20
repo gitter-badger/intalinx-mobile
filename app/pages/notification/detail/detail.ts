@@ -54,7 +54,7 @@ export class DetailPage {
     }
 
     getNotificationDetailByNotificationID(): void {
-        this.notificationService.getNotificationDetailByNotificationID(this.id).then(data => {
+        this.notificationService.getNotificationDetailByNotificationID(this.id).then((data: any) => {
             this.title = data.title;
             this.content = data.content;
             this.createUserId = data.createUser;
@@ -85,7 +85,7 @@ export class DetailPage {
 
     updateReadStatus(): void {
         let readStatus = 'READ';
-        this.notificationService.updateReadStatus(this.id, readStatus).then(data => {
+        this.notificationService.updateReadStatus(this.id, readStatus).then((data: string) => {
             if (data === 'true') {
                 this.notification.readStatus = readStatus;
                 let notificationNewInformationCount = Number(this.share.notificationNewInformationCount);

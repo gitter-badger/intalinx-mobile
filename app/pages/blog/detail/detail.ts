@@ -17,7 +17,6 @@ import {AddCommentPage} from '../add-comment/add-comment';
     templateUrl: 'build/pages/blog/detail/detail.html',
     providers: [BlogService, Util],
 })
-@Injectable()
 export class DetailPage {
     @ViewChild(Content) pageContent: Content;
 
@@ -47,7 +46,6 @@ export class DetailPage {
     private pageLoadTime: number;
 
     constructor(private nav: NavController, private params: NavParams, private blogService: BlogService, private share: ShareService) {
-
         this.community = this.params.get('community');
         this.id = this.community.communityID;
         this.readStatus = this.community.readStatus;
@@ -68,7 +66,7 @@ export class DetailPage {
     }
 
     getCommunityDetailByCommunityID(): void {
-        this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
+        this.blogService.getCommunityDetailByCommunityID(this.id).then((data: any) => {
             this.title = data.title;
             this.content = data.content;
             this.createUserId = data.createUser;
@@ -85,7 +83,8 @@ export class DetailPage {
 
     getReplyContentListByCommunityID(): void {
         let position = 0;
-        this.blogService.getReplyContentListByCommunityID(this.id, position).then(data => {
+        this.blogService.getReplyContentListByCommunityID(this.id, position).then((data: any) => {
+            debugger;
             if (data) {
                 this.comments = data.replyContents;
                 this.commentCount = data.cursor.maxRows;
@@ -95,7 +94,7 @@ export class DetailPage {
 
     doInfinite(infiniteScroll): void {
         let position = this.comments.length;
-        this.blogService.getReplyContentListByCommunityID(this.id, position).then(data => {
+        this.blogService.getReplyContentListByCommunityID(this.id, position).then((data: any) => {
             if (data && data.replyContents[0]) {
                 this.comments = this.comments.concat(data.replyContents);
             }
@@ -142,7 +141,7 @@ export class DetailPage {
 
     updateReplyStatus(): void {
         let readStatus = 'READ';
-        this.blogService.updateReplyStatus(this.id, readStatus).then(data => {
+        this.blogService.updateReplyStatus(this.id, readStatus).then((data: string) => {
             if (data === 'true') {
                 this.community.readStatus = readStatus;
                 let blogNewInformationCount = Number(this.share.blogNewInformationCount);
@@ -153,7 +152,7 @@ export class DetailPage {
 
     updateNewReplyFlag(): void {
         let newReplyFlag = 'FALSE';
-        this.blogService.updateNewReplyFlag(this.id, newReplyFlag).then(data => {
+        this.blogService.updateNewReplyFlag(this.id, newReplyFlag).then((data: string) => {
             if (data === 'true') {
                 this.community.newReplyFlag = newReplyFlag;
             }
@@ -175,6 +174,6 @@ export class DetailPage {
             } else {
                 that.isScrollToTopButtonVisible = false;
             }
-        }       
+        };  
     }
 }
