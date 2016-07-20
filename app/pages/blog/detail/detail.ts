@@ -82,7 +82,6 @@ export class BlogDetailPage {
     getReplyContentListByCommunityID(): void {
         let position = 0;
         this.blogService.getReplyContentListByCommunityID(this.id, position).then((data: any) => {
-            debugger;
             if (data) {
                 this.comments = data.replyContents;
                 this.commentCount = data.cursor.maxRows;
