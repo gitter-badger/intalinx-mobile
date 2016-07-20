@@ -57,9 +57,9 @@ export class DevicesPage {
     
     private displayDates: any;
     private fromDate: any;
-    private fromDateTime: any;
+    private fromDateTime: number;
     private toDate: any;
-    private toDateTime: any;
+    private toDateTime: number;
     private showFixedDate: boolean = false;
     private fixedDate: any;
     private headerFixed: boolean = false;

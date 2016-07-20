@@ -15,6 +15,7 @@ import {Util} from './utils/util';
 import {SSO} from './utils/sso';
 import {DateUtil} from './utils/dateutil';
 import {XmlUtil} from './utils/xmlutil';
+import {StorageUtil} from './utils/storageutil';
 
 // Services.
 import {ShareService} from './providers/share-service';
@@ -117,5 +118,6 @@ ionicBootstrap(IntaLinx, [
     Util,
     DateUtil,
     XmlUtil,
+    StorageUtil,
     ShareService
 ]);
