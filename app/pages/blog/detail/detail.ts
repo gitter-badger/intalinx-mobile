@@ -103,18 +103,18 @@ export class DetailPage {
         });
     }
 
-    onPageLoaded(): void {
+    ionViewLoaded(): void {
         this.pageLoadTime = new Date().getTime();
     }
 
-    onPageWillEnter(): void {
+    ionViewWillEnter(): void {
         let isRefreshFlag = this.sendData.isRefreshFlag;
         if (isRefreshFlag === true) {
             this.getReplyContentListByCommunityID();
         }
     }
 
-    onPageDidEnter(): void {
+    ionViewDidEnter(): void {
         let isRefreshFlag = this.sendData.isRefreshFlag;
         if (isRefreshFlag === true) {
             this.pageContent.scrollToBottom();
@@ -126,11 +126,11 @@ export class DetailPage {
         }
     }
 
-    onPageWillLeave(): void {
+    ionViewWillLeave(): void {
         this.sendData.isRefreshFlag = false;
     }
 
-    onPageWillUnload(): void {
+    ionViewWillUnload(): void {
         let now = new Date().getTime();
         let pageLoadingTime = now - this.pageLoadTime;
         if (this.status === 'PUBLISH' && this.readStatus === 'NOT_READ' && pageLoadingTime >= 3000) {
