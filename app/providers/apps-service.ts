@@ -2,7 +2,7 @@
 import {Http} from '@angular/http';
 
 // Services.
-import {ShareService} from '../../providers/share-service';
+import {ShareService} from './share-service';
 import {BlogService} from './blog-service';
 import {NotificationService} from './notification-service';
 

@@ -10,14 +10,8 @@ export class AppConfig {
         'SAMLART_NAME': 'SAMLart',
         'SAML_ARTIFACT_STORAGE_NAME': 'defaultinst_SAMLart',
         USER_DEFAULT_AVATAR_IMAGE_URL: 'img/default',
-        'PGYER' : {
-            'ANDROID' : {
-                'url' : 'https://www.pgyer.com/MMHC'
-            },
-            'IOS' : {
-                'url' : 'https://www.pgyer.com/MMHB'
-            }
-        },
+        'PGYER_ANDROID_URL' : 'https://www.pgyer.com/MMHC',
+        'PGYER_IOS_URL' : 'https://www.pgyer.com/MMHB',
         'USER_LANG': 'en-US'
     };
     get(key: string): string {
