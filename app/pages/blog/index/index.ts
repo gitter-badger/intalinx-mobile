@@ -11,7 +11,7 @@ import {BlogService} from '../../../providers/blog-service';
 import {ShareService} from '../../../providers/share-service';
 
 // Pages.
-import {DetailPage} from '../detail/detail';
+import {BlogDetailPage} from '../detail/detail';
 
 @Component({
     templateUrl: 'build/pages/blog/index/index.html',
@@ -40,7 +40,7 @@ export class BlogIndexPage {
     }
 
     openDetail(community): void {
-        this.nav.push(DetailPage, {
+        this.nav.push(BlogDetailPage, {
             'community': community
         });
     }

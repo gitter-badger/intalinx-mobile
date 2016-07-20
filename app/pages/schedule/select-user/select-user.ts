@@ -35,7 +35,7 @@ export class SelectUserPage {
         this.getOrganizationAndUsers();
     }
 
-    getOrganizationAndUsers() {
+    getOrganizationAndUsers(): any {
         return new Promise(resolve => {
             this.scheduleService.getOrganizationList().then((orgs: any[]) => {
 
@@ -63,7 +63,7 @@ export class SelectUserPage {
         });
     }
 
-    findUsers(event: any) {
+    findUsers(event: any): void {
         this.isSearching = true;
         let userName = event.value;
 
@@ -77,7 +77,7 @@ export class SelectUserPage {
         }
     }
 
-    changeSelectedUser(user: any) {
+    changeSelectedUser(user: any): void  {
         if (user.isSelected === true) {
             this.allUsers.forEach(function (everyuser) {
                 if (user.userId !== everyuser.userId && everyuser.isSelected === true) {
@@ -92,11 +92,11 @@ export class SelectUserPage {
         }
     }
 
-    close() {
+    close(): void  {
         this.viewCtrl.dismiss();
     }
 
-    selectUsers() {
+    selectUsers(): void  {
         this.viewCtrl.dismiss(this.selectedUser);
     }
 }

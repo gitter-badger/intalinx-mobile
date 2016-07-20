@@ -18,7 +18,7 @@ import {AddCommentPage} from '../add-comment/add-comment';
     providers: [BlogService, Util],
 })
 @Injectable()
-export class DetailPage {
+export class BlogDetailPage {
     @ViewChild(Content) pageContent: Content;
 
     private community: any;
@@ -32,7 +32,6 @@ export class DetailPage {
     };
     private title: string;
     private content: string;
-    private createUserId: string;
     private createDate: string;
     private createUserName: string;
     private createUserAvatar: string;
@@ -71,7 +70,6 @@ export class DetailPage {
         this.blogService.getCommunityDetailByCommunityID(this.id).then(data => {
             this.title = data.title;
             this.content = data.content;
-            this.createUserId = data.createUser;
             this.createDate = data.createDate;
             this.createUserName = data.createUserName;
             this.createUserAvatar = data.createUserAvatar;
@@ -79,7 +77,6 @@ export class DetailPage {
             this.readCount = data.readCount;
             this.isLoadCompleted = true;
             this.isScrollToTopButtonVisible = false;
-
         });
     }
 
