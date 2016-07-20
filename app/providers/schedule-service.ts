@@ -46,10 +46,6 @@ export class ScheduleService {
     }
 
     getIsAdmin() {
-        if (this.userDetailsData) {
-            // already loaded data
-            return Promise.resolve(this.userDetailsData);
-        }
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_user_details.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
@@ -76,10 +72,6 @@ export class ScheduleService {
     }
 
     getEventsForDevice(startTime, endTime) {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_events_for_device_and_group.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
@@ -140,10 +132,6 @@ export class ScheduleService {
     }
 
     getSpecialDays(locale, fromDateTime, toDateTime) {
-        if (this.specialDaysData) {
-            // already loaded data
-            return Promise.resolve(this.specialDaysData);
-        }
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_special_days.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
@@ -169,10 +157,6 @@ export class ScheduleService {
     }
 
     searchEvents(searchEventsRequires) {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/search_events.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
@@ -204,10 +188,6 @@ export class ScheduleService {
     }
 
     searchEventsBySelectedDay(searchEventsRequires) {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
             this.searchEvents(searchEventsRequires).then(eventOutputs => {
                 let events = new Array();
@@ -238,10 +218,6 @@ export class ScheduleService {
     }
 
     searchEventsByDisplayedMonth(searchEventsRequires) {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
             this.searchEvents(searchEventsRequires).then(eventOutputs => {
                 let days = new Array();
@@ -267,10 +243,6 @@ export class ScheduleService {
     }
 
     searchSpecialDaysByDisplayedMonth(searchSpecialDaysRequires) {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
             this.getSpecialDays(searchSpecialDaysRequires).then(holidays => {
                 let days = new Array();
@@ -305,10 +277,6 @@ export class ScheduleService {
     }
 
     getEventByEventId(eventID) {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_event_by_event_id.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
@@ -338,10 +306,6 @@ export class ScheduleService {
     }
 
     getCategoryList() {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_category_list.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
@@ -365,10 +329,6 @@ export class ScheduleService {
     }
 
     getCategoryNameByCategoryId(categoryId) {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
             this.getCategoryList().then(categories => {
                 let categoryName;
@@ -383,10 +343,6 @@ export class ScheduleService {
     }
 
     getDeviceListWithoutTranferToJson() {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_device_list.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
@@ -402,10 +358,6 @@ export class ScheduleService {
     }
 
     getDeviceList() {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
             this.getDeviceListWithoutTranferToJson().then(deviceOutputs => {
                 let devices = [];
@@ -418,10 +370,6 @@ export class ScheduleService {
     }
     
     getDeviceListByDeviceIDs(deviceIDs) {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
             let deviceIDArray = deviceIDs.split(',');
             this.getDeviceListWithoutTranferToJson().then(deviceOutputs => {
@@ -498,7 +446,7 @@ export class ScheduleService {
             this.util.getRequestXml('./assets/requests/schedule/get_human_resource_user_info_list.xml').then(req => {
                 let objRequest = this.util.parseXml(req);
                 req = this.util.xml2string(objRequest);
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
 
                     let userOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'UserOutput\']');
@@ -654,10 +602,6 @@ export class ScheduleService {
     }
 
     deleteEvent(deleteEventRequires) {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
 
             let eventId = deleteEventRequires.eventId;
