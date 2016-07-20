@@ -72,7 +72,7 @@ export class PortalPage {
     }
 
     loadApplications() {
-        this.appsService.load().then(data => {
+        this.appsService.load().then((data: any) => {
             let menuIdNeedToRemove = [];
             
             // remove about page for real device.
@@ -126,6 +126,6 @@ export class PortalPage {
             } else {
                 that.nav.setRoot(that.components[menu.componentsId]);
             }
-        }
+        };
     }
 }
