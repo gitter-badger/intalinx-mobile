@@ -20,7 +20,7 @@ import {UserService} from '../../providers/user-service';
 // import {NotificationIndexPage} from '../notification/index/index';
 // import {ScheduleIndexPage} from '../schedule/index/index';
 // import {AboutPage} from '../about/about';
-// import {FacilitiesPage} from '../schedule/facilities/facilities';
+import {DevicesPage} from '../schedule/devices/devices';
 
 @Component({
     templateUrl: 'build/pages/portal/portal.html',
@@ -45,7 +45,7 @@ export class PortalPage {
         // 'profile' : ProfileIndexPage,
         // 'schedule': ScheduleIndexPage,
         // 'about': AboutPage,
-        // 'facilities': FacilitiesPage
+        'devices': DevicesPage
     };
 
     constructor(private translate: TranslateService, private platform: Platform, private nav: NavController, private util: Util, private share: ShareService, private appsService: AppsService, private userService: UserService) {
@@ -85,7 +85,7 @@ export class PortalPage {
                 menuIdNeedToRemove.push('schedule');
                 menuIdNeedToRemove.push('profile');
             } else if (this.platform.is('mobile')){
-                //menuIdNeedToRemove.push('facilities');
+                //menuIdNeedToRemove.push('devices');
             }
 
             // remove unnecessary menu.
@@ -106,10 +106,10 @@ export class PortalPage {
                 // set root to blog.
                 //this.nav.setRoot(BlogIndexPage);
             } else {
-                // set root to facilities on tablet
-                //this.nav.setRoot(FacilitiesPage);
+                // set root to devices on tablet
+                this.nav.setRoot(DevicesPage);
             }
-            //this.nav.setRoot(FacilitiesPage);
+            this.nav.setRoot(DevicesPage);
         });
     }
 
