@@ -9,9 +9,6 @@ import {Util} from '../../../utils/util';
 // Services.
 import {BlogService} from '../../../providers/blog-service';
 
-// Pages.
-import {DetailPage} from '../detail/detail';
-
 @Component({
     templateUrl: 'build/pages/blog/add-comment/add-comment.html',
     providers: [
