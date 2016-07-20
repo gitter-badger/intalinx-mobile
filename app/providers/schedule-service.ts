@@ -132,7 +132,7 @@ export class ScheduleService {
         });
     }
 
-    getSpecialDays(locale, fromDateTime, toDateTime) {
+    getSpecialDays(locale: string, fromDateTime: number, toDateTime: number): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_special_days.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -239,36 +239,6 @@ export class ScheduleService {
                     }
                 }
                 resolve(days);
-            });
-        });
-    }
-
-    searchSpecialDaysByDisplayedMonth(searchSpecialDaysRequires) {
-        return new Promise(resolve => {
-            this.getSpecialDays(searchSpecialDaysRequires).then((holidays: any) => {
-                let days = new Array();
-                for (let i = 0; i < holidays.length; i++) {
-                    let startTime = holidays[i].startDay;
-                    if (Number(startTime) > searchSpecialDaysRequires.start && Number(startTime) < searchSpecialDaysRequires.end) {
-                        days.push(moment(startTime, 'X').format('D'));
-                    }
-                }
-                resolve(days);
-            });
-        });
-    }
-
-    getSpecialDaysInSelectedDay(searchSpecialDaysRequires, selectedDay) {
-        return new Promise(resolve => {
-            this.getSpecialDays(searchSpecialDaysRequires).then((holidays: any) => {
-                let specialDays = new Array();
-                for (let i = 0; i < holidays.length; i++) {
-                    let startDay = moment(holidays[i].startDay, 'X').format('YYYY/MM/D');
-                    if (selectedDay === startDay) {
-                        specialDays.push(holidays[i]);
-                    }
-                }
-                resolve(specialDays);
             });
         });
     }

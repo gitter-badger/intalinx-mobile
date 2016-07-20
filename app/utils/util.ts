@@ -19,7 +19,7 @@ import {StorageUtil} from './storageutil';
 @Injectable()
 export class Util {
 
-    constructor(private http: Http, private translate: TranslateService, private appConfig: AppConfig, private dateUtil: DateUtil, private xmlUtil: XmlUtil) {
+    constructor(private http: Http, private translate: TranslateService, private appConfig: AppConfig, private dateUtil: DateUtil, private xmlUtil: XmlUtil, private storageUtil: StorageUtil) {
         let lang = this.appConfig.get('USER_LANG').toLowerCase();
         moment.locale(lang);
     }
@@ -156,11 +156,11 @@ export class Util {
     }
 
     setSAMLart(key: string, value: string, notOnOrAfter): void {
-        StorageUtil.setSAMLart(key, value, notOnOrAfter);
+        this.storageUtil.setSAMLart(key, value, notOnOrAfter);
     }
 
     getSAMLart(key: string): string {
-        return StorageUtil.getSAMLart(key);
+        return this.storageUtil.getSAMLart(key);
     }
 
     loggedOn(): Promise<boolean> {
