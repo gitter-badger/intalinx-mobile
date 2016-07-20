@@ -29,21 +29,17 @@ import {LoginPage} from './pages/login/login';
     ]
 })
 class IntaLinx {
-
-    // make HelloIonicPage the root (or first) page
-    rootPage: any = LoginPage;
-
-    menus: any[] = [];
-    showMenu: any;
-
-    user: any = {
+    // make LoginPage the root (or first) page
+    private rootPage: any = LoginPage;
+    private menus: any[] = [];
+    private user: any = {
         'userAvatar': null
     };
-    
+
     constructor(private translate: TranslateService, private platform: Platform, private config: Config, private menu: MenuController, private appConfig: AppConfig, private share: ShareService) {
         this.initializeApp();
     }
-
+    
     initializeApp() {
         this.platform.ready().then(() => {
             // Okay, so the platform is ready and our plugins are available.
@@ -55,7 +51,7 @@ class IntaLinx {
         let userLang = navigator.language.toLowerCase();
         this.appConfig.set('USER_LANG', userLang);
         this.translate.use(userLang);
-        
+
         this.user.userAvatar = this.appConfig.get('USER_DEFAULT_AVATAR_IMAGE_URL');
         this.getBackButtonText().then(message => {
             this.config.set('ios', 'backButtonText', message);
@@ -75,19 +71,19 @@ class IntaLinx {
     }
 
     initializeMenu(that) {
-        return function(menus) {
+        return function (menus) {
             that.menus = menus;
         };
     }
 
     initializeUser(that) {
-        return function(user) {
+        return function (user) {
             that.user = user;
         };
     }
-    
+
     redirectLoginPage(that, loginPage) {
-        return function() {
+        return function () {
             that.nav.setRoot(loginPage);
         };
     }
@@ -95,8 +91,8 @@ class IntaLinx {
     openPage(item) {
         // close the menu when clicking a link from the menu
         this.menu.close();
-        if (this.showMenu) {
-            this.showMenu(item);
+        if (this.share.showMenu) {
+            this.share.showMenu(item);
         }
     }
 }
@@ -105,14 +101,14 @@ ionicBootstrap(IntaLinx, [
     disableDeprecatedForms(),
     provideForms(),
     HTTP_PROVIDERS,
-    { 
+    {
         provide: TranslateLoader,
         useFactory: (http: Http) => new TranslateStaticLoader(http, 'assets/i18n', '.json'),
         deps: [Http]
     },
     {
-        provide: PLATFORM_PIPES, 
-        useValue: TranslatePipe, 
+        provide: PLATFORM_PIPES,
+        useValue: TranslatePipe,
         multi: true
     },
     SSO,
