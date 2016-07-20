@@ -1,13 +1,16 @@
-import {Injectable, ReflectiveInjector} from '@angular/core';
-
-import {App, Config, Alert} from 'ionic-angular';
+// Third party library.
+import {Injectable} from '@angular/core';
 import {HTTP_PROVIDERS, Http, Headers, RequestOptions, RequestMethod} from '@angular/http';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import * as moment from 'moment';
 import 'moment/locale/ja';
 import 'moment/locale/zh-cn';
+import {Config, Alert} from 'ionic-angular';
 
-import {AppConfig} from './appconfig';
+// Config.
+import {AppConfig} from '../appconfig';
+
+// Utils.
 import {SSO} from './sso';
 import {XmlUtil} from './xmlutil';
 import {DateUtil} from './dateutil';
@@ -16,7 +19,7 @@ import {StorageUtil} from './storageutil';
 @Injectable()
 export class Util {
 
-    constructor(private appConfig: AppConfig, private http: Http, private translate: TranslateService, private dateUtil: DateUtil, private xmlUtil: XmlUtil) {
+    constructor(private http: Http, private translate: TranslateService, private appConfig: AppConfig, private dateUtil: DateUtil, private xmlUtil: XmlUtil) {
         let lang = this.appConfig.get('USER_LANG').toLowerCase();
         moment.locale(lang);
     }

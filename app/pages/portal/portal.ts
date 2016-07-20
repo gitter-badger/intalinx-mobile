@@ -1,12 +1,14 @@
-import {Injectable} from '@angular/core';
-import {Component} from '@angular/core';
-import {Platform, NavController, MenuController} from 'ionic-angular';
+// Third party library.
+import {Injectable, Component} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {Platform, NavController, MenuController} from 'ionic-angular';
 
+// Utils.
 import {Util} from '../../utils/util';
 
-
-// import {AppsService} from '../../providers/apps-service'; 
+// Services.
+import {ShareService} from '../../providers/share-service';
+import {AppsService} from '../../providers/apps-service'; 
 import {UserService} from '../../providers/user-service';
 // import {BlogService} from '../../providers/blog-service'; 
 // import {NotificationService} from '../../providers/notification-service';
@@ -23,7 +25,7 @@ import {UserService} from '../../providers/user-service';
 @Component({
     templateUrl: 'build/pages/portal/portal.html',
     providers: [
-        //AppsService,
+        AppsService,
         UserService,
         //BlogService,
         //NotificationService,
@@ -46,7 +48,7 @@ export class PortalPage {
         // 'facilities': FacilitiesPage
     };
 
-    constructor(private platform: Platform, private nav: NavController, private translate: TranslateService, private appsService: AppsService, private aboutService: AboutService, private userService: UserService, private util: Util) {
+    constructor(private translate: TranslateService, private platform: Platform, private nav: NavController, private util: Util, private share: ShareService, private appsService: AppsService, private userService: UserService) {
         this.checkUpdate();
         this.loadApplications();
         this.initializeUser();
@@ -54,19 +56,19 @@ export class PortalPage {
 
     checkUpdate() {
         // check latest version from http://pgyer.com/.
-        if (this.platform.is('cordova')) {
-            this.aboutService.getVersion().then(data => {
-                this.version = data;
-                this.aboutService.getLatestVersion().then(data => {
-                    this.latestVersion = data;
-                    if (this.latestVersion != this.version) {
-                        this.translate.get(['app.message.info.versionTooOld']).subscribe(message => {
-                            this.util.presentModal(message['app.message.info.versionTooOld'], 'info');
-                        });
-                    }
-                });
-            });
-        }
+        // if (this.platform.is('cordova')) {
+        //     this.aboutService.getVersion().then(data => {
+        //         this.version = data;
+        //         this.aboutService.getLatestVersion().then(data => {
+        //             this.latestVersion = data;
+        //             if (this.latestVersion != this.version) {
+        //                 this.translate.get(['app.message.info.versionTooOld']).subscribe(message => {
+        //                     this.util.presentModal(message['app.message.info.versionTooOld'], 'info');
+        //                 });
+        //             }
+        //         });
+        //     });
+        // }
     }
 
     loadApplications() {
@@ -97,7 +99,7 @@ export class PortalPage {
                 }
             })
 
-            //this.app.initializeMenu(data);
+            this.share.initializeMenu(data);
 
             // set root page.
             if (!this.platform.is('tablet')) {
@@ -113,7 +115,7 @@ export class PortalPage {
 
     initializeUser() {
         this.userService.getUserDetails().then(data => {
-            //this.app.initializeUser(data);
+            this.share.initializeUser(data);
         });
     }
   

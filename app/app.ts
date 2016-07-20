@@ -1,17 +1,26 @@
+// Third party library.
 import {Inject, OpaqueToken, Component, ViewChild} from '@angular/core';
 import {disableDeprecatedForms, provideForms} from '@angular/forms';
 import {ionicBootstrap, Platform, Config, MenuController, Nav} from 'ionic-angular';
-import {StatusBar} from 'ionic-native';
 import {PLATFORM_PIPES, provide} from '@angular/core';
-import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
 import {HTTP_PROVIDERS, Http} from '@angular/http';
+import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
+import {StatusBar} from 'ionic-native';
 
-import {LoginPage} from './pages/login/login';
-import {AppConfig} from './utils/appconfig';
+// Config.
+import {AppConfig} from './appconfig';
+
+// Utils.
 import {Util} from './utils/util';
 import {SSO} from './utils/sso';
 import {DateUtil} from './utils/dateutil';
 import {XmlUtil} from './utils/xmlutil';
+
+// Services.
+import {ShareService} from './providers/share-service';
+
+// Pages.
+import {LoginPage} from './pages/login/login';
 
 @Component({
     templateUrl: 'build/app.html',
@@ -31,7 +40,7 @@ class IntaLinx {
         'userAvatar': null
     };
     
-    constructor(private platform: Platform, private config: Config, private appConfig: AppConfig, private menu: MenuController, private translate: TranslateService) {
+    constructor(private translate: TranslateService, private platform: Platform, private config: Config, private menu: MenuController, private appConfig: AppConfig, private share: ShareService) {
         this.initializeApp();
     }
 
@@ -44,7 +53,6 @@ class IntaLinx {
 
         // initialize translate library
         let userLang = navigator.language.toLowerCase();
-        
         this.appConfig.set('USER_LANG', userLang);
         this.translate.use(userLang);
         
@@ -52,6 +60,10 @@ class IntaLinx {
         this.getBackButtonText().then(message => {
             this.config.set('ios', 'backButtonText', message);
         });
+
+        this.share.initializeMenu = this.initializeMenu(this);
+        this.share.initializeUser = this.initializeUser(this);
+        this.share.redirectLoginPage = this.redirectLoginPage(this, LoginPage);
     }
 
     getBackButtonText() {
@@ -108,5 +120,6 @@ ionicBootstrap(IntaLinx, [
     AppConfig,
     Util,
     DateUtil,
-    XmlUtil
+    XmlUtil,
+    ShareService
 ]);

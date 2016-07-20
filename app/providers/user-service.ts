@@ -1,14 +1,19 @@
+// Third party library.
 import {Injectable} from '@angular/core';
-import {NavController, Alert} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {NavController, Alert} from 'ionic-angular';
+
+// Config.
+import {AppConfig} from '../appconfig';
+
+// Utils.
 import {Util} from '../utils/util';
-import {AppConfig} from '../utils/appconfig';
 import {SSO} from '../utils/sso';
 
 @Injectable()
 export class UserService {
 
-    constructor(private appConfig: AppConfig, private nav: NavController, private translate: TranslateService, private util: Util, private sso: SSO) {
+    constructor(private translate: TranslateService, private nav: NavController, private appConfig: AppConfig, private util: Util, private sso: SSO) {
     }
 
     loggedOn() {

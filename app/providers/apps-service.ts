@@ -1,28 +1,16 @@
+// Third party library.
 import {Http} from '@angular/http';
-import {IonicApp} from 'ionic-angular';
+
+// Services.
 import {BlogService} from './blog-service';
 import {NotificationService} from './notification-service';
 
 export class AppsService {
 
-    static get parameters() {
-        return [[Http], [IonicApp], [BlogService],[NotificationService]];
-    }
-
-    constructor(http, app, blogService, notificationService) {
-        this.http = http;
-        this.app = app;
-        this.data = null;
-        this.blogService = blogService;
-        this.notificationService = notificationService;
+    constructor(private http: Http, private blogService: BlogService, private notificationService: NotificationService) {
     }
 
     load() {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
-
         // don't have the data yet
         return new Promise(resolve => {
             // We're using Angular Http provider to request the data,
@@ -38,21 +26,20 @@ export class AppsService {
                        this.getNewInformationCount(element);
                     }, this);
                     
-                    this.data = items;
-                    resolve(this.data);
+                    resolve(items);
                 });
         });
     }
 
     getNewInformationCount(item) {
-        if (item.componentsId == "blog") {
+        if (item.componentsId === 'blog') {
             this.blogService.getNotReadCommunityCountBySelf().then(data => {
                 if (data) {
                     this.app.blogNewInformationCount = data;
                 }
             });
         }
-        if (item.componentsId == "notification") {
+        if (item.componentsId === 'notification') {
             this.notificationService.getNotReadNotificationCountBySelf().then(data => {
                 if (data) {
                     this.app.notificationNewInformationCount = data;

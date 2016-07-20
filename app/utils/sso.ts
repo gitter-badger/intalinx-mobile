@@ -1,8 +1,11 @@
+// Third party library.
 import { Injectable } from '@angular/core';
 
-import {AppConfig} from './appconfig';
+// Config.
+import {AppConfig} from '../appconfig';
+
+// Utils.
 import {Util} from './util';
-import {MenuController, Nav} from 'ionic-angular';
 
 @Injectable()
 export class SSO {

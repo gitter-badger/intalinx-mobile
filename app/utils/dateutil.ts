@@ -1,7 +1,6 @@
+// Third party library.
 import {Injectable} from '@angular/core';
-
 import {TranslateService} from 'ng2-translate/ng2-translate';
-
 import * as moment from 'moment';
 import 'moment/locale/ja';
 import 'moment/locale/zh-cn';
