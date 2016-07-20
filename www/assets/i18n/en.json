@@ -139,12 +139,12 @@
             },
             "time": "Time",
             "colon": "：",
-            "selectFacilities": "Select Facilities",
+            "selectFacilities": "Select Devices",
             "selectParticipants": "Select Participants",
             "selectUser": "Select User",
             "scheduleOfPerson": "'s Schedule",
-            "facilities": {
-                "title": "Facilities"
+            "devices": {
+                "title": "Devices"
             },
             "index": {
                 "allDay": "all-day",

@@ -56,7 +56,7 @@ export class NotificationIndexPage {
     doInfinite(infiniteScroll): void {
         let position = this.notificationListForTop.length;
         let isNeedRegistNotExistsReadStatus = false;
-        this.notificationService.getNotificationListForTop(position, isNeedRegistNotExistsReadStatus).then(data => {
+        this.notificationService.getNotificationListForTop(position, isNeedRegistNotExistsReadStatus).then((data: any) => {
             if (data && data.lenght > 0) {
                 this.notificationListForTop = this.notificationListForTop.concat(data);
             }
@@ -67,7 +67,7 @@ export class NotificationIndexPage {
     getNotificationListForTop(refresher?, isRefresh?): void {
         let position = 0;
         let isNeedRegistNotExistsReadStatus = true;
-        this.notificationService.getNotificationListForTop(position, isNeedRegistNotExistsReadStatus).then(data => {
+        this.notificationService.getNotificationListForTop(position, isNeedRegistNotExistsReadStatus).then((data: any) => {
             this.notificationListForTop = data;
             this.isLoadCompleted = true;
             this.isScrollToTopButtonVisible = false;
@@ -78,7 +78,7 @@ export class NotificationIndexPage {
     }
     
     getNotReadNotificationCountBySelf(): void {
-        this.notificationService.getNotReadNotificationCountBySelf().then(data => {
+        this.notificationService.getNotReadNotificationCountBySelf().then((data: any) => {
             if (data) {
                 this.share.notificationNewInformationCount = data;
             }

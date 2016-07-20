@@ -2,9 +2,8 @@
 import {Injectable, ViewChild, Component, NgZone, ElementRef} from '@angular/core'
 import {NavController, Loading, Modal, Toast, Alert, NavParams, ViewController, Platform} from 'ionic-angular';
 import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
-
-// import * as EXIF from 'exif-js/exif.js';
-import EXIF = require('exif-js');
+/// <reference path="./exif-js/exif.d.ts" />
+import * as EXIF from 'exif-js/exif';
 
 // Utils.
 import {Util} from '../../../utils/util';

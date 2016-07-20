@@ -54,7 +54,7 @@ export class BlogIndexPage {
     doInfinite(infiniteScroll) {
         let position = this.communityListForTop.length;
         let isNeedRegistNotExistsReply = false;
-        this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
+        this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then((data: any) => {
             if (data && data.length > 0) {
                 this.communityListForTop = this.communityListForTop.concat(data);
             }
@@ -65,7 +65,7 @@ export class BlogIndexPage {
     getCommunityListForTop(refresher?: any, isRefresh?: boolean) {
         let position = 0;
         let isNeedRegistNotExistsReply = true;
-        this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
+        this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then((data: any) => {
             this.communityListForTop = data;
             this.isLoadCompleted = true;
             this.isScrollToTopButtonVisible = false;
@@ -76,7 +76,7 @@ export class BlogIndexPage {
     }
 
     getBlogNewInformationCount() {
-        this.blogService.getNotReadCommunityCountBySelf().then(data => {
+        this.blogService.getNotReadCommunityCountBySelf().then((data: any) => {
             if (data) {
                 this.share.blogNewInformationCount = data;
             }

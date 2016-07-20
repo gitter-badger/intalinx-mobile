@@ -24,7 +24,7 @@ export class LoginPage {
     local: any = new Storage(LocalStorage);
 
     public user: any = {
-        loginID: '123', 
+        loginID: '', 
         password: '', 
         rememberLoginID: false
     };
