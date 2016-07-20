@@ -16,11 +16,11 @@ export class UserService {
     constructor(private translate: TranslateService, private nav: NavController, private appConfig: AppConfig, private util: Util, private sso: SSO) {
     }
 
-    loggedOn() {
+    loggedOn(): Promise<any> {
         return this.sso.loggedOn();
     }
 
-    authenticate(loginID, password) {
+    authenticate(loginID, password): Promise<any> {
         return new Promise(resolve => {
             this.sso.authenticate(loginID, password).then(authenticationResult => {
                 if (authenticationResult || !authenticationResult) {
@@ -43,7 +43,7 @@ export class UserService {
         });
     }
 
-    updateProfile(user) {
+    updateProfile(user): Promise<any> {
         return new Promise(resolve => {
             if (this.validateUserPassword(user.newPassword, user.confirmPassword)) {
 
@@ -61,7 +61,7 @@ export class UserService {
         });
     }
 
-    validateUserPassword(newPassword, confirmPassword) {
+    validateUserPassword(newPassword, confirmPassword): boolean {
         let passwordEmptyFault = newPassword === '' && confirmPassword === '';
         let arePasswordsSame = newPassword === confirmPassword;
         if (passwordEmptyFault) {
@@ -94,7 +94,7 @@ export class UserService {
         return !passwordEmptyFault && arePasswordsSame;
     }
 
-    getUserDetails() {
+    getUserDetails(): Promise<any> {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/get_user_details.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -108,7 +108,7 @@ export class UserService {
                         userAvatar = this.appConfig.get('USER_DEFAULT_AVATAR_IMAGE_URL');
                     }
                     let user = {
-                        'userId': originalUser.UserName,
+                        'userID': originalUser.UserName,
                         'userName': originalUser.Description,
                         'email': originalUser.ContactInformation.email,
                         'phone': originalUser.ContactInformation.phone,
@@ -122,7 +122,7 @@ export class UserService {
         });
     }
 
-    setUserDetails(user) {
+    setUserDetails(user): Promise<any> {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/set_user_details.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -141,7 +141,7 @@ export class UserService {
         });
     }
 
-    changeUserAvatar(userAvatar) {
+    changeUserAvatar(userAvatar): Promise<any> {
         return new Promise(resolve => {
             this.getUserDetails().then((user: any) => {
                 user.userAvatar = userAvatar;
@@ -152,10 +152,10 @@ export class UserService {
         });
     }
     
-    getUserId() {
+    getUserID(): Promise<any> {
         return new Promise(resolve => {
             this.getUserDetails().then((user: any) => {
-                resolve(user.userId);
+                resolve(user.userID);
             });
         });
     }
