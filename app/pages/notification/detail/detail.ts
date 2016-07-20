@@ -1,46 +1,59 @@
-import {Page, IonicApp, NavController, NavParams, ViewController, Platform, Content} from 'ionic-angular';
-import {Component, ViewChild} from '@angular/core';
-
+// Third party library.
+import {Injectable, Component, ViewChild} from '@angular/core';
+import {NavController, NavParams, ViewController, Platform, Content} from 'ionic-angular';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
-
 import {NotificationService} from '../../../providers/notification-service';
+
+// Utils.
 import {Util} from '../../../utils/util';
 
-@Page({
+// Services.
+import {ShareService} from '../../../providers/share-service';
+
+@Component({
     templateUrl: 'build/pages/notification/detail/detail.html',
     providers: [
         NotificationService,
         Util
     ],
-    pipes: [TranslatePipe],
-    queries: {
-        pageContent: new ViewChild(Content)
-    }
+    pipes: [
+        TranslatePipe
+    ]
 })
-
+@Injectable()
 export class DetailPage {
+    @ViewChild(Content) pageContent: Content;
 
-    static get parameters() {
-        return [[IonicApp], [NavController], [NavParams], [NotificationService], [ViewController], [Platform]];
-    }
+    private notification: any;
+    private id: string;
+    private readStatus: string;
+    // The detail data of event.
+    private title: string;
+    private content: string;
+    private createUserId: string;
+    private publishStartDate: string;
+    private createUserAvatar: string;
+    private createUserName: string;
+    private status: string;
+    private readCount: string;
+    private isLoadCompleted: boolean;
+    private isScrollToTopButtonVisible: boolean;
+    // The number of milliseconds between midnight, January 1, 1970.
+    private pageLoadTime: number;
 
-    constructor(app, nav, params, notificationService, view, platform) {
-        this.app = app;
-        this.nav = nav;
-        this.params = params;
-        this.view = view;
-        this.platform = platform;
-
-        this.notification = this.params.get("notification");
+    constructor(private nav: NavController, 
+                private params: NavParams, 
+                private notificationService: NotificationService, 
+                private view: ViewController, 
+                private platform: Platform, 
+                private share: ShareService) {
+        this.getNotificationDetailByNotificationID();
+        this.notification = this.params.get('notification'); 
         this.id = this.notification.notificationID;
-        this.readStatus = this.notification.readStatus;
-
-        this.notificationService = notificationService;
-
-        this.getNotificationDetailByNotificationID();        
+        this.readStatus = this.notification.readStatus;     
     }
 
-    getNotificationDetailByNotificationID() {
+    getNotificationDetailByNotificationID(): void {
         this.notificationService.getNotificationDetailByNotificationID(this.id).then(data => {
             this.title = data.title;
             this.content = data.content;
@@ -56,40 +69,40 @@ export class DetailPage {
         });
     }
 
-    onPageLoaded() {
+    onPageLoaded(): void {
         this.pageLoadTime = new Date().getTime();
     }
 
-    onPageWillUnload() {
+    onPageWillUnload(): void {
         let now = new Date().getTime();
         let pageLoadingTime = now - this.pageLoadTime;
-        if (this.status == "PUBLISH" && this.readStatus == "NOT_READ" && pageLoadingTime >= 3000) {
+        if (this.status === 'PUBLISH' && this.readStatus === 'NOT_READ' && pageLoadingTime >= 3000) {
             this.updateReadStatus();
         }
         this.isLoadCompleted = false;
         this.isScrollToTopButtonVisible = false;
     }
 
-    updateReadStatus() {
-        let readStatus = "READ";
+    updateReadStatus(): void {
+        let readStatus = 'READ';
         this.notificationService.updateReadStatus(this.id, readStatus).then(data => {
-            if (data == "true") {
+            if (data === 'true') {
                 this.notification.readStatus = readStatus;
-                let notificationNewInformationCount = Number(this.app.notificationNewInformationCount);
-                this.app.notificationNewInformationCount = notificationNewInformationCount - 1;
+                let notificationNewInformationCount = Number(this.share.notificationNewInformationCount);
+                this.share.notificationNewInformationCount = String(notificationNewInformationCount - 1);
             }
         });
     }
 
-    ngAfterViewInit() {
+    ngAfterViewInit(): void {
         this.pageContent.addScrollListener(this.onPageScroll(this));
     }
 
-    scrollToDetailPageTop() {
+    scrollToDetailPageTop(): void {
         this.pageContent.scrollToTop();
     }
     
-    onPageScroll(that) {
+    onPageScroll(that): any {
         return function() {
             if (this.scrollTop > 200) {
                 that.isScrollToTopButtonVisible = true;

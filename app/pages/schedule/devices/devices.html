@@ -1,4 +1,4 @@
-<ion-content #pageContent padding class="facilities">
+<ion-content #pageContent padding class="devices">
     <div class="toolbar">
         <button item-left clear (click)="selectPerviousDay()">
             <ion-icon name="arrow-back"></ion-icon>
@@ -29,15 +29,15 @@
     </div>
     
     <div #ganttview class="ganttview" overflow-scroll="true" [style.visibility]="!isLoadCompleted ? 'hidden' : ''">
-        <div #facilityList class="facility-list">
-            <div #facilityListHeader class="facility-list-header">
+        <div #deviceList class="device-list">
+            <div #deviceListHeader class="device-list-header">
                 <div class="timezone">{{timeZone}}</div>
             </div>
-            <ion-row *ngFor="let facility of facilities; let i=index;">
-                <ion-col class="facility">
+            <ion-row *ngFor="let device of devices; let i=index;">
+                <ion-col class="device">
                     <div class="color{{i}}">
                     </div>
-                    <span>{{facility.targetName}}</span>
+                    <span>{{device.targetName}}</span>
                 </ion-col>
             </ion-row>
         </div>
@@ -46,7 +46,7 @@
                 <div class="line" [ngStyle]="setNowLineStyles()"></div>
             </div>
             <div #ganttviewDayTimeHeader class="ganttview-day-time-header">
-                <div [style.width]="dataGridWidth + 'px'">
+                <div [style.width]="ganttviewWidth + 'px'">
                     <div #ganttviewFixedDate [hidden]="!showFixedDate" class="ganttview-fixed-date {{(fixedDate.isSepcialDay || fixedDate.isSunday) ? 'sepcialday' : ''}} {{(fixedDate.isSaturday) ? 'saturday' : ''}}">
                         {{fixedDate.displayDate}}
                     </div>
@@ -64,17 +64,17 @@
                     </div>
                 </div> 
             </div>
-            <div class="ganttview-grid" [style.width]="dataGridWidth + 'px'">
-                <div *ngFor="let facility of facilities" class="row">
+            <div class="ganttview-grid" [style.width]="ganttviewWidth + 'px'">
+                <div *ngFor="let device of devices" class="row">
                     <div class="day" *ngFor="let date of displayDates">
                         <div *ngFor="let time of dateTimes" class="time {{(date.isSepcialDay || date.isSunday) ? 'sepcialday' : ''}} {{(date.isSaturday) ? 'saturday' : ''}}">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="ganttview-events" [style.width]="dataGridWidth + 'px'">
-                <div *ngFor="let facility of facilities; let i=index;" class="event-container">
-                    <div *ngFor="let event of facility.events" class="event color{{i}}" 
+            <div class="ganttview-events" [style.width]="ganttviewWidth + 'px'">
+                <div *ngFor="let device of devices; let i=index;" class="event-container">
+                    <div *ngFor="let event of device.events" class="event color{{i}}" 
                         [style.width]="event.timeLength" 
                         [style.margin-left]="event.eventMarginLeft" 
                         [style.margin-top]= "event.eventMarginTop"
