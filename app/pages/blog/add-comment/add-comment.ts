@@ -46,11 +46,11 @@ export class AddCommentPage {
         });
     }
 
-    onPageWillLeave(): void {
+    ionViewWillLeave(): void {
         this.sendData.unrepliedCommentcontent = this.comment.content;
     }
 
-    onPageWillEnter(): void {
+    ionViewWillEnter(): void {
         this.changeContent();
     }
 

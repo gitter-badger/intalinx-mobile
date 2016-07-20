@@ -20,7 +20,7 @@ import {DetailPage} from '../detail/detail';
         Util
     ]
 })
-
+@Injectable()
 export class BlogIndexPage {
     @ViewChild(Content) pageContent: Content;
 
@@ -35,23 +35,23 @@ export class BlogIndexPage {
         this.getBlogNewInformationCount();
     }
 
-    onPageLoaded() {
+    ionViewLoaded(): void {
         this.isLoadCompleted = false;
     }
 
-    openDetail(community) {
+    openDetail(community): void {
         this.nav.push(DetailPage, {
             'community': community
         });
     }
 
-    doRefresh(refresher) {
+    doRefresh(refresher): void {
         let isRefresh = true;
         this.getCommunityListForTop(refresher, isRefresh);
         this.getBlogNewInformationCount();
     }
 
-    doInfinite(infiniteScroll) {
+    doInfinite(infiniteScroll): void {
         let position = this.communityListForTop.length;
         let isNeedRegistNotExistsReply = false;
         this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then((data: any) => {
@@ -62,7 +62,7 @@ export class BlogIndexPage {
         });
     }
 
-    getCommunityListForTop(refresher?: any, isRefresh?: boolean) {
+    getCommunityListForTop(refresher?: any, isRefresh?: boolean): void {
         let position = 0;
         let isNeedRegistNotExistsReply = true;
         this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then((data: any) => {
@@ -83,15 +83,15 @@ export class BlogIndexPage {
         });
     }
 
-    ngAfterViewInit() {
+    ngAfterViewInit(): void {
         this.pageContent.addScrollListener(this.onPageScroll(this));
     }
 
-    scrollToIndexPageTop() {
+    scrollToIndexPageTop(): void {
         this.pageContent.scrollToTop();
     }
 
-    onPageScroll(that) {
+    onPageScroll(that): any {
         return function () {
             if (this.scrollTop > 200) {
                 that.isScrollToTopButtonVisible = true;
