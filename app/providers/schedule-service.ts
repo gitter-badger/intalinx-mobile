@@ -1,6 +1,7 @@
 // Third party library.
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
+import * as moment from 'moment';
 import {NavController, Alert} from 'ionic-angular';
 
 // Utils.
@@ -13,14 +14,14 @@ export class ScheduleService {
 
     getUserLocaleSettings(userID) {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/schedule/get_user_settings.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/schedule/get_user_settings.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
 
                 this.util.setNodeText(objRequest, './/*[local-name()=\'userID\']', userID);
 
                 req = this.util.xml2string(objRequest);
 
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
                     let userSettings = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'UserSettingOutput\']');
                     let localeString = '';
@@ -47,12 +48,12 @@ export class ScheduleService {
 
     getIsAdmin() {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/schedule/get_user_details.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/schedule/get_user_details.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
 
                 req = this.util.xml2string(objRequest);
 
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
 
                     let oRoleNodes = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'Role\']');
@@ -73,7 +74,7 @@ export class ScheduleService {
 
     getEventsForDevice(startTime, endTime) {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/schedule/get_events_for_device_and_group.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/schedule/get_events_for_device_and_group.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
 
                 // startTime/endTime--
@@ -84,7 +85,7 @@ export class ScheduleService {
 
                 req = this.util.xml2string(objRequest);
 
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
                     let targetLists = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'TargetList\']');
                     let devicesAndEvents = {};
@@ -133,7 +134,7 @@ export class ScheduleService {
 
     getSpecialDays(locale, fromDateTime, toDateTime) {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/schedule/get_special_days.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/schedule/get_special_days.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
                 // locale--separator--';'. Avaliable value - JP/CN/US
                 // start/end--type--timestamp 
@@ -143,7 +144,7 @@ export class ScheduleService {
 
                 req = this.util.xml2string(objRequest);
 
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
                     let holidayOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'HolidayOutput\']');
                     let holidays = new Array();
@@ -158,7 +159,7 @@ export class ScheduleService {
 
     searchEvents(searchEventsRequires) {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/schedule/search_events.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/schedule/search_events.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
 
                 this.util.setNodeText(objRequest, './/*[local-name()=\'categoryID\']', searchEventsRequires.categoryID);
@@ -176,7 +177,7 @@ export class ScheduleService {
 
                 req = this.util.xml2string(objRequest);
 
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
 
                     let eventOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'EventOutput\']');
@@ -189,7 +190,7 @@ export class ScheduleService {
 
     searchEventsBySelectedDay(searchEventsRequires) {
         return new Promise(resolve => {
-            this.searchEvents(searchEventsRequires).then(eventOutputs => {
+            this.searchEvents(searchEventsRequires).then((eventOutputs: string) => {
                 let events = new Array();
                 for (let i = 0; i < eventOutputs.length; i++) {
                     let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
@@ -219,7 +220,7 @@ export class ScheduleService {
 
     searchEventsByDisplayedMonth(searchEventsRequires) {
         return new Promise(resolve => {
-            this.searchEvents(searchEventsRequires).then(eventOutputs => {
+            this.searchEvents(searchEventsRequires).then((eventOutputs: string) => {
                 let days = new Array();
                 for (let i = 0; i < eventOutputs.length; i++) {
                     let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
@@ -244,7 +245,7 @@ export class ScheduleService {
 
     searchSpecialDaysByDisplayedMonth(searchSpecialDaysRequires) {
         return new Promise(resolve => {
-            this.getSpecialDays(searchSpecialDaysRequires).then(holidays => {
+            this.getSpecialDays(searchSpecialDaysRequires).then((holidays: any) => {
                 let days = new Array();
                 for (let i = 0; i < holidays.length; i++) {
                     let startTime = holidays[i].startDay;
@@ -258,12 +259,8 @@ export class ScheduleService {
     }
 
     getSpecialDaysInSelectedDay(searchSpecialDaysRequires, selectedDay) {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
-            this.getSpecialDays(searchSpecialDaysRequires).then(holidays => {
+            this.getSpecialDays(searchSpecialDaysRequires).then((holidays: any) => {
                 let specialDays = new Array();
                 for (let i = 0; i < holidays.length; i++) {
                     let startDay = moment(holidays[i].startDay, 'X').format('YYYY/MM/D');
@@ -278,13 +275,13 @@ export class ScheduleService {
 
     getEventByEventId(eventID) {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/schedule/get_event_by_event_id.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/schedule/get_event_by_event_id.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
                 this.util.setNodeText(objRequest, './/*[local-name()=\'eventID\']', eventID);
 
                 req = this.util.xml2string(objRequest);
 
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
                     let eventOutput = this.util.selectXMLNode(objResponse, './/*[local-name()=\'EventOutput\']');
                     let event = this.util.xml2json(eventOutput).EventOutput;
@@ -307,11 +304,11 @@ export class ScheduleService {
 
     getCategoryList() {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/schedule/get_category_list.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/schedule/get_category_list.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
                 req = this.util.xml2string(objRequest);
 
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
                     let normalCategory = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'FixedCategory\']');
                     let otherCategories = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'OtherCategoryList\']');
@@ -330,7 +327,7 @@ export class ScheduleService {
 
     getCategoryNameByCategoryId(categoryId) {
         return new Promise(resolve => {
-            this.getCategoryList().then(categories => {
+            this.getCategoryList().then((categories: any) => {
                 let categoryName;
                 categories.forEach(function(element) {
                     if (element.categoryID === categoryId) {
@@ -344,10 +341,10 @@ export class ScheduleService {
 
     getDeviceListWithoutTranferToJson() {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/schedule/get_device_list.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/schedule/get_device_list.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
                 req = this.util.xml2string(objRequest);
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
                     let deviceOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'DeviceOutput\']');
 
@@ -359,7 +356,7 @@ export class ScheduleService {
 
     getDeviceList() {
         return new Promise(resolve => {
-            this.getDeviceListWithoutTranferToJson().then(deviceOutputs => {
+            this.getDeviceListWithoutTranferToJson().then((deviceOutputs: string) => {
                 let devices = [];
                 for (let i = 0; i < deviceOutputs.length; i++) {
                     devices.push(this.util.xml2json(deviceOutputs[i]).DeviceOutput);
@@ -372,7 +369,7 @@ export class ScheduleService {
     getDeviceListByDeviceIDs(deviceIDs) {
         return new Promise(resolve => {
             let deviceIDArray = deviceIDs.split(',');
-            this.getDeviceListWithoutTranferToJson().then(deviceOutputs => {
+            this.getDeviceListWithoutTranferToJson().then((deviceOutputs: string) => {
                 let deviceArray = [];
                 for (let i = 0; i < deviceOutputs.length; i++) {
                     let device = this.util.xml2json(deviceOutputs[i]).DeviceOutput;
@@ -386,14 +383,10 @@ export class ScheduleService {
     }
 
     getDevicesByDeviceIds(deviceIds) {
-        if (this.data) {
-            // already loaded data
-            return Promise.resolve(this.data);
-        }
         return new Promise(resolve => {
             let deviceIdsArray = deviceIds.split(',');
 
-            this.getDeviceListWithoutTranferToJson().then(deviceOutputs => {
+            this.getDeviceListWithoutTranferToJson().then((deviceOutputs: string) => {
                 let deviceNames = new Array();
                 for (let i = 0; i < deviceOutputs.length; i++) {
                     let device = this.util.xml2json(deviceOutputs[i]).DeviceOutput;
@@ -408,11 +401,11 @@ export class ScheduleService {
 
     getOrganizationList() {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/schedule/get_organanization_list.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/schedule/get_organanization_list.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
                 req = this.util.xml2string(objRequest);
 
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
                     let organizationOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'OrganizationOutput\']');
                     let orgs = new Array();
@@ -443,7 +436,7 @@ export class ScheduleService {
 
     getHumanResourceUserInfoList() {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/schedule/get_human_resource_user_info_list.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/schedule/get_human_resource_user_info_list.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
                 req = this.util.xml2string(objRequest);
                 this.util.callCordysWebservice(req).then((data: string) => {
@@ -469,7 +462,7 @@ export class ScheduleService {
 
     addEvent(event, participants) {
         return new Promise((resolve, reject) => {
-            this.util.getRequestXml('./assets/requests/schedule/add_event.xml').then(req => { 
+            this.util.getRequestXml('./assets/requests/schedule/add_event.xml').then((req: string) => { 
                 let objRequest = this.util.parseXml(req);
                 
                 this.util.setNodeText(objRequest, './/*[local-name()=\'categoryID\']', event.categoryID);
@@ -509,7 +502,7 @@ export class ScheduleService {
                 }
                 
                 req = this.util.xml2string(objRequest);
-                this.util.callCordysWebservice(req, true).then(data => {
+                this.util.callCordysWebservice(req, true).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
                     
                     let returnObject = this.util.selectXMLNode(objResponse, './/*[local-name()=\'addEvent\']');
@@ -533,7 +526,7 @@ export class ScheduleService {
     
     updateEvent(event, participants) {
         return new Promise((resolve, reject) => {
-            this.util.getRequestXml('./assets/requests/schedule/update_event.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/schedule/update_event.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
                 
                 this.util.setNodeText(objRequest, './/*[local-name()=\'eventID\']', event.eventID);
@@ -579,7 +572,7 @@ export class ScheduleService {
                 }
                 
                 req = this.util.xml2string(objRequest);
-                this.util.callCordysWebservice(req, true).then(data => {
+                this.util.callCordysWebservice(req, true).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
                     
                     let returnObject = this.util.selectXMLNode(objResponse, './/*[local-name()=\'updateEvent\']');
@@ -606,7 +599,7 @@ export class ScheduleService {
 
             let eventId = deleteEventRequires.eventId;
             let isFromRepeatToSpecial = deleteEventRequires.isFromRepeatToSpecial;
-            this.util.getRequestXml('./assets/requests/schedule/delete_event.xml').then(req => {
+            this.util.getRequestXml('./assets/requests/schedule/delete_event.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
                 this.util.setNodeText(objRequest, './/*[local-name()=\'eventID\']', eventId);
                 // delete the event of the selecte dday
@@ -620,7 +613,7 @@ export class ScheduleService {
                 }
 
                 req = this.util.xml2string(objRequest);
-                this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then((data: string) => {
 
                     resolve('true');
                 });
@@ -630,7 +623,7 @@ export class ScheduleService {
 
     getDeviceListForSelect() {
         return new Promise(resolve => {
-            this.getDeviceListWithoutTranferToJson().then(deviceOutputs => {
+            this.getDeviceListWithoutTranferToJson().then((deviceOutputs: string) => {
                 let devices = new Array();
                 for (let i = 0; i < deviceOutputs.length; i++) {
                     let deviceOutput = this.util.xml2json(deviceOutputs[i]).DeviceOutput;

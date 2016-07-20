@@ -25,13 +25,13 @@ import {UserService} from '../../../providers/user-service';
 })
 export class DevicesPage {
 
-    @ViewChild('pageContent') pageContent;
-    @ViewChild('ganttview') ganttview;
-    @ViewChild('deviceList') deviceList;
-    @ViewChild('deviceListHeader') deviceListHeader;
-    @ViewChild('ganttviewSlide') ganttviewSlide;
-    @ViewChild('ganttviewDayTimeHeader') ganttviewDayTimeHeader;
-    @ViewChild('ganttviewFixedDate') ganttviewFixedDate;
+    @ViewChild('pageContent') pageContent: Content;
+    @ViewChild('ganttview') ganttview: ElementRef;
+    @ViewChild('deviceList') deviceList: ElementRef;
+    @ViewChild('deviceListHeader') deviceListHeader: ElementRef;
+    @ViewChild('ganttviewSlide') ganttviewSlide: ElementRef;
+    @ViewChild('ganttviewDayTimeHeader') ganttviewDayTimeHeader: ElementRef;
+    @ViewChild('ganttviewFixedDate') ganttviewFixedDate: ElementRef;
 
 
     // if nobody make an action, refresh whole page every 5 minutes.

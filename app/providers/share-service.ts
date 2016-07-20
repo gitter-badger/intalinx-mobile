@@ -7,7 +7,7 @@ export class ShareService {
     public redirectLoginPage: any;
     public showMenu: any;
     public notificationNewInformationCount: string;
-
+    public blogNewInformationCount: string;
     constructor() {
 
     }
