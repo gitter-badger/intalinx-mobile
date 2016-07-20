@@ -21,8 +21,8 @@
     },
     {
         "titleIcon": "desktop",
-        "title": "app.schedule.facilities.title",
-        "componentsId": "facilities"
+        "title": "app.schedule.devices.title",
+        "componentsId": "devices"
     },
     {
         "titleIcon": "contact",
