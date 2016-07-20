@@ -91,7 +91,7 @@ export class NotificationService {
                     if (!notification.createUserAvatar || notification.createUserAvatar.toString().indexOf('data:image') !== 0) {
                         notification.createUserAvatar = this.userDefaultAvatarImageUrl;
                     }
-                    this.util.fromNowForNotification(notification.publishStartDate).then(data => {
+                    this.util.fromNowForNotification(notification.publishStartDate).then((data: any) => {
                         notification.publishStartDate = data;
                     });
                     resolve(notification);

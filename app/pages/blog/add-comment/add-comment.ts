@@ -19,7 +19,6 @@ import {DetailPage} from '../detail/detail';
         Util
     ]
 })
-@Injectable()
 export class AddCommentPage {
     private sendData: any;
     private id: string;
