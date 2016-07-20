@@ -8,6 +8,7 @@ export class ShareService {
     public showMenu: any;
     public notificationNewInformationCount: string;
     public blogNewInformationCount: string;
+    
     constructor() {
 
     }

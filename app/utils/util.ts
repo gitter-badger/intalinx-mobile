@@ -36,7 +36,7 @@ export class Util {
         return this.xmlUtil.xml2string(xml);
     }
 
-    setNodeText(node: any, xpath: string, value: string, namespaces?: string) {
+    setNodeText(node: any, xpath: string, value: any, namespaces?: string) {
         return this.xmlUtil.setNodeText(node, xpath, value, namespaces);
     }
     
@@ -64,7 +64,7 @@ export class Util {
         return this.xmlUtil.getXMLAttribute(elementNode, attributeNamespace, attributeName);
     }
 
-    setXMLAttribute(elementNode: any, attributeNamespace: string, attributeName: string, attributeValue: string) {
+    setXMLAttribute(elementNode: any, attributeNamespace: string, attributeName: string, attributeValue: any) {
         return this.xmlUtil.setXMLAttribute(elementNode, attributeNamespace, attributeName, attributeValue);
     }
     

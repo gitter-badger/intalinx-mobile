@@ -1,48 +1,47 @@
-import {Page, IonicApp, NavController, Content} from 'ionic-angular';
-import {ViewChild} from '@angular/core';
+// Third party library.
+import {Injectable, Component, ViewChild} from '@angular/core';
+import {NavController, NavParams, Content} from 'ionic-angular';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
-import {TranslatePipe} from 'ng2-translate/ng2-translate';
-
-import {BlogService} from '../../../providers/blog-service';
-
-import {DetailPage} from '../detail/detail';
-
+// Utils.
 import {Util} from '../../../utils/util';
 
-@Page({
+// Services.
+import {BlogService} from '../../../providers/blog-service';
+import {ShareService} from '../../../providers/share-service';
+
+// Pages.
+import {DetailPage} from '../detail/detail';
+
+@Component({
     templateUrl: 'build/pages/blog/index/index.html',
     providers: [
-        BlogService, 
+        BlogService,
         Util
-    ],
-    pipes: [TranslatePipe],
-    queries: {
-        pageContent: new ViewChild(Content)
-    }
+    ]
 })
 
 export class BlogIndexPage {
+    @ViewChild(Content) pageContent: Content;
 
-    static get parameters() {
-        return [[IonicApp], [NavController], [BlogService]];
-    }
+    private isLoadCompleted: boolean;
+    private communityListForTop: any[] = [];
 
-    constructor(app, nav, blogService) {
-        this.app = app;
-        this.nav = nav;
-        this.blogService = blogService;
-        
+    private isScrollToTopButtonVisible: boolean;
+
+    constructor(private nav: NavController, private blogService: BlogService, private share: ShareService) {
+
         this.getCommunityListForTop();
         this.getBlogNewInformationCount();
     }
-    
-    onPageLoaded () {
+
+    onPageLoaded() {
         this.isLoadCompleted = false;
     }
 
     openDetail(community) {
         this.nav.push(DetailPage, {
-            "community": community
+            'community': community
         });
     }
 
@@ -63,7 +62,7 @@ export class BlogIndexPage {
         });
     }
 
-    getCommunityListForTop(refresher, isRefresh) {
+    getCommunityListForTop(refresher?: any, isRefresh?: boolean) {
         let position = 0;
         let isNeedRegistNotExistsReply = true;
         this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then(data => {
@@ -75,30 +74,30 @@ export class BlogIndexPage {
             }
         });
     }
-    
+
     getBlogNewInformationCount() {
         this.blogService.getNotReadCommunityCountBySelf().then(data => {
             if (data) {
-                this.app.blogNewInformationCount = data;
+                this.share.blogNewInformationCount = data;
             }
         });
     }
-    
+
     ngAfterViewInit() {
         this.pageContent.addScrollListener(this.onPageScroll(this));
     }
-    
+
     scrollToIndexPageTop() {
         this.pageContent.scrollToTop();
     }
-    
+
     onPageScroll(that) {
-        return function() {
+        return function () {
             if (this.scrollTop > 200) {
                 that.isScrollToTopButtonVisible = true;
             } else {
                 that.isScrollToTopButtonVisible = false;
             }
-        }       
+        }
     }
 }
