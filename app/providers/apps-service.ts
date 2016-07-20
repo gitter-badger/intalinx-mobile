@@ -36,14 +36,14 @@ export class AppsService {
 
     getNewInformationCount(item) {
         if (item.componentsId === 'blog') {
-            this.blogService.getNotReadCommunityCountBySelf().then(data => {
+            this.blogService.getNotReadCommunityCountBySelf().then((data: string) => {
                 if (data) {
                     this.share.blogNewInformationCount = data;
                 }
             });
         }
         if (item.componentsId === 'notification') {
-            this.notificationService.getNotReadNotificationCountBySelf().then(data => {
+            this.notificationService.getNotReadNotificationCountBySelf().then((data: string) => {
                 if (data) {
                     this.share.notificationNewInformationCount = data;
                 }
