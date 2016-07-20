@@ -1,55 +1,50 @@
-import {Page, IonicApp, Platform, NavController, Content} from 'ionic-angular';
-import {TranslatePipe} from 'ng2-translate/ng2-translate';
+// Third party library.
+import {Injectable, Component} from '@angular/core';
+import {Platform, NavController, Content} from 'ionic-angular';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
+// Utils.
 import {Util} from '../../utils/util';
 
+// Services.
 import {AboutService} from '../../providers/about-service';
 
-@Page({
+@Component({
     templateUrl: 'build/pages/about/about.html',
     providers: [
-        Util, 
         AboutService
-    ],
-    pipes: [TranslatePipe]
+    ]
 })
-
+@Injectable()
 export class AboutPage {
-    static get parameters() {
-        return [[NavController], [IonicApp], [Platform], [Util], [AboutService]];
-    }
 
-    constructor(nav, app, platform, util, aboutService) {
-        this.nav = nav;
-        this.app = app;
-        this.platform = platform;
-        this.util = util;
-        this.aboutService = aboutService;
-        this.version = "latest";
-        this.latestVersion = "latest";
-        this.upgradeUrl = "";
+    private version: string = 'latest';
+    private latestVersion: string = 'latest';
+    private upgradeUrl: string = '';
+
+    constructor(private nav: NavController, private platform: Platform, private util: Util, private aboutService: AboutService, private translate: TranslateService) {
         this.getVersionInfo();
         this.getUpgradeUrl();
     }
-    
-    getVersionInfo() {
+
+    getVersionInfo(): void {
         this.aboutService.getVersion().then(data => {
             this.version = data;
         });
-        
+
         this.aboutService.getLatestVersion().then(data => {
             this.latestVersion = data;
         });
     }
 
-    getUpgradeUrl() {
+    getUpgradeUrl(): void {
         this.aboutService.getUpgradeUrl().then(data => {
             this.upgradeUrl = data;
         });
     }
 
-    openUpgradeUrl() {
-        if (this.version == this.latestVersion) {
+    openUpgradeUrl(): boolean {
+        if (this.version === this.latestVersion) {
             return false;
         }
     }
