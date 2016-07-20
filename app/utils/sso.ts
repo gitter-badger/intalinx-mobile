@@ -84,7 +84,7 @@ export class SSO {
                                 let notOnOrAfterString = this.util.getNodeText(samlResponse, './/saml:Conditions/@NotOnOrAfter', null);
                                 if (notOnOrAfterString) {
                                     let notOnOrAfterDate = this.util.transferCordysDateStringToUTC(notOnOrAfterString);
-                                    this.util.setSAMLart(this.appConfig['SAML_ARTIFACT_STORAGE_NAME'], samlArtifact, notOnOrAfterDate);
+                                    this.util.setSAMLart(this.appConfig.get('SAML_ARTIFACT_STORAGE_NAME'), samlArtifact, notOnOrAfterDate);
                                     authenticationResult = true;    
                                 }
                                 /*

@@ -16,7 +16,7 @@ export class UserService {
     constructor(private translate: TranslateService, private nav: NavController, private appConfig: AppConfig, private util: Util, private sso: SSO) {
     }
 
-    loggedOn(): Promise<any> {
+    loggedOn(): Promise<boolean> {
         return this.sso.loggedOn();
     }
 

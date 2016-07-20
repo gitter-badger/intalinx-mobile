@@ -36,11 +36,11 @@ export class LoginPage {
 
     ngOnInit() {
         // If use already logged on, then redirect to portal page.
-        //this.loggedOn();
+        this.loggedOn();
     }
 
     loggedOn() {
-        this.userService.loggedOn().then(isLoggedOn => {
+        this.userService.loggedOn().then((isLoggedOn: boolean) => {
             if (isLoggedOn) {
                 this.redirectToPortal();
             }

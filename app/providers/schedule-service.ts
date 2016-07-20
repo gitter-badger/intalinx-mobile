@@ -7,6 +7,7 @@ import {NavController, Alert} from 'ionic-angular';
 // Utils.
 import {Util} from '../utils/util';
 
+@Injectable()
 export class ScheduleService {
 
     constructor(private http: Http, private nav: NavController, private util: Util) {

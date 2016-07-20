@@ -166,9 +166,9 @@ export class Util {
     loggedOn(): Promise<boolean> {
         return new Promise(resolve => {
             let isLoggedOn = false;
-            let storage =  this.getSAMLart(this.appConfig['SAML_ARTIFACT_STORAGE_NAME']);
+            let storage =  this.getSAMLart(this.appConfig.get('SAML_ARTIFACT_STORAGE_NAME'));
             isLoggedOn = storage != null && storage !== '';
-            return isLoggedOn;
+            resolve(isLoggedOn);
         });
     }
 
