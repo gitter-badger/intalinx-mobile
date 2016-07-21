@@ -1,9 +1,12 @@
 // Third party library.
 import {Injectable, Component} from '@angular/core';
-import {NavController, Popover, Alert} from 'ionic-angular';
+import {NavController, ViewController, Popover, Alert} from 'ionic-angular';
 
 // Utils.
 import {Util} from '../../utils/util';
+
+// Config.
+import {AppConfig} from '../../appconfig';
 
 // Services.
 import {TranslateService} from 'ng2-translate/ng2-translate';
@@ -87,6 +90,27 @@ export class LoginPage {
     }
 
     presentPopover(event) {
-        
+        let popover = Popover.create(ServerInfoPage);
+        this.nav.present(popover, {
+            ev: event
+        });
+    }
+}
+
+@Component({
+  template: `
+    <ion-list>
+      <ion-item>{{ server }}</ion-item>
+    </ion-list>
+  `
+})
+export class ServerInfoPage {
+    private server: string;
+    constructor(private viewCtrl: ViewController, private appConfig: AppConfig) {
+        this.server = this.appConfig.get('BASE_URL');
+    }
+
+    close() {
+        this.viewCtrl.dismiss();
     }
 }

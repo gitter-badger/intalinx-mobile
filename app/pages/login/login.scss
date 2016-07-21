@@ -5,6 +5,7 @@
     }
     .logo {
         padding-left: 2rem;
+        cursor: pointer;
     }
 }
 .login {
@@ -14,4 +15,7 @@
     .remember-loginID {
         height: 73px;
     }
+}
+.popover-content {
+    width: auto;
 }
