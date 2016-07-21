@@ -28,12 +28,10 @@ import {SelectUserPage} from '../select-user/select-user';
         ScheduleService,
         UserService,
         Util
-    ],
-    queries: {
-        slider: new ViewChild('calendarSlides')
-    }
+    ]
 })
 export class ScheduleIndexPage {
+    @ViewChild('calendarSlides') slider: Slides;
     private searchEventsRequires: any = {
         'categoryID': '',
         'isRepeat': '',
@@ -107,9 +105,9 @@ export class ScheduleIndexPage {
     private specialDays: any[];
     private events: any;
 
+    private daysWithEvents: any[];
 
-    constructor(private nav: NavController, private slider: Slides, private scheduleService: ScheduleService, private userService: UserService, private appConfig: AppConfig) {
-
+    constructor(private nav: NavController, private scheduleService: ScheduleService, private userService: UserService, private appConfig: AppConfig) {
 
         this.numbers = this.initNumbers(this.defaultNumber, this.cachedSlidesOnOneSide);
         this.weekdays = moment.weekdaysMin(true);
@@ -212,17 +210,19 @@ export class ScheduleIndexPage {
         for (let i = 0; i < Math.ceil(timeline.length / 7); i++) {
             calendar[i] = timeline.slice(i * 7, (i + 1) * 7);
         }
+        
         this.calendar = calendar;
 
         this.moment = moment().format('HH:mm');
 
         this.isHtmlLoadCompleted = true;
 
-        this.searchEventsAndSpecialDaysBySelectedDay(this.selectedDay).then(data => {
-            if (data === 'true') {
-                this.searchEventsByDisplayedMonth();
-            }
-        });
+        // this.searchEventsAndSpecialDaysBySelectedDay(this.selectedDay).then(data => {
+        //     if (data === 'true') {
+        //         this.searchEventsByDisplayedMonth();
+        //     }
+        // });
+        this.searchEventsByDisplayedMonth();
     }
 
     searchEventsAndSpecialDaysBySelectedDay(selectedDay) {
@@ -231,7 +231,7 @@ export class ScheduleIndexPage {
         return new Promise(resolve => {
             this.selectedDay = selectedDay;
             let startTime = moment(selectedDay).unix();
-            let endTime = moment(selectedDay).add(1, 'd').subtract('seconds', 1).unix();
+            let endTime = moment(selectedDay).add(1, 'd').subtract(1, 'seconds').unix();
 
             this.searchEventsRequires.startTime = startTime;
             this.searchEventsRequires.endTime = endTime;
@@ -247,8 +247,8 @@ export class ScheduleIndexPage {
     }
 
     searchEventsByDisplayedMonth() {
-        let startTimeOfMonth = moment(this.yearMonth).unix() + moment().zone() * 60;
-        let endTimeOfMonth = moment(this.yearMonth).add('months', 1).subtract('seconds', 1).unix() + moment().zone() * 60;
+        let startTimeOfMonth = moment(this.yearMonth).unix() + moment().utcOffset() * 60;
+        let endTimeOfMonth = moment(this.yearMonth).add(1, 'months').subtract(1, 'seconds').unix() + moment().utcOffset() * 60;
         this.searchEventsRequires.startTime = startTimeOfMonth;
         this.searchEventsRequires.endTime = endTimeOfMonth;
         this.searchHolidaysRequires.start = startTimeOfMonth;
@@ -276,7 +276,7 @@ export class ScheduleIndexPage {
         return new Promise(resolve => {
             this.selectedDay = selectedDay;
             let startTime = moment(selectedDay).unix();
-            let endTime = moment(selectedDay).add(1, 'd').subtract('seconds', 1).unix();
+            let endTime = moment(selectedDay).add(1, 'd').subtract(1, 'seconds').unix();
 
             this.searchHolidaysRequires.start = startTime;
             this.searchHolidaysRequires.end = endTime;
