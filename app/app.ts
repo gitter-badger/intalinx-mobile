@@ -32,7 +32,7 @@ import {PortalPage} from './pages/portal/portal';
     ]
 })
 class IntaLinx {
-    @ViewChild(Nav) nav: Nav;
+    @ViewChild('nav') nav: Nav;
     // make LoginPage the root (or first) page
     private rootPage: any;
     private menus: any[] = [];
