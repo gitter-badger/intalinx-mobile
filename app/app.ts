@@ -1,7 +1,7 @@
 // Third party library.
-import {Inject, OpaqueToken, Component, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {disableDeprecatedForms, provideForms} from '@angular/forms';
-import {ionicBootstrap, Platform, Config, MenuController, Nav} from 'ionic-angular';
+import {ionicBootstrap, Platform, Config, MenuController, NavController} from 'ionic-angular';
 import {PLATFORM_PIPES, provide} from '@angular/core';
 import {HTTP_PROVIDERS, Http} from '@angular/http';
 import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
@@ -32,7 +32,7 @@ import {PortalPage} from './pages/portal/portal';
     ]
 })
 class IntaLinx {
-    @ViewChild('nav') nav: Nav;
+    @ViewChild('nav') nav: NavController;
     // make LoginPage the root (or first) page
     private rootPage: any;
     private menus: any[] = [];
@@ -41,16 +41,15 @@ class IntaLinx {
     };
 
     constructor(private translate: TranslateService, private platform: Platform, private config: Config, private menu: MenuController, private appConfig: AppConfig, private util: Util, private share: ShareService) {
-        this.initializeApp();
+        this.platform.ready().then(() => {
+            this.initializeApp();
+        });
     }
     
     initializeApp() {
-        this.platform.ready().then(() => {
-            // Okay, so the platform is ready and our plugins are available.
-            // Here you can do any higher level native things you might need.
-            StatusBar.styleDefault();
-        });
-
+        // Okay, so the platform is ready and our plugins are available.
+        // Here you can do any higher level native things you might need.
+        StatusBar.styleDefault();
         // initialize translate library
         let userLang = navigator.language.toLowerCase();
         this.appConfig.set('USER_LANG', userLang);
