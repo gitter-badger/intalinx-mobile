@@ -2,9 +2,9 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class AppConfig {
-    _config: any = {
+    private config: any = {
         // 'BASE_URL': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
-        'BASE_URL': 'http://192.168.11.29/home/InternalSystem/',
+        'BASE_URL': 'http://192.168.11.29/home/intalinxcloud/',
         'GATEWAY_URL': 'com.eibus.web.soap.Gateway.wcp',
         'PRE_LOGIN_INFO_URL': 'com.eibus.sso.web.authentication.PreLoginInfo.wcp',
         'SAMLART_NAME': 'SAMLart',
@@ -19,9 +19,9 @@ export class AppConfig {
         'USER_LANG': 'en-US'
     };
     get(key: string): string {
-        return this._config[key];
+        return this.config[key];
     }
     set(key: string, value: string): void {
-        this._config[key] = value;
+        this.config[key] = value;
     }
 }
