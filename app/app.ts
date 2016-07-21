@@ -12,7 +12,8 @@ import {AppConfig} from './appconfig';
 
 // Utils.
 import {Util} from './utils/util';
-import {SSO} from './utils/sso';
+import {AlertUtil} from './utils/alertutil';
+import {CordysUtil} from './utils/cordysutil';
 import {DateUtil} from './utils/dateutil';
 import {XmlUtil} from './utils/xmlutil';
 import {StorageUtil} from './utils/storageutil';
@@ -22,6 +23,7 @@ import {ShareService} from './providers/share-service';
 
 // Pages.
 import {LoginPage} from './pages/login/login';
+import {PortalPage} from './pages/portal/portal';
 
 @Component({
     templateUrl: 'build/app.html',
@@ -30,14 +32,15 @@ import {LoginPage} from './pages/login/login';
     ]
 })
 class IntaLinx {
+    @ViewChild(Nav) nav: Nav;
     // make LoginPage the root (or first) page
-    private rootPage: any = LoginPage;
+    private rootPage: any;
     private menus: any[] = [];
     private user: any = {
         'userAvatar': null
     };
 
-    constructor(private translate: TranslateService, private platform: Platform, private config: Config, private menu: MenuController, private appConfig: AppConfig, private share: ShareService) {
+    constructor(private translate: TranslateService, private platform: Platform, private config: Config, private menu: MenuController, private appConfig: AppConfig, private util: Util, private share: ShareService) {
         this.initializeApp();
     }
     
@@ -61,6 +64,16 @@ class IntaLinx {
         this.share.initializeMenu = this.initializeMenu(this);
         this.share.initializeUser = this.initializeUser(this);
         this.share.redirectLoginPage = this.redirectLoginPage(this, LoginPage);
+        this.share.nav = this.nav;
+
+        // auto login.
+        this.util.loggedOn().then((isLoggedOn: boolean) => {
+            if (isLoggedOn) {
+                this.rootPage = PortalPage;
+            } else {
+                this.rootPage = LoginPage;
+            }
+        });
     }
 
     getBackButtonText() {
@@ -85,7 +98,7 @@ class IntaLinx {
 
     redirectLoginPage(that, loginPage) {
         return function () {
-            that.nav.setRoot(loginPage);
+            that.rootPage = loginPage;
         };
     }
 
@@ -95,6 +108,13 @@ class IntaLinx {
         if (this.share.showMenu) {
             this.share.showMenu(item);
         }
+    }
+
+    logout() {
+        this.menu.close();
+        this.util.logout().then(() => {
+            this.rootPage = LoginPage;
+        });
     }
 }
 
@@ -112,10 +132,11 @@ ionicBootstrap(IntaLinx, [
         useValue: TranslatePipe,
         multi: true
     },
-    SSO,
     TranslateService,
     AppConfig,
     Util,
+    AlertUtil,
+    CordysUtil,
     DateUtil,
     XmlUtil,
     StorageUtil,

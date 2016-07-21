@@ -11,6 +11,7 @@
             }
         },
         "action": {
+            "logout": "Logout",
             "edit": "Edit",
             "delete": "Delete",
             "save": "Save",
@@ -41,7 +42,7 @@
             "title": "Login",
             "loginId": "Account",
             "password": "Password",
-            "rememberLoginId": "Remember Account",
+            "autoLogin": "Keep me logged in",
             "login": "Login",
             "message": {
                 "error": {

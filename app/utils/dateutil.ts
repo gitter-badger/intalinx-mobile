@@ -11,7 +11,7 @@ export class DateUtil {
     constructor(private translate: TranslateService) {
     }
 
-    transferCordysDateStringToUTC(v: string) {
+    transferCordysDateStringToUTC(v: string): any {
         let fields = /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})/.exec(v);
         fields[2] = String(Number(fields[2]) - 1); // month is zero based
         return new Date(Date.UTC(Number(fields[1]), Number(fields[2]), Number(fields[3]), Number(fields[4]), Number(fields[5]), Number(fields[6])));

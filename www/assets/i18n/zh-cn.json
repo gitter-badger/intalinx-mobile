@@ -11,6 +11,7 @@
             }
         },
         "action": {
+            "logout": "退出登录",
             "edit": "编辑",
             "delete": "删除",
             "save": "保存",
@@ -41,7 +42,7 @@
             "title": "登录",
             "loginId": "账号",
             "password": "密码",
-            "rememberLoginId": "记住账号",
+            "autoLogin": "保持登录状态",
             "login": "登录",
             "message": {
                 "error": {

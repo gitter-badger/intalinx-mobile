@@ -1,5 +1,5 @@
 // Third party library.
-import {Injectable, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {ActionSheet, NavController, NavParams} from 'ionic-angular';
 import {TranslateService, TranslatePipe} from 'ng2-translate/ng2-translate';
 
@@ -22,7 +22,7 @@ import * as moment from 'moment';
     ],
     pipes: [TranslatePipe]
 })
-@Injectable()
+
 export class EventDetailPage {
     private sendDataToShowOrDeleteEvent: any;
     private eventID: string;
@@ -70,8 +70,8 @@ export class EventDetailPage {
         this.selectedDay = this.sendDataToShowOrDeleteEvent.selectedDay;
         this.isLoadCompleted = false;
         this.sendDataToEditEvent = {
-            'eventID': '',
-            'selectedDay': '',
+            'eventID': this.eventID,
+            'selectedDay': this.selectedDay,
             'isRefreshFlag': false
         };
         this.getEventByEventID();
@@ -284,8 +284,6 @@ export class EventDetailPage {
     }
 
     editEvent() {
-        this.sendDataToEditEvent.eventID = this.eventID;
-        this.sendDataToEditEvent.selectedDay = this.selectedDay;
         this.nav.push(EditEventPage, {
             'sendDataToEditEvent': this.sendDataToEditEvent
         });

@@ -2,12 +2,13 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';
 import * as moment from 'moment';
-import {NavController, Alert, Content} from 'ionic-angular';
+import {Alert, Content} from 'ionic-angular';
 
 // Utils.
 import {Util} from '../../../utils/util';
 
 // Services.
+import {ShareService} from '../../../providers/share-service';
 import {ScheduleService} from '../../../providers/schedule-service';
 import {UserService} from '../../../providers/user-service';
 
@@ -32,6 +33,7 @@ export class DevicesPage {
     @ViewChild('ganttviewSlide') ganttviewSlide: ElementRef;
     @ViewChild('ganttviewDayTimeHeader') ganttviewDayTimeHeader: ElementRef;
     @ViewChild('ganttviewFixedDate') ganttviewFixedDate: ElementRef;
+    @ViewChild('nowLine') nowLine: ElementRef;
 
 
     // if nobody make an action, refresh whole page every 5 minutes.
@@ -50,7 +52,7 @@ export class DevicesPage {
     private lastActionTime: number = moment().unix();
     private now: number = moment().unix();
     private isAdmin: boolean = false;
-    private isLoadCompleted: boolean = false;
+    private isLoadCompleted: boolean;
     private specialDays: any = new Array();
     private devices: any = new Array();
     private timeZone: string = 'UTC' + moment().format('Z');
@@ -64,10 +66,11 @@ export class DevicesPage {
     private fixedDate: any;
     private headerFixed: boolean = false;
     private isNeedShowNowLine: boolean = false;
+    private nowLineStyle: any;
     private dateTimes: any = new Array();
 
-    constructor(private nav: NavController, 
-        private util: Util, 
+    constructor(private util: Util, 
+        private share: ShareService,
         private scheduleService: ScheduleService, 
         private userService: UserService
         ) {
@@ -88,7 +91,7 @@ export class DevicesPage {
     }
 
     getToday(): string {
-        return moment(this.now).format('YYYY-MM-DD');
+        return moment.unix(this.now).format('YYYY-MM-DD');
     }
     
     loadRemoteData(): void {
@@ -101,9 +104,11 @@ export class DevicesPage {
         // to get user's settings.
         // Regardless the size of words, just to get the settings about locale. 
         this.userService.getUserID().then((userID: string) => {
-            this.scheduleService.getUserLocaleSettings(userID).then((locale: string) => {
-                this.getSpecialDays(locale);
-            });
+            return userID;
+        }).then((userID: string) => {
+            return this.scheduleService.getUserLocaleSettings(userID);
+        }).then((locale: string) => {
+            this.getSpecialDays(locale);
         }); 
         
         this.scheduleService.getEventsForDevice(this.fromDateTime, this.toDateTime).then((data: any) => {
@@ -126,6 +131,7 @@ export class DevicesPage {
                 }
                 this.devices[i].events = lineEvents;
             }
+
             this.setGanttviewSlideScrollToNow();
         });
     }
@@ -143,7 +149,14 @@ export class DevicesPage {
                 }
             }, that.refreshWholePageInterval);
         };
-        refreshEvent(this); 
+
+        let refreshNowLine = function(that: any) {
+            return setInterval(function() {
+                that.setNowLineStyles();
+            }, 1000 * 1);
+        };
+        refreshEvent(this);
+        refreshNowLine(this);
     }
   
     getSpecialDays(locale: string): void {
@@ -161,13 +174,9 @@ export class DevicesPage {
 
     setNowLineStyles(): any {
         if (this.getToday() === this.fromDate) {
-            let styles = {
-                'margin-left': this.calculateTimeWidth(this.fromDateTime, this.now),
-                'height': this.deviceHeight * this.devices.length + 'px'
-            };
-            return styles;
+            this.nowLine.nativeElement.style.marginLeft = this.calculateTimeWidth(this.fromDateTime, this.now);
+            this.nowLine.nativeElement.style.height = this.deviceHeight * this.devices.length + 'px';
         }
-        return '';
     }
     
     refresh(): void {
@@ -211,23 +220,16 @@ export class DevicesPage {
 
     setGanttviewSlideScrollToNow() {
         if (this.getToday() === this.fromDate) {
-            let realScroll = function(that){
-                return function() {
-                    let minScrollLeft = (that.workStartTime - 2) * that.oneHourWidth;
-                    let transFromNow = that.calculateTimeWidth(that.fromDateTime, that.now);
-                    transFromNow = parseInt(transFromNow) - that.oneHourWidth * 2;
-                    if (transFromNow > minScrollLeft) {
-                        that.ganttviewSlide.nativeElement.scrollLeft = (transFromNow);
-                    } else {
-                        that.ganttviewSlide.nativeElement.scrollLeft = (minScrollLeft);
-                    }
-                    that.isLoadCompleted = true;
-                };
-            };
-            setTimeout(realScroll(this), 1000);
-        } else {
-            this.isLoadCompleted = true;
+            let minScrollLeft = (this.workStartTime - 2) * this.oneHourWidth;
+            let transFromNow = this.calculateTimeWidth(this.fromDateTime, this.now);
+            transFromNow = parseInt(transFromNow) - this.oneHourWidth * 2;
+            if (transFromNow > minScrollLeft) {
+                this.ganttviewSlide.nativeElement.scrollLeft = (transFromNow);
+            } else {
+                this.ganttviewSlide.nativeElement.scrollLeft = (minScrollLeft);
+            }   
         }
+        this.isLoadCompleted = true;
     }
 
     resetGanttviewSlideScroll() {
@@ -266,6 +268,7 @@ export class DevicesPage {
             };
             this.displayDates.push(displayDate);
         }
+        
         this.toDate = this.displayDates[this.displayDaysNumber - 1].date;
 
         // if not display today, then reset scroll to 0. 
@@ -326,6 +329,6 @@ export class DevicesPage {
             message: '予定詳細画面の実装を待っています......',
             buttons: ['ok']
         });
-        this.nav.present(alert);
+        this.share.nav.present(alert);
     }
 }

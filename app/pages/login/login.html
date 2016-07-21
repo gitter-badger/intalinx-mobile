@@ -15,9 +15,9 @@
             <ion-label floating>{{ "app.login.password" | translate }}</ion-label>
             <ion-input type="password" name="user.password" [(ngModel)]="user.password" (ngModelChange)="changeUser($event)"></ion-input>
         </ion-item>
-        <ion-item no-lines class="remember-loginId">
-            <ion-label>{{ "app.login.rememberLoginId" | translate }}</ion-label>
-            <ion-checkbox checked="false" name="user.remeberLoginID" [(ngModel)]="user.rememberLoginID"></ion-checkbox>
+        <ion-item no-lines class="auto-login">
+            <ion-label>{{ "app.login.autoLogin" | translate }}</ion-label>
+            <ion-checkbox checked="false" name="user.autoLogin" [(ngModel)]="user.autoLogin"></ion-checkbox>
         </ion-item>
         <button disabled={{isDisabled}} full type="submit">{{ "app.login.login" | translate }}</button>
     </form>

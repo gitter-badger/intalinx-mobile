@@ -1,12 +1,15 @@
-import {Injectable} from '@angular/core';
-import {Component} from '@angular/core';
-import {NgForm}    from '@angular/forms';
-import {NavController, NavParams} from 'ionic-angular';
-import {Popover, Alert, Storage, LocalStorage} from 'ionic-angular';
+// Third party library.
+import {Injectable, Component} from '@angular/core';
+import {NavController, Popover, Alert} from 'ionic-angular';
+
+// Utils.
+import {Util} from '../../utils/util';
+
+// Services.
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {UserService} from '../../providers/user-service';
 
-
+// Pages.
 import {PortalPage} from '../portal/portal';
 
 @Component({
@@ -15,28 +18,16 @@ import {PortalPage} from '../portal/portal';
         UserService
     ]
 })
-@Injectable()
 export class LoginPage {
-    constants: any = {
-        LOGIN_ID_STORAGE_NAME: 'loginID'
-    };
-
-    local: any = new Storage(LocalStorage);
-
     public user: any = {
         loginID: '', 
         password: '', 
-        rememberLoginID: false
+        autoLogin: false
     };
 
     isDisabled: boolean = true;
 
-    constructor(private nav: NavController, private userService: UserService, private translate: TranslateService) {
-    }
-
-    ngOnInit() {
-        // If use already logged on, then redirect to portal page.
-        this.loggedOn();
+    constructor(private nav: NavController, private userService: UserService, private translate: TranslateService, private util: Util) {
     }
 
     loggedOn() {
@@ -51,10 +42,10 @@ export class LoginPage {
         this.isDisabled = true;
         this.userService.authenticate(this.user.loginID, this.user.password).then(authenticationResult => {
             if (authenticationResult) {
-                if (this.user.rememberLoginID) {
-                    this.local.set(this.constants.LOGIN_ID_STORAGE_NAME, this.user.loginID);
+                if (this.user.autoLogin) {
+                    this.userService.enableAutoLogin(this.user.loginID, this.user.password);
                 } else {
-                    this.local.remove(this.constants.LOGIN_ID_STORAGE_NAME);
+                    this.userService.disableAutoLogin();
                 }
                 this.redirectToPortal();
             } else if (!authenticationResult) {
@@ -83,12 +74,8 @@ export class LoginPage {
     }
     
     onPageDidEnter() {
-        this.local.get(this.constants.LOGIN_ID_STORAGE_NAME).then(value => {
-            if (value != null) {
-                this.user.loginID = value;
-                this.user.rememberLoginID = true;
-            }
-        });
+        // If use already logged on, then redirect to portal page.
+        this.loggedOn();
     }
     
     changeUser(): void {

@@ -13,15 +13,15 @@ import {Util} from '../utils/util';
 export class NotificationService {
     private userDefaultAvatarImageUrl: string;
 
-    constructor(private http: Http, 
-                private nav: NavController, 
-                private appConfig: AppConfig, 
-                private util: Util) {
+    constructor(private http: Http,
+        private nav: NavController,
+        private appConfig: AppConfig,
+        private util: Util) {
         this.userDefaultAvatarImageUrl = this.appConfig.get('USER_DEFAULT_AVATAR_IMAGE_URL');
     }
 
-    getNotificationListForTop(position, isNeedRegistNotExistsReadStatus): any {
-        let rowsPerpage = '10';
+    getNotificationListForTop(position: number, isNeedRegistNotExistsReadStatus: boolean): any {
+        let rowsPerpage = 10;
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/notification/get_notification_list_for_top_request.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -42,7 +42,7 @@ export class NotificationService {
                         notifications.push(this.util.xml2json(notificationOutputs[i]).NotificationOutputForTop);
                     }
 
-                    notifications.forEach(function(notification) {
+                    notifications.forEach(function (notification) {
                         if (!notification.createUserAvatar || notification.createUserAvatar.toString().indexOf('data:image') !== 0) {
                             notification.createUserAvatar = this.userDefaultAvatarImageUrl;
                         }
@@ -74,7 +74,7 @@ export class NotificationService {
         });
     }
 
-    getNotificationDetailByNotificationID(notificationID): any {
+    getNotificationDetailByNotificationID(notificationID: string): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/notification/get_notification_detail_by_notification_id_request.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -99,12 +99,12 @@ export class NotificationService {
             });
         });
     }
-    
-    updateReadStatus(notificationID, status): any {
+
+    updateReadStatus(notificationID: string, status: string): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/notification/update_read_status.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
-                
+
                 this.util.setNodeText(objRequest, './/*[local-name()=\'notificationId\']', notificationID);
                 this.util.setNodeText(objRequest, './/*[local-name()=\'status\']', status);
                 req = this.util.xml2string(objRequest);
