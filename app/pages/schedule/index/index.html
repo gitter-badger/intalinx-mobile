@@ -50,7 +50,7 @@
             <ion-grid [hidden]="isHtmlLoadCompleted==false">
                 <ion-row *ngFor="let week of calendar">
                     <!--<ion-col *ngFor="let day of week" (mouseover)="searchEventsAndSpecialDaysBySelectedDay(day.format('YYYY/MM/D'))">-->
-                    <ion-col *ngFor="let day of week" (mouseover)="getEventsAndSpecialDaysBySelectedDay(day.format('YYYY/MM/D'))">
+                    <ion-col *ngFor="let day of week" (click)="getEventsAndSpecialDaysBySelectedDay(day.format('YYYY/MM/D'))">
                         <div class="day-default" [ngClass]="{'day-not-this-month': day.format('YYYY-MM')!=yearMonth,
                             'day-today': day.format('YYYY/MM/D')==today,
                             'weekends': day.format('d')==6 || day.format('d')==0,

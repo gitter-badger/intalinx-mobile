@@ -60,6 +60,8 @@ export class EventDetailPage {
     private visibilityTypeName: string;
     private deleteEventRequires: any;
 
+    private isAfterEditEvent: boolean;
+
     constructor(private nav: NavController,
         private params: NavParams,
         private translate: TranslateService,
@@ -250,7 +252,6 @@ export class EventDetailPage {
     deleteTheEvent() {
         this.scheduleService.deleteEvent(this.deleteEventRequires).then(data => {
             if (data === 'true') {
-                this.setDaysOfDeletedEvent();
                 this.sendDataToShowOrDeleteEvent.isRefreshFlag = true;
                 setTimeout(() => {
                     this.nav.pop();
@@ -259,41 +260,23 @@ export class EventDetailPage {
         });
     }
 
-    setDaysOfDeletedEvent() {
-        let daysOfDeletedEvent = new Array();
-        if (this.isRepeat === 'true' && this.deleteEventRequires.isFromRepeatToSpecial) {
-            daysOfDeletedEvent.push(moment(this.selectedDay).format('D'));
-        } else {
-            let monthOfSelectedDay = moment(this.selectedDay).format('YYYY/MM');
-            let monthStartDate = moment(this.selectedDay).startOf('months').format('YYYY/MM/DD');
-            let monthEndDate = moment(this.selectedDay).endOf('months').format('YYYY/MM/DD');
-            let startDay = Number(moment(this.eventStartTime, 'X').format('D'));
-            let endDay = Number(moment(this.eventEndTime, 'X').format('D'));
-            if (moment(moment.unix(this.eventStartTime).format('YYYY/MM/DD')).isBefore(monthStartDate)) {
-                startDay = Number(moment(monthStartDate).format('D'));
-            }
-            if (moment(moment.unix(this.eventEndTime).format('YYYY/MM/DD')).isAfter(monthEndDate)) {
-                endDay = Number(moment(monthEndDate).format('D'));
-            }
-
-            for (let i = startDay; i <= endDay; i++) {
-                daysOfDeletedEvent.push(i.toString());
-            }
-        }
-        this.sendDataToShowOrDeleteEvent.daysOfDeletedEvent = daysOfDeletedEvent;
-    }
-
     editEvent() {
         this.nav.push(EditEventPage, {
             'sendDataToEditEvent': this.sendDataToEditEvent
         });
     }
 
-    onPageWillEnter() {
-        let isRefreshFlag = this.sendDataToEditEvent.isRefreshFlag;
-        if (isRefreshFlag === true) {
+    ionViewWillEnter() {
+        this.isAfterEditEvent = this.sendDataToEditEvent.isRefreshFlag;
+        if (this.isAfterEditEvent === true) {
             this.isLoadCompleted = false;
             this.getEventByEventID();
+        }
+    }
+
+    ionViewWillLeave() {
+        if (this.isAfterEditEvent) {
+            this.sendDataToShowOrDeleteEvent.isRefreshFlag = true;
         }
     }
 }
