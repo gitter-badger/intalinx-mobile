@@ -11,41 +11,43 @@
             </button>
         </ion-buttons>-->
     </ion-navbar>
+    <ion-toolbar no-border-top class="year-month-tool">
+        <ion-buttons start>
+            <button class="last-month" (click)="lastMonth()">
+                <ion-icon name="arrow-back"></ion-icon>
+            </button>
+        </ion-buttons>
+        <ion-item class="display-year-month">
+            <ion-datetime displayFormat="YYYY/MM" min={{minDisplayDate}} max={{maxDisplayDate}} (change)="changeCalendar($event)" [(ngModel)]="yearMonth"
+                cancelText='{{ "app.action.cancel" | translate }}' doneText='{{ "app.action.done" | translate }}'></ion-datetime>
+        </ion-item>
+        <ion-buttons end>
+            <button class="next-month" (click)="nextMonth()">
+                <ion-icon name="arrow-forward"></ion-icon>
+            </button>
+            <!--<button class="search-event" (click)="searchEventsBySelectedDay()">
+                <ion-icon name="search"></ion-icon>
+            </button>-->
+            <button class="add-event" (click)="addEvent()">
+                <ion-icon name="md-add"></ion-icon>
+            </button>
+        </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar no-border-top class="week-names">
+        <ion-row>
+            <ion-col *ngFor="let weekday of weekdays" [ngClass]="{'weekends': (isFirstDayMonday==false && (weekday==weekdays[0] || weekday==weekdays[6])) || (isFirstDayMonday==true && (weekday==weekdays[5] || weekday==weekdays[6]))}">{{weekday}}</ion-col>
+        </ion-row>
+    </ion-toolbar>
+
 </ion-header>
-<ion-toolbar no-border-top class="year-month-tool">
-    <ion-buttons start>
-        <button class="last-month" (click)="lastMonth()">
-            <ion-icon name="arrow-back"></ion-icon>
-        </button>
-    </ion-buttons>
-    <ion-item class="display-year-month">
-        <ion-datetime displayFormat="YYYY/MM" min={{minDisplayDate}} max={{maxDisplayDate}} (change)="changeCalendar($event)" [(ngModel)]="yearMonth"
-        cancelText='{{ "app.action.cancel" | translate }}' doneText='{{ "app.action.done" | translate }}'></ion-datetime>
-    </ion-item>
-    <ion-buttons end>
-        <button class="next-month" (click)="nextMonth()">
-            <ion-icon name="arrow-forward"></ion-icon>
-        </button>
-        <!--<button class="search-event" (click)="searchEventsBySelectedDay()">
-            <ion-icon name="search"></ion-icon>
-        </button>-->
-        <button class="add-event" (click)="addEvent()">
-            <ion-icon name="md-add"></ion-icon>
-        </button>
-    </ion-buttons>
-</ion-toolbar>
-<ion-toolbar no-border-top class="week-names">
-    <ion-row>
-        <ion-col *ngFor="let weekday of weekdays" [ngClass]="{'weekends': (isFirstDayMonday==false && (weekday==weekdays[0] || weekday==weekdays[6])) || (isFirstDayMonday==true && (weekday==weekdays[5] || weekday==weekdays[6]))}">{{weekday}}</ion-col>
-    </ion-row>
-</ion-toolbar>
+
 <ion-content class="month-calendar">
     <div class="loading" [hidden]="isHtmlLoadCompleted==true">
         <ion-spinner name="dots"></ion-spinner>
     </div>
     <ion-slides #calendarSlides (willChange)="changeMonth($event)" [options]="calendarSlideOptions">
         <ion-slide class="calendar" *ngFor="let n of numbers">
-            <ion-grid  [hidden]="isHtmlLoadCompleted==false">
+            <ion-grid [hidden]="isHtmlLoadCompleted==false">
                 <ion-row *ngFor="let week of calendar">
                     <ion-col *ngFor="let day of week" (mouseover)="searchEventsAndSpecialDaysBySelectedDay(day.format('YYYY/MM/D'))">
                         <div class="day-default" [ngClass]="{'day-not-this-month': day.format('YYYY-MM')!=yearMonth,
@@ -93,14 +95,16 @@
         </ion-list>
     </ion-scroll>
 </ion-content>
-<ion-toolbar position="bottom">
-    <ion-segment class="month-calendar-bottom-buttons">
-        <ion-segment-button class="button-select-user" (click)="selectUser()">
-            <ion-icon name="ios-people"></ion-icon>
-        </ion-segment-button>
-        <ion-segment-button class="button-show-today" (click)="showToday()">{{ "app.date.today" | translate }}
-        </ion-segment-button>
-        <ion-segment-button class="button-show-my-schedule" (click)="showMySchedule()">{{ "app.schedule.index.mySchedule" | translate }}
-        </ion-segment-button>
-    </ion-segment>
-</ion-toolbar>
+<ion-footer>
+    <ion-toolbar no-border-bottom position="bottom">
+        <ion-segment class="month-calendar-bottom-buttons">
+            <ion-segment-button class="button-select-user" (click)="selectUser()">
+                <ion-icon name="ios-people"></ion-icon>
+            </ion-segment-button>
+            <ion-segment-button class="button-show-today" (click)="showToday()">{{ "app.date.today" | translate }}
+            </ion-segment-button>
+            <ion-segment-button class="button-show-my-schedule" (click)="showMySchedule()">{{ "app.schedule.index.mySchedule" | translate }}
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+</ion-footer>

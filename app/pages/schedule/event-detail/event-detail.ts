@@ -1,14 +1,20 @@
-import {IonicApp, Page, ActionSheet, NavController, NavParams} from 'ionic-angular';
+// Third party library.
+import {Component} from '@angular/core';
+import {ActionSheet, NavController, NavParams} from 'ionic-angular';
+import {TranslateService, TranslatePipe} from 'ng2-translate/ng2-translate';
 
-import {TranslatePipe} from 'ng2-translate/ng2-translate';
-
-import {EditEventPage} from '../edit-event/edit-event'
-
-import {ScheduleService} from '../../../providers/schedule-service';
-
+// Utils.
 import {Util} from '../../../utils/util';
 
-@Page({
+// Services.
+import {ScheduleService} from '../../../providers/schedule-service';
+
+// Pages.
+import {EditEventPage} from '../edit-event/edit-event';
+
+import * as moment from 'moment';
+
+@Component({
     templateUrl: 'build/pages/schedule/event-detail/event-detail.html',
     providers: [
         ScheduleService,
@@ -16,30 +22,63 @@ import {Util} from '../../../utils/util';
     ],
     pipes: [TranslatePipe]
 })
-export class EventDetailPage {
-    static get parameters() {
-        return [[IonicApp], [NavController], [NavParams], [ScheduleService]];
-    }
 
-    constructor(app, nav, params, scheduleService) {
-        this.app = app;
-        this.nav = nav;
-        this.params = params;
-        this.scheduleService = scheduleService;
-        this.sendDataToShowOrDeleteEvent = this.params.get("sendDataToShowOrDeleteEvent");
-        this.eventId = this.sendDataToShowOrDeleteEvent.eventId;
+export class EventDetailPage {
+    private sendDataToShowOrDeleteEvent: any;
+    private eventID: string;
+    private selectedDay: string;
+    private isLoadCompleted: boolean;
+    private sendDataToEditEvent: any;
+    private isAllDay: string;
+    private isRepeat: string;
+    private eventStartTime: any;
+    private eventEndTime: any;
+    private startDay: any;
+    private startDateAndWeekDay: any;
+    private startWeekDayMin: any;
+    private startTime: any;
+    private endDay: any;
+    private endDateAndWeekDay: any;
+    private endWeekDayMin: any;
+    private endTime: any;
+    private categoryID: string;
+    private deviceNames: any;
+    private categoryName: string;
+    private title: string;
+    private location: string;
+    private summary: string;
+    private createDateTime: string;
+    private updateUserID: string;
+    private updateUserName: string;
+    private updateDateTime: string;
+    private participantNames: any;
+    private repeatType: any;
+    private repeatStartTime: string;
+    private repeatEndTime: string;
+    private repeatTypeName: string;
+    private repeatValueName: string;
+    private visibilityTypeName: string;
+    private deleteEventRequires: any;
+
+    constructor(private nav: NavController,
+        private params: NavParams,
+        private translate: TranslateService,
+        private scheduleService: ScheduleService) {
+
+        this.sendDataToShowOrDeleteEvent = this.params.get('sendDataToShowOrDeleteEvent');
+        this.eventID = this.sendDataToShowOrDeleteEvent.eventID;
         this.selectedDay = this.sendDataToShowOrDeleteEvent.selectedDay;
         this.isLoadCompleted = false;
         this.sendDataToEditEvent = {
-            "eventId": "",
-            "selectedDay": "",
-            "isRefreshFlag": false
-        }
-        this.getEventByEventId();
+            'eventID': this.eventID,
+            'selectedDay': this.selectedDay,
+            'isRefreshFlag': false
+        };
+        this.getEventByEventID();
     }
 
-    getEventByEventId() {
-        this.scheduleService.getEventByEventId(this.eventId).then(data => {
+    getEventByEventID() {
+        this.scheduleService.getEventByEventID(this.eventID).then((data: any) => {
             let event = data.event;
             this.isAllDay = event.isAllDay;
             this.isRepeat = event.isRepeat;
@@ -49,18 +88,18 @@ export class EventDetailPage {
 
             this.eventStartTime = event.startTime;
             this.eventEndTime = event.endTime;
-            this.startDay = moment(event.startTime, "X").format("LL");
-            this.startDateAndWeekDay = moment(event.startTime, "X").format("LLdddd");
-            this.startWeekDayMin = moment.weekdaysMin(true)[moment(event.startTime, "X").format("d")];
-            this.startTime = moment(event.startTime, "X").format("HH:mm");
-            this.endDay = moment(event.endTime, "X").format("LL");
-            this.endDateAndWeekDay = moment(event.endTime, "X").format("LLdddd");
-            this.endWeekDayMin = moment.weekdaysMin(true)[moment(event.endTime, "X").format("d")];
-            this.endTime = moment(event.endTime, "X").format("HH:mm");
+            this.startDay = moment(event.startTime, 'X').format('LL');
+            this.startDateAndWeekDay = moment(event.startTime, 'X').format('LLdddd');
+            this.startWeekDayMin = moment.weekdaysMin(true)[moment(event.startTime, 'X').format('d')];
+            this.startTime = moment(event.startTime, 'X').format('HH:mm');
+            this.endDay = moment(event.endTime, 'X').format('LL');
+            this.endDateAndWeekDay = moment(event.endTime, 'X').format('LLdddd');
+            this.endWeekDayMin = moment.weekdaysMin(true)[moment(event.endTime, 'X').format('d')];
+            this.endTime = moment(event.endTime, 'X').format('HH:mm');
 
-            let deviceIds = event.deviceID;
-            if (deviceIds) {
-                this.scheduleService.getDevicesByDeviceIds(deviceIds).then(deviceNames => {
+            let deviceIDs = event.deviceID;
+            if (deviceIDs) {
+                this.scheduleService.getDevicesByDeviceIDs(deviceIDs).then(deviceNames => {
                     this.deviceNames = deviceNames;
                 });
             }
@@ -68,16 +107,16 @@ export class EventDetailPage {
             let visibility = event.visibility;
             this.setVisibilityTypeNameByVisibility(visibility);
             this.categoryID = event.categoryID;
-            this.scheduleService.getCategoryNameByCategoryId(event.categoryID).then(categoryName => {
+            this.scheduleService.getCategoryNameByCategoryID(event.categoryID).then((categoryName: string) => {
                 this.categoryName = categoryName;
             });
             this.title = event.title;
             this.location = event.location;
             this.summary = event.summary;
-            this.createDateTime = moment(event.createDate).format("LL HH:MM:SS");
+            this.createDateTime = moment(event.createDate).format('LL HH:MM:SS');
             this.updateUserID = event.updateUserID;
             this.updateUserName = event.updateUserName;
-            this.updateDateTime = moment(event.updateDate).format("LL HH:MM:SS");
+            this.updateDateTime = moment(event.updateDate).format('LL HH:MM:SS');
 
             let participants = data.participants;
             this.setParticipantNames(participants);
@@ -87,23 +126,23 @@ export class EventDetailPage {
 
     setRepeatContentsByRepeatRule(repeatRule) {
         if (repeatRule) {
-            let repeatRules = repeatRule.split(";");
+            let repeatRules = repeatRule.split(';');
             this.repeatType = repeatRules[0];
             let repeatValue = repeatRules[1];
-            this.repeatStartTime = repeatRules[2].substr(0, 2) + ":" + repeatRules[2].substr(2, 4);
-            this.repeatEndTime = repeatRules[3].substr(0, 2) + ":" + repeatRules[3].substr(2, 4)
-            if (this.repeatType == "DAILY") {
-                this.app.translate.get('app.date.daily').subscribe(message => {
+            this.repeatStartTime = repeatRules[2].substr(0, 2) + ':' + repeatRules[2].substr(2, 4);
+            this.repeatEndTime = repeatRules[3].substr(0, 2) + ':' + repeatRules[3].substr(2, 4);
+            if (this.repeatType === 'DAILY') {
+                this.translate.get('app.date.daily').subscribe(message => {
                     this.repeatTypeName = message;
-                    this.repeatValueName = "";
+                    this.repeatValueName = '';
                 });
-            } else if (this.repeatType == "WEEKLY") {
-                this.app.translate.get('app.date.weeekly').subscribe(message => {
+            } else if (this.repeatType === 'WEEKLY') {
+                this.translate.get('app.date.weeekly').subscribe(message => {
                     this.repeatTypeName = message;
-                    this.repeatValueName = moment.weekdays(true)[Number(repeatValue)]
+                    this.repeatValueName = moment.weekdays(true)[Number(repeatValue)];
                 });
-            } else if (this.repeatType == "MONTHLY") {
-                this.app.translate.get(['app.date.monthly', 'app.date.day']).subscribe(message => {
+            } else if (this.repeatType === 'MONTHLY') {
+                this.translate.get(['app.date.monthly', 'app.date.day']).subscribe(message => {
                     this.repeatTypeName = message['app.date.monthly'];
                     this.repeatValueName = repeatValue + message['app.date.day'];
                 });
@@ -112,16 +151,16 @@ export class EventDetailPage {
     }
 
     setVisibilityTypeNameByVisibility(visibility) {
-        if (visibility == "public") {
-            this.app.translate.get('app.schedule.visibility.public').subscribe(message => {
+        if (visibility === 'public') {
+            this.translate.get('app.schedule.visibility.public').subscribe(message => {
                 this.visibilityTypeName = message;
             });
-        } else if (visibility == "private") {
-            this.app.translate.get('app.schedule.visibility.private').subscribe(message => {
+        } else if (visibility === 'private') {
+            this.translate.get('app.schedule.visibility.private').subscribe(message => {
                 this.visibilityTypeName = message;
             });
-        } else if (visibility == "confidential") {
-            this.app.translate.get('app.schedule.visibility.confidential').subscribe(message => {
+        } else if (visibility === 'confidential') {
+            this.translate.get('app.schedule.visibility.confidential').subscribe(message => {
                 this.visibilityTypeName = message;
             });
         }
@@ -136,12 +175,12 @@ export class EventDetailPage {
 
     deleteEvent() {
         this.deleteEventRequires = {
-            "eventId": this.eventId,
-            "isFromRepeatToSpecial": false,
-            "startTime": "",
-            "endTime": ""
-        }
-        if (this.isRepeat == "true") {
+            'eventID': this.eventID,
+            'isFromRepeatToSpecial': false,
+            'startTime': '',
+            'endTime': ''
+        };
+        if (this.isRepeat === 'true') {
             this.presentDeleteRepeatEventActionSheet();
         } else {
             this.presentDeleteNotRepeatEventActionSheet();
@@ -149,41 +188,44 @@ export class EventDetailPage {
     }
 
     presentDeleteRepeatEventActionSheet() {
-        this.app.translate.get(["app.schedule.deleteRepeatEvent.title", "app.schedule.deleteRepeatEvent.deleteEventOfSelectedDay", "app.schedule.deleteRepeatEvent.deleteAllEvents", "app.action.cancel"]).subscribe(message => {
-            let title = message['app.schedule.deleteRepeatEvent.title'];
-            let deleteEventOfSelectedDay = message['app.schedule.deleteRepeatEvent.deleteEventOfSelectedDay'];
-            let deleteAllEvents = message['app.schedule.deleteRepeatEvent.deleteAllEvents'];
-            let cancelButton = message['app.action.cancel'];
-            let actionSheet = ActionSheet.create({
-                title: title,
-                buttons: [
-                    {
-                        text: deleteEventOfSelectedDay,
-                        handler: () => {
-                            this.deleteEventRequires.isFromRepeatToSpecial = true;
-                            this.deleteEventRequires.startTime = moment(this.selectedDay + " " + this.repeatStartTime).unix()
-                            this.deleteEventRequires.endTime = moment(this.selectedDay + " " + this.repeatEndTime).unix();
-                            this.deleteTheEvent();
-                        }
-                    }, {
-                        text: deleteAllEvents,
-                        handler: () => {
-                            this.deleteTheEvent();
-                        }
-                    }, {
-                        text: cancelButton,
-                        handler: () => {
+        this.translate.get(['app.schedule.deleteRepeatEvent.title',
+            'app.schedule.deleteRepeatEvent.deleteEventOfSelectedDay',
+            'app.schedule.deleteRepeatEvent.deleteAllEvents',
+            'app.action.cancel']).subscribe(message => {
+                let title = message['app.schedule.deleteRepeatEvent.title'];
+                let deleteEventOfSelectedDay = message['app.schedule.deleteRepeatEvent.deleteEventOfSelectedDay'];
+                let deleteAllEvents = message['app.schedule.deleteRepeatEvent.deleteAllEvents'];
+                let cancelButton = message['app.action.cancel'];
+                let actionSheet = ActionSheet.create({
+                    title: title,
+                    buttons: [
+                        {
+                            text: deleteEventOfSelectedDay,
+                            handler: () => {
+                                this.deleteEventRequires.isFromRepeatToSpecial = true;
+                                this.deleteEventRequires.startTime = moment(this.selectedDay + ' ' + this.repeatStartTime).unix();
+                                this.deleteEventRequires.endTime = moment(this.selectedDay + ' ' + this.repeatEndTime).unix();
+                                this.deleteTheEvent();
+                            }
+                        }, {
+                            text: deleteAllEvents,
+                            handler: () => {
+                                this.deleteTheEvent();
+                            }
+                        }, {
+                            text: cancelButton,
+                            handler: () => {
 
+                            }
                         }
-                    }
-                ]
+                    ]
+                });
+                this.nav.present(actionSheet);
             });
-            this.nav.present(actionSheet);
-        });
     }
 
     presentDeleteNotRepeatEventActionSheet() {
-        this.app.translate.get(["app.schedule.deleteEvent", "app.action.cancel"]).subscribe(message => {
+        this.translate.get(['app.schedule.deleteEvent', 'app.action.cancel']).subscribe(message => {
             let deleteEvent = message['app.schedule.deleteEvent'];
             let cancelButton = message['app.action.cancel'];
             let actionSheet = ActionSheet.create({
@@ -207,11 +249,11 @@ export class EventDetailPage {
 
     deleteTheEvent() {
         this.scheduleService.deleteEvent(this.deleteEventRequires).then(data => {
-            if (data == "true") {
+            if (data === 'true') {
                 this.setDaysOfDeletedEvent();
                 this.sendDataToShowOrDeleteEvent.isRefreshFlag = true;
                 setTimeout(() => {
-                   this.nav.pop();
+                    this.nav.pop();
                 }, 500);
             }
         });
@@ -219,19 +261,19 @@ export class EventDetailPage {
 
     setDaysOfDeletedEvent() {
         let daysOfDeletedEvent = new Array();
-        if (this.isRepeat == "true" && this.deleteEventRequires.isFromRepeatToSpecial) {
-            daysOfDeletedEvent.push(moment(this.selectedDay).format("D"));
+        if (this.isRepeat === 'true' && this.deleteEventRequires.isFromRepeatToSpecial) {
+            daysOfDeletedEvent.push(moment(this.selectedDay).format('D'));
         } else {
-            let monthOfSelectedDay = moment(this.selectedDay).format("YYYY/MM");
-            let monthStartDate = moment(this.selectedDay).startOf("months").format("YYYY/MM/DD");
-            let monthEndDate = moment(this.selectedDay).endOf("months").format("YYYY/MM/DD");
-            let startDay = Number(moment(this.eventStartTime, "X").format("D"));
-            let endDay = Number(moment(this.eventEndTime, "X").format("D"));
-            if (moment(moment.unix(this.eventStartTime).format("YYYY/MM/DD")).isBefore(monthStartDate)) {
-                startDay = Number(moment(monthStartDate).format("D"));
+            let monthOfSelectedDay = moment(this.selectedDay).format('YYYY/MM');
+            let monthStartDate = moment(this.selectedDay).startOf('months').format('YYYY/MM/DD');
+            let monthEndDate = moment(this.selectedDay).endOf('months').format('YYYY/MM/DD');
+            let startDay = Number(moment(this.eventStartTime, 'X').format('D'));
+            let endDay = Number(moment(this.eventEndTime, 'X').format('D'));
+            if (moment(moment.unix(this.eventStartTime).format('YYYY/MM/DD')).isBefore(monthStartDate)) {
+                startDay = Number(moment(monthStartDate).format('D'));
             }
-            if (moment(moment.unix(this.eventEndTime).format("YYYY/MM/DD")).isAfter(monthEndDate)) {
-                endDay = Number(moment(monthEndDate).format("D"));
+            if (moment(moment.unix(this.eventEndTime).format('YYYY/MM/DD')).isAfter(monthEndDate)) {
+                endDay = Number(moment(monthEndDate).format('D'));
             }
 
             for (let i = startDay; i <= endDay; i++) {
@@ -242,18 +284,16 @@ export class EventDetailPage {
     }
 
     editEvent() {
-        this.sendDataToEditEvent.eventId = this.eventId;
-        this.sendDataToEditEvent.selectedDay = this.selectedDay;
         this.nav.push(EditEventPage, {
-            "sendDataToEditEvent": this.sendDataToEditEvent
+            'sendDataToEditEvent': this.sendDataToEditEvent
         });
     }
 
     onPageWillEnter() {
         let isRefreshFlag = this.sendDataToEditEvent.isRefreshFlag;
-        if (isRefreshFlag == true) {
+        if (isRefreshFlag === true) {
             this.isLoadCompleted = false;
-            this.getEventByEventId();
+            this.getEventByEventID();
         }
     }
 }

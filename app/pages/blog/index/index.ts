@@ -20,7 +20,7 @@ import {BlogDetailPage} from '../detail/detail';
         Util
     ]
 })
-@Injectable()
+
 export class BlogIndexPage {
     @ViewChild(Content) pageContent: Content;
 

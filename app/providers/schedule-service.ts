@@ -13,7 +13,7 @@ export class ScheduleService {
     constructor(private http: Http, private nav: NavController, private util: Util) {
     }
 
-    getUserLocaleSettings(userID) {
+    getUserLocaleSettings(userID: string): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_user_settings.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -47,7 +47,7 @@ export class ScheduleService {
         });
     }
 
-    getIsAdmin() {
+    getIsAdmin(): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_user_details.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -73,7 +73,7 @@ export class ScheduleService {
         });
     }
 
-    getEventsForDevice(startTime, endTime) {
+    getEventsForDevice(startTime: number, endTime: number): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_events_for_device_and_group.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -95,7 +95,7 @@ export class ScheduleService {
                     let participantsOfEvent = new Array();
 
                     for (let i = 0; i < targetLists.length; i++) {
-                        let targetIdString = this.util.getNodeText(targetLists[i], './/*[local-name()=\'targetID\']');
+                        let targetIDString = this.util.getNodeText(targetLists[i], './/*[local-name()=\'targetID\']');
                         let targetNameString = this.util.getNodeText(targetLists[i], './/*[local-name()=\'targetName\']');
 
                         let eventLists = this.util.selectXMLNodes(targetLists[i], './/*[local-name()=\'eventList\']');
@@ -118,7 +118,7 @@ export class ScheduleService {
                             eventList.push(showEventContent);
                         }
                         let deviceObject = {
-                            'targetId': targetIdString,
+                            'targetID': targetIDString,
                             'targetName': targetNameString,
                             'events': eventList
                         };
@@ -158,7 +158,7 @@ export class ScheduleService {
         });
     }
 
-    searchEvents(searchEventsRequires) {
+    searchEvents(searchEventsRequires: any): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/search_events.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -189,7 +189,7 @@ export class ScheduleService {
         });
     }
 
-    searchEventsBySelectedDay(searchEventsRequires) {
+    searchEventsBySelectedDay(searchEventsRequires: any): any {
         return new Promise(resolve => {
             this.searchEvents(searchEventsRequires).then((eventOutputs: string) => {
                 let events = new Array();
@@ -219,7 +219,7 @@ export class ScheduleService {
         });
     }
 
-    searchEventsByDisplayedMonth(searchEventsRequires) {
+    searchEventsByDisplayedMonth(searchEventsRequires: any): any {
         return new Promise(resolve => {
             this.searchEvents(searchEventsRequires).then((eventOutputs: string) => {
                 let days = new Array();
@@ -244,7 +244,7 @@ export class ScheduleService {
         });
     }
 
-    getEventByEventId(eventID) {
+    getEventByEventID(eventID: string): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_event_by_event_id.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -273,7 +273,7 @@ export class ScheduleService {
 
     }
 
-    getCategoryList() {
+    getCategoryList(): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_category_list.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -296,12 +296,12 @@ export class ScheduleService {
         });
     }
 
-    getCategoryNameByCategoryId(categoryId) {
+    getCategoryNameByCategoryID(categoryID: string): any {
         return new Promise(resolve => {
             this.getCategoryList().then((categories: any) => {
                 let categoryName;
-                categories.forEach(function(element) {
-                    if (element.categoryID === categoryId) {
+                categories.forEach(function (element) {
+                    if (element.categoryID === categoryID) {
                         categoryName = element.categoryName;
                     }
                 }, this);
@@ -310,7 +310,7 @@ export class ScheduleService {
         });
     }
 
-    getDeviceListWithoutTranferToJson() {
+    getDeviceListWithoutTranferToJson(): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_device_list.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -325,7 +325,7 @@ export class ScheduleService {
         });
     }
 
-    getDeviceList() {
+    getDeviceList(): any {
         return new Promise(resolve => {
             this.getDeviceListWithoutTranferToJson().then((deviceOutputs: string) => {
                 let devices = [];
@@ -336,10 +336,11 @@ export class ScheduleService {
             });
         });
     }
-    
-    getDeviceListByDeviceIDs(deviceIDs) {
+
+    getDeviceListByDeviceIDs(deviceIDs: string): any {
         return new Promise(resolve => {
-            let deviceIDArray = deviceIDs.split(',');
+            let deviceIDArray: any;
+            deviceIDArray = deviceIDs.split(',');
             this.getDeviceListWithoutTranferToJson().then((deviceOutputs: string) => {
                 let deviceArray = [];
                 for (let i = 0; i < deviceOutputs.length; i++) {
@@ -353,15 +354,16 @@ export class ScheduleService {
         });
     }
 
-    getDevicesByDeviceIds(deviceIds) {
+    getDevicesByDeviceIDs(deviceIDs: string): any {
         return new Promise(resolve => {
-            let deviceIdsArray = deviceIds.split(',');
+            let deviceIDsArray: any;
+            deviceIDsArray = deviceIDs.split(',');
 
             this.getDeviceListWithoutTranferToJson().then((deviceOutputs: string) => {
                 let deviceNames = new Array();
                 for (let i = 0; i < deviceOutputs.length; i++) {
                     let device = this.util.xml2json(deviceOutputs[i]).DeviceOutput;
-                    if (deviceIdsArray.includes(device.deviceID)) {
+                    if (deviceIDsArray.includes(device.deviceID)) {
                         deviceNames.push(device.deviceName);
                     }
                 }
@@ -370,7 +372,7 @@ export class ScheduleService {
         });
     }
 
-    getOrganizationList() {
+    getOrganizationList(): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_organanization_list.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -384,7 +386,7 @@ export class ScheduleService {
                         orgs.push(this.util.xml2json(organizationOutputs[i]).OrganizationOutput);
                     }
 
-                    orgs.forEach(function(element) {
+                    orgs.forEach(function (element) {
                         if (element.parentOrganizationCode && element.parentOrganizationCode !== '') {
                             let curParentOrganizationCode = element.parentOrganizationCode;
                             for (let index = 0; index < orgs.length; index++) {
@@ -405,7 +407,7 @@ export class ScheduleService {
         });
     }
 
-    getHumanResourceUserInfoList() {
+    getHumanResourceUserInfoList(): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/get_human_resource_user_info_list.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -418,7 +420,8 @@ export class ScheduleService {
                     for (let i = 0; i < userOutputs.length; i++) {
                         let userOutput = this.util.xml2json(userOutputs[i]).UserOutput;
                         let user = {
-                            'userID': userOutput.userID,
+                            // Attendation: In this webservice, we had used userId not userID.
+                            'userID': userOutput.userId,
                             'userName': userOutput.userName,
                             'assignOrgCd': userOutput.assignOrgCd,
                             'isSelected': false,
@@ -431,11 +434,11 @@ export class ScheduleService {
         });
     }
 
-    addEvent(event, participants) {
+    addEvent(event: any, participants: any): any {
         return new Promise((resolve, reject) => {
-            this.util.getRequestXml('./assets/requests/schedule/add_event.xml').then((req: string) => { 
+            this.util.getRequestXml('./assets/requests/schedule/add_event.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
-                
+
                 this.util.setNodeText(objRequest, './/*[local-name()=\'categoryID\']', event.categoryID);
                 this.util.setNodeText(objRequest, './/*[local-name()=\'isAllDay\']', event.isAllDay);
                 this.util.setNodeText(objRequest, './/*[local-name()=\'isRepeat\']', event.isRepeat);
@@ -455,7 +458,7 @@ export class ScheduleService {
                 // add paticipants to the request.
                 let oEventOutput = this.util.selectXMLNode(objRequest, './/*[local-name()=\'EventOutput\']');
                 let iLen = participants.length;
-                
+
                 // The namespace about schedule's participant
                 let participantNamespace = 'http://schemas.intasect.co.jp/mycal/service/event';
                 if (iLen > 0) {
@@ -471,35 +474,35 @@ export class ScheduleService {
                         this.util.appendXMLNode(oParticipant, oEventOutput);
                     }
                 }
-                
+
                 req = this.util.xml2string(objRequest);
                 this.util.callCordysWebservice(req, true).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
-                    
+
                     let returnObject = this.util.selectXMLNode(objResponse, './/*[local-name()=\'addEvent\']');
-                    let returnData = this.util.xml2json(returnObject).addEvent.addEvent; 
+                    let returnData = this.util.xml2json(returnObject).addEvent.addEvent;
                     resolve(returnData);
                 }, err => {
-                    
+
                     let errResponse = this.util.parseXml(err.text());
-                    
+
                     let faultCode = this.util.getNodeText(errResponse, './/*[local-name()=\'faultcode\']');
                     let faultString = this.util.getNodeText(errResponse, './/*[local-name()=\'faultstring\']');
                     let returnData = {
                         'faultcode': faultCode,
                         'faultstring': faultString
-                    }; 
+                    };
                     reject(returnData);
                 });
             });
         });
     }
-    
-    updateEvent(event, participants) {
+
+    updateEvent(event: any, participants: any): any {
         return new Promise((resolve, reject) => {
             this.util.getRequestXml('./assets/requests/schedule/update_event.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
-                
+
                 this.util.setNodeText(objRequest, './/*[local-name()=\'eventID\']', event.eventID);
                 this.util.setNodeText(objRequest, './/*[local-name()=\'categoryID\']', event.categoryID);
                 this.util.setNodeText(objRequest, './/*[local-name()=\'isAllDay\']', event.isAllDay);
@@ -521,11 +524,11 @@ export class ScheduleService {
                 this.util.setNodeText(objRequest, './/*[local-name()=\'oldStartTime\']', event.oldStartTime);
                 this.util.setNodeText(objRequest, './/*[local-name()=\'oldEndTime\']', event.oldEndTime);
                 this.util.setNodeText(objRequest, './/*[local-name()=\'isFromRepeatToSpecial\']', event.isFromRepeatToSpecial);
-                
+
                 // add paticipants to the request.
                 let oEventOutput = this.util.selectXMLNode(objRequest, './/*[local-name()=\'EventOutput\']');
                 let iLen = participants.length;
-                
+
                 // The namespace about schedule's participant
                 let participantNamespace = 'http://schemas.intasect.co.jp/mycal/service/event';
                 if (iLen > 0) {
@@ -541,42 +544,42 @@ export class ScheduleService {
                         this.util.appendXMLNode(oParticipant, oEventOutput);
                     }
                 }
-                
+
                 req = this.util.xml2string(objRequest);
                 this.util.callCordysWebservice(req, true).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
-                    
+
                     let returnObject = this.util.selectXMLNode(objResponse, './/*[local-name()=\'updateEvent\']');
-                    let returnData = this.util.xml2json(returnObject).updateEvent.updateEvent; 
+                    let returnData = this.util.xml2json(returnObject).updateEvent.updateEvent;
                     resolve(returnData);
                 }, err => {
-                    
+
                     let errResponse = this.util.parseXml(err.text());
-                    
+
                     let faultCode = this.util.getNodeText(errResponse, './/*[local-name()=\'faultcode\']');
                     let faultString = this.util.getNodeText(errResponse, './/*[local-name()=\'faultstring\']');
                     let returnData = {
                         'faultcode': faultCode,
                         'faultstring': faultString
-                    }; 
+                    };
                     reject(returnData);
                 });
             });
         });
     }
 
-    deleteEvent(deleteEventRequires) {
+    deleteEvent(deleteEventRequires: any): any {
         return new Promise(resolve => {
 
-            let eventId = deleteEventRequires.eventId;
+            let eventID = deleteEventRequires.eventID;
             let isFromRepeatToSpecial = deleteEventRequires.isFromRepeatToSpecial;
             this.util.getRequestXml('./assets/requests/schedule/delete_event.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
-                this.util.setNodeText(objRequest, './/*[local-name()=\'eventID\']', eventId);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'eventID\']', eventID);
                 // delete the event of the selecte dday
                 this.util.setNodeText(objRequest, './/*[local-name()=\'isFromRepeatToSpecial\']', '' + isFromRepeatToSpecial);
                 if (isFromRepeatToSpecial) {
-                    this.util.setNodeText(objRequest, './/*[local-name()=\'parentEventID\']', eventId);
+                    this.util.setNodeText(objRequest, './/*[local-name()=\'parentEventID\']', eventID);
                     this.util.setNodeText(objRequest, './/*[local-name()=\'oldStartTime\']', deleteEventRequires.startTime);
                     this.util.setNodeText(objRequest, './/*[local-name()=\'oldEndTime\']', deleteEventRequires.endTime);
                     this.util.setNodeText(objRequest, './/*[local-name()=\'startTime\']', -1);
@@ -592,14 +595,14 @@ export class ScheduleService {
         });
     }
 
-    getDeviceListForSelect() {
+    getDeviceListForSelect(): any {
         return new Promise(resolve => {
             this.getDeviceListWithoutTranferToJson().then((deviceOutputs: string) => {
                 let devices = new Array();
                 for (let i = 0; i < deviceOutputs.length; i++) {
                     let deviceOutput = this.util.xml2json(deviceOutputs[i]).DeviceOutput;
                     let device = {
-                        'deviceId': deviceOutput.deviceID,
+                        'deviceID': deviceOutput.deviceID,
                         'deviceName': deviceOutput.deviceName,
                         'description': deviceOutput.description,
                         'isSelected': false,

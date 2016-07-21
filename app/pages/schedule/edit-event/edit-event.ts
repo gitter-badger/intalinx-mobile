@@ -1,82 +1,115 @@
-import {Page, IonicApp, NavController, Content, Alert, Modal, ViewController, NavParams} from 'ionic-angular';
+// Third party library.
+import {Component} from '@angular/core';
+import {NavController, Content, Alert, Modal, ViewController, NavParams} from 'ionic-angular';
+import {TranslateService, TranslatePipe} from 'ng2-translate/ng2-translate';
 
-import {TranslatePipe} from 'ng2-translate/ng2-translate';
-
-import {ScheduleService} from '../../../providers/schedule-service';
-import {UserService} from '../../../providers/user-service';
+// Utils.
 import {Util} from '../../../utils/util';
 
-import {SelectParticipantsPage} from '../select-participants/select-participants'
-import {SelectFacilitiesPage} from '../select-facilities/select-facilities'
+// Services.
+import {ScheduleService} from '../../../providers/schedule-service';
+import {UserService} from '../../../providers/user-service';
 
-@Page({
+// Pages.
+import {SelectParticipantsPage} from '../select-participants/select-participants';
+import {SelectDevicesPage} from '../select-devices/select-devices';
+
+import * as moment from 'moment';
+
+@Component({
     templateUrl: 'build/pages/schedule/edit-event/edit-event.html',
     providers: [ScheduleService,
         UserService,
         Util,
         SelectParticipantsPage,
-        SelectFacilitiesPage],
+        SelectDevicesPage],
     pipes: [TranslatePipe]
 })
+
 export class EditEventPage {
-    static get parameters() {
-        return [[IonicApp], [NavController], [NavParams], [ScheduleService], [UserService], [Util]];
-    }
+    private visibilityPublic: string;
+    private visibilityConfidential: string;
+    private visibilityPrivate: string;
+    private visibilities: any;
+    private repeatEveryDay: string;
+    private repeatEveryWeek: string;
+    private repeatEveryMonth: string;
+    private weeklySelections: any;
+    private monthlySelections: any;
+    private repeatRules: any;
+    private categories: any;
+    private selectedRepeatRules: any;
+    private isFromRepeatToSpecial: string;
+    private isOriginalRepeat: boolean;
+    private sendDataToEditEvent: any;
+    private sendDataToAddEvent: any;
+    private receivedData: any;
+    private isNewEvent: boolean;
+    private event: any;
+    private participants: any;
+    private startTime: any;
+    private endTime: any;
+    private repeatStartTime: any;
+    private repeatEndTime: any;
+    private devices: any;
+    private errorTitle: string;
+    private infoTitle: string;
+    private actionOk: string;
+    private actionYes: string;
+    private actionNo: string;
 
-    constructor(app, nav, params, scheduleService, userService, util) {
-        this.app = app;
-        this.nav = nav;
-        this.params = params;
-        this.scheduleService = scheduleService;
-        this.userService = userService;
-        this.util = util;
-
+    constructor(private nav: NavController,
+        private params: NavParams,
+        private translate: TranslateService,
+        private scheduleService: ScheduleService,
+        private util: Util,
+        private userService: UserService) {
         this.initTranslation();
         this.initData();
     }
 
     initTranslation() {
-        this.app.translate.get(["app.schedule.visibility.public",
-            "app.schedule.visibility.confidential",
-            "app.schedule.visibility.private"]).subscribe(message => {
-                this.visibilityPublic = message["app.schedule.visibility.public"];
-                this.visibilityConfidential = message["app.schedule.visibility.confidential"];
-                this.visibilityPrivate = message["app.schedule.visibility.private"];
+        this.translate.get(['app.schedule.visibility.public',
+            'app.schedule.visibility.confidential',
+            'app.schedule.visibility.private']).subscribe(message => {
+                this.visibilityPublic = message['app.schedule.visibility.public'];
+                this.visibilityConfidential = message['app.schedule.visibility.confidential'];
+                this.visibilityPrivate = message['app.schedule.visibility.private'];
             });
         this.visibilities = [
             {
-                value: "public",
+                value: 'public',
                 description: this.visibilityPublic
             },
             {
-                value: "confidential",
+                value: 'confidential',
                 description: this.visibilityConfidential
             },
             {
-                value: "private",
+                value: 'private',
                 description: this.visibilityPrivate
             }
         ];
-        this.app.translate.get(["app.schedule.repeatRules.daily",
-            "app.schedule.repeatRules.weekly",
-            "app.schedule.repeatRules.monthly"]).subscribe(message => {
-                this.repeatEveryDay = message["app.schedule.repeatRules.daily"];
-                this.repeatEveryWeek = message["app.schedule.repeatRules.weekly"];
-                this.repeatEveryMonth = message["app.schedule.repeatRules.monthly"];
+        this.translate.get(['app.schedule.repeatRules.daily',
+            'app.schedule.repeatRules.weekly',
+            'app.schedule.repeatRules.monthly']).subscribe(message => {
+                this.repeatEveryDay = message['app.schedule.repeatRules.daily'];
+                this.repeatEveryWeek = message['app.schedule.repeatRules.weekly'];
+                this.repeatEveryMonth = message['app.schedule.repeatRules.monthly'];
             });
         this.weeklySelections = [];
         this.monthlySelections = [];
 
         for (let i = 1; i <= 7; i++) {
             let weekdayObject = {
-                "value": i,
-                "description": moment.weekdays(i)
+                'value': i,
+                'description': moment.weekdays(i)
             };
             this.weeklySelections.push(weekdayObject);
         }
 
-        this.app.translate.get(["app.date.day"]).subscribe(message => {
-            let dayDescription = message["app.date.day"];
+        this.translate.get(['app.date.day']).subscribe(message => {
+            let dayDescription = message['app.date.day'];
 
             for (let i = 1; i <= 31; i++) {
                 let dateDescription = i + dayDescription;
@@ -90,15 +123,15 @@ export class EditEventPage {
 
         this.repeatRules = [
             {
-                value: "DAILY",
+                value: 'DAILY',
                 description: this.repeatEveryDay
             },
             {
-                value: "WEEKLY",
+                value: 'WEEKLY',
                 description: this.repeatEveryWeek
             },
             {
-                value: "MONTHLY",
+                value: 'MONTHLY',
                 description: this.repeatEveryMonth
             }
         ];
@@ -107,32 +140,32 @@ export class EditEventPage {
     // Initial display data.
     initData() {
         this.scheduleService.getCategoryList().then(data => {
-            // The "action-sheet" option will be invalid, when the count of option over 6.
+            // The 'action-sheet' option will be invalid, when the count of option over 6.
             this.categories = data;
             this.categories.unshift({
-                categoryID: "",
-                categoryName: "未選択"  // Adding a japanese select-option for the other data is japanese.
+                categoryID: '',
+                categoryName: '未選択'  // Adding a japanese select-option for the other data is japanese.
             });
         });
         this.selectedRepeatRules = {
-            "rule": "DAILY",
-            "index": 1
-        }
-        this.isFromRepeatToSpecial = "all";
+            'rule': 'DAILY',
+            'index': 1
+        };
+        this.isFromRepeatToSpecial = 'all';
         this.isOriginalRepeat = false;
 
-        // Just to get event will get the "event" action, not our schedule.
-        this.sendDataToEditEvent = this.params.get("sendDataToEditEvent");
-        this.sendDataToAddEvent = this.params.get("sendDataToAddEvent");
+        // Just to get event will get the 'event' action, not our schedule.
+        this.sendDataToEditEvent = this.params.get('sendDataToEditEvent');
+        this.sendDataToAddEvent = this.params.get('sendDataToAddEvent');
 
         if (this.sendDataToEditEvent) {
             this.receivedData = {
-                "eventID": this.sendDataToEditEvent.eventId,
-                "selectedDay": this.sendDataToEditEvent.selectedDay
+                'eventID': this.sendDataToEditEvent.eventID,
+                'selectedDay': this.sendDataToEditEvent.selectedDay
             };
             this.event = {
                 eventID: this.receivedData.eventID
-            }
+            };
             this.getEventByEventID(this.event.eventID);
         } else {
             this.setDefaultDataForNewEvent();
@@ -141,16 +174,16 @@ export class EditEventPage {
 
     getEventByEventID(eventID) {
         this.isNewEvent = false;
-        this.scheduleService.getEventByEventId(eventID).then(data => {
+        this.scheduleService.getEventByEventID(eventID).then((data: any) => {
             this.event = data.event;
             this.participants = data.participants;
 
-            if (this.event.isAllDay == "true") {
+            if (this.event.isAllDay === 'true') {
                 this.event.isAllDay = true;
             } else {
                 this.event.isAllDay = false;
             }
-            if (this.event.isRepeat == "true") {
+            if (this.event.isRepeat === 'true') {
                 this.event.isRepeat = true;
                 this.isOriginalRepeat = true;
                 this.event.parentEventID = this.event.eventID;
@@ -169,19 +202,19 @@ export class EditEventPage {
     }
 
     transRepeatRuleToPerformanceData(repeatRule) {
-        let repeatRuleArray = repeatRule.split(";");
+        let repeatRuleArray = repeatRule.split(';');
         this.selectedRepeatRules = {
-            "rule": repeatRuleArray[0],
-            "index": parseInt(repeatRuleArray[1])
-        }
+            'rule': repeatRuleArray[0],
+            'index': parseInt(repeatRuleArray[1])
+        };
         this.repeatStartTime = {
             hour: repeatRuleArray[2].substring(0, 2),
             minute: repeatRuleArray[2].substring(2, 4)
-        }
+        };
         this.repeatEndTime = {
             hour: repeatRuleArray[3].substring(0, 2),
             minute: repeatRuleArray[3].substring(2, 4)
-        }
+        };
         this.startTime = moment.unix(this.event.startTime);
         this.endTime = moment.unix(this.event.endTime);
         this.startTime = moment(this.startTime).hour(this.repeatStartTime.hour).minute(this.repeatStartTime.minute).format();
@@ -193,15 +226,15 @@ export class EditEventPage {
         this.event.oldEndTime = moment(specialEndTime).unix();
 
         // set rule-index to 1, when the repeat rule is everyday.
-        if (this.selectedRepeatRules.index == 0) {
+        if (this.selectedRepeatRules.index === 0) {
             this.selectedRepeatRules.index = 1;
         }
     }
 
     getDevicesByDeviceIDs(deviceIDs) {
         // this.devices = [];
-        let deviceIDArray = deviceIDs.split(",");
-        this.scheduleService.getDeviceListByDeviceIDs(deviceIDs).then(data => {
+        let deviceIDArray = deviceIDs.split(',');
+        this.scheduleService.getDeviceListByDeviceIDs(deviceIDs).then((data: any) => {
             this.devices = data;
         });
     }
@@ -215,8 +248,8 @@ export class EditEventPage {
         this.userService.getUserDetails().then(user => {
             this.participants = [
                 {
-                    "userID": user.userId,
-                    "userName": user.userName
+                    'userID': user.userID,
+                    'userName': user.userName
                 }];
         });
 
@@ -224,27 +257,27 @@ export class EditEventPage {
         this.devices = [];
         // The data object of update, but be used when add new event.
         this.event = {
-            "eventID": "",
-            "categoryID": "",
-            "isAllDay": false,
-            "isRepeat": false,
-            "repeatRule": "",
-            "startTime": "",
-            "endTime": "",
-            "deviceID": "",
-            "visibility": "public",
-            "isReminder": "",
-            "reminderRule": "",
-            "title": "",
-            "summary": "",
-            "location": "",
-            "status": "",
-            "isDeviceRepeatWarned": false,
-            "isEventRepeatWarned": false,
-            "parentEventID": "",
-            "oldStartTime": "",
-            "oldEndTime": "",
-            "isFromRepeatToSpecial": ""
+            'eventID': '',
+            'categoryID': '',
+            'isAllDay': false,
+            'isRepeat': false,
+            'repeatRule': '',
+            'startTime': '',
+            'endTime': '',
+            'deviceID': '',
+            'visibility': 'public',
+            'isReminder': '',
+            'reminderRule': '',
+            'title': '',
+            'summary': '',
+            'location': '',
+            'status': '',
+            'isDeviceRepeatWarned': false,
+            'isEventRepeatWarned': false,
+            'parentEventID': '',
+            'oldStartTime': '',
+            'oldEndTime': '',
+            'isFromRepeatToSpecial': ''
         };
     }
 
@@ -264,10 +297,10 @@ export class EditEventPage {
         }
 
         if (currentMinutes >= 50) {
-            this.startTime = moment(time).minute(startMinutes).add(1, "hours").format();
+            this.startTime = moment(time).minute(startMinutes).add(1, 'hours').format();
             startMinutes = 60;
         } else {
-            this.startTime = moment(time).minute(startMinutes).format();;
+            this.startTime = moment(time).minute(startMinutes).format();
         }
 
         let endMinutes = startMinutes + 30;
@@ -275,7 +308,7 @@ export class EditEventPage {
             this.endTime = moment(time).minute(endMinutes).format();
         } else {
             endMinutes = endMinutes - 60;
-            this.endTime = moment(time).minute(endMinutes).add(1, "hours").format();
+            this.endTime = moment(time).minute(endMinutes).add(1, 'hours').format();
         }
     }
 
@@ -283,7 +316,7 @@ export class EditEventPage {
     // Q: And change the endTime half hour after startTime auto?
     // changeEndTime() {
     //   if(this.endTime < this.startTime) {
-    //       this.app.translate.get(["app.message.error.title", "app.schedule.editEvent.error.endTimeBigger", "app.action.ok"]).subscribe(message => {
+    //       this.app.translate.get(['app.message.error.title', 'app.schedule.editEvent.error.endTimeBigger', 'app.action.ok']).subscribe(message => {
     //                 let title = message['app.message.error.title'];
     //                 let ok = message['app.action.ok'];
     //                 let content = message['app.schedule.editEvent.error.endTimeBigger'];
@@ -305,7 +338,7 @@ export class EditEventPage {
     // }
 
     changeRepeatEventUpdateFlag() {
-        if (this.isFromRepeatToSpecial == "all") {
+        if (this.isFromRepeatToSpecial === 'all') {
             this.event.isFromRepeatToSpecial = false;
             this.event.isRepeat = true;
             this.startTime = moment.unix(this.event.startTime);
@@ -334,7 +367,7 @@ export class EditEventPage {
 
     // Calling the sub-page to select the paticipants.
     chooseParticipants() {
-        let participantsModal = Modal.create(SelectParticipantsPage, { "participants": this.participants });
+        let participantsModal = Modal.create(SelectParticipantsPage, { 'participants': this.participants });
         participantsModal.onDismiss(data => {
             this.participants = data;
         });
@@ -343,14 +376,14 @@ export class EditEventPage {
 
     // Calling the sub-page to select the devices.
     chooseDevices() {
-        let devicesModal = Modal.create(SelectFacilitiesPage, { "devices": this.devices });
+        let devicesModal = Modal.create(SelectDevicesPage, { 'devices': this.devices });
         devicesModal.onDismiss(data => {
             this.devices = data;
-            this.event.deviceID = "";
+            this.event.deviceID = '';
             for (let i = 0; i < data.length; i++) {
                 this.event.deviceID += data[i].deviceID;
-                if (i != (data.length - 1)) {
-                    this.event.deviceID += ",";
+                if (i !== (data.length - 1)) {
+                    this.event.deviceID += ',';
                 }
             }
         });
@@ -363,7 +396,7 @@ export class EditEventPage {
             if (completed) {
                 let isOk = this.checkBeforeSave();
                 if (isOk) {
-                    if (this.event.eventID == "") {
+                    if (this.event.eventID === '') {
                         this.addEvent();
                     } else {
                         this.updateEvent();
@@ -374,52 +407,52 @@ export class EditEventPage {
     }
 
     getTransInfoForDisplayAlert() {
-        this.app.translate.get(["app.message.error.title",
-                "app.message.info.title", 
-                "app.action.ok", 
-                "app.action.yes", 
-                "app.action.no"]).subscribe(message => {
-            this.errorTitle = message['app.message.error.title'];
-            this.infoTitle = message['app.message.info.title'];
-            this.actionOk = message['app.action.ok'];
-            this.actionYes = message['app.action.yes'];
-            this.actionNo = message['app.action.no'];
-        });
+        this.translate.get(['app.message.error.title',
+            'app.message.info.title',
+            'app.action.ok',
+            'app.action.yes',
+            'app.action.no']).subscribe(message => {
+                this.errorTitle = message['app.message.error.title'];
+                this.infoTitle = message['app.message.info.title'];
+                this.actionOk = message['app.action.ok'];
+                this.actionYes = message['app.action.yes'];
+                this.actionNo = message['app.action.no'];
+            });
     }
 
     createSaveData() {
         return new Promise(resolve => {
-            let saveStartTime = "";
-            let saveEndTime = "";
-            this.event.repeatRule = "";
+            let saveStartTime: number;
+            let saveEndTime: number;
+            this.event.repeatRule = '';
             if (this.event.isRepeat) {
                 saveStartTime = moment(this.startTime).hour(0).minute(0).second(0).unix();
-                saveEndTime = moment(this.endTime).hour(0).minute(0).second(0).add(1, "d").add(-1, "s").unix();
+                saveEndTime = moment(this.endTime).hour(0).minute(0).second(0).add(1, 'd').add(-1, 's').unix();
 
                 this.event.repeatRule += this.selectedRepeatRules.rule;
-                this.event.repeatRule += ";";
-                if (this.selectedRepeatRules.rule == "DAILY") {
-                    this.event.repeatRule += "0;";
+                this.event.repeatRule += ';';
+                if (this.selectedRepeatRules.rule === 'DAILY') {
+                    this.event.repeatRule += '0;';
                 } else {
                     this.event.repeatRule += this.selectedRepeatRules.index;
-                    this.event.repeatRule += ";";
+                    this.event.repeatRule += ';';
                 }
-                let repeatStartTime = moment(this.startTime).format("HHmm");
-                let repeatEndTime = moment(this.endTime).format("HHmm");
+                let repeatStartTime = moment(this.startTime).format('HHmm');
+                let repeatEndTime = moment(this.endTime).format('HHmm');
                 this.event.repeatRule += repeatStartTime;
-                this.event.repeatRule += ";";
+                this.event.repeatRule += ';';
                 this.event.repeatRule += repeatEndTime;
             } else if (this.event.isAllDay) {
                 saveStartTime = moment(this.startTime).hour(0).minute(0).second(0).unix();
-                saveEndTime = moment(this.endTime).hour(0).minute(0).second(0).add(1, "d").add(-1, "s").unix();
+                saveEndTime = moment(this.endTime).hour(0).minute(0).second(0).add(1, 'd').add(-1, 's').unix();
             } else {
                 saveStartTime = moment(this.startTime).second(0).unix();
                 saveEndTime = moment(this.endTime).second(0).unix();
             }
-            if (this.isOriginalRepeat && (this.isFromRepeatToSpecial == "all")) {
-                this.event.parentEventID = "";
-                this.event.oldStartTime = "";
-                this.event.oldEndTime = "";
+            if (this.isOriginalRepeat && (this.isFromRepeatToSpecial === 'all')) {
+                this.event.parentEventID = '';
+                this.event.oldStartTime = '';
+                this.event.oldEndTime = '';
             }
             this.event.startTime = saveStartTime;
             this.event.endTime = saveEndTime;
@@ -443,8 +476,8 @@ export class EditEventPage {
 
 
     checkTitle() {
-        if (!this.event.title && this.util.deleteEmSpaceEnSpaceNewLineInCharacter(this.event.title) == "") {
-            this.app.translate.get(['app.schedule.editEvent.message.eventTitleNecessary']).subscribe(message => {
+        if (!this.event.title && this.util.deleteEmSpaceEnSpaceNewLineInCharacter(this.event.title) === '') {
+            this.translate.get(['app.schedule.editEvent.message.eventTitleNecessary']).subscribe(message => {
                 let errMsg = message['app.schedule.editEvent.message.eventTitleNecessary'];
 
                 this.showError(errMsg);
@@ -456,10 +489,10 @@ export class EditEventPage {
 
     checkTime() {
         if (this.event.isRepeat) {
-            let repeatStartTime = moment(this.startTime).format("HHmm");
-            let repeatEndTime = moment(this.endTime).format("HHmm");
+            let repeatStartTime = moment(this.startTime).format('HHmm');
+            let repeatEndTime = moment(this.endTime).format('HHmm');
             if (repeatStartTime >= repeatEndTime) {
-                this.app.translate.get(['app.schedule.editEvent.message.repeatEndTimeShouldBeLater']).subscribe(message => {
+                this.translate.get(['app.schedule.editEvent.message.repeatEndTimeShouldBeLater']).subscribe(message => {
                     let errMsg = message['app.schedule.editEvent.message.repeatEndTimeShouldBeLater'];
 
                     this.showError(errMsg);
@@ -468,7 +501,7 @@ export class EditEventPage {
             }
         }
         if (this.event.startTime >= this.event.endTime) {
-            this.app.translate.get(['app.schedule.editEvent.message.endTimeShouldBeLater']).subscribe(message => {
+            this.translate.get(['app.schedule.editEvent.message.endTimeShouldBeLater']).subscribe(message => {
                 let errMsg = message['app.schedule.editEvent.message.endTimeShouldBeLater'];
 
                 this.showError(errMsg);
@@ -480,7 +513,7 @@ export class EditEventPage {
 
     addEvent() {
         this.scheduleService.addEvent(this.event, this.participants).then(data => {
-            if (data == "true") {
+            if (data === 'true') {
                 this.sendDataToAddEvent.isRefreshFlag = true;
                 this.nav.pop();
             } else {
@@ -489,9 +522,9 @@ export class EditEventPage {
         }, err => {
             let errMsg = err.faultstring;
             let faultCode = err.faultcode;
-            if ((faultCode.indexOf("WARN002") > -1) || (faultCode.indexOf("WARN001") > -1)) {
+            if ((faultCode.indexOf('WARN002') > -1) || (faultCode.indexOf('WARN001') > -1)) {
                 errMsg = this.convertWarningMessage(errMsg);
-                this.confirmRepeatWarn(this.errorTitle, errMsg, this.actionYes, this.actionNo, faultCode, "addEvent");
+                this.confirmRepeatWarn(this.errorTitle, errMsg, this.actionYes, this.actionNo, faultCode, 'addEvent');
             } else {
                 this.showError(errMsg);
             }
@@ -500,7 +533,7 @@ export class EditEventPage {
 
     updateEvent() {
         this.scheduleService.updateEvent(this.event, this.participants).then(data => {
-            if (data == "true") {
+            if (data === 'true') {
                 this.sendDataToEditEvent.isRefreshFlag = true;
                 this.nav.pop();
             } else {
@@ -509,10 +542,10 @@ export class EditEventPage {
         }, err => {
             let errMsg = err.faultstring;
             let faultCode = err.faultcode;
-            if ((faultCode.indexOf("WARN002") > -1) || (faultCode.indexOf("WARN001") > -1)) {
+            if ((faultCode.indexOf('WARN002') > -1) || (faultCode.indexOf('WARN001') > -1)) {
                 errMsg = this.convertWarningMessage(errMsg);
 
-                this.confirmRepeatWarn(this.errorTitle, errMsg, this.actionYes, this.actionNo, faultCode, "updateEvent");
+                this.confirmRepeatWarn(this.errorTitle, errMsg, this.actionYes, this.actionNo, faultCode, 'updateEvent');
             } else {
                 this.showError(errMsg);
             }
@@ -521,20 +554,20 @@ export class EditEventPage {
 
     convertWarningMessage(oldMessage) {
         // oldMessage: 
-        // "下記の参加者は既に同じ時間帯の予定が入っています。</br>王　茜: 1468453500~1468455300;スケジュールを登録しますか？"
-        let aMessages = oldMessage.split(";");
-        let newMessage = "";
+        // '下記の参加者は既に同じ時間帯の予定が入っています。</br>王　茜: 1468453500~1468455300;スケジュールを登録しますか？'
+        let aMessages = oldMessage.split(';');
+        let newMessage = '';
         for (let i = 0; i < aMessages.length - 1; i++) {
-            let sWarningName = aMessages[i].split(": ")[0];
-            let sStartEnd = aMessages[i].split(": ")[1];
-            let sStart = sStartEnd.split("~")[0];
-            let sEnd = sStartEnd.split("~")[1];
-            newMessage += sWarningName + ": " + moment.unix(sStart).format("YYYY/MM/DD HH:mm")
-                + " ~ " + moment.unix(sEnd).format("YYYY/MM/DD HH:mm") + "</br>";
+            let sWarningName = aMessages[i].split(': ')[0];
+            let sStartEnd = aMessages[i].split(': ')[1];
+            let sStart = sStartEnd.split('~')[0];
+            let sEnd = sStartEnd.split('~')[1];
+            newMessage += sWarningName + ': ' + moment.unix(sStart).format('YYYY/MM/DD HH:mm')
+                + ' ~ ' + moment.unix(sEnd).format('YYYY/MM/DD HH:mm') + '</br>';
         }
         newMessage += aMessages[aMessages.length - 1];
         // newMessage: 
-        // 下記の参加者は既に同じ時間帯の予定が入っています。</br>王　茜: 2016/07/14 08:45 ~ 2016/07/14 09:15</br>スケジュールを登録しますか？"
+        // 下記の参加者は既に同じ時間帯の予定が入っています。</br>王　茜: 2016/07/14 08:45 ~ 2016/07/14 09:15</br>スケジュールを登録しますか？'
         return newMessage;
     }
 
@@ -545,16 +578,16 @@ export class EditEventPage {
             buttons: [{
                 text: yes,
                 handler: () => {
-                    if (faultCode.indexOf("WARN002") > -1) {
+                    if (faultCode.indexOf('WARN002') > -1) {
                         // The same people had have scheduling at selected peroid.
                         this.event.isDeviceRepeatWarned = false;
                         this.event.isEventRepeatWarned = true;
-                    } else if (faultCode.indexOf("WARN001") > -1) {
+                    } else if (faultCode.indexOf('WARN001') > -1) {
                         // The same device had been used at selected peroid.
                         this.event.isDeviceRepeatWarned = true;
                         this.event.isEventRepeatWarned = true;
                     }
-                    if (type == "addEvent") {
+                    if (type === 'addEvent') {
                         this.addEvent();
                     } else {
                         this.updateEvent();
@@ -578,8 +611,8 @@ export class EditEventPage {
 
     setDaysOfAddedEvent() {
         let daysOfAddedEvent = new Array();
-        let startDay = Number(moment(this.startTime).format("D"));
-        let endDay = Number(moment(this.endTime).format("D"));
+        let startDay = Number(moment(this.startTime).format('D'));
+        let endDay = Number(moment(this.endTime).format('D'));
         for (let i = startDay; i <= endDay; i++) {
             daysOfAddedEvent.push(i.toString());
         }

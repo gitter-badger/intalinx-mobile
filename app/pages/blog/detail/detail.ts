@@ -25,11 +25,7 @@ export class BlogDetailPage {
     private id: string;
     private readStatus: string;
     private newReplyFlag: string;
-    private sendData = {
-        'id': this.id,
-        'isRefreshFlag': false,
-        'unrepliedCommentcontent': ''
-    };
+    private sendData: any;
     private title: string;
     private content: string;
     private createDate: string;
@@ -51,11 +47,11 @@ export class BlogDetailPage {
         this.readStatus = this.community.readStatus;
         this.newReplyFlag = this.community.newReplyFlag;
 
-        // this.sendData = {
-        //     'id': this.id,
-        //     'isRefreshFlag': false,
-        //     'unrepliedCommentcontent': ''
-        // }
+        this.sendData = {
+            'id': this.id,
+            'isRefreshFlag': false,
+            'unrepliedCommentcontent': ''
+        };
 
         this.getCommunityDetailByCommunityID();
         this.getReplyContentListByCommunityID();
@@ -90,7 +86,13 @@ export class BlogDetailPage {
     }
 
     doInfinite(infiniteScroll): void {
-        let position = this.comments.length;
+        let position: number;
+        if (this.comments) {
+            position = this.comments.length;
+        } else {
+            position = 0;
+        }
+
         this.blogService.getReplyContentListByCommunityID(this.id, position).then((data: any) => {
             if (data && data.replyContents[0]) {
                 this.comments = this.comments.concat(data.replyContents);
@@ -163,14 +165,14 @@ export class BlogDetailPage {
     scrollToDetailPageTop(): void {
         this.pageContent.scrollToTop();
     }
-    
+
     onPageScroll(that): any {
-        return function() {
+        return function () {
             if (this.scrollTop > 200) {
                 that.isScrollToTopButtonVisible = true;
             } else {
                 that.isScrollToTopButtonVisible = false;
             }
-        };  
+        };
     }
 }
