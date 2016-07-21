@@ -1,5 +1,4 @@
 
-
 export class ShareService {
     
     public initializeMenu: any;
@@ -8,6 +7,7 @@ export class ShareService {
     public showMenu: any;
     public notificationNewInformationCount: string;
     public blogNewInformationCount: string;
+    public nav: any;
     
     constructor() {
 

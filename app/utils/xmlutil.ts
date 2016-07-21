@@ -222,14 +222,14 @@ export class XmlUtil {
         return document.createElementNS(namespaceURI, qualifiedName);
     }
     
-    getNodeText(node: any, xpath: string, defaultValue: string, namespaces: string) {
+    getNodeText(node: any, xpath: string, defaultValue?: string, namespaces?: string) {
         if (node && (node = this.selectXMLNode(node, xpath, namespaces))) {
             return (this.getTextContent(node) || defaultValue);
         }
         return defaultValue;
     }
     
-    setNodeText(node: any, xpath: string, value: string, namespaces: string) {
+    setNodeText(node: any, xpath: string, value: string, namespaces?: string) {
         if (node && (node = this.selectXMLNode(node, xpath, namespaces))) {
             this.setTextContent(node, value);
             return true;
@@ -303,7 +303,7 @@ export class XmlUtil {
         }
     }
     
-    selectXMLNode(object, xpathExpression, namespaces) {
+    selectXMLNode(object, xpathExpression, namespaces?) {
         if (this.isIE()) {
             try {
                 var xmlDocument = (object.ownerDocument || object);
@@ -345,7 +345,7 @@ export class XmlUtil {
         }
     }
     
-    selectXMLNodes(object, xpathExpression, namespaces) {
+    selectXMLNodes(object, xpathExpression, namespaces?) {
         if (this.isIE()) {
             try {
                 var xmlDocument = (object.ownerDocument || object);

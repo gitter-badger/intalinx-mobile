@@ -11,15 +11,19 @@ import {Config, Alert} from 'ionic-angular';
 import {AppConfig} from '../appconfig';
 
 // Utils.
-import {SSO} from './sso';
+import {AlertUtil} from './alertutil';
+import {CordysUtil} from './cordysutil';
 import {XmlUtil} from './xmlutil';
 import {DateUtil} from './dateutil';
 import {StorageUtil} from './storageutil';
 
+// Services.
+import {ShareService} from '../providers/share-service';
+
 @Injectable()
 export class Util {
 
-    constructor(private http: Http, private translate: TranslateService, private appConfig: AppConfig, private dateUtil: DateUtil, private xmlUtil: XmlUtil, private storageUtil: StorageUtil) {
+    constructor(private http: Http, private translate: TranslateService, private appConfig: AppConfig, private cordysUtil: CordysUtil, private dateUtil: DateUtil, private xmlUtil: XmlUtil, private storageUtil: StorageUtil, private alertUtil: AlertUtil, private share: ShareService) {
         let lang = this.appConfig.get('USER_LANG').toLowerCase();
         moment.locale(lang);
     }
@@ -81,95 +85,27 @@ export class Util {
     }
 
     callCordysWebserviceUseAnonymous(request: any) {
-        let useAnonymous = true;
-        return this.callCordysWebserviceUseAnonymousShowError(request, useAnonymous);
+        return this.cordysUtil.callCordysWebserviceUseAnonymous(request);
     }
 
     callCordysWebserviceUseAnonymousShowError(request: any, useAnonymous: boolean) {
-        let hideError = false;
-        return this.callCordysWebservice(request, useAnonymous, hideError);
+        return this.cordysUtil.callCordysWebserviceUseAnonymousShowError(request, useAnonymous);
     }
 
-    callCordysWebservice(request: any, useAnonymous?: boolean, hideError?: boolean) {
-        if (!useAnonymous) {
-            // If there is not a saml artifact in cookie, then redirect to Login page.
-            if (!this.loggedOn()) {
-                // redirect to Login page.
-                // this.app.redirectLoginPage();
-                // TODO
-                return;
-            }
-        }
-        return new Promise((resolve, reject) => {
-            let url = this.appConfig.get('BASE_URL') + this.appConfig.get('GATEWAY_URL');
-            if (!useAnonymous) {
-                url = url + '?' + this.appConfig.get('SAMLART_NAME') + '=' +
-                    this.getSAMLart(this.appConfig.get('SAML_ARTIFACT_STORAGE_NAME'));
-                url = url + '&language=' + this.appConfig.get('USER_LANG');
-            } else {
-                url = url + '?language=' + this.appConfig.get('USER_LANG');
-            }
-            this.http.post(url, request)
-                .map(res => res.text())
-                .subscribe(data => {
-                    resolve(data);
-                }, error => {
-                    if (error.status === '500' && error.type === '2') {
-                        if (!hideError) {
-                            let responseText = error.text();
-                            let responseNode = this.parseXml(responseText);
-                            this.presentModal(this.getNodeText(responseNode, './/*[local-name()=\'faultstring\']'));
-                        }
-                    } else {
-                        this.presentSystemErrorModal();
-                    }
-                    reject(error);
-                });
-        });
+    callCordysWebservice(request: any, hideError?: boolean, useAnonymous?: boolean) {
+        return this.cordysUtil.callCordysWebservice(request, hideError, useAnonymous);
     }
-    
-    callCordysWebserviceWithoutShowError(request, useAnonymous) {
 
-    } 
+    getCallCordysWebserviceURL(useAnonymous?: boolean) {
+        return this.cordysUtil.getCallCordysWebserviceURL(useAnonymous);
+    }
 
     callCordysWebserviceWithUrl(url, request) {
-        return new Promise(resolve => {
-            this.http.post(url, request)
-                .map(res => res.text())
-                .subscribe(data => {
-                    resolve(data);
-                }, error => {
-                    this.presentSystemErrorModal();
-                });
-        });
+        return this.cordysUtil.callCordysWebserviceWithUrl(url, request);
     }
 
     getRequestXml(url: string) {
-        return new Promise(resolve => {
-            this.http.get(url)
-                .map(res => res.text())
-                .subscribe(data => {
-                    resolve(data);
-                });
-
-        });
-    }
-
-    setSAMLart(key: string, value: string, notOnOrAfter): void {
-        this.storageUtil.setSAMLart(key, value, notOnOrAfter);
-    }
-
-    getSAMLart(key: string): string {
-        return this.storageUtil.getSAMLart(key);
-    }
-
-    loggedOn(): Promise<boolean> {
-        return new Promise(resolve => {
-            let isLoggedOn = false;
-            let storage =  this.getSAMLart(this.appConfig.get('SAML_ARTIFACT_STORAGE_NAME'));
-            isLoggedOn = storage != null && storage !== '';
-            resolve(isLoggedOn);
-        });
+        return this.cordysUtil.getRequestXml(url);
     }
 
     transferCordysDateStringToUTC(dateString: string) {
@@ -226,32 +162,79 @@ export class Util {
         });
     }
 
-    presentModal(content, level = 'error'): void {
-        this.translate.get(['app.message.' + level + '.title', 'app.action.ok']).subscribe(message => {
-            let title = message['app.message.' + level + '.title'];
-            let ok = message['app.action.ok'];
-
-            let alert = Alert.create({
-                title: title,
-                subTitle: content,
-                buttons: [ok]
-            });
-            //this.nav.present(alert);
-        });
+    presentModal(content, level) {
+        return this.alertUtil.presentModal(content, level);
     }
 
-    presentSystemErrorModal(): void {
-        this.translate.get(['app.message.error.title', 'app.message.error.systemError', 'app.action.ok']).subscribe(message => {
-            let title = message['app.message.error.title'];
-            let ok = message['app.action.ok'];
-            let content = message['app.message.error.systemError'];
+    presentSystemErrorModal() {
+        return this.alertUtil.presentSystemErrorModal();
+    }
 
-            let alert = Alert.create({
-                title: title,
-                subTitle: content,
-                buttons: [ok]
-            });
-            //this.nav.present(alert);
-        });
+    authenticate(userId, password) {
+        return this.cordysUtil.authenticate(userId, password);
+    }
+
+    loggedOn(): Promise<boolean> {
+        return this.cordysUtil.loggedOn();
+    }
+
+    logout() {
+        return this.cordysUtil.logout();
+    }
+
+    enableAutoLogin() {
+        return this.cordysUtil.enableAutoLogin();
+    }
+
+    disableAutoLogin() {
+        return this.cordysUtil.disableAutoLogin();
+    }
+
+    isAutoLogin() {
+        return this.cordysUtil.isAutoLogin();
+    }
+
+    setLoginID(value) {
+        return this.cordysUtil.setLoginID(value);
+    }
+
+    setPassword(value) {
+        return this.cordysUtil.setPassword(value);
+    }
+
+    getLoginID() {
+        return this.cordysUtil.getLoginID();
+    }
+
+    getPassword() {
+        return this.cordysUtil.getPassword();
+    }
+
+    removeLoginID() {
+        return this.cordysUtil.removeLoginID();
+    }
+
+    removePassword() {
+        return this.cordysUtil.removePassword();
+    }
+
+    setSAMLart(value, notOnOrAfter) {
+        return this.cordysUtil.setSAMLart(value, notOnOrAfter);
+    }
+
+    getSAMLart(): Promise<string> {
+        return this.cordysUtil.getSAMLart();
+    }
+
+    getSAMLartExpireDate(): Promise<any> {
+        return this.cordysUtil.getSAMLartExpireDate();
+    }
+
+    removeSAMLart(): Promise<boolean> {
+        return this.cordysUtil.removeSAMLart();
+    }
+
+    hasSAMLart(): Promise<boolean> {
+        return this.cordysUtil.hasSAMLart();
     }
 }

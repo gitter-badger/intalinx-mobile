@@ -8,21 +8,45 @@ import {AppConfig} from '../appconfig';
 
 // Utils.
 import {Util} from '../utils/util';
-import {SSO} from '../utils/sso';
 
 @Injectable()
 export class UserService {
 
-    constructor(private translate: TranslateService, private nav: NavController, private appConfig: AppConfig, private util: Util, private sso: SSO) {
+    constructor(private translate: TranslateService, private nav: NavController, private appConfig: AppConfig, private util: Util) {
     }
 
     loggedOn(): Promise<boolean> {
-        return this.sso.loggedOn();
+        return new Promise(resolve => {
+            this.util.loggedOn().then((result: boolean) => {
+                if (!result) {
+                    this.util.isAutoLogin().then((isAutoLogin: boolean) => {
+                        if (isAutoLogin) {
+                            Promise.all([this.util.getLoginID(), this.util.getPassword()]).then((values: any) => {
+                                return this.authenticate(values[0], values[1]);
+                            });
+                        }
+                    });
+                }
+                return result;
+            });
+        });
+    }
+
+    enableAutoLogin(loginID, password) {
+        this.util.enableAutoLogin();
+        this.util.setLoginID(loginID);
+        this.util.setPassword(password);
+    }
+
+    disableAutoLogin() {
+        this.util.disableAutoLogin();
+        this.util.removeLoginID();
+        this.util.removePassword();
     }
 
     authenticate(loginID, password): Promise<any> {
         return new Promise(resolve => {
-            this.sso.authenticate(loginID, password).then(authenticationResult => {
+            this.util.authenticate(loginID, password).then(authenticationResult => {
                 if (authenticationResult || !authenticationResult) {
                     resolve(authenticationResult);
                 } else {
