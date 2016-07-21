@@ -20,7 +20,7 @@ import {ShareService} from '../../../providers/share-service';
         TranslatePipe
     ]
 })
-@Injectable()
+
 export class DetailPage {
     @ViewChild(Content) pageContent: Content;
 
@@ -41,16 +41,17 @@ export class DetailPage {
     // The number of milliseconds between midnight, January 1, 1970.
     private pageLoadTime: number;
 
-    constructor(private nav: NavController, 
-                private params: NavParams, 
-                private notificationService: NotificationService, 
-                private view: ViewController, 
-                private platform: Platform, 
-                private share: ShareService) {
-        this.getNotificationDetailByNotificationID();
-        this.notification = this.params.get('notification'); 
+    constructor(private nav: NavController,
+        private params: NavParams,
+        private notificationService: NotificationService,
+        private view: ViewController,
+        private platform: Platform,
+        private share: ShareService) {
+        this.notification = this.params.get('notification');
         this.id = this.notification.notificationID;
-        this.readStatus = this.notification.readStatus;     
+        this.readStatus = this.notification.readStatus;
+
+        this.getNotificationDetailByNotificationID();
     }
 
     getNotificationDetailByNotificationID(): void {
@@ -101,14 +102,14 @@ export class DetailPage {
     scrollToDetailPageTop(): void {
         this.pageContent.scrollToTop();
     }
-    
+
     onPageScroll(that): any {
-        return function() {
+        return function () {
             if (this.scrollTop > 200) {
                 that.isScrollToTopButtonVisible = true;
             } else {
                 that.isScrollToTopButtonVisible = false;
             }
-        }       
+        }
     }
 }

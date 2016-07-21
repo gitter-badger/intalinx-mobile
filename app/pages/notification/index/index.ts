@@ -16,7 +16,7 @@ import {DetailPage} from '../detail/detail';
 @Component({
     templateUrl: 'build/pages/notification/index/index.html',
     providers: [
-        NotificationService, 
+        NotificationService,
         Util
     ],
     pipes: [
@@ -30,14 +30,14 @@ export class NotificationIndexPage {
     private isLoadCompleted: boolean;
     private isScrollToTopButtonVisible: boolean;
 
-    constructor(private share: ShareService, 
-                private nav: NavController, 
-                private notificationService: NotificationService) {
+    constructor(private share: ShareService,
+        private nav: NavController,
+        private notificationService: NotificationService) {
         this.getNotificationListForTop();
         this.getNotReadNotificationCountBySelf();
     }
-    
-    onPageLoaded (): void {
+
+    onPageLoaded(): void {
         this.isLoadCompleted = false;
     }
 
@@ -54,7 +54,13 @@ export class NotificationIndexPage {
     }
 
     doInfinite(infiniteScroll): void {
-        let position = this.notificationListForTop.length;
+        let position: number;
+        if (this.notificationListForTop) {
+            position = this.notificationListForTop.length;
+        } else {
+            position = 0;
+        }
+
         let isNeedRegistNotExistsReadStatus = false;
         this.notificationService.getNotificationListForTop(position, isNeedRegistNotExistsReadStatus).then((data: any) => {
             if (data && data.lenght > 0) {
@@ -76,7 +82,7 @@ export class NotificationIndexPage {
             }
         });
     }
-    
+
     getNotReadNotificationCountBySelf(): void {
         this.notificationService.getNotReadNotificationCountBySelf().then((data: any) => {
             if (data) {
@@ -84,22 +90,22 @@ export class NotificationIndexPage {
             }
         });
     }
-    
+
     ngAfterViewInit(): void {
         this.pageContent.addScrollListener(this.onPageScroll(this));
     }
-    
+
     scrollToIndexPageTop(): void {
         this.pageContent.scrollToTop();
     }
-    
+
     onPageScroll(that): any {
-        return function() {
+        return function () {
             if (this.scrollTop > 200) {
                 that.isScrollToTopButtonVisible = true;
             } else {
                 that.isScrollToTopButtonVisible = false;
             }
-        }       
+        }
     }
 }
