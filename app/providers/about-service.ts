@@ -1,4 +1,5 @@
 // Third party library.
+import {Injectable} from '@angular/core';
 import {Http, Headers, RequestOptions} from '@angular/http';
 import {Platform} from 'ionic-angular';
 import {AppVersion} from 'ionic-native';
@@ -9,6 +10,7 @@ import {AppConfig} from '../appconfig';
 // Utils.
 import {Util} from '../utils/util';
 
+@Injectable()
 export class AboutService {
 
     constructor(private http: Http, private platform: Platform, private util: Util, private appConfig: AppConfig) {
