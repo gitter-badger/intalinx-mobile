@@ -28,7 +28,7 @@
         <ion-spinner></ion-spinner>
     </div>
     
-    <div #ganttview class="ganttview" overflow-scroll="true" [style.visibility]="!isLoadCompleted ? 'hidden' : ''">
+    <div #ganttview class="ganttview" overflow-scroll="true" [class.hidden]="!isLoadCompleted">
         <div #deviceList class="device-list">
             <div #deviceListHeader class="device-list-header">
                 <div class="timezone">{{timeZone}}</div>
@@ -43,7 +43,7 @@
         </div>
         <div #ganttviewSlide overflow-scroll="true" class="ganttview-slide" (scroll)="onGanttviewSlideScrollLeft($event)">
             <div class="now-line">
-                <div class="line" [ngStyle]="setNowLineStyles()"></div>
+                <div #nowLine class="line" ></div>
             </div>
             <div #ganttviewDayTimeHeader class="ganttview-day-time-header">
                 <div [style.width]="ganttviewWidth + 'px'">
@@ -80,7 +80,7 @@
                         [style.margin-top]= "event.eventMarginTop"
                         (click)="showDetail(event)">
                         <div class="event-text">
-                            {{event.title}}
+                            {{event.participants}}
                         </div>
                     </div>
                 </div>
