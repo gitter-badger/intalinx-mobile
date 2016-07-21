@@ -46,11 +46,7 @@ export class ScheduleIndexPage {
         'selType': '',
         'userID': ''
     };
-    private searchHolidaysRequires: any = {
-        'locale': '',
-        'start': '',
-        'end': ''
-    };
+    private locale: string;
     private sendDataToShowOrDeleteEvent: any = {
         'selectedDay': '',
         'eventID': '',
@@ -66,12 +62,8 @@ export class ScheduleIndexPage {
 
     private defaultNumber: number = 0;
     private cachedSlidesOnOneSide: number = 1;
+    private calendarSlideOptions: any;
     private numbers: any;
-
-    private calendarSlideOptions = {
-        direction: 'vertical',
-        initialSlide: this.cachedSlidesOnOneSide
-    };
 
     private weekdays: any[] = moment.weekdaysMin(true);
 
@@ -102,13 +94,18 @@ export class ScheduleIndexPage {
 
     private isHtmlLoadCompleted: boolean;
     private isEventLoadCompleted: boolean;
-    private specialDays: any[];
+    private specialDays: any;
     private events: any;
 
-    private daysWithEvents: any[];
+    private timeline: any;
+    private eventsByDays = new Map(Array());
+    private specialDaysByDays = new Map(Array());
 
     constructor(private nav: NavController, private scheduleService: ScheduleService, private userService: UserService, private appConfig: AppConfig) {
-
+        this.calendarSlideOptions = {
+            direction: 'vertical',
+            initialSlide: this.cachedSlidesOnOneSide
+        };
         this.numbers = this.initNumbers(this.defaultNumber, this.cachedSlidesOnOneSide);
         this.weekdays = moment.weekdaysMin(true);
 
@@ -173,10 +170,6 @@ export class ScheduleIndexPage {
         let daysInMonth = firstDateWeek.daysInMonth();
         // the weekday of the first day on this month
         let firstDayWeek = firstDateWeek.format('d');
-        // weekdays
-        let timeline = [];
-        // calendar
-        let calendar = [];
 
         // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.\
         let indexOfFirstDayInWeek = 0;
@@ -185,113 +178,113 @@ export class ScheduleIndexPage {
             indexOfFirstDayInWeek = 1;
             indexOfLastDayInWeek = 0;
         }
-
+        this.timeline = [];
         // day and weekday
         if (indexOfFirstDayInWeek === 1 && firstDayWeek === 0) {
             for (let i = indexOfFirstDayInWeek; i < 7; i++) {
-                timeline.push(moment(firstDateWeek).subtract(7 - i, 'days'));
+                this.timeline.push(moment(firstDateWeek).subtract(7 - i, 'days'));
             }
         } else {
             for (let i = indexOfFirstDayInWeek; i < firstDayWeek; i++) {
-                timeline.push(moment(firstDateWeek).subtract(firstDayWeek - i, 'days'));
+                this.timeline.push(moment(firstDateWeek).subtract(firstDayWeek - i, 'days'));
             }
         }
         for (let i = 0; i < daysInMonth; i++) {
-            timeline.push(moment(firstDateWeek).add(i, 'days'));
+            this.timeline.push(moment(firstDateWeek).add(i, 'days'));
         }
         let lastDayWeek = moment(firstDateWeek).endOf('month').format('d');
         let lastDateInMonth = moment(firstDateWeek).endOf('month');
         if (Number(lastDayWeek) !== indexOfLastDayInWeek) {
             for (let i = 0; i < 6 - Number(lastDayWeek) + indexOfFirstDayInWeek; i++) {
-                timeline.push(moment(lastDateInMonth).add(i + 1, 'days'));
+                this.timeline.push(moment(lastDateInMonth).add(i + 1, 'days'));
             }
         }
         // calendar
-        for (let i = 0; i < Math.ceil(timeline.length / 7); i++) {
-            calendar[i] = timeline.slice(i * 7, (i + 1) * 7);
+        let calendar = [];
+        for (let i = 0; i < Math.ceil(this.timeline.length / 7); i++) {
+            calendar[i] = this.timeline.slice(i * 7, (i + 1) * 7);
         }
-        
         this.calendar = calendar;
 
         this.moment = moment().format('HH:mm');
-
         this.isHtmlLoadCompleted = true;
 
-        // this.searchEventsAndSpecialDaysBySelectedDay(this.selectedDay).then(data => {
-        //     if (data === 'true') {
-        //         this.searchEventsByDisplayedMonth();
-        //     }
-        // });
-        this.searchEventsByDisplayedMonth();
+        this.searchEventsAndSpecialDaysByDisplayedMonth();
     }
 
-    searchEventsAndSpecialDaysBySelectedDay(selectedDay) {
-
+    searchEventsAndSpecialDaysByDisplayedMonth() {
         this.isEventLoadCompleted = false;
-        return new Promise(resolve => {
-            this.selectedDay = selectedDay;
-            let startTime = moment(selectedDay).unix();
-            let endTime = moment(selectedDay).add(1, 'd').subtract(1, 'seconds').unix();
-
-            this.searchEventsRequires.startTime = startTime;
-            this.searchEventsRequires.endTime = endTime;
-
-            this.getSpecialDays(this.selectedDay);
-
-            this.scheduleService.searchEventsBySelectedDay(this.searchEventsRequires).then(data => {
-                this.events = data;
-                this.isEventLoadCompleted = true;
-                resolve('true');
-            });
-        });
-    }
-
-    searchEventsByDisplayedMonth() {
         let startTimeOfMonth = moment(this.yearMonth).unix() + moment().utcOffset() * 60;
         let endTimeOfMonth = moment(this.yearMonth).add(1, 'months').subtract(1, 'seconds').unix() + moment().utcOffset() * 60;
         this.searchEventsRequires.startTime = startTimeOfMonth;
         this.searchEventsRequires.endTime = endTimeOfMonth;
-        this.searchHolidaysRequires.start = startTimeOfMonth;
-        this.searchHolidaysRequires.end = endTimeOfMonth;
-        this.scheduleService.searchEventsByDisplayedMonth(this.searchEventsRequires).then(eventsDays => {
-
-            // this.scheduleService.searchSpecialDaysByDisplayedMonth(this.searchHolidaysRequires).then(specialDays => {
-            //     eventsDays = eventsDays.concat(specialDays);
-            //     this.daysOfEvents = Array.from(new Set(eventsDays));
-            //     this.daysOfEvents = eventsDays;
-            // });
+        this.scheduleService.getSpecialDays(this.locale, startTimeOfMonth, endTimeOfMonth).then((specialDays: any) => {
+            this.scheduleService.searchEvents(this.searchEventsRequires).then((events: any) => {
+                for (let i = 0; i < this.timeline.length; i++) {
+                    let eventsByDay = new Array();
+                    for (let j = 0; j < events.length; j++) {
+                        if (this.timeline[i].isBetween(moment(events[j].ouputStartTime, 'X'), moment(events[j].ouputEndTime, 'X'), 'day', '[]')) {
+                            eventsByDay.push(events[j]);
+                        }
+                    }
+                    if (eventsByDay.length > 0) {
+                        this.eventsByDays.set(this.timeline[i].format('YYYY/MM/D'), eventsByDay);
+                    }
+                    let specialDaysByDay = new Array();
+                    for (let j = 0; j < specialDays.length; j++) {
+                        if (this.timeline[i].isSame(moment.unix(specialDays[j].startDay).format('YYYY/MM/D'), 'day')) {
+                            specialDaysByDay.push(specialDays[j]);
+                        }
+                    }
+                    if (specialDaysByDay.length > 0) {
+                        this.specialDaysByDays.set(this.timeline[i].format('YYYY/MM/D'), specialDaysByDay);
+                    }
+                }
+                this.getEventsAndSpecialDaysBySelectedDay(this.selectedDay);
+            });
         });
+    }
+
+    getEventsAndSpecialDaysBySelectedDay(selectedDay) {
+        this.selectedDay = selectedDay;
+        this.events = this.eventsByDays.get(this.selectedDay);
+        this.specialDays = this.specialDaysByDays.get(this.selectedDay);
+        this.isEventLoadCompleted = true;
     }
 
     getLocalsFromSetting() {
         return new Promise(resolve => {
-            this.scheduleService.getUserLocaleSettings(this.searchEventsRequires.userID).then(locale => {
-                this.searchHolidaysRequires.locale = locale;
+            this.scheduleService.getUserLocaleSettings(this.searchEventsRequires.userID).then((locale: string) => {
+                this.locale = locale;
                 resolve(locale);
             });
         });
     }
 
-    getSpecialDays(selectedDay) {
-        return new Promise(resolve => {
-            this.selectedDay = selectedDay;
-            let startTime = moment(selectedDay).unix();
-            let endTime = moment(selectedDay).add(1, 'd').subtract(1, 'seconds').unix();
-
-            this.searchHolidaysRequires.start = startTime;
-            this.searchHolidaysRequires.end = endTime;
-
-            // this.scheduleService.getSpecialDaysInSelectedDay(this.searchHolidaysRequires, this.selectedDay).then(data => {
-            //     this.specialDays = data;
-            //     resolve('true');
-            // });
-        });
+    /**
+       * Makes an initial array of numbers to slide, based on the cache size specified
+       */
+    initNumbers(defaultNumber: number, cachedSlidesOnOneSide: number): any {
+        let length = 2 * cachedSlidesOnOneSide + 1;
+        let numbers = new Array(length);
+        numbers[cachedSlidesOnOneSide] = defaultNumber;
+        let pushedNumber = defaultNumber;
+        for (let i = cachedSlidesOnOneSide - 1; i >= 0; i--) {
+            pushedNumber--;
+            numbers[i] = pushedNumber;
+        }
+        pushedNumber = defaultNumber;
+        for (let i = cachedSlidesOnOneSide + 1; i < length; i++) {
+            pushedNumber++;
+            numbers[i] = pushedNumber;
+        }
+        return numbers;
     }
 
     changeMonth(swiper) {
-        let backward = swiper.swipeDirection === 'prev';
+        let swipeDirection = swiper.swipeDirection;
         let newIndex = this.slider.getActiveIndex();
-        if (backward) {
+        if (swipeDirection === 'prev') {
             while (newIndex < this.cachedSlidesOnOneSide) {
                 newIndex++;
                 this.numbers.unshift(this.numbers[0] - 1);
@@ -308,26 +301,6 @@ export class ScheduleIndexPage {
         }
         // Workaround to make it work: breaks the animation
         this.slider.slideTo(newIndex, 0, false);
-    }
-
-    /**
-    * Makes an initial array of numbers to slide, based on the cache size specified
-    */
-    initNumbers(defaultNumber: number, cachedSlidesOnOneSide: number): any {
-        let length = 2 * cachedSlidesOnOneSide + 1;
-        let numbers = new Array(length);
-        numbers[cachedSlidesOnOneSide] = defaultNumber;
-        let pushedNumber = defaultNumber;
-        for (let i = cachedSlidesOnOneSide - 1; i >= 0; i--) {
-            pushedNumber--;
-            numbers[i] = pushedNumber;
-        }
-        pushedNumber = defaultNumber;
-        for (let i = cachedSlidesOnOneSide + 1; i < length; i++) {
-            pushedNumber++;
-            numbers[i] = pushedNumber;
-        }
-        return numbers;
     }
 
     openEventDetail(event) {
@@ -371,25 +344,25 @@ export class ScheduleIndexPage {
         this.showCalendar(moment(this.yearMonth));
     }
 
-    onPageWillEnter() {
+    ionViewWillEnter() {
         // enter page after deleting event
         let isRefreshFlag = this.sendDataToShowOrDeleteEvent.isRefreshFlag;
         if (isRefreshFlag === true) {
-            this.searchEventsAndSpecialDaysBySelectedDay(this.sendDataToShowOrDeleteEvent.selectedDay);
-            for (let i = 0; i < this.sendDataToShowOrDeleteEvent.daysOfDeletedEvent.length; i++) {
-                let index = this.daysOfEvents.indexOf(this.sendDataToShowOrDeleteEvent.daysOfDeletedEvent[i]);
-                if (index !== -1) {
-                    this.daysOfEvents.splice(index, 1);
-                }
-            }
-            this.sendDataToShowOrDeleteEvent.isRefreshFlag = false;
+            // this.searchEventsAndSpecialDaysBySelectedDay(this.sendDataToShowOrDeleteEvent.selectedDay);
+            // for (let i = 0; i < this.sendDataToShowOrDeleteEvent.daysOfDeletedEvent.length; i++) {
+            //     let index = this.daysOfEvents.indexOf(this.sendDataToShowOrDeleteEvent.daysOfDeletedEvent[i]);
+            //     if (index !== -1) {
+            //         this.daysOfEvents.splice(index, 1);
+            //     }
+            // }
+            // this.sendDataToShowOrDeleteEvent.isRefreshFlag = false;
         }
         // enter page after adding event
         let isRefreshFlagFromAddEvent = this.sendDataToAddEvent.isRefreshFlag;
         if (isRefreshFlagFromAddEvent === true) {
-            this.searchEventsAndSpecialDaysBySelectedDay(this.sendDataToAddEvent.selectedDay);
-            this.daysOfEvents = this.daysOfEvents.concat(this.sendDataToAddEvent.daysOfAddedEvent);
-            this.sendDataToAddEvent.isRefreshFlag = false;
+            // this.searchEventsAndSpecialDaysBySelectedDay(this.sendDataToAddEvent.selectedDay);
+            // this.daysOfEvents = this.daysOfEvents.concat(this.sendDataToAddEvent.daysOfAddedEvent);
+            // this.sendDataToAddEvent.isRefreshFlag = false;
         }
     }
 }
