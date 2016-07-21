@@ -1,5 +1,5 @@
 // Third party library.
-import {Injectable, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {Platform, NavController, Content} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 
@@ -15,7 +15,7 @@ import {AboutService} from '../../providers/about-service';
         AboutService
     ]
 })
-@Injectable()
+
 export class AboutPage {
 
     private version: string = 'latest';

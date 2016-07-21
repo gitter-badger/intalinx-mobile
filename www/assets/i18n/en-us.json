@@ -140,7 +140,7 @@
             },
             "time": "Time",
             "colon": "：",
-            "selectFacilities": "Select Devices",
+            "selectDevices": "Select Devices",
             "selectParticipants": "Select Participants",
             "selectUser": "Select User",
             "scheduleOfPerson": "'s Schedule",

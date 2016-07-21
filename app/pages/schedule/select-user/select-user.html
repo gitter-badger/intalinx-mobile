@@ -1,17 +1,19 @@
-<ion-toolbar>
-    <ion-buttons start>
-        <button (click)="close()">
-            {{"app.action.cancel" | translate}}
-        </button>
-    </ion-buttons>
-    <ion-title>{{"app.schedule.selectUser" | translate}}</ion-title>
-    <ion-buttons end>
-        <button (click)="selectUsers()" [disabled]="selectedUserCount<=0">
-            {{"app.action.done" | translate}}
-            <span [hidden]="selectedUserCount<=0">({{selectedUserCount}})</span>
-        </button>
-    </ion-buttons>
-</ion-toolbar>
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons start>
+            <button (click)="close()">
+                {{"app.action.cancel" | translate}}
+            </button>
+        </ion-buttons>
+        <ion-title>{{"app.schedule.selectUser" | translate}}</ion-title>
+        <ion-buttons end>
+            <button (click)="selectUsers()" [disabled]="selectedUserCount<=0">
+                {{"app.action.done" | translate}}
+                <span [hidden]="selectedUserCount<=0">({{selectedUserCount}})</span>
+            </button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
 <ion-searchbar (input)="findUsers($event)" [hideCancelButton]=true placeholder='{{"app.action.search" | translate}}'>
     <ion-icon name="search"></ion-icon>
 </ion-searchbar>

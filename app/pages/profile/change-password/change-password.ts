@@ -1,5 +1,5 @@
 // Third party library.
-import {Injectable, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {NavController, ViewController, Platform} from 'ionic-angular';
 import {NgForm} from '@angular/common';
 import {TranslatePipe} from 'ng2-translate/ng2-translate';

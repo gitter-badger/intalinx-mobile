@@ -140,7 +140,7 @@
             },
             "time": "时间",
             "colon": "：",
-            "selectFacilities": "选择设施",
+            "selectDevices": "选择设施",
             "selectParticipants": "选择出席者",
             "selectUser": "选择要查看的用户",
             "scheduleOfPerson": "的日程",
