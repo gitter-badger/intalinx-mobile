@@ -24,7 +24,7 @@ import {SelectUserPage} from '../select-user/select-user';
         ScheduleService]
 })
 @Injectable()
-export class SelectdevicesPage {
+export class SelectDevicesPage {
 
     private originDevices: any;
     private selectedDeviceCount: number;
@@ -42,7 +42,7 @@ export class SelectdevicesPage {
         });
     }
 
-    getDevices() {
+    getDevices(): any  {
         return new Promise(resolve => {
             this.scheduleService.getDeviceListForSelect().then(devices => {
                 this.devices = devices;
@@ -52,7 +52,7 @@ export class SelectdevicesPage {
         });
     }
 
-    findDevices(event) {
+    findDevices(event: any): void  {
         this.isSearching = true;
         let deviceName = event.value;
 
@@ -66,7 +66,7 @@ export class SelectdevicesPage {
         }
     }
 
-    changeSelecteddevice(device) {
+    changeSelectedDevice(device: any): void  {
         if (device.isSelected === true) {
             this.selectedDevices.push(device);
             this.selectedDeviceCount++;
@@ -79,7 +79,7 @@ export class SelectdevicesPage {
         }
     }
 
-    setOriginSelectedDevices() {
+    setOriginSelectedDevices(): void  {
         for (let i = 0; i < this.originDevices.length; i++) {
             for (let j = 0; j < this.devices.length; j++) {
                 if (this.originDevices[i].deviceID === this.devices[j].deviceID) {
@@ -91,11 +91,11 @@ export class SelectdevicesPage {
         }
     }
 
-    close() {
+    close(): void  {
         this.viewCtrl.dismiss(this.originDevices);
     }
 
-    selectdevices() {
+    selectDevices(): void  {
         let sendDevices = new Array();
         this.selectedDevices.forEach(function (selectedDevice) {
             let device = {

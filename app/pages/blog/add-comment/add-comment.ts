@@ -9,9 +9,6 @@ import {Util} from '../../../utils/util';
 // Services.
 import {BlogService} from '../../../providers/blog-service';
 
-// Pages.
-import {DetailPage} from '../detail/detail';
-
 @Component({
     templateUrl: 'build/pages/blog/add-comment/add-comment.html',
     providers: [
@@ -19,7 +16,6 @@ import {DetailPage} from '../detail/detail';
         Util
     ]
 })
-@Injectable()
 export class AddCommentPage {
     private sendData: any;
     private id: string;

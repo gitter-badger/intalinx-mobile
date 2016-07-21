@@ -24,7 +24,6 @@ import {ChangeAvatarPage} from '../change-avatar/change-avatar';
     ],
     pipes: [TranslatePipe]
 })
-@Injectable()
 export class ProfileIndexPage {
     private userDefaultAvatarImageUrl: string;
     private user: any;

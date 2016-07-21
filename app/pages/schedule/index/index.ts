@@ -46,25 +46,25 @@ export class ScheduleIndexPage {
         'location': '',
         'timezone': '',
         'selType': '',
-        'userId': ''
-    }
+        'userID': ''
+    };
     private searchHolidaysRequires: any = {
         'locale': '',
         'start': '',
         'end': ''
-    }
+    };
     private sendDataToShowOrDeleteEvent: any = {
         'selectedDay': '',
-        'eventId': '',
+        'eventID': '',
         'daysOfDeletedEvent': '',
         'isRefreshFlag': false
-    }
+    };
 
     private sendDataToAddEvent: any = {
         'selectedDay': '',
         'daysOfAddedEvent': '',
         'isRefreshFlag': false
-    }
+    };
 
     private defaultNumber: number = 0;
     private cachedSlidesOnOneSide: number = 1;
@@ -73,7 +73,7 @@ export class ScheduleIndexPage {
     private calendarSlideOptions = {
         direction: 'vertical',
         initialSlide: this.cachedSlidesOnOneSide
-    }
+    };
 
     private weekdays: any[] = moment.weekdaysMin(true);
 
@@ -90,7 +90,7 @@ export class ScheduleIndexPage {
 
     private selectedDay: any;
 
-    private myUserId: string;
+    private myUserID: string;
 
     private myUserName: string;
 
@@ -131,11 +131,11 @@ export class ScheduleIndexPage {
         let firstDateWeek = moment(this.yearMonth);
         this.selectedDay = this.today;
 
-        // let userId =this.app.user.userId;
+        // let userID =this.app.user.userID;
         this.userService.getUserDetails().then(user => {
-            this.myUserId = user.userId;
+            this.myUserID = user.userID;
             this.myUserName = user.userName;
-            this.searchEventsRequires.userId = user.userId;
+            this.searchEventsRequires.userID = user.userID;
             this.selectedUserName = user.userName;
             this.getLocalsFromSetting().then(local => {
                 this.showCalendar(firstDateWeek);
@@ -265,7 +265,7 @@ export class ScheduleIndexPage {
 
     getLocalsFromSetting() {
         return new Promise(resolve => {
-            this.scheduleService.getUserLocaleSettings(this.searchEventsRequires.userId).then(locale => {
+            this.scheduleService.getUserLocaleSettings(this.searchEventsRequires.userID).then(locale => {
                 this.searchHolidaysRequires.locale = locale;
                 resolve(locale);
             });
@@ -332,7 +332,7 @@ export class ScheduleIndexPage {
 
     openEventDetail(event) {
         this.sendDataToShowOrDeleteEvent.selectedDay = this.selectedDay;
-        this.sendDataToShowOrDeleteEvent.eventId = event.eventID;
+        this.sendDataToShowOrDeleteEvent.eventID = event.eventID;
         this.nav.push(EventDetailPage, {
             'sendDataToShowOrDeleteEvent': this.sendDataToShowOrDeleteEvent
         });
@@ -349,7 +349,7 @@ export class ScheduleIndexPage {
         let selectUserModal = Modal.create(SelectUserPage);
         selectUserModal.onDismiss(data => {
             if (data) {
-                this.searchEventsRequires.userId = data.userId;
+                this.searchEventsRequires.userID = data.userID;
                 this.selectedUserName = data.userName;
                 this.showCalendar(moment(this.yearMonth));
             }
@@ -360,13 +360,13 @@ export class ScheduleIndexPage {
     showToday() {
         this.selectedDay = this.today;
         this.yearMonth = moment().format('YYYY-MM');
-        //this month
+        // this month
         let firstDateWeek = moment(this.yearMonth);
         this.showCalendar(moment(this.yearMonth));
     }
 
     showMySchedule() {
-        this.searchEventsRequires.userId = this.myUserId;
+        this.searchEventsRequires.userID = this.myUserID;
         this.selectedUserName = this.myUserName;
         this.showCalendar(moment(this.yearMonth));
     }
@@ -378,7 +378,7 @@ export class ScheduleIndexPage {
             this.searchEventsAndSpecialDaysBySelectedDay(this.sendDataToShowOrDeleteEvent.selectedDay);
             for (let i = 0; i < this.sendDataToShowOrDeleteEvent.daysOfDeletedEvent.length; i++) {
                 let index = this.daysOfEvents.indexOf(this.sendDataToShowOrDeleteEvent.daysOfDeletedEvent[i]);
-                if (index != -1) {
+                if (index !== -1) {
                     this.daysOfEvents.splice(index, 1);
                 }
             }

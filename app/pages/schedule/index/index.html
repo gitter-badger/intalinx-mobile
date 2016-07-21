@@ -1,15 +1,17 @@
-<ion-navbar *navbar>
-    <button menuToggle>
-        <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title [hidden]="isHtmlLoadCompleted==true">{{ "app.schedule.title" | translate }}</ion-title>
-    <ion-title [hidden]="isHtmlLoadCompleted!=true">{{selectedUserName}}{{ "app.schedule.scheduleOfPerson" | translate }}</ion-title>
-    <!--<ion-buttons end>
-        <button>
-            <ion-icon name="more" aria-label="more"></ion-icon>
+<ion-header>
+    <ion-navbar>
+        <button menuToggle>
+            <ion-icon name="menu"></ion-icon>
         </button>
-    </ion-buttons>-->
-</ion-navbar>
+        <ion-title [hidden]="isHtmlLoadCompleted==true">{{ "app.schedule.title" | translate }}</ion-title>
+        <ion-title [hidden]="isHtmlLoadCompleted!=true">{{selectedUserName}}{{ "app.schedule.scheduleOfPerson" | translate }}</ion-title>
+        <!--<ion-buttons end>
+            <button>
+                <ion-icon name="more" aria-label="more"></ion-icon>
+            </button>
+        </ion-buttons>-->
+    </ion-navbar>
+</ion-header>
 <ion-toolbar no-border-top class="year-month-tool">
     <ion-buttons start>
         <button class="last-month" (click)="lastMonth()">

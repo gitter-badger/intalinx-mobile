@@ -40,7 +40,7 @@ export class SelectParticipantsPage {
         });
     }
 
-    getOrganizationAndUsers() {
+    getOrganizationAndUsers(): any  {
         return new Promise(resolve => {
             this.scheduleService.getOrganizationList().then((orgs: any[]) => {
 
@@ -68,7 +68,7 @@ export class SelectParticipantsPage {
         });
     }
 
-    findUsers(event: any) {
+    findUsers(event: any): void  {
         this.isSearching = true;
         let userName = event.value;
 
@@ -82,7 +82,7 @@ export class SelectParticipantsPage {
         }
     }
 
-    changeSelectedUser(user: any) {
+    changeSelectedUser(user: any): void  {
         if (user.isSelected === true) {
             this.selectedUsers.push(user);
             this.selectedUsersCount++;
@@ -95,7 +95,7 @@ export class SelectParticipantsPage {
         }
     }
 
-    setOriginSelectedUsers() {
+    setOriginSelectedUsers(): void  {
         for (let i = 0; i < this.originUsers.length; i++) {
             for (let j = 0; j < this.allUsers.length; j++) {
                 if (this.originUsers[i].userID === this.allUsers[j].userID) {
@@ -107,11 +107,11 @@ export class SelectParticipantsPage {
         }
     }
 
-    close() {
+    close(): void  {
         this.viewCtrl.dismiss(this.originUsers);
     }
 
-    selectUsers() {
+    selectUsers(): void  {
         let sendUsers = new Array();
         this.selectedUsers.forEach(function(selectedUser) {
             let user = {

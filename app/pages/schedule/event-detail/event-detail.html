@@ -1,10 +1,11 @@
-<ion-navbar *navbar>
-    <ion-title>{{"app.schedule.eventDetail.title" | translate}}</ion-title>
-    <ion-buttons end [hidden]="!isLoadCompleted">
-        <button class="edit-event-detail" (click)="editEvent()">{{"app.action.edit" | translate}}</button>
-    </ion-buttons>
-</ion-navbar>
-
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{"app.schedule.eventDetail.title" | translate}}</ion-title>
+        <ion-buttons end [hidden]="!isLoadCompleted">
+            <button class="edit-event-detail" (click)="editEvent()">{{"app.action.edit" | translate}}</button>
+        </ion-buttons>
+    </ion-navbar>
+</ion-header>
 <ion-content padding class="event-detail">
     <div class="loading" [hidden]="isLoadCompleted">
         <ion-spinner name="dots"></ion-spinner>

@@ -18,7 +18,6 @@ import {UserService} from '../../../providers/user-service';
     ],
     pipes: [TranslatePipe]
 })
-@Injectable()
 export class ChangePasswordPage {
     private user: any;
     private isDisabled: boolean;

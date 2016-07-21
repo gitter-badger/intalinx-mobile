@@ -1,11 +1,13 @@
-<ion-navbar *navbar>
-    <button menuToggle>
-        <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>
-        {{"app.notification.title" | translate}}
-    </ion-title>
-</ion-navbar>
+<ion-header>
+    <ion-navbar>
+        <button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>
+            {{"app.notification.title" | translate}}
+        </ion-title>
+    </ion-navbar>
+</ion-header>
 <ion-content class="notification-index">
     <div class="loading" [hidden]="isLoadCompleted">
         <ion-spinner name="dots"></ion-spinner>
