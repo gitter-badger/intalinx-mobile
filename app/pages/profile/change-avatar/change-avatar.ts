@@ -1,5 +1,5 @@
 // Third party library.
-import {Injectable, ViewChild, Component, NgZone, ElementRef} from '@angular/core'
+import {Injectable, ViewChild, Component, NgZone, ElementRef} from '@angular/core';
 import {NavController, Loading, Modal, Toast, Alert, NavParams, ViewController, Platform} from 'ionic-angular';
 import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
 /// <reference path="./exif-ts/exif.d.ts" />

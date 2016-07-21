@@ -131,7 +131,7 @@ export class CordysUtil {
                         // wdk XXX: use guid generator?
                         let gid = 'a'; // XML validation requires that the request ID does not start with a number
                         for (let i = 0; i < 32; i++) {
-                            gid += Math.floor(Math.random() * 0xF).toString(0xF) + (i == 8 || i == 12 || i == 16 || i == 20 ? "-" : "");
+                            gid += Math.floor(Math.random() * 0xF).toString(0xF) + (i === 8 || i === 12 || i === 16 || i === 20 ? '-' : '');
                         }
                         return gid;
                     };
