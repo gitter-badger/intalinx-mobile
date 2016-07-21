@@ -7,7 +7,9 @@
         margin-right: 8px;
     }
     
-    .item-select ion-label {
+    .item-input ion-label, 
+    .item-select ion-label, 
+    .item-datetime ion-label{
         color: #000;
     }
     
@@ -28,7 +30,7 @@
     
     .participants {
         .participant-title {
-            font-size: 1.7rem;
+            font-size: 1.8rem;
             color: #000;
         }
         .participant-list {
@@ -48,7 +50,7 @@
     
     .devices {
         .device-title {
-            font-size: 1.7rem;
+            font-size: 1.8rem;
             color: #000;
         }
         .device-list {

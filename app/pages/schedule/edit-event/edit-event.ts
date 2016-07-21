@@ -1,5 +1,5 @@
 // Third party library.
-import {Injectable, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {NavController, Content, Alert, Modal, ViewController, NavParams} from 'ionic-angular';
 import {TranslateService, TranslatePipe} from 'ng2-translate/ng2-translate';
 
@@ -25,7 +25,7 @@ import * as moment from 'moment';
         SelectDevicesPage],
     pipes: [TranslatePipe]
 })
-@Injectable()
+
 export class EditEventPage {
     private visibilityPublic: string;
     private visibilityConfidential: string;
