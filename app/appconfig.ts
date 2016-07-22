@@ -16,7 +16,10 @@ export class AppConfig {
         USER_DEFAULT_AVATAR_IMAGE_URL: 'img/default',
         'PGYER_ANDROID_URL' : 'https://www.pgyer.com/MMHC',
         'PGYER_IOS_URL' : 'https://www.pgyer.com/MMHB',
-        'USER_LANG': 'en-US'
+        'USER_LANG': 'en-US',
+        'DATETIME_YEAR_MONTH_DAY_MIN': '2004-01-01',
+        'DATETIME_YEAR_MONTH_DAY_MAX': '2080-12-31',
+        'DATETIME_MINUTE_VALUES': '00, 15, 30, 45'
     };
     get(key: string): string {
         return this.config[key];

@@ -4,6 +4,9 @@ import {TranslatePipe} from 'ng2-translate/ng2-translate';
 import * as moment from 'moment';
 import {Alert, Content} from 'ionic-angular';
 
+// Config.
+import {AppConfig} from '../../../appconfig';
+
 // Utils.
 import {Util} from '../../../utils/util';
 
@@ -68,11 +71,14 @@ export class DevicesPage {
     private isNeedShowNowLine: boolean = false;
     private nowLineStyle: any;
     private dateTimes: any = new Array();
+    private minDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MIN');
+    private maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
 
     constructor(private util: Util, 
         private share: ShareService,
         private scheduleService: ScheduleService, 
-        private userService: UserService
+        private userService: UserService,
+        private appConfig: AppConfig
         ) {
         // initialize data
         this.initVariable();

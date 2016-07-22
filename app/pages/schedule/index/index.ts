@@ -57,43 +57,32 @@ export class ScheduleIndexPage {
         'selectedDay': '',
         'isRefreshFlag': false
     };
-
-    private defaultNumber: number = 0;
-    private cachedSlidesOnOneSide: number = 1;
-    private calendarSlideOptions: any;
-    private numbers: any;
+    private userLang: string = this.appConfig.get('USER_LANG');
+    private minDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MIN');
+    private maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
 
     private weekdays: any[] = moment.weekdaysMin(true);
+    private defaultNumber: number = 0;
+    private cachedSlidesOnOneSide: number = 1;
 
-    private userLang: string = this.appConfig.get('USER_LANG');
-
+    private calendarSlideOptions: any;
+    private numbers: any;
     private isFirstDayMonday: boolean;
-
     private today: any;
-
     private yearMonth: any;
-
-    private minDisplayDate: string = Number(moment().format('YYYY')) - 5 + '-01';
-    private maxDisplayDate: string = Number(moment().format('YYYY')) + 5 + '-12';
-
     private selectedDay: any;
-
     private myUserID: string;
-
     private myUserName: string;
-
     private selectedUserName: string;
 
-    private calendar: any[];
-
+    private calendar: any;
+    private timeline: any;
     private moment: any;
 
     private isHtmlLoadCompleted: boolean;
     private isEventLoadCompleted: boolean;
     private specialDays: any;
     private events: any;
-
-    private timeline: any;
     private eventsByDays: any = new Map(Array());
     private specialDaysByDays: any = new Map(Array());
 

@@ -3,6 +3,9 @@ import {Component} from '@angular/core';
 import {NavController, Content, Alert, Modal, ViewController, NavParams} from 'ionic-angular';
 import {TranslateService, TranslatePipe} from 'ng2-translate/ng2-translate';
 
+// Config.
+import {AppConfig} from '../../../appconfig';
+
 // Utils.
 import {Util} from '../../../utils/util';
 
@@ -57,12 +60,16 @@ export class EditEventPage {
     private actionOk: string;
     private actionYes: string;
     private actionNo: string;
+    private minDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MIN');
+    private maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
+    private minuteValues: string = this.appConfig.get('DATETIME_MINUTE_VALUES');
 
     constructor(private nav: NavController,
         private params: NavParams,
         private translate: TranslateService,
         private scheduleService: ScheduleService,
         private util: Util,
+        private appConfig: AppConfig,
         private userService: UserService) {
         this.initTranslation();
         this.initData();
