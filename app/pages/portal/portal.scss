@@ -90,5 +90,8 @@ input[type], textarea {
 textarea {
     resize: none;
 }
+.item-input.ng-valid.input-has-value::after {
+    border-bottom-color: $primary-color; 
+}
 .portal {
 }

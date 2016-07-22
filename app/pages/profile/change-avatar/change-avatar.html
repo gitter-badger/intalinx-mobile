@@ -12,11 +12,11 @@
 <ion-content padding class="change-avatar">
     <img src="{{userAvatar}}" />
 </ion-content>
-<ion-toolbar position="bottom" [style.display]="isSelectChange && isLoadCompleted ? 'inherit' : 'none'">
-    <ion-buttons start>
-        <button type="reset" (click)="resetUserAvatar()">{{ "app.action.cancel" | translate }}</button>
-    </ion-buttons>
-    <ion-buttons end>
-        <button type="submit" (click)="changeUserAvatar()">{{ "app.action.select" | translate }}</button>
-    </ion-buttons>
-</ion-toolbar>
+<ion-footer class="change-avatar">
+    <ion-toolbar position="bottom" [style.display]="isSelectChange && isLoadCompleted ? 'inherit' : 'none'">
+        <ion-buttons>
+            <button type="reset" class="button-left" (click)="resetUserAvatar()">{{ "app.action.cancel" | translate }}</button>
+            <button type="submit" class="button-right" (click)="changeUserAvatar()">{{ "app.action.select" | translate }}</button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-footer>
