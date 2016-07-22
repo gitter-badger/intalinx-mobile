@@ -54,7 +54,7 @@ export class SelectDevicesPage {
 
     findDevices(event: any): void  {
         this.isSearching = true;
-        let deviceName = event.value;
+        let deviceName = event.target.value;
 
         this.foundDevices = this.devices;
         if (deviceName && deviceName.trim() !== '') {

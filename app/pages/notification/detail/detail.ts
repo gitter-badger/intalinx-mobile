@@ -70,11 +70,11 @@ export class DetailPage {
         });
     }
 
-    onPageLoaded(): void {
+    ionViewLoaded(): void {
         this.pageLoadTime = new Date().getTime();
     }
 
-    onPageWillUnload(): void {
+    ionViewWillUnload(): void {
         let now = new Date().getTime();
         let pageLoadingTime = now - this.pageLoadTime;
         if (this.status === 'PUBLISH' && this.readStatus === 'NOT_READ' && pageLoadingTime >= 3000) {

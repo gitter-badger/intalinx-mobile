@@ -6,7 +6,7 @@
         <div class="from-to">
             <button clear>
                 <ion-datetime class="from" displayFormat="YYYY/MM/DD" 
-                          min="2004-01-01" max="2080-12-31" 
+                          min={{minDisplayDate}} max={{maxDisplayDate}} 
                           doneText=" {{'app.action.done' | translate}} " 
                           cancelText=" {{'app.action.cancel' | translate}} " 
                           [(ngModel)] = "fromDate" 

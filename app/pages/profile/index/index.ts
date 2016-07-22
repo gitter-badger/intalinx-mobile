@@ -42,7 +42,7 @@ export class ProfileIndexPage {
         };
     }
 
-    onPageWillEnter() {
+    ionViewWillEnter() {
         this.isLoadCompleted = false;
         this.userService.getUserDetails().then(data => {
             this.user = data;

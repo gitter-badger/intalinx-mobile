@@ -72,11 +72,11 @@ export class LoginPage {
         this.nav.setRoot(PortalPage);
     }
     
-    onPageWillEnter() {
+    ionViewWillEnter() {
         this.isDisabled = true;
     }
     
-    onPageDidEnter() {
+    ionViewDidEnter() {
         // If use already logged on, then redirect to portal page.
         this.loggedOn();
     }

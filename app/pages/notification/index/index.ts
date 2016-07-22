@@ -38,7 +38,7 @@ export class NotificationIndexPage {
         this.getNotReadNotificationCountBySelf();
     }
 
-    onPageLoaded(): void {
+    ionViewLoaded(): void {
         this.isLoadCompleted = false;
     }
 

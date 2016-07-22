@@ -72,7 +72,7 @@ export class SelectParticipantsPage {
 
     findUsers(event: any): void {
         this.isSearching = true;
-        let userName = event.value;
+        let userName = event.target.value;
 
         this.foundUserMembers = this.allUsers;
         if (userName && userName.trim() !== '') {

@@ -65,7 +65,7 @@ export class SelectUserPage {
 
     findUsers(event: any): void {
         this.isSearching = true;
-        let userName = event.value;
+        let userName = event.target.value;
 
         this.foundUserMembers = this.allUsers;
         if (userName && userName.trim() !== '') {
@@ -79,9 +79,9 @@ export class SelectUserPage {
 
     changeSelectedUser(user: any): void  {
         if (user.isSelected === true) {
-            this.allUsers.forEach(function (everyuser) {
-                if (user.userId !== everyuser.userId && everyuser.isSelected === true) {
-                    everyuser.isSelected = false;
+            this.allUsers.forEach(function (everyUser) {
+                if (user.userID !== everyUser.userID && everyUser.isSelected === true) {
+                    everyUser.isSelected = false;
                 }
             });
             this.selectedUser = user;
