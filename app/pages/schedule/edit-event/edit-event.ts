@@ -456,10 +456,6 @@ export class EditEventPage {
             }
             this.event.startTime = saveStartTime;
             this.event.endTime = saveEndTime;
-            // calculate the days of adding event
-            if (this.sendDataToAddEvent) {
-                this.setDaysOfAddedEvent();
-            }
             resolve(true);
         });
     }
@@ -607,15 +603,5 @@ export class EditEventPage {
             buttons: [this.actionOk]
         });
         this.nav.present(alert);
-    }
-
-    setDaysOfAddedEvent() {
-        let daysOfAddedEvent = new Array();
-        let startDay = Number(moment(this.startTime).format('D'));
-        let endDay = Number(moment(this.endTime).format('D'));
-        for (let i = startDay; i <= endDay; i++) {
-            daysOfAddedEvent.push(i.toString());
-        }
-        this.sendDataToAddEvent.daysOfAddedEvent = daysOfAddedEvent;
     }
 }
