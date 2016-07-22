@@ -185,7 +185,7 @@ export class DevicesPage {
         this.loadRemoteData();
     }
     
-    onPageLoaded(): void {
+    ionViewLoaded(): void {
         this.isLoadCompleted = false;
     }
     

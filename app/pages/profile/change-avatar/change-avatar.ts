@@ -208,9 +208,6 @@ export class ChangeAvatarPage {
         });
     }
 
-    onPageWillEnter() {
-    }
-
     resetUserAvatar() {
         this.userAvatar = this.initAvatar;
         this.fileInput.nativeElement.value = '';
