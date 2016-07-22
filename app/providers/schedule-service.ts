@@ -61,7 +61,7 @@ export class ScheduleService {
                     let isAdmin = false;
                     if (oRoleNodes) {
                         for (var i = 0; i < oRoleNodes.length; i++) {
-                            var role = this.util.getNodeText(oRoleNodes[i], './');
+                            var role = this.util.getNodeText(oRoleNodes[i], '.');
                             if (role === 'MyCalAdmin') {
                                 isAdmin = true;
                             }
