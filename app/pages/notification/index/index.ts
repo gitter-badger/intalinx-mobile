@@ -1,5 +1,5 @@
 // Third party library.
-import {Injectable, Component, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {NavController, Content} from 'ionic-angular';
 
 // Utils.
@@ -19,6 +19,7 @@ import {DetailPage} from '../detail/detail';
         Util
     ]
 })
+
 export class NotificationIndexPage {
     @ViewChild(Content) pageContent: Content;
 

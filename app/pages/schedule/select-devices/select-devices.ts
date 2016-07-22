@@ -1,5 +1,5 @@
 // Third party library.
-import {Injectable, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {NavController, NavParams, Content, Slides, Modal, ViewController} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 
@@ -23,7 +23,7 @@ import {SelectUserPage} from '../select-user/select-user';
     providers: [Util,
         ScheduleService]
 })
-@Injectable()
+
 export class SelectDevicesPage {
 
     private originDevices: any;

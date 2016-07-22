@@ -1,18 +1,20 @@
-<ion-toolbar>
-    <ion-buttons start>
-        <button (click)="close()">
-             {{"app.action.cancel" | translate}}
-        </button>
-    </ion-buttons>
-    <ion-title>{{"app.schedule.selectDevices" | translate}}</ion-title>
-    <ion-buttons end>
-        <button (click)="selectDevices()">
-            {{"app.action.done" | translate}}
-            <span [hidden]="selectedDeviceCount<=0">({{selectedDeviceCount}})</span>
-        </button>
-    </ion-buttons>
-</ion-toolbar>
-<ion-searchbar (ionInput)="findDevices($event)" [hideCancelButton]=true placeholder='{{"app.action.search" | translate}}'>
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons start>
+            <button (click)="close()">
+                {{"app.action.cancel" | translate}}
+            </button>
+        </ion-buttons>
+        <ion-title>{{"app.schedule.selectDevices" | translate}}</ion-title>
+        <ion-buttons end>
+            <button (click)="selectDevices()">
+                {{"app.action.done" | translate}}
+                <span [hidden]="selectedDeviceCount<=0">({{selectedDeviceCount}})</span>
+            </button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-searchbar (input)="findDevices($event)" [hideCancelButton]=true placeholder='{{"app.action.search" | translate}}'>
         <ion-icon name="search"></ion-icon>
     </ion-searchbar>
 <ion-content padding class="select-devices">

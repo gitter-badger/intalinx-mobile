@@ -1,5 +1,5 @@
 // Third party library.
-import {Injectable, Component, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {NavController, NavParams, ViewController, Platform, Content} from 'ionic-angular';
 import {NotificationService} from '../../../providers/notification-service';
 

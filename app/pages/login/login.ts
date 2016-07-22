@@ -1,5 +1,5 @@
 // Third party library.
-import {Injectable, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {NavController, ViewController, Popover, Alert} from 'ionic-angular';
 
 // Utils.

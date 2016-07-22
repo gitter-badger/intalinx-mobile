@@ -1,5 +1,5 @@
 // Third party library.
-import {Injectable, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {Platform, NavController, MenuController} from 'ionic-angular';
 
@@ -33,7 +33,7 @@ import {DevicesPage} from '../schedule/devices/devices';
         AboutService
     ]
 })
-@Injectable()
+
 export class PortalPage {
     version: string = 'latest';
     latestVersion: string = 'latest';
