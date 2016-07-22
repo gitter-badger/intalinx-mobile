@@ -1,7 +1,6 @@
 // Third party library.
 import {Injectable, Component, ViewChild} from '@angular/core';
 import {NavController, Content} from 'ionic-angular';
-import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -18,9 +17,6 @@ import {DetailPage} from '../detail/detail';
     providers: [
         NotificationService,
         Util
-    ],
-    pipes: [
-        TranslatePipe
     ]
 })
 export class NotificationIndexPage {

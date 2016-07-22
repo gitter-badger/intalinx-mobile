@@ -200,6 +200,7 @@ export class ScheduleService {
                     let startTime = moment(ouputStartTime, 'X').format('HH:mm');
                     let endTime = moment(ouputEndTime, 'X').format('HH:mm');
                     let isAllDay = eventOutput.isAllDay;
+                    let title = eventOutput.title;
                     if (searchEventsRequires.startTime >= eventOutput.startTime && searchEventsRequires.endTime <= eventOutput.endTime) {
                         isAllDay = 'true';
                     } else if (searchEventsRequires.startTime < eventOutput.startTime && searchEventsRequires.endTime < eventOutput.endTime) {
@@ -208,13 +209,15 @@ export class ScheduleService {
                         startTime = '00:00';
                     }
                     let event = {
-                        eventID: eventOutput.eventID,
-                        ouputStartTime: ouputStartTime,
-                        ouputEndTime: ouputEndTime,
-                        startTime: startTime,
-                        endTime: endTime,
-                        title: eventOutput.title,
-                        isAllDay: isAllDay
+                        'eventID': eventOutput.eventID,
+                        'ouputStartTime': ouputStartTime,
+                        'ouputEndTime': ouputEndTime,
+                        'startTime': startTime,
+                        'endTime': endTime,
+                        'title': title,
+                        'isAllDay': isAllDay,
+                        'visibility': eventOutput.visibility,
+                        'isSelf': eventOutput.isSelf
                     };
                     events.push(event);
                 }

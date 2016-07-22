@@ -2,7 +2,6 @@
 import {Injectable, Component} from '@angular/core';
 import {NavController, ViewController, Platform} from 'ionic-angular';
 import {NgForm} from '@angular/common';
-import {TranslatePipe} from 'ng2-translate/ng2-translate';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -15,8 +14,7 @@ import {UserService} from '../../../providers/user-service';
     providers: [
         UserService,
         Util
-    ],
-    pipes: [TranslatePipe]
+    ]
 })
 export class ChangePasswordPage {
     private user: any;

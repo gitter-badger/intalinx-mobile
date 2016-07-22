@@ -1,7 +1,7 @@
 // Third party library.
 import {Component} from '@angular/core';
 import {ActionSheet, NavController, NavParams} from 'ionic-angular';
-import {TranslateService, TranslatePipe} from 'ng2-translate/ng2-translate';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -21,8 +21,7 @@ import * as moment from 'moment';
         ScheduleService,
         UserService,
         Util
-    ],
-    pipes: [TranslatePipe]
+    ]
 })
 
 export class EventDetailPage {

@@ -1,7 +1,6 @@
 // Third party library.
 import {Injectable, Component} from '@angular/core';
 import {NavController, ViewController, Platform} from 'ionic-angular';
-import {TranslatePipe} from 'ng2-translate/ng2-translate';
 // Config.
 import {AppConfig} from '../../../appconfig';
 
@@ -21,8 +20,7 @@ import {ChangeAvatarPage} from '../change-avatar/change-avatar';
     providers: [
         UserService,
         Util
-    ],
-    pipes: [TranslatePipe]
+    ]
 })
 export class ProfileIndexPage {
     private userDefaultAvatarImageUrl: string;

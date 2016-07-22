@@ -1,6 +1,5 @@
 // Third party library.
 import {Component, ViewChild, ElementRef} from '@angular/core';
-import {TranslatePipe} from 'ng2-translate/ng2-translate';
 import * as moment from 'moment';
 import {Alert, Content} from 'ionic-angular';
 
@@ -21,11 +20,7 @@ import {UserService} from '../../../providers/user-service';
         Util,
         ScheduleService,
         UserService
-    ],
-    pipes: [TranslatePipe],
-    queries: {
-        
-    }
+    ]
 })
 export class DevicesPage {
 

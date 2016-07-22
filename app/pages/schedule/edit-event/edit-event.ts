@@ -1,7 +1,7 @@
 // Third party library.
 import {Component} from '@angular/core';
 import {NavController, Content, Alert, Modal, ViewController, NavParams} from 'ionic-angular';
-import {TranslateService, TranslatePipe} from 'ng2-translate/ng2-translate';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
 // Config.
 import {AppConfig} from '../../../appconfig';
@@ -25,8 +25,7 @@ import * as moment from 'moment';
         UserService,
         Util,
         SelectParticipantsPage,
-        SelectDevicesPage],
-    pipes: [TranslatePipe]
+        SelectDevicesPage]
 })
 
 export class EditEventPage {
