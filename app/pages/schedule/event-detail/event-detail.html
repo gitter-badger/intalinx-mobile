@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar>
         <ion-title>{{"app.schedule.eventDetail.title" | translate}}</ion-title>
-        <ion-buttons end [hidden]="!isLoadCompleted">
+        <ion-buttons end [hidden]="!isLoadCompleted || (!isAdmin && !isParticiPant)">
             <button class="edit-event-detail" (click)="editEvent()">{{"app.action.edit" | translate}}</button>
         </ion-buttons>
     </ion-navbar>
@@ -57,7 +57,7 @@
     </div>
 </ion-content>
 
-<ion-footer>
+<ion-footer [hidden]="!isLoadCompleted || (!isAdmin && !isParticiPant)">
     <ion-toolbar>
         <ion-buttons text-center>
             <button (click)="deleteEvent()">{{"app.schedule.deleteEvent" | translate}}</button>

@@ -8,6 +8,7 @@ import {Util} from '../../../utils/util';
 
 // Services.
 import {ScheduleService} from '../../../providers/schedule-service';
+import {UserService} from '../../../providers/user-service';
 
 // Pages.
 import {EditEventPage} from '../edit-event/edit-event';
@@ -18,6 +19,7 @@ import * as moment from 'moment';
     templateUrl: 'build/pages/schedule/event-detail/event-detail.html',
     providers: [
         ScheduleService,
+        UserService,
         Util
     ],
     pipes: [TranslatePipe]
@@ -61,11 +63,14 @@ export class EventDetailPage {
     private deleteEventRequires: any;
 
     private isAfterEditEvent: boolean;
+    private isAdmin: boolean = false;
+    private isParticiPant: boolean = false;
 
     constructor(private nav: NavController,
         private params: NavParams,
         private translate: TranslateService,
-        private scheduleService: ScheduleService) {
+        private scheduleService: ScheduleService,
+        private userService: UserService) {
 
         this.sendDataToShowOrDeleteEvent = this.params.get('sendDataToShowOrDeleteEvent');
         this.eventID = this.sendDataToShowOrDeleteEvent.eventID;
@@ -77,6 +82,10 @@ export class EventDetailPage {
             'isRefreshFlag': false
         };
         this.getEventByEventID();
+
+        this.scheduleService.getIsAdmin().then((data: boolean) => {
+            this.isAdmin = data;
+        });
     }
 
     getEventByEventID() {
@@ -121,6 +130,7 @@ export class EventDetailPage {
             this.updateDateTime = moment(event.updateDate).format('LL HH:MM:SS');
 
             let participants = data.participants;
+            this.isParticiPantMember(participants);
             this.setParticipantNames(participants);
             this.isLoadCompleted = true;
         });
@@ -173,6 +183,16 @@ export class EventDetailPage {
         for (let i = 0; i < participants.length; i++) {
             this.participantNames.push(participants[i].userName);
         }
+    }
+
+    isParticiPantMember(participants) {
+        this.userService.getUserID().then((userID: string) => {
+            for (let i = 0; i < participants.length; i++) {
+                if (participants[i].userID === userID) {
+                    this.isParticiPant = true;
+                }
+            }
+        });
     }
 
     deleteEvent() {
