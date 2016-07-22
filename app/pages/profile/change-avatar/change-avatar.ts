@@ -143,7 +143,7 @@ export class ChangeAvatarPage {
                     quality = 0.01;
                 } else {
                     other.loading.dismiss();
-                    other.app.translate.get(['app.blog.message.error.title', 
+                    other.translate.get(['app.blog.message.error.title', 
                                              'app.profile.message.error.avatarTooLarge', 
                                              'app.action.ok']).subscribe(message => {
                         let title = message['app.blog.message.error.title'];
