@@ -12,7 +12,7 @@
         </button>
     </ion-buttons>
 </ion-toolbar>
-<ion-searchbar (input)="findUsers($event)" [hideCancelButton]=true placeholder='{{"app.action.search" | translate}}'>
+<ion-searchbar (ionInput)="findUsers($event)" [hideCancelButton]=true placeholder='{{"app.action.search" | translate}}'>
     <ion-icon name="search"></ion-icon>
 </ion-searchbar>
 <ion-content padding class="select-participants">
