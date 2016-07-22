@@ -1,7 +1,7 @@
 // Third party library.
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
-import {NavController, Alert} from 'ionic-angular';
+import {NavController} from 'ionic-angular';
 
 // Config.
 import {AppConfig} from '../appconfig';

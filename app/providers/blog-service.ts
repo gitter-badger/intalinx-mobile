@@ -1,6 +1,6 @@
 // Third party library.
 import {Injectable} from '@angular/core';
-import {NavController, Alert} from 'ionic-angular';
+import {NavController} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 
 // Config.
@@ -203,33 +203,11 @@ export class BlogService {
                 this.insertReplyContent(comment).then(data => {
                     if (data === 'true') {
                         resolve(data);
-                    } else {
-                        this.translate.get(['app.blog.message.error.title', 'app.message.error.systemError', 'app.action.ok']).subscribe(message => {
-                            let title = message['app.blog.message.error.title'];
-                            let ok = message['app.action.ok'];
-                            let content = message['app.message.error.systemError'];
-
-                            let alert = Alert.create({
-                                title: title,
-                                subTitle: content,
-                                buttons: [ok]
-                            });
-                            this.nav.present(alert);
-                        });
                     }
                 });
             } else {
-                this.translate.get(['app.blog.message.error.title', 'app.blog.message.error.noContent', 'app.action.ok']).subscribe(message => {
-                    let title = message['app.blog.message.error.title'];
-                    let ok = message['app.action.ok'];
-                    let content = message['app.blog.message.error.noContent'];
-
-                    let alert = Alert.create({
-                        title: title,
-                        subTitle: content,
-                        buttons: [ok]
-                    });
-                    this.nav.present(alert);
+                this.translate.get('app.blog.message.error.noContent').subscribe(message => {
+                    this.util.presentModal(message);
                 });
             }
         });

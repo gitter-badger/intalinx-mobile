@@ -8,6 +8,9 @@
             "info": {
                 "title": "提示",
                 "versionTooOld": "有新的版本更新。"
+            },
+            "warning": {
+                "title": "警告"
             }
         },
         "action": {

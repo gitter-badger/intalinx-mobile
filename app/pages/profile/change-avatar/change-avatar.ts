@@ -1,6 +1,6 @@
 // Third party library.
 import {ViewChild, Component, NgZone, ElementRef} from '@angular/core';
-import {NavController, Loading, Modal, Toast, Alert, NavParams, ViewController, Platform} from 'ionic-angular';
+import {NavController, Loading, Modal, Toast, NavParams, ViewController, Platform} from 'ionic-angular';
 import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
 /// <reference path="./exif-ts/exif.d.ts" />
 import * as EXIF from 'exif-ts/exif';
@@ -40,7 +40,8 @@ export class ChangeAvatarPage {
         private platform: Platform,
         private userService: UserService,
         private translate: TranslateService,
-        private share: ShareService) {
+        private share: ShareService,
+        private util: Util) {
 
         this.user = this.params.get('user');
         this.isLoadCompleted = true;
@@ -143,18 +144,8 @@ export class ChangeAvatarPage {
                     quality = 0.01;
                 } else {
                     other.loading.dismiss();
-                    other.app.translate.get(['app.blog.message.error.title', 
-                                             'app.profile.message.error.avatarTooLarge', 
-                                             'app.action.ok']).subscribe(message => {
-                        let title = message['app.blog.message.error.title'];
-                        let ok = message['app.action.ok'];
-                        let content = message['app.profile.message.error.avatarTooLarge'];
-                        let alert = Alert.create({
-                            title: title,
-                            subTitle: content,
-                            buttons: [ok]
-                        });
-                        other.nav.present(alert);
+                    other.translate.get('app.profile.message.error.avatarTooLarge').subscribe(message => {
+                        other.util.presentModal(message);
                     });
                     other.isSelectChange = false;
                     return false;

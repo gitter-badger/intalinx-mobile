@@ -54,8 +54,7 @@ export class EditEventPage {
     private repeatStartTime: any;
     private repeatEndTime: any;
     private devices: any;
-    private errorTitle: string;
-    private infoTitle: string;
+    private warningTitle: string;
     private actionOk: string;
     private actionYes: string;
     private actionNo: string;
@@ -413,14 +412,11 @@ export class EditEventPage {
     }
 
     getTransInfoForDisplayAlert() {
-        this.translate.get(['app.message.error.title',
-            'app.message.info.title',
-            'app.action.ok',
+        this.translate.get([
+            'app.message.warning.title',
             'app.action.yes',
             'app.action.no']).subscribe(message => {
-                this.errorTitle = message['app.message.error.title'];
-                this.infoTitle = message['app.message.info.title'];
-                this.actionOk = message['app.action.ok'];
+                this.warningTitle = message['app.message.warning.title'];
                 this.actionYes = message['app.action.yes'];
                 this.actionNo = message['app.action.no'];
             });
@@ -526,7 +522,7 @@ export class EditEventPage {
             let faultCode = err.faultcode;
             if ((faultCode.indexOf('WARN002') > -1) || (faultCode.indexOf('WARN001') > -1)) {
                 errMsg = this.convertWarningMessage(errMsg);
-                this.confirmRepeatWarn(this.errorTitle, errMsg, this.actionYes, this.actionNo, faultCode, 'addEvent');
+                this.confirmRepeatWarn(this.warningTitle, errMsg, this.actionYes, this.actionNo, faultCode, 'addEvent');
             } else {
                 this.showError(errMsg);
             }
@@ -547,7 +543,7 @@ export class EditEventPage {
             if ((faultCode.indexOf('WARN002') > -1) || (faultCode.indexOf('WARN001') > -1)) {
                 errMsg = this.convertWarningMessage(errMsg);
 
-                this.confirmRepeatWarn(this.errorTitle, errMsg, this.actionYes, this.actionNo, faultCode, 'updateEvent');
+                this.confirmRepeatWarn(this.warningTitle, errMsg, this.actionYes, this.actionNo, faultCode, 'updateEvent');
             } else {
                 this.showError(errMsg);
             }
@@ -603,11 +599,6 @@ export class EditEventPage {
     }
 
     showError(errorMessage) {
-        let alert = Alert.create({
-            title: this.errorTitle,
-            subTitle: errorMessage,
-            buttons: [this.actionOk]
-        });
-        this.nav.present(alert);
+        this.util.presentModal(errorMessage);
     }
 }

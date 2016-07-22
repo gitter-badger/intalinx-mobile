@@ -162,7 +162,7 @@ export class Util {
         });
     }
 
-    presentModal(content, level) {
+    presentModal(content: string, level?: string) {
         return this.alertUtil.presentModal(content, level);
     }
 

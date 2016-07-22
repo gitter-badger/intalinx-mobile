@@ -25,7 +25,6 @@ export class ChangePasswordPage {
         private userService: UserService,
         private platform: Platform) {
 
-
         this.user = {
             oldPassword: '',
             newPassword: '',

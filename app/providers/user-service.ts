@@ -1,7 +1,7 @@
 // Third party library.
 import {Injectable} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
-import {NavController, Alert} from 'ionic-angular';
+import {NavController} from 'ionic-angular';
 
 // Config.
 import {AppConfig} from '../appconfig';
@@ -50,18 +50,7 @@ export class UserService {
                 if (authenticationResult || !authenticationResult) {
                     resolve(authenticationResult);
                 } else {
-                    this.translate.get(['app.blog.message.error.title', 'app.message.error.systemError', 'app.action.ok']).subscribe(message => {
-                        let title = message['app.blog.message.error.title'];
-                        let ok = message['app.action.ok'];
-                        let content = message['app.message.error.systemError'];
-
-                        let alert = Alert.create({
-                            title: title,
-                            subTitle: content,
-                            buttons: [ok]
-                        });
-                        this.nav.present(alert);
-                    });
+                    this.util.presentSystemErrorModal();
                 }
             });
         });
@@ -77,8 +66,18 @@ export class UserService {
                     this.util.setNodeText(objRequest, './/*[local-name()=\'NewPassword\']', user.newPassword);
                     req = this.util.xml2string(objRequest);
 
-                    this.util.callCordysWebservice(req).then(data => {
+                    this.util.callCordysWebservice(req, true).then(data => {
                         resolve(true);
+                    }, err => {
+                        let errResponse = this.util.parseXml(err.text());
+                        let errMsg = this.util.getNodeText(errResponse, './/*[local-name()=\'faultstring\']');
+                        if (this.appConfig.get('USER_LANG').toLowerCase() === 'zh-cn' && errMsg.indexOf('does not match the current password') >= 0) {
+                            this.translate.get('app.profile.message.error.mismatchCurrentPassword').subscribe(message => {
+                                this.util.presentModal(message);
+                            });
+                        } else {
+                            this.util.presentModal(errMsg);
+                        }
                     });
                 });
             }
@@ -89,30 +88,12 @@ export class UserService {
         let passwordEmptyFault = newPassword === '' && confirmPassword === '';
         let arePasswordsSame = newPassword === confirmPassword;
         if (passwordEmptyFault) {
-            this.translate.get(['app.profile.message.error.title', 'app.profile.message.error.emptyPassword', 'app.action.ok']).subscribe(message => {
-                let title = message['app.profile.message.error.title'];
-                let ok = message['app.action.ok'];
-                let content = message['app.profile.message.error.emptyPassword'];
-
-                let alert = Alert.create({
-                    title: title,
-                    subTitle: content,
-                    buttons: [ok]
-                });
-                this.nav.present(alert);
+            this.translate.get('app.profile.message.error.emptyPassword').subscribe(message => {
+                this.util.presentModal(message);
             });
         } else if (!arePasswordsSame) {
-            this.translate.get(['app.profile.message.error.title', 'app.profile.message.error.mismatchPassword', 'app.action.ok']).subscribe(message => {
-                let title = message['app.profile.message.error.title'];
-                let ok = message['app.action.ok'];
-                let content = message['app.profile.message.error.mismatchPassword'];
-
-                let alert = Alert.create({
-                    title: title,
-                    subTitle: content,
-                    buttons: [ok]
-                });
-                this.nav.present(alert);
+            this.translate.get('app.profile.message.error.mismatchPassword').subscribe(message => {
+                this.util.presentModal(message);
             });
         }
         return !passwordEmptyFault && arePasswordsSame;
