@@ -21,7 +21,7 @@
                 <img src="{{notification.createUserAvatar}}" />
             </ion-avatar>
             <p>{{notification.createUserName}}</p>
-            <h2 class="title">{{notification.title}}</h2>
+            <h2 class="title {{(notification.priorityLevel == 'HIGH') ? 'high-priority' : ''}}">{{notification.title}}</h2>
             <div item-right class="status">
                 <ion-badge class="new" *ngIf="notification.readStatus=='NOT_READ'">{{"app.notification.newNotification" | translate}}</ion-badge>
                 <p>{{notification.publishStartDate}}</p>
