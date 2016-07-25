@@ -13,10 +13,10 @@
             </button>
         </ion-buttons>
     </ion-toolbar>
-</ion-header>
-<ion-searchbar (input)="findDevices($event)" [hideCancelButton]=true placeholder='{{"app.action.search" | translate}}'>
+    <ion-searchbar (input)="findDevices($event)" [hideCancelButton]=true placeholder='{{"app.action.search" | translate}}'>
         <ion-icon name="search"></ion-icon>
     </ion-searchbar>
+</ion-header>
 <ion-content padding class="select-devices">
     <ion-list [hidden]="isSearching!=true">
         <ion-item *ngFor="let device of foundDevices">
