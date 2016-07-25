@@ -39,17 +39,15 @@ export class NotificationService {
                     let notificationOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'NotificationOutputForTop\']');
                     let notifications = new Array();
                     for (let i = 0; i < notificationOutputs.length; i++) {
-                        notifications.push(this.util.xml2json(notificationOutputs[i]).NotificationOutputForTop);
-                    }
-
-                    notifications.forEach(function (notification) {
+                        let notification = this.util.xml2json(notificationOutputs[i]).NotificationOutputForTop;
                         if (!notification.createUserAvatar || notification.createUserAvatar.toString().indexOf('data:image') !== 0) {
                             notification.createUserAvatar = this.userDefaultAvatarImageUrl;
                         }
                         this.util.fromNowForNotification(notification.publishStartDate).then(data => {
                             notification.publishStartDate = data;
                         });
-                    }, this);
+                        notifications.push(notification);
+                    }
 
                     resolve(notifications);
                 });

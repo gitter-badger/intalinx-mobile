@@ -36,17 +36,16 @@ export class BlogService {
                     let communityOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'CommunityOutput\']');
                     let communities = new Array();
                     for (let i = 0; i < communityOutputs.length; i++) {
-                        communities.push(this.util.xml2json(communityOutputs[i]).CommunityOutput);
-                    }
-
-                    communities.forEach(function (community) {
+                        let community = this.util.xml2json(communityOutputs[i]).CommunityOutput;
                         if (!community.createUserAvatar || community.createUserAvatar.toString().indexOf('data:image') !== 0) {
                             community.createUserAvatar = this.userDefaultAvatarImageUrl;
                         }
                         this.util.fromNow(community.publishStartDate).then(data => {
                             community.publishStartDate = data;
                         });
-                    }, this);
+
+                        communities.push(community);
+                    }
 
                     resolve(communities);
                 });
@@ -139,17 +138,15 @@ export class BlogService {
                     let rreplyContentOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'ReplyContentOutput\']');
                     let replyContents = new Array();
                     for (let i = 0; i < rreplyContentOutputs.length; i++) {
-                        replyContents.push(this.util.xml2json(rreplyContentOutputs[i]).ReplyContentOutput);
-                    }
-
-                    replyContents.forEach(function (replyContent) {
+                        let replyContent = this.util.xml2json(rreplyContentOutputs[i]).ReplyContentOutput;
                         if (!replyContent.userAvatar || replyContent.userAvatar.toString().indexOf('data:image') !== 0) {
                             replyContent.userAvatar = this.userDefaultAvatarImageUrl;
                         }
                         this.util.fromNow(replyContent.createDate).then(data => {
                             replyContent.createDate = data;
                         });
-                    }, this);
+                        replyContents.push(replyContent);
+                    }
 
                     let cursor = this.util.selectXMLNode(objResponse, './/*[local-name()=\'cursor\']');
                     cursor = this.util.xml2json(cursor);
