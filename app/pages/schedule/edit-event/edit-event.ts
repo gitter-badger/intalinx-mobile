@@ -551,8 +551,8 @@ export class EditEventPage {
     }
 
     convertWarningMessage(oldMessage) {
-        // oldMessage: 
-        // '下記の参加者は既に同じ時間帯の予定が入っています。</br>王　茜: 1468453500~1468455300;スケジュールを登録しますか？'
+        // oldMessage:
+        // '下記の参加者は既に同じ時間帯の予定が入っています。<br/>王　茜: 1469412000~1469416500;スケジュールを登録しますか？'
         let aMessages = oldMessage.split(';');
         let newMessage = '';
         for (let i = 0; i < aMessages.length - 1; i++) {
@@ -561,11 +561,11 @@ export class EditEventPage {
             let sStart = sStartEnd.split('~')[0];
             let sEnd = sStartEnd.split('~')[1];
             newMessage += sWarningName + ': ' + moment.unix(sStart).format('YYYY/MM/DD HH:mm')
-                + ' ~ ' + moment.unix(sEnd).format('YYYY/MM/DD HH:mm') + '</br>';
+                + ' ~ ' + moment.unix(sEnd).format('YYYY/MM/DD HH:mm') + '<br/>';
         }
         newMessage += aMessages[aMessages.length - 1];
         // newMessage: 
-        // 下記の参加者は既に同じ時間帯の予定が入っています。</br>王　茜: 2016/07/14 08:45 ~ 2016/07/14 09:15</br>スケジュールを登録しますか？'
+        // 下記の参加者は既に同じ時間帯の予定が入っています。<br/>王　茜: 2016/07/14 08:45 ~ 2016/07/14 09:15<br/>スケジュールを登録しますか？'
         return newMessage;
     }
 
