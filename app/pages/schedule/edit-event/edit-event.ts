@@ -179,9 +179,9 @@ export class EditEventPage {
 
     getEventByEventID(eventID) {
         this.isNewEvent = false;
-        this.scheduleService.getEventByEventID(eventID).then((data: any) => {
-            this.event = data.event;
-            this.participants = data.participants;
+        this.scheduleService.getEventByEventID(eventID).then((event: any) => {
+            this.event = event;
+            this.participants = event.Participant;
 
             if (this.event.isAllDay === 'true') {
                 this.event.isAllDay = true;
@@ -192,13 +192,13 @@ export class EditEventPage {
                 this.event.isRepeat = true;
                 this.isOriginalRepeat = true;
                 this.event.parentEventID = this.event.eventID;
-                this.transRepeatRuleToPerformanceData(data.event.repeatRule);
+                this.transRepeatRuleToPerformanceData(event.repeatRule);
             } else {
                 this.event.isRepeat = false;
-                this.startTime = moment.unix(data.event.startTime).format();
-                this.endTime = moment.unix(data.event.endTime).format();
+                this.startTime = moment.unix(event.startTime).format();
+                this.endTime = moment.unix(event.endTime).format();
             }
-            this.getDevicesByDeviceIDs(data.event.deviceID);
+            this.getDevicesByDeviceIDs(event.deviceID);
             // To set some default value for updating data.
             this.event.isDeviceRepeatWarned = false;
             this.event.isEventRepeatWarned = false;

@@ -59,7 +59,6 @@ export class EventDetailPage {
     private repeatTypeName: string;
     private repeatValueName: string;
     private visibilityTypeName: string;
-    private deleteEventRequires: any;
 
     private isAfterEditEvent: boolean;
     private isAdmin: boolean = false;
@@ -88,8 +87,7 @@ export class EventDetailPage {
     }
 
     getEventByEventID() {
-        this.scheduleService.getEventByEventID(this.eventID).then((data: any) => {
-            let event = data.event;
+        this.scheduleService.getEventByEventID(this.eventID).then((event: any) => {
             this.isAllDay = event.isAllDay;
             this.isRepeat = event.isRepeat;
             let repeatRule = event.repeatRule;
@@ -128,7 +126,7 @@ export class EventDetailPage {
             this.updateUserName = event.updateUserName;
             this.updateDateTime = moment(event.updateDate).format('LL HH:MM:SS');
 
-            let participants = data.participants;
+            let participants = event.Participant;
             this.isParticiPantMember(participants);
             this.setParticipantNames(participants);
             this.isLoadCompleted = true;
@@ -195,12 +193,6 @@ export class EventDetailPage {
     }
 
     deleteEvent() {
-        this.deleteEventRequires = {
-            'eventID': this.eventID,
-            'isFromRepeatToSpecial': false,
-            'startTime': '',
-            'endTime': ''
-        };
         if (this.isRepeat === 'true') {
             this.presentDeleteRepeatEventActionSheet();
         } else {
@@ -223,15 +215,14 @@ export class EventDetailPage {
                         {
                             text: deleteEventOfSelectedDay,
                             handler: () => {
-                                this.deleteEventRequires.isFromRepeatToSpecial = true;
-                                this.deleteEventRequires.startTime = moment(this.selectedDay + ' ' + this.repeatStartTime).unix();
-                                this.deleteEventRequires.endTime = moment(this.selectedDay + ' ' + this.repeatEndTime).unix();
-                                this.deleteTheEvent();
+                                let startTime = moment(this.selectedDay + ' ' + this.repeatStartTime).unix();
+                                let endTime = moment(this.selectedDay + ' ' + this.repeatEndTime).unix();
+                                this.deleteTheEvent(this.eventID, true, startTime, endTime);
                             }
                         }, {
                             text: deleteAllEvents,
                             handler: () => {
-                                this.deleteTheEvent();
+                                this.deleteTheEvent(this.eventID, false, '', '');
                             }
                         }, {
                             text: cancelButton,
@@ -254,7 +245,7 @@ export class EventDetailPage {
                     {
                         text: deleteEvent,
                         handler: () => {
-                            this.deleteTheEvent();
+                            this.deleteTheEvent(this.eventID, true, '', '');
                         }
                     }, {
                         text: cancelButton,
@@ -268,8 +259,8 @@ export class EventDetailPage {
         });
     }
 
-    deleteTheEvent() {
-        this.scheduleService.deleteEvent(this.deleteEventRequires).then(data => {
+    deleteTheEvent(eventID, isFromRepeatToSpecial, startTime, endTime) {
+        this.scheduleService.deleteEvent(eventID, isFromRepeatToSpecial, startTime, endTime).then(data => {
             if (data === 'true') {
                 this.sendDataToShowOrDeleteEvent.isRefreshFlag = true;
                 setTimeout(() => {

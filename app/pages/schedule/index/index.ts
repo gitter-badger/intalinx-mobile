@@ -32,20 +32,7 @@ import {SelectUserPage} from '../select-user/select-user';
 })
 export class ScheduleIndexPage {
     @ViewChild('calendarSlides') slider: Slides;
-    private searchEventsRequires: any = {
-        'categoryID': '',
-        'isRepeat': '',
-        'startTime': '',
-        'endTime': '',
-        'deviceID': '',
-        'visibility': '',
-        'title': '',
-        'summary': '',
-        'location': '',
-        'timezone': '',
-        'selType': '',
-        'userID': ''
-    };
+
     private locale: string;
     private sendDataToShowOrDeleteEvent: any = {
         'selectedDay': '',
@@ -73,6 +60,7 @@ export class ScheduleIndexPage {
     private selectedDay: any;
     private myUserID: string;
     private myUserName: string;
+    private userID: string;
     private selectedUserName: string;
 
     private calendar: any;
@@ -115,7 +103,7 @@ export class ScheduleIndexPage {
         this.userService.getUserDetails().then(user => {
             this.myUserID = user.userID;
             this.myUserName = user.userName;
-            this.searchEventsRequires.userID = user.userID;
+            this.userID = user.userID;
             this.selectedUserName = user.userName;
             this.getLocalsFromSetting().then(local => {
                 this.showCalendar(firstDateWeek);
@@ -156,7 +144,7 @@ export class ScheduleIndexPage {
         // the weekday of the first day on this month
         let firstDayWeek = firstDateWeek.format('d');
 
-        // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.\
+        // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
         let indexOfFirstDayInWeek = 0;
         let indexOfLastDayInWeek = 6;
         if (this.isFirstDayMonday && this.isFirstDayMonday === true) {
@@ -164,8 +152,9 @@ export class ScheduleIndexPage {
             indexOfLastDayInWeek = 0;
         }
         this.timeline = new Array();
-        // day and weekday
-        if (indexOfFirstDayInWeek === 1 && firstDayWeek === 0) {
+
+        // when the first day of the week is Sunday.
+        if (indexOfFirstDayInWeek === 1 && firstDayWeek === '0') {
             for (let i = indexOfFirstDayInWeek; i < 7; i++) {
                 this.timeline.push(moment(firstDateWeek).subtract(7 - i, 'days'));
             }
@@ -184,12 +173,6 @@ export class ScheduleIndexPage {
                 this.timeline.push(moment(lastDateInMonth).add(i + 1, 'days'));
             }
         }
-        // calendar
-        let calendar = new Array();
-        for (let i = 0; i < Math.ceil(this.timeline.length / 7); i++) {
-            calendar[i] = this.timeline.slice(i * 7, (i + 1) * 7);
-        }
-        this.calendar = calendar;
 
         this.moment = moment().format('HH:mm');
         this.isHtmlLoadCompleted = true;
@@ -201,10 +184,8 @@ export class ScheduleIndexPage {
         this.isEventLoadCompleted = false;
         let startTimeOfMonth = moment(yearMonth).unix() + moment().utcOffset() * 60;
         let endTimeOfMonth = moment(yearMonth).add(1, 'months').subtract(1, 'seconds').unix() + moment().utcOffset() * 60;
-        this.searchEventsRequires.startTime = startTimeOfMonth;
-        this.searchEventsRequires.endTime = endTimeOfMonth;
         this.scheduleService.getSpecialDays(this.locale, startTimeOfMonth, endTimeOfMonth).then((specialDays: any) => {
-            this.scheduleService.searchEvents(this.searchEventsRequires).then((events: any) => {
+            this.scheduleService.searchEventsByStartTimeAndEndTimeAndUserID(startTimeOfMonth, endTimeOfMonth, this.userID).then((events: any) => {
                 this.eventsByDays.clear();
                 this.specialDaysByDays.clear();
                 for (let i = 0; i < this.timeline.length; i++) {
@@ -241,7 +222,7 @@ export class ScheduleIndexPage {
 
     getLocalsFromSetting() {
         return new Promise(resolve => {
-            this.scheduleService.getUserLocaleSettings(this.searchEventsRequires.userID).then((locale: string) => {
+            this.scheduleService.getUserLocaleSettings(this.userID).then((locale: string) => {
                 this.locale = locale;
                 resolve(locale);
             });
@@ -309,7 +290,7 @@ export class ScheduleIndexPage {
         let selectUserModal = Modal.create(SelectUserPage);
         selectUserModal.onDismiss(data => {
             if (data) {
-                this.searchEventsRequires.userID = data.userID;
+                this.userID = data.userId;
                 this.selectedUserName = data.userName;
                 this.showCalendar(moment(this.yearMonth));
             }
@@ -326,7 +307,7 @@ export class ScheduleIndexPage {
     }
 
     showMySchedule() {
-        this.searchEventsRequires.userID = this.myUserID;
+        this.userID = this.myUserID;
         this.selectedUserName = this.myUserName;
         this.showCalendar(moment(this.yearMonth));
     }

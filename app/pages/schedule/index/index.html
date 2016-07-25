@@ -5,11 +5,6 @@
         </button>
         <ion-title [hidden]="isHtmlLoadCompleted==true">{{ "app.schedule.title" | translate }}</ion-title>
         <ion-title [hidden]="isHtmlLoadCompleted!=true">{{selectedUserName}}{{ "app.schedule.scheduleOfPerson" | translate }}</ion-title>
-        <!--<ion-buttons end>
-            <button>
-                <ion-icon name="more" aria-label="more"></ion-icon>
-            </button>
-        </ion-buttons>-->
     </ion-navbar>
     <ion-toolbar no-border-top class="year-month-tool">
         <ion-buttons start>
@@ -18,50 +13,38 @@
             </button>
         </ion-buttons>
         <ion-item class="display-year-month">
-            <ion-datetime displayFormat="YYYY/MM" min={{minDisplayDate}} max={{maxDisplayDate}} (change)="changeCalendar($event)" [(ngModel)]="yearMonth"
+            <ion-datetime displayFormat="YYYY/MM" min={{minDisplayDate}} max={{maxDisplayDate}} (ionChange)="changeCalendar($event)" [(ngModel)]="yearMonth"
                 cancelText='{{ "app.action.cancel" | translate }}' doneText='{{ "app.action.done" | translate }}'></ion-datetime>
         </ion-item>
         <ion-buttons end>
             <button class="next-month" (click)="nextMonth()">
                 <ion-icon name="arrow-forward"></ion-icon>
             </button>
-            <!--<button class="search-event" (click)="searchEventsBySelectedDay()">
-                <ion-icon name="search"></ion-icon>
-            </button>-->
             <button class="add-event" (click)="addEvent()">
                 <ion-icon name="md-add"></ion-icon>
             </button>
         </ion-buttons>
     </ion-toolbar>
     <ion-toolbar no-border-top class="week-names">
-        <ion-row>
-            <ion-col *ngFor="let weekday of weekdays" [ngClass]="{'weekends': (isFirstDayMonday==false && (weekday==weekdays[0] || weekday==weekdays[6])) || (isFirstDayMonday==true && (weekday==weekdays[5] || weekday==weekdays[6]))}">{{weekday}}</ion-col>
-        </ion-row>
+        <div class="week-days" *ngFor="let weekday of weekdays" [ngClass]="{'weekends': (isFirstDayMonday==false && (weekday==weekdays[0] || weekday==weekdays[6])) || (isFirstDayMonday==true && (weekday==weekdays[5] || weekday==weekdays[6]))}">{{weekday}}</div>
     </ion-toolbar>
-
 </ion-header>
-
 <ion-content class="month-calendar">
     <div class="loading" [hidden]="isHtmlLoadCompleted==true">
         <ion-spinner name="dots"></ion-spinner>
     </div>
     <ion-slides #calendarSlides (ionDrag)="changeMonth($event)" [options]="calendarSlideOptions">
         <ion-slide class="calendar" *ngFor="let n of numbers">
-            <ion-grid [hidden]="isHtmlLoadCompleted==false">
-                <ion-row *ngFor="let week of calendar">
-                    <!--<ion-col *ngFor="let day of week" (mouseover)="searchEventsAndSpecialDaysBySelectedDay(day.format('YYYY/MM/D'))">-->
-                    <ion-col *ngFor="let day of week" (click)="getEventsAndSpecialDaysBySelectedDay(day.format('YYYY/MM/D'))">
-                        <div class="day-default" [ngClass]="{'day-not-this-month': day.format('YYYY-MM')!=yearMonth,
+            <div class="day-in-calendar" *ngFor="let day of timeline" (click)="getEventsAndSpecialDaysBySelectedDay(day.format('YYYY/MM/D'))">
+                <div class="day-default" [ngClass]="{'day-not-this-month': day.format('YYYY-MM')!=yearMonth,
                             'day-today': day.format('YYYY/MM/D')==today,
                             'weekends': day.format('d')==6 || day.format('d')==0,
                             'hover': day.format('YYYY/MM/D')==selectedDay}">
-                            {{day.format('D')}}
-                        </div>
-                        <ion-badge class="day-has-events" [style.visibility]="day.format('YYYY-MM')==yearMonth && eventsByDays.has(day.format('YYYY/MM/DD')) ? 'visible' : 'hidden'">
-                        </ion-badge>
-                    </ion-col>
-                </ion-row>
-            </ion-grid>
+                    {{day.format('D')}}
+                </div>
+                <ion-badge class="day-has-events" [style.visibility]="day.format('YYYY-MM')==yearMonth && eventsByDays.has(day.format('YYYY/MM/DD')) ? 'visible' : 'hidden'">
+                </ion-badge>
+            </div>
         </ion-slide>
     </ion-slides>
     <ion-scroll class="events" scrollY="true">
@@ -90,9 +73,6 @@
                     <ion-col width-10></ion-col>
                 </ion-row>
             </ion-item>
-            <!--<ion-item [style.display]="events&&events.length==0 && specialDays&&specialDays.length==0 ? 'block' : 'none'">
-                イベントはありません
-            </ion-item>-->
         </ion-list>
     </ion-scroll>
 </ion-content>

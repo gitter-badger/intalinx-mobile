@@ -2,6 +2,7 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import * as moment from 'moment';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
 // Utils.
 import {Util} from '../utils/util';
@@ -9,7 +10,7 @@ import {Util} from '../utils/util';
 @Injectable()
 export class ScheduleService {
 
-    constructor(private http: Http, private util: Util) {
+    constructor(private http: Http, private util: Util, private translate: TranslateService) {
     }
 
     getUserLocaleSettings(userID: string): any {
@@ -157,70 +158,47 @@ export class ScheduleService {
         });
     }
 
-    searchEventsWithoutTranferToJson(searchEventsRequires: any): any {
+    searchEventsByStartTimeAndEndTimeAndUserID(startTime: number, endTime: number, userID: string): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/search_events.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
-
-                this.util.setNodeText(objRequest, './/*[local-name()=\'categoryID\']', searchEventsRequires.categoryID);
-                this.util.setNodeText(objRequest, './/*[local-name()=\'isRepeat\']', searchEventsRequires.isRepeat);
-                this.util.setNodeText(objRequest, './/*[local-name()=\'startTime\']', searchEventsRequires.startTime);
-                this.util.setNodeText(objRequest, './/*[local-name()=\'endTime\']', searchEventsRequires.endTime);
-                this.util.setNodeText(objRequest, './/*[local-name()=\'deviceID\']', searchEventsRequires.deviceID);
-                this.util.setNodeText(objRequest, './/*[local-name()=\'visibility\']', searchEventsRequires.visibility);
-                this.util.setNodeText(objRequest, './/*[local-name()=\'title\']', searchEventsRequires.title);
-                this.util.setNodeText(objRequest, './/*[local-name()=\'summary\']', searchEventsRequires.summary);
-                this.util.setNodeText(objRequest, './/*[local-name()=\'location\']', searchEventsRequires.location);
-                this.util.setNodeText(objRequest, './/*[local-name()=\'timezone\']', searchEventsRequires.timezone);
-                this.util.setNodeText(objRequest, './/*[local-name()=\'selType\']', searchEventsRequires.selType);
-                this.util.setNodeText(objRequest, './/*[local-name()=\'userID\']', searchEventsRequires.userID);
-
+                this.util.setNodeText(objRequest, './/*[local-name()=\'startTime\']', startTime);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'endTime\']', endTime);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'userID\']', userID);
                 req = this.util.xml2string(objRequest);
-
                 this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
-
                     let eventOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'EventOutput\']');
 
-                    resolve(eventOutputs);
-                });
-            });
-        });
-    }
-
-    searchEvents(searchEventsRequires: any): any {
-        return new Promise(resolve => {
-            this.searchEventsWithoutTranferToJson(searchEventsRequires).then((eventOutputs: string) => {
-                let events = new Array();
-                for (let i = 0; i < eventOutputs.length; i++) {
-                    let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
-                    let ouputStartTime = eventOutput.startTime;
-                    let ouputEndTime = eventOutput.endTime;
-                    let startTime = moment(ouputStartTime, 'X').format('HH:mm');
-                    let endTime = moment(ouputEndTime, 'X').format('HH:mm');
-                    let isAllDay = eventOutput.isAllDay;
-                    let title = eventOutput.title;
-                    if (searchEventsRequires.startTime >= eventOutput.startTime && searchEventsRequires.endTime <= eventOutput.endTime) {
-                        isAllDay = 'true';
-                    } else if (searchEventsRequires.startTime < eventOutput.startTime && searchEventsRequires.endTime < eventOutput.endTime) {
-                        endTime = '24:00';
-                    } else if (searchEventsRequires.endTime > eventOutput.endTime && searchEventsRequires.startTime > eventOutput.startTime) {
-                        startTime = '00:00';
+                    let events = new Array();
+                    for (let i = 0; i < eventOutputs.length; i++) {
+                        let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
+                        let ouputStartTime = eventOutput.startTime;
+                        let ouputEndTime = eventOutput.endTime;
+                        let startHourMinute = moment(ouputStartTime, 'X').format('HH:mm');
+                        let endHourMinute = moment(ouputEndTime, 'X').format('HH:mm');
+                        let isAllDay = eventOutput.isAllDay;
+                        if (startTime >= eventOutput.startTime && endTime <= eventOutput.endTime) {
+                            isAllDay = 'true';
+                        } else if (startTime < eventOutput.startTime && endTime < eventOutput.endTime) {
+                            endHourMinute = '24:00';
+                        } else if (endTime > eventOutput.endTime && startTime > eventOutput.startTime) {
+                            startHourMinute = '00:00';
+                        }
+                        if (!eventOutput.title && eventOutput.isSelf === 'false') {
+                            this.translate.get('app.schedule.visibility.invisible').subscribe(message => {
+                                eventOutput.title = message;
+                            });
+                        }
+                        eventOutput['ouputStartTime'] = ouputStartTime;
+                        eventOutput['ouputEndTime'] = ouputEndTime;
+                        eventOutput.startTime = startHourMinute;
+                        eventOutput.endTime = endHourMinute;
+                        eventOutput.isAllDay = isAllDay;
+                        events.push(eventOutput);
                     }
-                    let event = {
-                        'eventID': eventOutput.eventID,
-                        'ouputStartTime': ouputStartTime,
-                        'ouputEndTime': ouputEndTime,
-                        'startTime': startTime,
-                        'endTime': endTime,
-                        'title': title,
-                        'isAllDay': isAllDay,
-                        'visibility': eventOutput.visibility,
-                        'isSelf': eventOutput.isSelf
-                    };
-                    events.push(event);
-                }
-                resolve(events);
+                    resolve(events);
+                });
             });
         });
     }
@@ -242,11 +220,7 @@ export class ScheduleService {
                     for (let i = 0; i < participantNodes.length; i++) {
                         participants.push(this.util.xml2json(participantNodes[i]).Participant);
                     }
-                    let returnData = {
-                        'event': event,
-                        'participants': participants
-                    };
-                    resolve(returnData);
+                    event.Participant = participants;
                     resolve(event);
                 });
             });
@@ -400,13 +374,9 @@ export class ScheduleService {
                     let usrs = new Array();
                     for (let i = 0; i < userOutputs.length; i++) {
                         let userOutput = this.util.xml2json(userOutputs[i]).UserOutput;
-                        let user = {
-                            // Attendation: In this webservice, we had used userId not userID.
-                            'userID': userOutput.userId,
-                            'userName': userOutput.userName,
-                            'assignOrgCd': userOutput.assignOrgCd,
-                            'isSelected': false,
-                        };
+                        let user = userOutput;
+                        user['isSelected'] = false;
+                        user['userID'] = userOutput.userId;
                         usrs.push(user);
                     }
                     resolve(usrs);
@@ -549,11 +519,8 @@ export class ScheduleService {
         });
     }
 
-    deleteEvent(deleteEventRequires: any): any {
+    deleteEvent(eventID: string, isFromRepeatToSpecial: string, startTime: string, endTime: string): any {
         return new Promise(resolve => {
-
-            let eventID = deleteEventRequires.eventID;
-            let isFromRepeatToSpecial = deleteEventRequires.isFromRepeatToSpecial;
             this.util.getRequestXml('./assets/requests/schedule/delete_event.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
                 this.util.setNodeText(objRequest, './/*[local-name()=\'eventID\']', eventID);
@@ -561,15 +528,13 @@ export class ScheduleService {
                 this.util.setNodeText(objRequest, './/*[local-name()=\'isFromRepeatToSpecial\']', '' + isFromRepeatToSpecial);
                 if (isFromRepeatToSpecial) {
                     this.util.setNodeText(objRequest, './/*[local-name()=\'parentEventID\']', eventID);
-                    this.util.setNodeText(objRequest, './/*[local-name()=\'oldStartTime\']', deleteEventRequires.startTime);
-                    this.util.setNodeText(objRequest, './/*[local-name()=\'oldEndTime\']', deleteEventRequires.endTime);
+                    this.util.setNodeText(objRequest, './/*[local-name()=\'oldStartTime\']', startTime);
+                    this.util.setNodeText(objRequest, './/*[local-name()=\'oldEndTime\']', endTime);
                     this.util.setNodeText(objRequest, './/*[local-name()=\'startTime\']', -1);
                     this.util.setNodeText(objRequest, './/*[local-name()=\'endTime\']', -1);
                 }
-
                 req = this.util.xml2string(objRequest);
                 this.util.callCordysWebservice(req).then((data: string) => {
-
                     resolve('true');
                 });
             });
@@ -582,12 +547,8 @@ export class ScheduleService {
                 let devices = new Array();
                 for (let i = 0; i < deviceOutputs.length; i++) {
                     let deviceOutput = this.util.xml2json(deviceOutputs[i]).DeviceOutput;
-                    let device = {
-                        'deviceID': deviceOutput.deviceID,
-                        'deviceName': deviceOutput.deviceName,
-                        'description': deviceOutput.description,
-                        'isSelected': false,
-                    };
+                    let device = deviceOutput;
+                    device['isSelected'] = false;
                     devices.push(device);
                 }
                 resolve(devices);
