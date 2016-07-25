@@ -139,7 +139,8 @@
                 "title": "公開制限",
                 "public": "一般公開",
                 "confidential": "限定公開",
-                "private": "非公開"
+                "private": "非公開",
+                "invisible": "[未公開]"
             },
             "time": "時間",
             "colon": "：",

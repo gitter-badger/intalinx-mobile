@@ -139,7 +139,8 @@
                 "title": "公开权限",
                 "public": "公开",
                 "confidential": "部分公开",
-                "private": "不公开"
+                "private": "不公开",
+                "invisible": "[未公开]"
             },
             "time": "时间",
             "colon": "：",

@@ -139,7 +139,8 @@
                 "title": "Visibility",
                 "public": "Public",
                 "confidential": "Limit Public",
-                "private": "Private"
+                "private": "Private",
+                "invisible": "[Invisible]"
             },
             "time": "Time",
             "colon": "：",
