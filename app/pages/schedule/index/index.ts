@@ -73,7 +73,7 @@ export class ScheduleIndexPage {
     private eventsByDays: any = new Map(Array());
     private specialDaysByDays: any = new Map(Array());
 
-    constructor(private nav: NavController, private scheduleService: ScheduleService, private userService: UserService, private appConfig: AppConfig) {
+    constructor(private nav: NavController, private translate: TranslateService, private scheduleService: ScheduleService, private userService: UserService, private appConfig: AppConfig) {
         this.calendarSlideOptions = {
             direction: 'vertical',
             initialSlide: this.cachedSlidesOnOneSide
@@ -249,8 +249,13 @@ export class ScheduleIndexPage {
     openEventDetail(event) {
         this.sendDataToShowOrDeleteEvent.selectedDay = this.selectedDay;
         this.sendDataToShowOrDeleteEvent.eventID = event.eventID;
-        this.nav.push(EventDetailPage, {
-            'sendDataToShowOrDeleteEvent': this.sendDataToShowOrDeleteEvent
+
+        this.translate.get('app.schedule.visibility.invisible').subscribe(message => {
+            if (!(event.title === message && event.isSelf === 'false')) {
+                this.nav.push(EventDetailPage, {
+                    'sendDataToShowOrDeleteEvent': this.sendDataToShowOrDeleteEvent
+                });
+            }
         });
     }
 

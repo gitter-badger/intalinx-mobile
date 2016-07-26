@@ -62,7 +62,7 @@
                     <ion-col width-70>{{specialDay.specialDayName}}</ion-col>
                 </ion-row>
             </ion-item>
-            <ion-item *ngFor="let event of events" (click)="openEventDetail(event)" [disabled]="event.title==('app.schedule.visibility.invisible'|translate)&&event.isSelf=='false'">
+            <ion-item *ngFor="let event of events" (click)="openEventDetail(event)">
                 <ion-row [ngClass]="{'event-in-past-time': selectedDay==today&&event.isAllDay!='true'&&moment>event.endTime}">
                     <ion-col text-right width-20 class="border-right-solid border-right-default">
                         <ion-row [hidden]="event.isAllDay!='true'">{{ "app.schedule.index.allDay" | translate }}</ion-row>
