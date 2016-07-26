@@ -245,7 +245,7 @@ export class EventDetailPage {
                     {
                         text: deleteEvent,
                         handler: () => {
-                            this.deleteTheEvent(this.eventID, true, '', '');
+                            this.deleteTheEvent(this.eventID, false, '', '');
                         }
                     }, {
                         text: cancelButton,

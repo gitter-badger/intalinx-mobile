@@ -308,7 +308,7 @@ export class ScheduleIndexPage {
         // enter page after adding event
         let isRefreshFlagFromAddEvent = this.sendDataToAddEvent.isRefreshFlag;
         if (isRefreshFlagFromAddEvent === true) {
-            let yearMonth = moment(this.sendDataToShowOrDeleteEvent.selectedDay).format('YYYY-MM');
+            let yearMonth = moment(this.sendDataToAddEvent.selectedDay).format('YYYY-MM');
             this.searchEventsAndSpecialDaysByDisplayedMonth(yearMonth);
             this.sendDataToAddEvent.isRefreshFlag = false;
         }
