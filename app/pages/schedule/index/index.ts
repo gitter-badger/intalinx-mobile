@@ -226,24 +226,26 @@ export class ScheduleIndexPage {
 
     changeMonth(swiper) {
         let swipeDirection = swiper.swipeDirection;
-        let newIndex = this.slider.getActiveIndex();
-        if (swipeDirection === 'prev') {
-            while (newIndex < this.cachedSlidesOnOneSide) {
-                newIndex++;
-                this.numbers.unshift(this.numbers[0] - 1);
-                this.numbers.pop();
-                this.lastMonth();
+        if (swipeDirection) {
+            let newIndex = this.slider.getActiveIndex();
+            if (swipeDirection === 'prev') {
+                while (newIndex < this.cachedSlidesOnOneSide) {
+                    newIndex++;
+                    this.numbers.unshift(this.numbers[0] - 1);
+                    this.numbers.pop();
+                    this.lastMonth();
+                }
+            } else {
+                while (newIndex > this.cachedSlidesOnOneSide) {
+                    newIndex--;
+                    this.numbers.push(this.numbers[this.numbers.length - 1] + 1);
+                    this.numbers.shift();
+                    this.nextMonth();
+                }
             }
-        } else {
-            while (newIndex > this.cachedSlidesOnOneSide) {
-                newIndex--;
-                this.numbers.push(this.numbers[this.numbers.length - 1] + 1);
-                this.numbers.shift();
-                this.nextMonth();
-            }
+            // Workaround to make it work: breaks the animation
+            this.slider.slideTo(newIndex, 0, false);
         }
-        // Workaround to make it work: breaks the animation
-        this.slider.slideTo(newIndex, 0, false);
     }
 
     openEventDetail(event) {
