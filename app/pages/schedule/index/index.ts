@@ -59,9 +59,8 @@ export class ScheduleIndexPage {
     private yearMonth: any;
     private selectedDay: any;
     private myUserID: string;
-    private myUserName: string;
     private userID: string;
-    private selectedUserName: string;
+    private selectedOtherUserName: string;
 
     private calendar: any;
     private timeline: any;
@@ -102,9 +101,8 @@ export class ScheduleIndexPage {
         // let userID =this.app.user.userID;
         this.userService.getUserDetails().then(user => {
             this.myUserID = user.userID;
-            this.myUserName = user.userName;
             this.userID = user.userID;
-            this.selectedUserName = user.userName;
+            this.selectedOtherUserName = '';
             this.getLocalsFromSetting().then(local => {
                 this.showCalendar(firstDateWeek);
             });
@@ -152,7 +150,6 @@ export class ScheduleIndexPage {
             indexOfLastDayInWeek = 0;
         }
         this.timeline = new Array();
-
         // when the first day of the week is Sunday.
         if (indexOfFirstDayInWeek === 1 && firstDayWeek === '0') {
             for (let i = indexOfFirstDayInWeek; i < 7; i++) {
@@ -173,10 +170,8 @@ export class ScheduleIndexPage {
                 this.timeline.push(moment(lastDateInMonth).add(i + 1, 'days'));
             }
         }
-
         this.moment = moment().format('HH:mm');
         this.isHtmlLoadCompleted = true;
-
         this.searchEventsAndSpecialDaysByDisplayedMonth(this.yearMonth);
     }
 
@@ -184,30 +179,10 @@ export class ScheduleIndexPage {
         this.isEventLoadCompleted = false;
         let startTimeOfMonth = moment(yearMonth).unix() + moment().utcOffset() * 60;
         let endTimeOfMonth = moment(yearMonth).add(1, 'months').subtract(1, 'seconds').unix() + moment().utcOffset() * 60;
-        this.scheduleService.getSpecialDays(this.locale, startTimeOfMonth, endTimeOfMonth).then((specialDays: any) => {
-            this.scheduleService.searchEventsByStartTimeAndEndTimeAndUserID(startTimeOfMonth, endTimeOfMonth, this.userID).then((events: any) => {
-                this.eventsByDays.clear();
-                this.specialDaysByDays.clear();
-                for (let i = 0; i < this.timeline.length; i++) {
-                    let eventsByDay = new Array();
-                    for (let j = 0; j < events.length; j++) {
-                        if (this.timeline[i].isBetween(moment(events[j].ouputStartTime, 'X'), moment(events[j].ouputEndTime, 'X'), 'day', '[]')) {
-                            eventsByDay.push(events[j]);
-                        }
-                    }
-                    if (eventsByDay.length > 0) {
-                        this.eventsByDays.set(this.timeline[i].format('YYYY/MM/D'), eventsByDay);
-                    }
-                    let specialDaysByDay = new Array();
-                    for (let j = 0; j < specialDays.length; j++) {
-                        if (this.timeline[i].isSame(moment.unix(specialDays[j].startDay).format('YYYY/MM/D'), 'day')) {
-                            specialDaysByDay.push(specialDays[j]);
-                        }
-                    }
-                    if (specialDaysByDay.length > 0) {
-                        this.specialDaysByDays.set(this.timeline[i].format('YYYY/MM/D'), specialDaysByDay);
-                    }
-                }
+        this.scheduleService.getSpecialDaysForMonthByStartTimeAndEndTimeAndLocal(this.locale, startTimeOfMonth, endTimeOfMonth).then((specialDaysByDays: any) => {
+            this.scheduleService.searchEventsForMonthByStartTimeAndEndTimeAndUserID(startTimeOfMonth, endTimeOfMonth, this.userID).then((eventsByDays: any) => {
+                this.eventsByDays = eventsByDays;
+                this.specialDaysByDays = specialDaysByDays;
                 this.getEventsAndSpecialDaysBySelectedDay(this.selectedDay);
             });
         });
@@ -291,7 +266,12 @@ export class ScheduleIndexPage {
         selectUserModal.onDismiss(data => {
             if (data) {
                 this.userID = data.userId;
-                this.selectedUserName = data.userName;
+                // hidden my user name
+                if (data.userId === this.myUserID) {
+                    this.selectedOtherUserName = '';
+                } else {
+                    this.selectedOtherUserName = data.userName;
+                }
                 this.showCalendar(moment(this.yearMonth));
             }
         });
@@ -308,7 +288,7 @@ export class ScheduleIndexPage {
 
     showMySchedule() {
         this.userID = this.myUserID;
-        this.selectedUserName = this.myUserName;
+        this.selectedOtherUserName = '';
         this.showCalendar(moment(this.yearMonth));
     }
 

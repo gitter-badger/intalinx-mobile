@@ -3,8 +3,8 @@
         <button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title [hidden]="isHtmlLoadCompleted==true">{{ "app.schedule.title" | translate }}</ion-title>
-        <ion-title [hidden]="isHtmlLoadCompleted!=true">{{selectedUserName}}{{ "app.schedule.scheduleOfPerson" | translate }}</ion-title>
+        <ion-title [hidden]="selectedOtherUserName">{{ "app.schedule.title" | translate }}</ion-title>
+        <ion-title [hidden]="!selectedOtherUserName">{{selectedOtherUserName}}{{ "app.schedule.scheduleOfPerson" | translate }}</ion-title>
     </ion-navbar>
     <ion-toolbar no-border-top class="year-month-tool">
         <ion-buttons start>
@@ -62,7 +62,7 @@
                     <ion-col width-70>{{specialDay.specialDayName}}</ion-col>
                 </ion-row>
             </ion-item>
-            <ion-item *ngFor="let event of events" (click)="openEventDetail(event)">
+            <ion-item *ngFor="let event of events" (click)="openEventDetail(event)" [disabled]="event.title==('app.schedule.visibility.invisible'|translate)&&event.isSelf=='false'">
                 <ion-row [ngClass]="{'event-in-past-time': selectedDay==today&&event.isAllDay!='true'&&moment>event.endTime}">
                     <ion-col text-right width-20 class="border-right-solid border-right-default">
                         <ion-row [hidden]="event.isAllDay!='true'">{{ "app.schedule.index.allDay" | translate }}</ion-row>
