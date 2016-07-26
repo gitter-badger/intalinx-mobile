@@ -12,7 +12,7 @@
     </div>
     <div [hidden]="!isLoadCompleted">
         <ion-item no-lines>
-            <h2 class="event-title"><span [hidden]="!categoryName">【{{categoryName}}】</span><span [hidden]="!visibilityTypeName">【{{visibilityTypeName}}】</span>{{title}}</h2>
+            <h2 class="event-title"><span [hidden]="!categoryName">【{{categoryName}}】</span><span [hidden]="!visibilityTypeName||visibilityTypeName==('app.schedule.visibility.public'|translate)">【{{visibilityTypeName}}】</span>{{title}}</h2>
         </ion-item>
         <ion-item no-lines [hidden]="!location">
             <h2 class="event-contents-title">{{"app.schedule.event.location" | translate}}{{"app.schedule.colon" | translate}}</h2> {{location}}
