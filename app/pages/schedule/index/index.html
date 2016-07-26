@@ -3,8 +3,7 @@
         <button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title [hidden]="selectedOtherUserName">{{ "app.schedule.title" | translate }}</ion-title>
-        <ion-title [hidden]="!selectedOtherUserName">{{selectedOtherUserName}}{{ "app.schedule.scheduleOfPerson" | translate }}</ion-title>
+        <ion-title>{{!selectedOtherUserName ? ("app.schedule.title"|translate) : (selectedOtherUserName) + ("app.schedule.scheduleOfPerson" | translate)}}</ion-title>
     </ion-navbar>
     <ion-toolbar no-border-top class="year-month-tool">
         <ion-buttons start>
