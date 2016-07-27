@@ -331,12 +331,12 @@ export class DevicesPage {
     }
 
     showDetail(eventInfo) {
-        this.lastActionTime = moment().unix();
-        let alert = Alert.create({
-            subTitle: eventInfo.title,
-            message: '予定詳細画面の実装を待っています......',
-            buttons: ['ok']
-        });
-        this.share.nav.present(alert);
+        // this.lastActionTime = moment().unix();
+        // let alert = Alert.create({
+        //     subTitle: eventInfo.title,
+        //     message: '予定詳細画面の実装を待っています......',
+        //     buttons: ['ok']
+        // });
+        // this.share.nav.present(alert);
     }
 }
