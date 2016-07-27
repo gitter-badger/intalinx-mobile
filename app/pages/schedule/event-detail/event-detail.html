@@ -22,7 +22,10 @@
             <div><span>{{"app.schedule.event.start" | translate}}{{"app.schedule.colon" | translate}}{{startDay}}({{startWeekDayMin}})</span>
                 <span [hidden]="isAllDay=='true'||isRepeat=='true'">{{startTime}}</span>
             </div>
-            <div>{{"app.schedule.event.end" | translate}}{{"app.schedule.colon" | translate}}{{endDay}}({{endWeekDayMin}})<span [hidden]="isAllDay=='true'||isRepeat=='true'">{{endTime}}</span></div>
+            <div>{{"app.schedule.event.end" | translate}}{{"app.schedule.colon" | translate}}{{endDay}}({{endWeekDayMin}})
+                <span [hidden]="isAllDay=='true'||isRepeat=='true'">{{endTime}}
+                </span>
+            </div>
             <div [hidden]="isAllDay!='true'">{{"app.schedule.event.allDay" | translate}}</div>
             <div [hidden]="isRepeat!='true'">{{"app.schedule.event.repeat" | translate}}{{"app.schedule.colon" | translate}}{{repeatTypeName}}{{repeatValueName}}[{{repeatStartTime}}~{{repeatEndTime}}]</div>
         </ion-item>
@@ -32,9 +35,6 @@
             <div [hidden]="isAllDay=='true'||isRepeat=='true'">{{startTime}}~{{endTime}}</div>
             <div [hidden]="isAllDay!='true'">{{"app.schedule.event.allDay" | translate}}</div>
             <div [hidden]="isRepeat!='true'">{{"app.schedule.event.repeat" | translate}}{{"app.schedule.colon" | translate}}{{repeatTypeName}}{{repeatValueName}}[{{repeatStartTime}}~{{repeatEndTime}}]</div>
-        </ion-item>
-        <ion-item no-lines [hidden]="!summary">
-            <h2 class="event-contents-title">{{"app.schedule.event.summary" | translate}}{{"app.schedule.colon" | translate}}</h2> {{summary}}
         </ion-item>
         <ion-item no-lines [hidden]="!participantNames">
             <h2 class="event-contents-title">{{"app.schedule.event.participant" | translate}}{{"app.schedule.colon" | translate}}</h2>
@@ -48,6 +48,13 @@
                 {{deviceName}}
             </div>
         </ion-item>
+        <ion-item no-lines [hidden]="!summary">
+            <ion-label>
+                <h2 class="event-contents-title">{{"app.schedule.event.summary" | translate}}{{"app.schedule.colon" | translate}}</h2>
+                <ion-textarea [disabled]=true class="summary-content" rows=5 [(ngModel)]="summary">
+                </ion-textarea>
+            </ion-label>
+        </ion-item>
         <ion-item no-lines [hidden]="!createUserName">
             <h2 class="event-contents-title">{{"app.schedule.event.createUser" | translate}}{{"app.schedule.colon" | translate}}</h2> {{createUserName}}({{createDateTime}})
         </ion-item>
@@ -58,7 +65,7 @@
 </ion-content>
 
 <ion-footer [hidden]="!isLoadCompleted || (!isAdmin && !isParticiPant)">
-    <ion-toolbar>
+    <ion-toolbar no-border-bottom position="bottom">
         <ion-buttons text-center>
             <button (click)="deleteEvent()">{{"app.schedule.deleteEvent" | translate}}</button>
         </ion-buttons>
