@@ -32,7 +32,7 @@
     <div class="loading" [hidden]="isHtmlLoadCompleted==true">
         <ion-spinner name="dots"></ion-spinner>
     </div>
-    <ion-slides #calendarSlides (ionWillChange)="changeMonth($event)" [options]="calendarSlideOptions">
+    <ion-slides [style.height]="calendarHeight + 'px'" #calendarSlides (ionWillChange)="changeMonth($event)" [options]="calendarSlideOptions">
         <ion-slide class="calendar" *ngFor="let n of numbers">
             <div class="day-in-calendar" *ngFor="let day of timeline" (click)="getEventsAndSpecialDaysBySelectedDay(day.format('YYYY/MM/D'))">
                 <div class="day-default" [ngClass]="{'day-not-this-month': day.format('YYYY-MM')!=yearMonth,

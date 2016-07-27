@@ -65,6 +65,7 @@ export class ScheduleIndexPage {
     private calendar: any;
     private timeline: any;
     private moment: any;
+    private calendarHeight: number;
 
     private isHtmlLoadCompleted: boolean;
     private isEventLoadCompleted: boolean;
@@ -80,8 +81,6 @@ export class ScheduleIndexPage {
         };
         this.numbers = this.initNumbers(this.defaultNumber, this.cachedSlidesOnOneSide);
         this.weekdays = moment.weekdaysMin(true);
-
-
         // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
         if (this.userLang === 'ja' || this.userLang === 'ja-jp') {
             this.isFirstDayMonday = true;
@@ -93,7 +92,6 @@ export class ScheduleIndexPage {
         }
         this.today = moment().format('YYYY/MM/D');
         this.yearMonth = moment().format('YYYY-MM');
-
         // this month
         let firstDateWeek = moment(this.yearMonth);
         this.selectedDay = this.today;
@@ -170,6 +168,9 @@ export class ScheduleIndexPage {
                 this.timeline.push(moment(lastDateInMonth).add(i + 1, 'days'));
             }
         }
+        let rowCount = Math.ceil(this.timeline.length / 7);
+        this.calendarHeight = rowCount * 46;
+
         this.moment = moment().format('HH:mm');
         this.isHtmlLoadCompleted = true;
         this.searchEventsAndSpecialDaysByDisplayedMonth(this.yearMonth);
