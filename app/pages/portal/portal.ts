@@ -84,23 +84,27 @@ export class PortalPage {
             }
             // remove notification, calendar, profile for real device.
             if (this.platform.is('tablet')) {
+                menuIdNeedToRemove.push('blog');
                 menuIdNeedToRemove.push('notification');
                 menuIdNeedToRemove.push('schedule');
                 menuIdNeedToRemove.push('profile');
+                menuIdNeedToRemove.push('about');
             } else if (this.platform.is('mobile')) {
                 menuIdNeedToRemove.push('devices');
             }
 
             // remove unnecessary menu.
-            data.forEach(function(currentValue, index, array){
+            for (let index = 0; index < data.length; index ++) {
+                let currentValue = data[index];
                 for (let i = 0; i < menuIdNeedToRemove.length; i++) {
                     if (currentValue.componentsId === menuIdNeedToRemove[i]) {
                         data.splice(index, 1);
                         menuIdNeedToRemove.splice(i, 1);
+                        index--;
                         break;
                     }
                 }
-            });
+            }
 
             this.share.initializeMenu(data);
 
