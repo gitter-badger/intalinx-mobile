@@ -113,7 +113,9 @@ export class ScheduleService {
                                 'participants': participantsOfEvent,
                                 'deviceName': eventObject.deviceName,
                                 'startTime': eventObject.startTime,
-                                'endTime': eventObject.endTime
+                                'endTime': eventObject.endTime,
+                                'isSelf': eventObject.isSelf,
+                                'visibility': eventObject.visibility
                             };
                             eventList.push(showEventContent);
                         }

@@ -2,6 +2,7 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
 import * as moment from 'moment';
 import {Alert, Content} from 'ionic-angular';
+import {Brightness} from 'ionic-native';
 
 // Config.
 import {AppConfig} from '../../../appconfig';
@@ -75,6 +76,12 @@ export class DevicesPage {
         private userService: UserService,
         private appConfig: AppConfig
         ) {
+        
+        if (typeof Brightness !== undefined) {
+            Brightness.setBrightness(1);
+            Brightness.setKeepScreenOn(true);
+        }
+
         // initialize data
         this.initVariable();
         this.loadRemoteData();
@@ -324,12 +331,12 @@ export class DevicesPage {
     }
 
     showDetail(eventInfo) {
-        this.lastActionTime = moment().unix();
-        let alert = Alert.create({
-            subTitle: eventInfo.title,
-            message: '予定詳細画面の実装を待っています......',
-            buttons: ['ok']
-        });
-        this.share.nav.present(alert);
+        // this.lastActionTime = moment().unix();
+        // let alert = Alert.create({
+        //     subTitle: eventInfo.title,
+        //     message: '予定詳細画面の実装を待っています......',
+        //     buttons: ['ok']
+        // });
+        // this.share.nav.present(alert);
     }
 }
