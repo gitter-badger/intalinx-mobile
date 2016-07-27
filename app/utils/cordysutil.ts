@@ -70,7 +70,7 @@ export class CordysUtil {
                     .subscribe(data => {
                         resolve(data);
                     }, error => {
-                        if (error.status === '500' && error.type === '2') {
+                        if (error.status === 500 && error.type === 2) {
                             if (!hideError) {
                                 let responseText = error.text();
                                 let responseNode = this.xmlUtil.parseXML(responseText);

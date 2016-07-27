@@ -158,7 +158,29 @@ export class ScheduleService {
         });
     }
 
-    searchEventsByStartTimeAndEndTimeAndUserID(startTime: number, endTime: number, userID: string): any {
+    getSpecialDaysForMonthByStartTimeAndEndTimeAndLocal(locale: string, startTime: number, endTime: number) {
+        return new Promise(resolve => {
+            this.getSpecialDays(locale, startTime, endTime).then(holidays => {
+                let holidaysByDays = new Map(Array<any>());
+                holidays.forEach(function (holiday) {
+                    let holidaysByDay: any = new Array();
+                    let startDay = moment(holiday.startDay, 'X').format('YYYY/MM/D');
+                    if (Number(holiday.startDay) > startTime && Number(holiday.startDay) < endTime) {
+                        if (!holidaysByDays.has(startDay)) {
+                            holidaysByDay.push(holiday);
+                            holidaysByDays.set(startDay, holidaysByDay);
+                        } else {
+                            holidaysByDay = holidaysByDays.get(startDay);
+                            holidaysByDay.push(holiday);
+                        }
+                    }
+                });
+                resolve(holidaysByDays);
+            });
+        });
+    }
+
+    searchEventsForMonthByStartTimeAndEndTimeAndUserID(startTime: number, endTime: number, userID: string): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/search_events.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -168,36 +190,65 @@ export class ScheduleService {
                 req = this.util.xml2string(objRequest);
                 this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
-                    let eventOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'EventOutput\']');
-
-                    let events = new Array();
+                    let eventOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'EventOutput\']');                   
+                    let eventsByDays = new Map(Array<any>());
+                    let startDate;
+                    let endDate;
                     for (let i = 0; i < eventOutputs.length; i++) {
                         let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
-                        let ouputStartTime = eventOutput.startTime;
-                        let ouputEndTime = eventOutput.endTime;
-                        let startHourMinute = moment(ouputStartTime, 'X').format('HH:mm');
-                        let endHourMinute = moment(ouputEndTime, 'X').format('HH:mm');
-                        let isAllDay = eventOutput.isAllDay;
-                        if (startTime >= eventOutput.startTime && endTime <= eventOutput.endTime) {
-                            isAllDay = 'true';
-                        } else if (startTime < eventOutput.startTime && endTime < eventOutput.endTime) {
-                            endHourMinute = '24:00';
-                        } else if (endTime > eventOutput.endTime && startTime > eventOutput.startTime) {
-                            startHourMinute = '00:00';
-                        }
                         if (!eventOutput.title && eventOutput.isSelf === 'false') {
                             this.translate.get('app.schedule.visibility.invisible').subscribe(message => {
                                 eventOutput.title = message;
                             });
                         }
-                        eventOutput['ouputStartTime'] = ouputStartTime;
-                        eventOutput['ouputEndTime'] = ouputEndTime;
-                        eventOutput.startTime = startHourMinute;
-                        eventOutput.endTime = endHourMinute;
-                        eventOutput.isAllDay = isAllDay;
-                        events.push(eventOutput);
+                        let ouputStartTime = eventOutput.startTime;
+                        let ouputEndTime = eventOutput.endTime;            
+                        // the start time is before the month
+                        if (Number(ouputStartTime) < startTime) {
+                            startDate = moment(moment(startTime).format('YYYY/MM/D'));
+                        }  else {
+                            startDate = moment(moment(ouputStartTime, 'X').format('YYYY/MM/D'));
+                        }
+                        // the end time is after the month
+                        if (Number(ouputEndTime) > endTime) {
+                            endDate = moment(moment(endTime).format('YYYY/MM/D'));
+                        } else {
+                            endDate = moment(moment(ouputEndTime, 'X').format('YYYY/MM/D'));
+                        }
+                        let currentDate = startDate;
+                        while (currentDate <= endDate) {
+                            let startHourMinute = moment(ouputStartTime, 'X').format('HH:mm');
+                            let endHourMinute = moment(ouputEndTime, 'X').format('HH:mm');
+                            let isAllDay = eventOutput.isAllDay;
+                            let currentDay = currentDate.format('YYYY/MM/D');
+                            let currentDayStartTime = currentDate.unix() + moment().utcOffset() * 60;
+                            let currentDayEndTime = (currentDate.add(1, 'days').subtract(1, 'seconds')).unix() + moment().utcOffset() * 60;
+                            if (currentDayStartTime >= Number(ouputStartTime) && currentDayEndTime <= Number(ouputEndTime)) {
+                                isAllDay = 'true';
+                            } else if (currentDayStartTime < Number(ouputStartTime) && currentDayEndTime < Number(ouputEndTime)) {
+                                endHourMinute = '24:00';
+                            } else if (currentDayEndTime > Number(ouputEndTime) && currentDayStartTime > Number(ouputStartTime)) {
+                                startHourMinute = '00:00';
+                            }
+                            let event: any = JSON.stringify(eventOutput);
+                            event = JSON.parse(event);
+                            event['ouputStartTime'] = ouputStartTime;
+                            event['ouputEndTime'] = ouputEndTime;
+                            event.startTime = startHourMinute;
+                            event.endTime = endHourMinute;
+                            event.isAllDay = isAllDay;
+                            let eventsByDay: any = new Array();
+                            if (!eventsByDays.has(currentDay)) {
+                                eventsByDay.push(event);
+                                eventsByDays.set(currentDay, eventsByDay);
+                            } else {
+                                eventsByDay = eventsByDays.get(currentDay);
+                                eventsByDay.push(event);
+                            }
+                            currentDate.add(1, 'seconds');
+                        }
                     }
-                    resolve(events);
+                    resolve(eventsByDays);
                 });
             });
         });

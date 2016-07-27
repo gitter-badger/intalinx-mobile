@@ -3,8 +3,7 @@
         <button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title [hidden]="isHtmlLoadCompleted==true">{{ "app.schedule.title" | translate }}</ion-title>
-        <ion-title [hidden]="isHtmlLoadCompleted!=true">{{selectedUserName}}{{ "app.schedule.scheduleOfPerson" | translate }}</ion-title>
+        <ion-title>{{!selectedOtherUserName ? ("app.schedule.title"|translate) : (selectedOtherUserName) + ("app.schedule.scheduleOfPerson" | translate)}}</ion-title>
     </ion-navbar>
     <ion-toolbar no-border-top class="year-month-tool">
         <ion-buttons start>
@@ -33,7 +32,7 @@
     <div class="loading" [hidden]="isHtmlLoadCompleted==true">
         <ion-spinner name="dots"></ion-spinner>
     </div>
-    <ion-slides #calendarSlides (ionDrag)="changeMonth($event)" [options]="calendarSlideOptions">
+    <ion-slides [style.height]="calendarHeight + 'px'" #calendarSlides (ionWillChange)="changeMonth($event)" [options]="calendarSlideOptions">
         <ion-slide class="calendar" *ngFor="let n of numbers">
             <div class="day-in-calendar" *ngFor="let day of timeline" (click)="getEventsAndSpecialDaysBySelectedDay(day.format('YYYY/MM/D'))">
                 <div class="day-default" [ngClass]="{'day-not-this-month': day.format('YYYY-MM')!=yearMonth,
@@ -42,7 +41,7 @@
                             'hover': day.format('YYYY/MM/D')==selectedDay}">
                     {{day.format('D')}}
                 </div>
-                <ion-badge class="day-has-events" [style.visibility]="day.format('YYYY-MM')==yearMonth && eventsByDays.has(day.format('YYYY/MM/DD')) ? 'visible' : 'hidden'">
+                <ion-badge class="day-has-events" [style.visibility]="day.format('YYYY-MM')==yearMonth && (eventsByDays.has(day.format('YYYY/MM/D'))||specialDaysByDays.has(day.format('YYYY/MM/D'))) ? 'visible' : 'hidden'">
                 </ion-badge>
             </div>
         </ion-slide>

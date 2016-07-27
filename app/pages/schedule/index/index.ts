@@ -59,13 +59,13 @@ export class ScheduleIndexPage {
     private yearMonth: any;
     private selectedDay: any;
     private myUserID: string;
-    private myUserName: string;
     private userID: string;
-    private selectedUserName: string;
+    private selectedOtherUserName: string;
 
     private calendar: any;
     private timeline: any;
     private moment: any;
+    private calendarHeight: number;
 
     private isHtmlLoadCompleted: boolean;
     private isEventLoadCompleted: boolean;
@@ -74,15 +74,13 @@ export class ScheduleIndexPage {
     private eventsByDays: any = new Map(Array());
     private specialDaysByDays: any = new Map(Array());
 
-    constructor(private nav: NavController, private scheduleService: ScheduleService, private userService: UserService, private appConfig: AppConfig) {
+    constructor(private nav: NavController, private translate: TranslateService, private scheduleService: ScheduleService, private userService: UserService, private appConfig: AppConfig) {
         this.calendarSlideOptions = {
             direction: 'vertical',
             initialSlide: this.cachedSlidesOnOneSide
         };
         this.numbers = this.initNumbers(this.defaultNumber, this.cachedSlidesOnOneSide);
         this.weekdays = moment.weekdaysMin(true);
-
-
         // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
         if (this.userLang === 'ja' || this.userLang === 'ja-jp') {
             this.isFirstDayMonday = true;
@@ -94,7 +92,6 @@ export class ScheduleIndexPage {
         }
         this.today = moment().format('YYYY/MM/D');
         this.yearMonth = moment().format('YYYY-MM');
-
         // this month
         let firstDateWeek = moment(this.yearMonth);
         this.selectedDay = this.today;
@@ -102,9 +99,8 @@ export class ScheduleIndexPage {
         // let userID =this.app.user.userID;
         this.userService.getUserDetails().then(user => {
             this.myUserID = user.userID;
-            this.myUserName = user.userName;
             this.userID = user.userID;
-            this.selectedUserName = user.userName;
+            this.selectedOtherUserName = '';
             this.getLocalsFromSetting().then(local => {
                 this.showCalendar(firstDateWeek);
             });
@@ -152,7 +148,6 @@ export class ScheduleIndexPage {
             indexOfLastDayInWeek = 0;
         }
         this.timeline = new Array();
-
         // when the first day of the week is Sunday.
         if (indexOfFirstDayInWeek === 1 && firstDayWeek === '0') {
             for (let i = indexOfFirstDayInWeek; i < 7; i++) {
@@ -173,10 +168,11 @@ export class ScheduleIndexPage {
                 this.timeline.push(moment(lastDateInMonth).add(i + 1, 'days'));
             }
         }
+        let rowCount = Math.ceil(this.timeline.length / 7);
+        this.calendarHeight = rowCount * 46;
 
         this.moment = moment().format('HH:mm');
         this.isHtmlLoadCompleted = true;
-
         this.searchEventsAndSpecialDaysByDisplayedMonth(this.yearMonth);
     }
 
@@ -184,30 +180,10 @@ export class ScheduleIndexPage {
         this.isEventLoadCompleted = false;
         let startTimeOfMonth = moment(yearMonth).unix() + moment().utcOffset() * 60;
         let endTimeOfMonth = moment(yearMonth).add(1, 'months').subtract(1, 'seconds').unix() + moment().utcOffset() * 60;
-        this.scheduleService.getSpecialDays(this.locale, startTimeOfMonth, endTimeOfMonth).then((specialDays: any) => {
-            this.scheduleService.searchEventsByStartTimeAndEndTimeAndUserID(startTimeOfMonth, endTimeOfMonth, this.userID).then((events: any) => {
-                this.eventsByDays.clear();
-                this.specialDaysByDays.clear();
-                for (let i = 0; i < this.timeline.length; i++) {
-                    let eventsByDay = new Array();
-                    for (let j = 0; j < events.length; j++) {
-                        if (this.timeline[i].isBetween(moment(events[j].ouputStartTime, 'X'), moment(events[j].ouputEndTime, 'X'), 'day', '[]')) {
-                            eventsByDay.push(events[j]);
-                        }
-                    }
-                    if (eventsByDay.length > 0) {
-                        this.eventsByDays.set(this.timeline[i].format('YYYY/MM/D'), eventsByDay);
-                    }
-                    let specialDaysByDay = new Array();
-                    for (let j = 0; j < specialDays.length; j++) {
-                        if (this.timeline[i].isSame(moment.unix(specialDays[j].startDay).format('YYYY/MM/D'), 'day')) {
-                            specialDaysByDay.push(specialDays[j]);
-                        }
-                    }
-                    if (specialDaysByDay.length > 0) {
-                        this.specialDaysByDays.set(this.timeline[i].format('YYYY/MM/D'), specialDaysByDay);
-                    }
-                }
+        this.scheduleService.getSpecialDaysForMonthByStartTimeAndEndTimeAndLocal(this.locale, startTimeOfMonth, endTimeOfMonth).then((specialDaysByDays: any) => {
+            this.scheduleService.searchEventsForMonthByStartTimeAndEndTimeAndUserID(startTimeOfMonth, endTimeOfMonth, this.userID).then((eventsByDays: any) => {
+                this.eventsByDays = eventsByDays;
+                this.specialDaysByDays = specialDaysByDays;
                 this.getEventsAndSpecialDaysBySelectedDay(this.selectedDay);
             });
         });
@@ -251,31 +227,38 @@ export class ScheduleIndexPage {
 
     changeMonth(swiper) {
         let swipeDirection = swiper.swipeDirection;
-        let newIndex = this.slider.getActiveIndex();
-        if (swipeDirection === 'prev') {
-            while (newIndex < this.cachedSlidesOnOneSide) {
-                newIndex++;
-                this.numbers.unshift(this.numbers[0] - 1);
-                this.numbers.pop();
-                this.lastMonth();
+        if (swipeDirection) {
+            let newIndex = this.slider.getActiveIndex();
+            if (swipeDirection === 'prev') {
+                while (newIndex < this.cachedSlidesOnOneSide) {
+                    newIndex++;
+                    this.numbers.unshift(this.numbers[0] - 1);
+                    this.numbers.pop();
+                    this.lastMonth();
+                }
+            } else {
+                while (newIndex > this.cachedSlidesOnOneSide) {
+                    newIndex--;
+                    this.numbers.push(this.numbers[this.numbers.length - 1] + 1);
+                    this.numbers.shift();
+                    this.nextMonth();
+                }
             }
-        } else {
-            while (newIndex > this.cachedSlidesOnOneSide) {
-                newIndex--;
-                this.numbers.push(this.numbers[this.numbers.length - 1] + 1);
-                this.numbers.shift();
-                this.nextMonth();
-            }
+            // Workaround to make it work: breaks the animation
+            this.slider.slideTo(newIndex, 0, false);
         }
-        // Workaround to make it work: breaks the animation
-        this.slider.slideTo(newIndex, 0, false);
     }
 
     openEventDetail(event) {
         this.sendDataToShowOrDeleteEvent.selectedDay = this.selectedDay;
         this.sendDataToShowOrDeleteEvent.eventID = event.eventID;
-        this.nav.push(EventDetailPage, {
-            'sendDataToShowOrDeleteEvent': this.sendDataToShowOrDeleteEvent
+
+        this.translate.get('app.schedule.visibility.invisible').subscribe(message => {
+            if (!(event.title === message && event.isSelf === 'false')) {
+                this.nav.push(EventDetailPage, {
+                    'sendDataToShowOrDeleteEvent': this.sendDataToShowOrDeleteEvent
+                });
+            }
         });
     }
 
@@ -291,7 +274,12 @@ export class ScheduleIndexPage {
         selectUserModal.onDismiss(data => {
             if (data) {
                 this.userID = data.userId;
-                this.selectedUserName = data.userName;
+                // hidden my user name
+                if (data.userId === this.myUserID) {
+                    this.selectedOtherUserName = '';
+                } else {
+                    this.selectedOtherUserName = data.userName;
+                }
                 this.showCalendar(moment(this.yearMonth));
             }
         });
@@ -308,7 +296,7 @@ export class ScheduleIndexPage {
 
     showMySchedule() {
         this.userID = this.myUserID;
-        this.selectedUserName = this.myUserName;
+        this.selectedOtherUserName = '';
         this.showCalendar(moment(this.yearMonth));
     }
 
@@ -323,7 +311,7 @@ export class ScheduleIndexPage {
         // enter page after adding event
         let isRefreshFlagFromAddEvent = this.sendDataToAddEvent.isRefreshFlag;
         if (isRefreshFlagFromAddEvent === true) {
-            let yearMonth = moment(this.sendDataToShowOrDeleteEvent.selectedDay).format('YYYY-MM');
+            let yearMonth = moment(this.sendDataToAddEvent.selectedDay).format('YYYY-MM');
             this.searchEventsAndSpecialDaysByDisplayedMonth(yearMonth);
             this.sendDataToAddEvent.isRefreshFlag = false;
         }

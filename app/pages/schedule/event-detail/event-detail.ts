@@ -48,6 +48,7 @@ export class EventDetailPage {
     private title: string;
     private location: string;
     private summary: string;
+    private createUserName: string;
     private createDateTime: string;
     private updateUserID: string;
     private updateUserName: string;
@@ -121,6 +122,7 @@ export class EventDetailPage {
             this.title = event.title;
             this.location = event.location;
             this.summary = event.summary;
+            this.createUserName = event.createUserName;
             this.createDateTime = moment(event.createDate).format('LL HH:MM:SS');
             this.updateUserID = event.updateUserID;
             this.updateUserName = event.updateUserName;
@@ -245,7 +247,7 @@ export class EventDetailPage {
                     {
                         text: deleteEvent,
                         handler: () => {
-                            this.deleteTheEvent(this.eventID, true, '', '');
+                            this.deleteTheEvent(this.eventID, false, '', '');
                         }
                     }, {
                         text: cancelButton,
