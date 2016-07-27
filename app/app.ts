@@ -1,8 +1,7 @@
 // Third party library.
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, PLATFORM_PIPES, provide} from '@angular/core';
 import {disableDeprecatedForms, provideForms} from '@angular/forms';
 import {ionicBootstrap, Platform, Config, MenuController, NavController} from 'ionic-angular';
-import {PLATFORM_PIPES, provide} from '@angular/core';
 import {HTTP_PROVIDERS, Http} from '@angular/http';
 import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
 import {StatusBar} from 'ionic-native';
