@@ -162,11 +162,11 @@
             <p class="participant-title">{{"app.schedule.event.participant" | translate}}</p>
             <ion-icon item-right name="arrow-forward"></ion-icon>
         </button>
-        <ion-item class="participant-list">
-            <button outline *ngFor="let participant of participants">
+        <div class="participant-list">
+            <div outline class="participant-name" *ngFor="let participant of participants">
                 {{participant.userName}}
-            </button>
-        </ion-item>
+            </div>
+        </div>
     </div>
     <div class="separation-section"></div>
     <!-- devices -->
