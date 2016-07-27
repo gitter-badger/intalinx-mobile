@@ -35,7 +35,7 @@ export class ChangePasswordPage {
     updateProfile() {
         this.isDisabled = true;
         this.userService.updateProfile(this.user).then(data => {
-            if (data === 'true') {
+            if (data === true) {
                 this.nav.pop();
             }
         });
