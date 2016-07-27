@@ -535,7 +535,9 @@ export class EditEventPage {
         this.scheduleService.updateEvent(this.event, this.participants).then(data => {
             if (data === 'true') {
                 this.sendDataToEditEvent.isRefreshFlag = true;
-                this.nav.pop();
+                setTimeout(() => {
+                    this.nav.pop();
+                }, 500);
             } else {
                 this.showError(data);
             }
