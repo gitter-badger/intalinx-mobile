@@ -2,6 +2,7 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
 import * as moment from 'moment';
 import {Alert, Content} from 'ionic-angular';
+import {Brightness} from 'ionic-native';
 
 // Config.
 import {AppConfig} from '../../../appconfig';
@@ -75,6 +76,12 @@ export class DevicesPage {
         private userService: UserService,
         private appConfig: AppConfig
         ) {
+        
+        if (typeof Brightness !== undefined) {
+            Brightness.setBrightness(1);
+            Brightness.setKeepScreenOn(true);
+        }
+
         // initialize data
         this.initVariable();
         this.loadRemoteData();
