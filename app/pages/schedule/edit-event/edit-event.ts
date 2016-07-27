@@ -513,9 +513,7 @@ export class EditEventPage {
         this.scheduleService.addEvent(this.event, this.participants).then(data => {
             if (data === 'true') {
                 this.sendDataToAddEvent.isRefreshFlag = true;
-                setTimeout(() => {
-                    this.nav.pop();
-                }, 500);
+                this.nav.pop();
             } else {
                 this.showError(data);
             }
@@ -535,9 +533,7 @@ export class EditEventPage {
         this.scheduleService.updateEvent(this.event, this.participants).then(data => {
             if (data === 'true') {
                 this.sendDataToEditEvent.isRefreshFlag = true;
-                setTimeout(() => {
-                    this.nav.pop();
-                }, 500);
+                this.nav.pop();
             } else {
                 this.showError(data);
             }
@@ -546,7 +542,6 @@ export class EditEventPage {
             let faultCode = err.faultcode;
             if ((faultCode.indexOf('WARN002') > -1) || (faultCode.indexOf('WARN001') > -1)) {
                 errMsg = this.convertWarningMessage(errMsg);
-
                 this.confirmRepeatWarn(this.warningTitle, errMsg, this.actionYes, this.actionNo, faultCode, 'updateEvent');
             } else {
                 this.showError(errMsg);
@@ -590,14 +585,19 @@ export class EditEventPage {
                         this.event.isEventRepeatWarned = true;
                     }
                     if (type === 'addEvent') {
-                        this.addEvent();
+                        setTimeout(() => {
+                            this.addEvent();
+                        }, 500);
                     } else {
-                        this.updateEvent();
+                        setTimeout(() => {
+                            this.updateEvent();
+                        }, 500);
                     }
                 }
-            }, {
-                    text: no
-                }]
+            },
+            {
+                text: no
+            }]
         });
         this.nav.present(alert);
     }
