@@ -21,9 +21,9 @@
     <ion-list [hidden]="isSearching!=true">
         <ion-item *ngFor="let user of foundUserMembers">
             <ion-checkbox [(ngModel)]="user.isSelected" (ngModelChange)="changeSelectedUser(user)"></ion-checkbox>
-            <ion-avatar item-left>
+            <!--<ion-avatar item-left>
                 <img src="img/default">
-            </ion-avatar>
+            </ion-avatar>-->
             <ion-label>{{user.userName}}</ion-label>
         </ion-item>
     </ion-list>
@@ -31,9 +31,9 @@
         <ion-item-divider>{{orgWithUsers.organizationName}}</ion-item-divider>
         <ion-item *ngFor="let user of orgWithUsers.users">
             <ion-checkbox [(ngModel)]="user.isSelected" (ngModelChange)="changeSelectedUser(user)"></ion-checkbox>
-            <ion-avatar item-left>
+            <!--<ion-avatar item-left>
                 <img src="img/default">
-            </ion-avatar>
+            </ion-avatar>-->
             <ion-label>{{user.userName}}</ion-label>
         </ion-item>
     </ion-item-group>
