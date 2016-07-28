@@ -173,7 +173,8 @@
                     "endTimeShouldBeLater": "The end time should be later than start time!",
                     "repeatEndTimeShouldBeLater": "The repeat start time should be later than start time!",
                     "addEventSuccess": "The schedule had been saved.",
-                    "updateEventSuccess": "The schedule had been updated."
+                    "updateEventSuccess": "The schedule had been updated.",
+                    "isSaveChangedData": "Do you want to save the changes?"
                 },
                 "selectRepeatEventUpdateFlag": "Please select the update object in this repeat schedule!", 
                 "selectAll": "All of the schedule", 

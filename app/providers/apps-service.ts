@@ -51,11 +51,6 @@ export class AppsService {
             this.blogService.getNotReadCommunityCountBySelf().then((data: string) => {
                 if (data) {
                     this.share.blogNewInformationCount = data;
-                    if (this.platform.is('cordova')) {
-                        Badge.get().then((coutner) => {
-                            Badge.set(Number(coutner) + Number(data));
-                        });
-                    }
                 }
             });
         }
@@ -63,11 +58,6 @@ export class AppsService {
             this.notificationService.getNotReadNotificationCountBySelf().then((data: string) => {
                 if (data) {
                     this.share.notificationNewInformationCount = data;
-                    if (this.platform.is('cordova')) {
-                        Badge.get().then((coutner) => {
-                            Badge.set(Number(coutner) + Number(data));
-                        });
-                    }
                 }
             });
         }

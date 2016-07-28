@@ -49,15 +49,16 @@ export class PortalPage {
     };
 
     constructor(private translate: TranslateService, private platform: Platform, private nav: NavController, private util: Util, private share: ShareService, private appsService: AppsService, private aboutService: AboutService, private userService: UserService) {
-        this.checkUpdate();
-        this.loadApplications();
-        this.initializeUser();
+        this.loadApplications().then(() => {
+            this.checkUpdate();
+            this.initializeUser();
+        });        
         if (!this.share.showMenu) {
             this.share.showMenu = this.showMenu(this);
         }
     }
 
-    checkUpdate() {
+    checkUpdate(): void {
         // check latest version from http://pgyer.com/.
         if (this.platform.is('cordova') && !this.platform.is('tablet')) {
             this.aboutService.getVersion().then(data => {
@@ -75,7 +76,7 @@ export class PortalPage {
     }
 
     loadApplications() {
-        this.appsService.load().then((data: any) => {
+        return this.appsService.load().then((data: any) => {
             let menuIdNeedToRemove = [];
             
             // remove about page for web browser.
