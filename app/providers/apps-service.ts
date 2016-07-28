@@ -23,8 +23,10 @@ export class AppsService {
     load() {
         // don't have the data yet
         return new Promise(resolve => {
-            // Clear badge.
-            Badge.clear();
+            if (this.platform.is('cordova')) {
+                // Clear badge.
+                Badge.clear();
+            }
 
             // We're using Angular Http provider to request the data,
             // then on the response it'll map the JSON data to a parsed JS object.
@@ -49,9 +51,11 @@ export class AppsService {
             this.blogService.getNotReadCommunityCountBySelf().then((data: string) => {
                 if (data) {
                     this.share.blogNewInformationCount = data;
-                    Badge.get().then((coutner) => {
-                        Badge.set(Number(coutner) + Number(data));
-                    });
+                    if (this.platform.is('cordova')) {
+                        Badge.get().then((coutner) => {
+                            Badge.set(Number(coutner) + Number(data));
+                        });
+                    }
                 }
             });
         }
@@ -59,9 +63,11 @@ export class AppsService {
             this.notificationService.getNotReadNotificationCountBySelf().then((data: string) => {
                 if (data) {
                     this.share.notificationNewInformationCount = data;
-                    Badge.get().then((coutner) => {
-                        Badge.set(Number(coutner) + Number(data));
-                    });
+                    if (this.platform.is('cordova')) {
+                        Badge.get().then((coutner) => {
+                            Badge.set(Number(coutner) + Number(data));
+                        });
+                    }
                 }
             });
         }
