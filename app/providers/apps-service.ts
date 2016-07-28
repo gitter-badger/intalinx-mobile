@@ -1,6 +1,8 @@
 // Third party library.
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
+import {Badge} from 'ionic-native';
+import {Platform} from 'ionic-angular';
 
 // Services.
 import {ShareService} from './share-service';
@@ -10,12 +12,20 @@ import {NotificationService} from './notification-service';
 @Injectable()
 export class AppsService {
 
-    constructor(private http: Http, private share: ShareService, private blogService: BlogService, private notificationService: NotificationService) {
+    constructor(private http: Http, 
+        private platform: Platform,
+        private share: ShareService, 
+        private blogService: BlogService, 
+        private notificationService: NotificationService) {
+
     }
 
     load() {
         // don't have the data yet
         return new Promise(resolve => {
+            // Clear badge.
+            Badge.clear();
+
             // We're using Angular Http provider to request the data,
             // then on the response it'll map the JSON data to a parsed JS object.
             // Next we process the data and resolve the promise with the new data.
@@ -39,6 +49,9 @@ export class AppsService {
             this.blogService.getNotReadCommunityCountBySelf().then((data: string) => {
                 if (data) {
                     this.share.blogNewInformationCount = data;
+                    Badge.get().then((coutner) => {
+                        Badge.set(Number(coutner) + Number(data));
+                    });
                 }
             });
         }
@@ -46,6 +59,9 @@ export class AppsService {
             this.notificationService.getNotReadNotificationCountBySelf().then((data: string) => {
                 if (data) {
                     this.share.notificationNewInformationCount = data;
+                    Badge.get().then((coutner) => {
+                        Badge.set(Number(coutner) + Number(data));
+                    });
                 }
             });
         }
