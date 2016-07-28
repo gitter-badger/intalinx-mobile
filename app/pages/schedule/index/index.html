@@ -79,7 +79,6 @@
                         <ion-row [hidden]="event.isAllDay=='true'">{{event.endTime}}</ion-row>
                     </ion-col>
                     <ion-col width-70>{{(event.visibility === 'public' || isAdmin || event.isSelf == 'true') ? event.title : ( "app.schedule.visibility.invisible" | translate)}}</ion-col>
-                    <ion-col width-10></ion-col>
                 </ion-row>
             </ion-item>
         </ion-list>
@@ -91,9 +90,9 @@
             <ion-segment-button class="button-select-user" (click)="selectUser()">
                 <ion-icon name="ios-people"></ion-icon>
             </ion-segment-button>
-            <ion-segment-button class="button-show-today" (click)="showToday()">{{ "app.date.today" | translate }}
+            <ion-segment-button class="button-show-today" [style.text-align]="userID==myUserID ? right : center" (click)="showToday()">{{ "app.date.today" | translate }}
             </ion-segment-button>
-            <ion-segment-button class="button-show-my-schedule" (click)="showMySchedule()">{{ "app.schedule.index.mySchedule" | translate }}
+            <ion-segment-button class="button-show-my-schedule" [hidden]="userID==myUserID" (click)="showMySchedule()">{{ "app.schedule.index.mySchedule" | translate }}
             </ion-segment-button>
         </ion-segment>
     </ion-toolbar>
