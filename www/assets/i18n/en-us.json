@@ -169,15 +169,15 @@
                     "edit": "Save"
                 },
                 "message": {
-                    "eventTitleNecessary": "Please input the title of this schedule!",
+                    "eventTitleNecessary": "Please input the title of this event!",
                     "endTimeShouldBeLater": "The end time should be later than start time!",
                     "repeatEndTimeShouldBeLater": "The repeat start time should be later than start time!",
-                    "addEventSuccess": "The schedule had been saved.",
-                    "updateEventSuccess": "The schedule had been updated.",
+                    "addEventSuccess": "The event had been saved.",
+                    "updateEventSuccess": "The event had been updated.",
                     "isSaveChangedData": "Do you want to save the changes?"
                 },
-                "selectRepeatEventUpdateFlag": "Please select the update object in this repeat schedule!", 
-                "selectAll": "All of the schedule", 
+                "selectRepeatEventUpdateFlag": "Please select the update object in this repeat event!", 
+                "selectAll": "All of the event", 
                 "selectSpecial": "Just the selected date"
             },
             "deleteEvent": "Delete Event",

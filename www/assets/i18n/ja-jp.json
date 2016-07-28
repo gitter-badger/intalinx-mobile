@@ -156,8 +156,8 @@
                 "mySchedule": "本人"
             },
             "eventDetail": {
-                "title": "イベントの詳細",
-                "delete": "イベントを削除"
+                "title": "予定詳細",
+                "delete": "予定削除"
             },
             "editEvent": {
                 "title": {
@@ -180,11 +180,11 @@
                 "selectAll": "全ての予定", 
                 "selectSpecial": "当該日付の予定のみ"
             },
-            "deleteEvent": "イベントを削除",
+            "deleteEvent": "予定削除",
             "deleteRepeatEvent": {
-                "title": "これは繰り返しイベントです。",
-                "deleteEventOfSelectedDay": "当該日付のイベントのみを削除",
-                "deleteAllEvents": "全てのイベントを削除"
+                "title": "これは繰り返し予定です。",
+                "deleteEventOfSelectedDay": "当該日付の予定のみを削除",
+                "deleteAllEvents": "全ての予定を削除"
             }
         }
     }

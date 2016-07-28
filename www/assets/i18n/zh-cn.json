@@ -156,13 +156,13 @@
                 "mySchedule": "我"
             },
             "eventDetail": {
-                "title": "事件详细",
+                "title": "预订详细",
                 "delete": "删除"
             },
             "editEvent": {
                 "title": {
-                    "new": "新建事件", 
-                    "edit": "编辑事件"
+                    "new": "新建预订", 
+                    "edit": "编辑预订"
                 },
                 "saveEvent": {
                     "new": "追加", 
@@ -180,11 +180,11 @@
                 "selectAll": "更新所有重复预订", 
                 "selectSpecial": "只更新当前选择的预订"
             },
-            "deleteEvent": "删除事件",
+            "deleteEvent": "删除预订",
             "deleteRepeatEvent": {
-                "title": "此为重复事件。",
-                "deleteEventOfSelectedDay": "仅删除当天的事件",
-                "deleteAllEvents": "删除所有的事件"
+                "title": "此为重复预订。",
+                "deleteEventOfSelectedDay": "仅删除当天的预订",
+                "deleteAllEvents": "删除所有的预订"
             }
         }
     }
