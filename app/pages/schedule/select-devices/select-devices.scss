@@ -1,4 +1,12 @@
-.select-facilities {
+ion-searchbar {
+    .searchbar-input {
+        padding-right: 0;
+    }
+    .searchbar-clear-icon {
+        display: none!important; 
+    }
+}
+.select-devices {
     ion-list + ion-list {
         margin-top: 0;
     }
