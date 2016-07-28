@@ -62,7 +62,7 @@ export class EditEventPage {
     private minDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MIN');
     private maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
     private minuteValues: string = this.appConfig.get('DATETIME_MINUTE_VALUES');
-    private isSaved: boolean = false;
+    private isSavedOrChecked: boolean = false;
 
     constructor(private nav: NavController,
         private params: NavParams,
@@ -407,7 +407,7 @@ export class EditEventPage {
                 break;
             }
         }
-        if (!this.isSaved && isAnyChange) {
+        if (!this.isSavedOrChecked && isAnyChange) {
             this.confirmSaveWarn();
         }
     }
@@ -415,13 +415,13 @@ export class EditEventPage {
     confirmSaveWarn() {
         this.translate.get([
             'app.message.warning.title',
-            'app.schedule.editEvent.message.isSaveChangedData',
+            'app.schedule.editEvent.message.undoChanged',
             'app.action.yes',
             'app.action.no']).subscribe(message => {
                 this.warningTitle = message['app.message.warning.title'];
                 this.actionYes = message['app.action.yes'];
                 this.actionNo = message['app.action.no'];
-                let content = message['app.schedule.editEvent.message.isSaveChangedData'];
+                let content = message['app.schedule.editEvent.message.undoChanged'];
 
                 let alert = Alert.create({
                     title: this.warningTitle,
@@ -430,7 +430,8 @@ export class EditEventPage {
                         text: this.actionYes,
                         handler: () => {
                             setTimeout(() => {
-                                this.saveEvent();
+                                this.isSavedOrChecked = true;
+                                this.nav.pop();
                             }, 500);
                         }
                     },
@@ -559,7 +560,7 @@ export class EditEventPage {
     addEvent() {
         this.scheduleService.addEvent(this.event, this.participants).then(data => {
             if (data === 'true') {
-                this.isSaved = true;
+                this.isSavedOrChecked = true;
                 this.sendDataToAddEvent.isRefreshFlag = true;
                 this.nav.pop();
             } else {
@@ -580,7 +581,7 @@ export class EditEventPage {
     updateEvent() {
         this.scheduleService.updateEvent(this.event, this.participants).then(data => {
             if (data === 'true') {
-                this.isSaved = true;
+                this.isSavedOrChecked = true;
                 this.sendDataToEditEvent.isRefreshFlag = true;
                 this.nav.pop();
             } else {
