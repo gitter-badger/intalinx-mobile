@@ -11,11 +11,9 @@
                 <ion-icon name="arrow-back"></ion-icon>
             </button>
         </ion-buttons>
-        <ion-item class="display-year-month">
-            <ion-datetime displayFormat="YYYY/MM" min={{minDisplayDate}} max={{maxDisplayDate}} (ionChange)="changeCalendar($event)" [(ngModel)]="yearMonth"
-                cancelText='{{ "app.action.cancel" | translate }}' doneText='{{ "app.action.done" | translate }}'></ion-datetime>
-        </ion-item>
         <ion-buttons end>
+            <ion-datetime class="change-month" displayFormat="YYYY/MM" min={{minDisplayDate}} max={{maxDisplayDate}} (ionChange)="changeCalendar($event)" [(ngModel)]="yearMonth"
+            cancelText='{{ "app.action.cancel" | translate }}' doneText='{{ "app.action.done" | translate }}'></ion-datetime>
             <button class="next-month" (click)="nextMonth()">
                 <ion-icon name="arrow-forward"></ion-icon>
             </button>

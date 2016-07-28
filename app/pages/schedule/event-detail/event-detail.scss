@@ -1,27 +1,34 @@
 .event-detail {
-    .event-title {
-        display: block;
-        line-height: 1.2;
-        font-size: 2.0rem;
-        color: #222;
-        font-weight: bold;
-        white-space: pre-wrap;
-    }
-    
-    .participant-name {
-        float: left;
-        width: 45%;
-        text-align: left;
-    }
-    
-    .event-contents-title {
-        line-height: 1.2;
-        font-size: 1.8rem;
-        color: #222;
-        font-weight: bold;
-        white-space: pre-wrap;
-    }
-    .event-summary {
-        margin: 0;
+    padding: 0;
+    ion-item {
+        padding-left: 0;
+        ion-label {
+            margin-top: 0;
+        }
+        .event-title {
+            display: block;
+            line-height: 1.2;
+            font-size: 2.0rem;
+            color: #222;
+            font-weight: bold;
+            white-space: pre-wrap;
+        }
+        
+        .participant-name {
+            float: left;
+            width: 45%;
+            text-align: left;
+        }
+        
+        .event-contents-title {
+            line-height: 1.2;
+            font-size: 1.8rem;
+            color: #222;
+            font-weight: bold;
+            white-space: pre-wrap;
+        }
+        .event-summary {
+            margin: 0;
+        }
     }
 }
