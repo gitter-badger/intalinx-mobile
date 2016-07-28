@@ -26,17 +26,27 @@ export class AlertUtil {
     }
 
     presentSystemErrorModal(): void {
-        this.translate.get(['app.message.error.title', 'app.message.error.systemError', 'app.action.ok']).subscribe(message => {
-            let title = message['app.message.error.title'];
-            let ok = message['app.action.ok'];
-            let content = message['app.message.error.systemError'];
+        if (typeof this.share.alertForSystemError === undefined) {
+            this.translate.get(['app.message.error.title', 'app.message.error.systemError', 'app.action.ok']).subscribe(message => {
+                let title = message['app.message.error.title'];
+                let ok = message['app.action.ok'];
+                let content = message['app.message.error.systemError'];
 
-            let alert = Alert.create({
-                title: title,
-                subTitle: content,
-                buttons: [ok]
+                let alert = Alert.create({
+                    title: title,
+                    subTitle: content,
+                    buttons: [
+                        {
+                            text: ok,
+                            handler: data => {
+                                this.share.alertForSystemError = undefined;
+                            }
+                        }
+                    ]
+                });
+                this.share.alertForSystemError = alert;
+                this.share.nav.present(alert);
             });
-            this.share.nav.present(alert);
-        });
+        }
     }
 }
