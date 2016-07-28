@@ -52,6 +52,7 @@ export class LoginPage {
                 }
                 this.redirectToPortal();
             } else if (!authenticationResult) {
+                this.isDisabled = null;
                 this.translate.get(['app.login.message.error.title', 'app.login.message.error.idOrPasswordNotCorrect', 'app.action.ok']).subscribe(message => {
                     let title = message['app.login.message.error.title'];
                     let ok = message['app.action.ok'];

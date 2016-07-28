@@ -47,11 +47,7 @@ export class UserService {
     authenticate(loginID, password): Promise<any> {
         return new Promise(resolve => {
             this.util.authenticate(loginID, password).then(authenticationResult => {
-                if (authenticationResult || !authenticationResult) {
-                    resolve(authenticationResult);
-                } else {
-                    this.util.presentSystemErrorModal();
-                }
+                resolve(authenticationResult);
             });
         });
     }

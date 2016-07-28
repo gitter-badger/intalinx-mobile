@@ -151,7 +151,9 @@ export class CordysUtil {
 
                     req = this.xmlUtil.xml2string(samlRequest);
 
-                    this.callCordysWebserviceUseAnonymous(req).then((data: string) => {
+                    let hideError = true;
+                    let useAnonymous = true;
+                    this.callCordysWebservice(req, hideError, useAnonymous).then((data: string) => {
                         let samlResponse = this.xmlUtil.parseXML(data);
                         this.xmlUtil.setXMLNamespaces(samlResponse, {
                             'SOAP': this.constants.SOAP_NAMESPACE,
@@ -180,6 +182,8 @@ export class CordysUtil {
                             }
                         }
                         resolve(authenticationResult);
+                    }, (error: any) => {
+                        resolve(false);
                     });
                 });
             });

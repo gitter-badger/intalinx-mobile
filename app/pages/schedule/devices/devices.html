@@ -80,7 +80,7 @@
                         [style.margin-top]= "event.eventMarginTop"
                         (click)="showDetail(event)">
                         <div class="event-text">
-                            {{(event.visibility === 'public' || isAdmin || !event.isSelf) ? event.participants : ( "app.schedule.visibility.invisible" | translate)}}
+                            {{(event.visibility === 'public' || isAdmin || event.isSelf == 'true') ? event.participants : ( "app.schedule.visibility.invisible" | translate)}}
                         </div>
                     </div>
                 </div>
