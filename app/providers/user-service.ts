@@ -19,8 +19,8 @@ export class UserService {
         return new Promise(resolve => {
             this.util.loggedOn().then((result: boolean) => {
                 if (!result) {
-                    this.util.isAutoLogin().then((isAutoLogin: boolean) => {
-                        if (isAutoLogin) {
+                    this.util.isAutoLogin().then((isAutoLogin: string) => {
+                        if (isAutoLogin === 'true') {
                             Promise.all([this.util.getLoginID(), this.util.getPassword()]).then((values: any) => {
                                 return this.authenticate(values[0], values[1]);
                             });

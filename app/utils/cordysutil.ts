@@ -194,7 +194,16 @@ export class CordysUtil {
                 this.isAutoLogin().then((isAutoLogin: boolean) => {
                     if (isAutoLogin) {
                         Promise.all([this.getLoginID(), this.getPassword()]).then((values: any) => {
-                            return this.authenticate(values[0], values[1]);
+                            this.authenticate(values[0], values[1]).then((result: boolean) => {
+                                // use saved login id and password faild, then remove it and set auto login to false.
+                                if (!result) {
+                                    return this.logout().then(() => {
+                                        return false;
+                                    });
+                                } else {
+                                    return Promise.resolve(result);
+                                }
+                            });
                         });
                     }
                 });

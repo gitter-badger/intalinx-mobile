@@ -116,8 +116,8 @@ export class SSO {
             let isLoggedOn = false;
             isLoggedOn = samlart != null && samlart !== '';
             if (!isLoggedOn) {
-                this.isAutoLogin().then((isAutoLogin: boolean) => {
-                    if (isAutoLogin) {
+                this.isAutoLogin().then((isAutoLogin: string) => {
+                    if (isAutoLogin === 'true') {
                         Promise.all([this.getLoginID(), this.getPassword()]).then((values: any) => {
                             return this.authenticate(values[0], values[1]);
                         });

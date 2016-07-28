@@ -59,7 +59,7 @@ export class PortalPage {
 
     checkUpdate() {
         // check latest version from http://pgyer.com/.
-        if (this.platform.is('cordova')) {
+        if (this.platform.is('cordova') && !this.platform.is('tablet')) {
             this.aboutService.getVersion().then(data => {
                 this.version = data;
                 this.aboutService.getLatestVersion().then(data => {
@@ -78,7 +78,7 @@ export class PortalPage {
         this.appsService.load().then((data: any) => {
             let menuIdNeedToRemove = [];
             
-            // remove about page for real device.
+            // remove about page for web browser.
             if (!this.platform.is('cordova')) {
                 menuIdNeedToRemove.push('about');
             }
