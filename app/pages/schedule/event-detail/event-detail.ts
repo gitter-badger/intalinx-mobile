@@ -203,16 +203,13 @@ export class EventDetailPage {
     }
 
     presentDeleteRepeatEventActionSheet() {
-        this.translate.get(['app.schedule.deleteRepeatEvent.title',
-            'app.schedule.deleteRepeatEvent.deleteEventOfSelectedDay',
+        this.translate.get(['app.schedule.deleteRepeatEvent.deleteEventOfSelectedDay',
             'app.schedule.deleteRepeatEvent.deleteAllEvents',
             'app.action.cancel']).subscribe(message => {
-                let title = message['app.schedule.deleteRepeatEvent.title'];
                 let deleteEventOfSelectedDay = message['app.schedule.deleteRepeatEvent.deleteEventOfSelectedDay'];
                 let deleteAllEvents = message['app.schedule.deleteRepeatEvent.deleteAllEvents'];
                 let cancelButton = message['app.action.cancel'];
                 let actionSheet = ActionSheet.create({
-                    title: title,
                     buttons: [
                         {
                             text: deleteEventOfSelectedDay,

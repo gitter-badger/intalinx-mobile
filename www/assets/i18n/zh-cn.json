@@ -182,7 +182,6 @@
             },
             "deleteEvent": "删除事件",
             "deleteRepeatEvent": {
-                "title": "此为重复事件。",
                 "deleteEventOfSelectedDay": "仅删除当天的事件",
                 "deleteAllEvents": "删除所有的事件"
             }

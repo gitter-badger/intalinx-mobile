@@ -182,7 +182,6 @@
             },
             "deleteEvent": "Delete Event",
             "deleteRepeatEvent": {
-                "title": "This is a repeating event.",
                 "deleteEventOfSelectedDay": "Delete This Event of the Selected Day",
                 "deleteAllEvents": "Delete All Events"
             }
