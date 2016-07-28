@@ -2,6 +2,8 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {NavController} from 'ionic-angular';
+import {Badge} from 'ionic-native';
+import {Platform} from 'ionic-angular';
 
 // Config.
 import {AppConfig} from '../appconfig';
@@ -15,6 +17,7 @@ export class NotificationService {
 
     constructor(private http: Http,
         private nav: NavController,
+        private platform: Platform,
         private appConfig: AppConfig,
         private util: Util) {
         this.userDefaultAvatarImageUrl = this.appConfig.get('USER_DEFAULT_AVATAR_IMAGE_URL');
@@ -66,6 +69,11 @@ export class NotificationService {
 
                     let returnOutPut = this.util.selectXMLNode(objResponse, './/*[local-name()=\'return\']');
                     let returnData = this.util.xml2json(returnOutPut).return;
+                    if (this.platform.is('cordova')) {
+                        Badge.get().then((coutner) => {
+                            Badge.set(Number(coutner) + Number(returnData));
+                        });
+                    }
                     resolve(returnData);
                 });
             });
