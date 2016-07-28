@@ -182,6 +182,47 @@ export class ScheduleService {
         });
     }
 
+    // search events by seleted day.
+    searchEventsBySelectedDay(startTime: number, endTime: number, userID: string): any {
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/schedule/search_events.xml').then((req: string) => {
+                let objRequest = this.util.parseXml(req);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'startTime\']', startTime);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'endTime\']', endTime);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'userID\']', userID);
+                req = this.util.xml2string(objRequest);
+                this.util.callCordysWebservice(req).then((data: string) => {
+                    let objResponse = this.util.parseXml(data);
+                    let eventOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'EventOutput\']');
+                    let events = new Array();
+                    for (let i = 0; i < eventOutputs.length; i++) {
+                        let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
+                        let startTime = moment(eventOutput.startTime, 'X').format('HH:mm');
+                        let endTime = moment(eventOutput.endTime, 'X').format('HH:mm');
+                        let isAllDay = eventOutput.isAllDay;
+                        if (startTime >= eventOutput.startTime && endTime <= eventOutput.endTime) {
+                            isAllDay = 'true';
+                        } else if (startTime < eventOutput.startTime && endTime < eventOutput.endTime) {
+                            endTime = '24:00';
+                        } else if (endTime > eventOutput.endTime && startTime > eventOutput.startTime) {
+                            startTime = '00:00';
+                        }
+                        let event = {
+                            eventID: eventOutput.eventID,
+                            startTime: startTime,
+                            endTime: endTime,
+                            title: eventOutput.title,
+                            isAllDay: isAllDay
+                        };
+                        events.push(event);
+                    }
+                    resolve(events);
+                });
+            });
+        });
+    }
+
+    // search events by month.
     searchEventsForMonthByStartTimeAndEndTimeAndUserID(startTime: number, endTime: number, userID: string): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/schedule/search_events.xml').then((req: string) => {
