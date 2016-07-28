@@ -27,13 +27,11 @@
     {
         "titleIcon": "contact",
         "title": "app.profile.title",
-        "componentsId": "profile",
-        "isPush": true
+        "componentsId": "profile"
     },
     {
         "titleIcon": "information-circle",
         "title": "app.about.title",
-        "componentsId": "about",
-        "isPush": true
+        "componentsId": "about"
     }
 ]
