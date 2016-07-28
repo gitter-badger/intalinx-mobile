@@ -39,8 +39,8 @@ export class DevicesPage {
     private refreshWholePageInterval: number = 60 * 5;
     // the width of one hour
     private oneHourWidth: number = 120;
-    private eventHeight: number = 60;
-    private deviceHeight: number = 60;
+    private eventHeight: number = 70;
+    private deviceHeight: number = 70;
     private displayDaysNumber: number = 2;
     private ganttviewWidth: number;
     private fixedDateWidth: number;
@@ -183,7 +183,7 @@ export class DevicesPage {
     setNowLineStyles(): any {
         if (this.getToday() === this.fromDate) {
             this.nowLine.nativeElement.style.marginLeft = this.calculateTimeWidth(this.fromDateTime, this.now);
-            this.nowLine.nativeElement.style.height = this.deviceHeight * this.devices.length + 'px';
+            this.nowLine.nativeElement.style.height = this.ganttviewSlide.nativeElement.clientHeight + 'px';
         }
     }
     

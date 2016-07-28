@@ -2,12 +2,12 @@
 .devices {
     $grey-border: 1px solid #D7D7D7;
     $red-border: 2px solid red;
-    $device-list-width: 200px;
-    $cell-height: 60px;
+    $device-list-width: 280px;
+    $cell-height: 70px;
     $cell-width: 120px;
     
     $cell-padding: 6px;
-    $event-height: 60px;
+    $event-height: 70px;
     $event-padding: 3px;
     $event-margin: 0px;
     $background-color-list :
@@ -214,6 +214,10 @@
                             position: absolute;
                             overflow: hidden;
                             word-break: break-all;
+                            -webkit-line-clamp: 3;
+                            -webkit-box-orient: vertical;
+                            display: -webkit-box;
+                            line-height: 18px;
                         }
                         @include generate-color('&');
                     }
