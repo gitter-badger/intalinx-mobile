@@ -5,23 +5,20 @@
         </button>
         <ion-title>{{!selectedOtherUserName ? ("app.schedule.title"|translate) : (selectedOtherUserName) + ("app.schedule.scheduleOfPerson" | translate)}}</ion-title>
     </ion-navbar>
-    <ion-toolbar no-border-top class="year-month-tool">
-        <ion-buttons start>
-            <button class="last-month" (click)="lastMonth()">
-                <ion-icon name="arrow-back"></ion-icon>
-            </button>
-        </ion-buttons>
-        <ion-buttons end>
-            <ion-datetime class="change-month" displayFormat="YYYY/MM" min={{minDisplayDate}} max={{maxDisplayDate}} (ionChange)="changeCalendar($event)" [(ngModel)]="yearMonth"
+    <div class="calendar-toolbar">
+        <button clear class="last-month" (click)="lastMonth()">
+            <ion-icon name="arrow-back"></ion-icon>
+        </button>
+        <ion-datetime class="change-month" displayFormat="YYYY/MM" min={{minDisplayDate}} max={{maxDisplayDate}} (ionChange)="changeCalendar($event)" [(ngModel)]="yearMonth"
             cancelText='{{ "app.action.cancel" | translate }}' doneText='{{ "app.action.done" | translate }}'></ion-datetime>
-            <button class="next-month" (click)="nextMonth()">
-                <ion-icon name="arrow-forward"></ion-icon>
-            </button>
-            <button class="add-event" (click)="addEvent()">
-                <ion-icon name="md-add"></ion-icon>
-            </button>
-        </ion-buttons>
-    </ion-toolbar>
+        <button clear class="next-month" (click)="nextMonth()">
+            <ion-icon name="arrow-forward"></ion-icon>
+        </button>
+        <div class="blank"></div>
+        <button clear class="add-event" (click)="addEvent()">
+            <ion-icon name="md-add"></ion-icon>
+        </button>
+    </div>
     <ion-toolbar no-border-top class="week-names">
         <div class="week-days" *ngFor="let weekday of weekdays" [ngClass]="{'weekends': (isFirstDayMonday==false && (weekday==weekdays[0] || weekday==weekdays[6])) || (isFirstDayMonday==true && (weekday==weekdays[5] || weekday==weekdays[6]))}">{{weekday}}</div>
     </ion-toolbar>
