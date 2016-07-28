@@ -1,6 +1,6 @@
 // Third party library.
 import {Component} from '@angular/core';
-import {NavController, ViewController, Platform} from 'ionic-angular';
+import {NavController, ViewController} from 'ionic-angular';
 import {NgForm} from '@angular/common';
 
 // Utils.
@@ -22,8 +22,8 @@ export class ChangePasswordPage {
 
     constructor(private nav: NavController,
         private view: ViewController,
-        private userService: UserService,
-        private platform: Platform) {
+        private util: Util,
+        private userService: UserService) {
 
         this.user = {
             oldPassword: '',
@@ -36,6 +36,12 @@ export class ChangePasswordPage {
         this.isDisabled = true;
         this.userService.updateProfile(this.user).then(data => {
             if (data === true) {
+                // refresh password in storage.
+                this.util.isAutoLogin().then((isAutoLogin: string) => {
+                    if (isAutoLogin === 'true') {
+                        this.util.setPassword(this.user.confirmPassword);
+                    }
+                });
                 this.nav.pop();
             }
         });
