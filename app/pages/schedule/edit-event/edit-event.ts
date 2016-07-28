@@ -48,6 +48,7 @@ export class EditEventPage {
     private receivedData: any;
     private isNewEvent: boolean;
     private event: any;
+    private initEvent: any;
     private participants: any;
     private startTime: any;
     private endTime: any;
@@ -61,6 +62,7 @@ export class EditEventPage {
     private minDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MIN');
     private maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
     private minuteValues: string = this.appConfig.get('DATETIME_MINUTE_VALUES');
+    private isSaved: boolean = false;
 
     constructor(private nav: NavController,
         private params: NavParams,
@@ -203,6 +205,7 @@ export class EditEventPage {
             this.event.isDeviceRepeatWarned = false;
             this.event.isEventRepeatWarned = false;
             this.event.isFromRepeatToSpecial = false;
+            this.initEvent = Object.assign({}, this.event);
         });
     }
 
@@ -284,6 +287,7 @@ export class EditEventPage {
             'oldEndTime': '',
             'isFromRepeatToSpecial': ''
         };
+        this.initEvent = Object.assign({}, this.event);
     }
 
     setEndTimeHalfHourLater(time) {
@@ -393,6 +397,49 @@ export class EditEventPage {
             }
         });
         this.nav.present(devicesModal);
+    }
+
+    ionViewWillLeave(): void {
+        let isAnyChange = false;
+        for (let key in this.initEvent) {
+            if (this.initEvent[key] !== this.event[key]) {
+                isAnyChange = true;
+                break;
+            }
+        }
+        if (!this.isSaved && isAnyChange) {
+            this.confirmSaveWarn();
+        }
+    }
+
+    confirmSaveWarn() {
+        this.translate.get([
+            'app.message.warning.title',
+            'app.schedule.editEvent.message.isSaveChangedData',
+            'app.action.yes',
+            'app.action.no']).subscribe(message => {
+                this.warningTitle = message['app.message.warning.title'];
+                this.actionYes = message['app.action.yes'];
+                this.actionNo = message['app.action.no'];
+                let content = message['app.schedule.editEvent.message.isSaveChangedData'];
+
+                let alert = Alert.create({
+                    title: this.warningTitle,
+                    subTitle: content,
+                    buttons: [{
+                        text: this.actionYes,
+                        handler: () => {
+                            setTimeout(() => {
+                                this.saveEvent();
+                            }, 500);
+                        }
+                    },
+                    {
+                        text: this.actionNo
+                    }]
+            });
+            this.nav.present(alert);
+        });
     }
 
     saveEvent() {
@@ -512,6 +559,7 @@ export class EditEventPage {
     addEvent() {
         this.scheduleService.addEvent(this.event, this.participants).then(data => {
             if (data === 'true') {
+                this.isSaved = true;
                 this.sendDataToAddEvent.isRefreshFlag = true;
                 this.nav.pop();
             } else {
@@ -532,6 +580,7 @@ export class EditEventPage {
     updateEvent() {
         this.scheduleService.updateEvent(this.event, this.participants).then(data => {
             if (data === 'true') {
+                this.isSaved = true;
                 this.sendDataToEditEvent.isRefreshFlag = true;
                 this.nav.pop();
             } else {

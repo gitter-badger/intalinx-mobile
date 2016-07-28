@@ -125,7 +125,7 @@
                 "participant": "参加者",
                 "device": "设施",
                 "createUser": "创建者",
-                "updateUser": "变更者"
+                "updateUser": "更新者"
             },
             "repeatRules": {
                 "title": "重复频率", 
@@ -161,8 +161,8 @@
             },
             "editEvent": {
                 "title": {
-                    "new": "予定新規", 
-                    "edit": "予定編集"
+                    "new": "新建事件", 
+                    "edit": "编辑事件"
                 },
                 "saveEvent": {
                     "new": "追加", 
@@ -173,7 +173,8 @@
                     "endTimeShouldBeLater": "结束时间需要在开始时间之后",
                     "repeatEndTimeShouldBeLater": "重复的结束时间需要在开始时间之后",
                     "addEventSuccess": "预订已保存",
-                    "updateEventSuccess": "预订已更新"
+                    "updateEventSuccess": "预订已更新",
+                    "isSaveChangedData": "是否保存已编辑的数据？"
                 },
                 "selectRepeatEventUpdateFlag": "请选择本次更新的对象", 
                 "selectAll": "更新所有重复预订", 

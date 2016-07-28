@@ -173,7 +173,8 @@
                     "endTimeShouldBeLater": "終了時間は開始時間以後に選択してください！",
                     "repeatEndTimeShouldBeLater": "繰り返す終了時間は開始時間以後に選択してください！",
                     "addEventSuccess": "予定追加完了しました。",
-                    "updateEventSuccess": "予定更新完了しました。"
+                    "updateEventSuccess": "予定更新完了しました。",
+                    "isSaveChangedData": "スケジュールへの変更を保存しますか？"
                 },
                 "selectRepeatEventUpdateFlag": "編集・削除の対象を選択してください。", 
                 "selectAll": "全ての予定", 
