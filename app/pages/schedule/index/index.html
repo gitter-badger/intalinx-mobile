@@ -30,7 +30,7 @@
     <div class="loading" [hidden]="isHtmlLoadCompleted==true">
         <ion-spinner name="dots"></ion-spinner>
     </div>
-    <ion-slides [style.height]="calendarHeight + 'px'" #calendarSlides (ionWillChange)="changeMonth($event)" [options]="calendarSlideOptions">
+    <!--<ion-slides [style.height]="calendarHeight + 'px'" #calendarSlides (ionWillChange)="changeMonth($event)" [options]="calendarSlideOptions">
         <ion-slide class="calendar" *ngFor="let n of numbers">
             <div class="day-in-calendar" *ngFor="let day of timeline" (click)="getEventsAndSpecialDaysBySelectedDay(day.format('YYYY/MM/D'))">
                 <div class="day-default" [ngClass]="{'day-not-this-month': day.format('YYYY-MM')!=yearMonth,
@@ -43,7 +43,19 @@
                 </ion-badge>
             </div>
         </ion-slide>
-    </ion-slides>
+    </ion-slides>-->
+    <ion-grid class="calendar" [style.height]="calendarHeight + 'px'" >
+        <div class="day-in-calendar" *ngFor="let day of timeline" (click)="getEventsAndSpecialDaysBySelectedDay(day.format('YYYY/MM/D'))">
+            <div class="day-default" [ngClass]="{'day-not-this-month': day.format('YYYY-MM')!=yearMonth,
+                        'day-today': day.format('YYYY/MM/D')==today,
+                        'weekends': day.format('d')==6 || day.format('d')==0,
+                        'hover': day.format('YYYY/MM/D')==selectedDay}">
+                {{day.format('D')}}
+            </div>
+            <ion-badge class="day-has-events" [style.visibility]="day.format('YYYY-MM')==yearMonth && (eventsByDays.has(day.format('YYYY/MM/D'))||specialDaysByDays.has(day.format('YYYY/MM/D'))) ? 'visible' : 'hidden'">
+            </ion-badge>
+        </div>
+    </ion-grid>
     <ion-scroll class="events" scrollY="true">
         <div class="loading" [hidden]="isEventLoadCompleted!=false">
             <ion-spinner name="dots"></ion-spinner>
