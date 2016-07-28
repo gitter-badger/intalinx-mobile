@@ -51,8 +51,7 @@
         <ion-item no-lines [hidden]="!summary">
             <ion-label>
                 <h2 class="event-contents-title">{{"app.schedule.event.summary" | translate}}{{"app.schedule.colon" | translate}}</h2>
-                <ion-textarea [disabled]=true class="summary-content" rows=5 [(ngModel)]="summary">
-                </ion-textarea>
+                <pre class="event-summary">{{summary}}</pre>
             </ion-label>
         </ion-item>
         <ion-item no-lines [hidden]="!createUserName">

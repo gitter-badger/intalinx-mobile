@@ -5,29 +5,28 @@
 
 .year-month-tool {
     ion-buttons[start] {
-        min-width: 5%;
-        max-width: 5%;
-        .next-month {
-            position: absolute;
-            right: 0;
-        }
+        width: 5rem;
     }
     .toolbar-content {
         max-width: 30%;
         .display-year-month {
             background-color: inherit;
             ion-datetime {
-                max-width: 10rem;
-                padding: 0 !important;
+                width: 10rem;
+                padding: 0 ;
                 margin: auto;
             }
         }
     }
     ion-buttons[end] {
-        min-width: 60%;
-        .next-month {
+        min-width: 90%;
+        .change-month {
             position: absolute;
             left: 0;
+        }
+        .next-month {
+            position: absolute;
+            left: 10rem;
         }
     }
 }
