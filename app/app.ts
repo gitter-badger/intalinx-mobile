@@ -5,7 +5,7 @@ import {ionicBootstrap, Platform, Config, MenuController, NavController} from 'i
 import {PLATFORM_PIPES, provide} from '@angular/core';
 import {HTTP_PROVIDERS, Http} from '@angular/http';
 import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
-import {StatusBar} from 'ionic-native';
+import {StatusBar, GoogleAnalytics} from 'ionic-native';
 
 // Config.
 import {AppConfig} from './appconfig';
@@ -50,6 +50,12 @@ class IntaLinx {
         // Okay, so the platform is ready and our plugins are available.
         // Here you can do any higher level native things you might need.
         StatusBar.styleDefault();
+
+        // Google Analytics
+        if (typeof GoogleAnalytics !== undefined && this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')) {
+            GoogleAnalytics.startTrackerWithId(this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID'));
+        }
+
         // initialize translate library
         let userLang = navigator.language.toLowerCase();
         this.appConfig.set('USER_LANG', userLang);
@@ -112,7 +118,7 @@ class IntaLinx {
     logout() {
         this.menu.close();
         this.util.logout().then(() => {
-            this.rootPage = LoginPage;
+            this.share.nav.setRoot(LoginPage);
         });
     }
 }
