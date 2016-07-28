@@ -81,7 +81,7 @@ export class ScheduleIndexPage {
             initialSlide: this.cachedSlidesOnOneSide
         };
         this.numbers = this.initNumbers(this.defaultNumber, this.cachedSlidesOnOneSide);
-        this.weekdays = moment.weekdaysMin(true);
+        this.weekdays = moment.weekdaysMin(false);
         // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
         if (this.userLang === 'ja' || this.userLang === 'ja-jp') {
             this.isFirstDayMonday = true;
@@ -148,7 +148,7 @@ export class ScheduleIndexPage {
         // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
         let indexOfFirstDayInWeek = 0;
         let indexOfLastDayInWeek = 6;
-        if (this.isFirstDayMonday && this.isFirstDayMonday === true) {
+        if (this.isFirstDayMonday) {
             indexOfFirstDayInWeek = 1;
             indexOfLastDayInWeek = 0;
         }
