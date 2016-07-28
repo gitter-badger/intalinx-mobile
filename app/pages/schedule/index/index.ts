@@ -61,6 +61,7 @@ export class ScheduleIndexPage {
     private myUserID: string;
     private userID: string;
     private selectedOtherUserName: string;
+    private isAdmin: boolean;
 
     private calendar: any;
     private timeline: any;
@@ -104,6 +105,10 @@ export class ScheduleIndexPage {
             this.getLocalsFromSetting().then(local => {
                 this.showCalendar(firstDateWeek);
             });
+        });
+
+        this.scheduleService.getIsAdmin().then((data: boolean) => {
+            this.isAdmin = data;
         });
     }
 
@@ -252,14 +257,11 @@ export class ScheduleIndexPage {
     openEventDetail(event) {
         this.sendDataToShowOrDeleteEvent.selectedDay = this.selectedDay;
         this.sendDataToShowOrDeleteEvent.eventID = event.eventID;
-
-        this.translate.get('app.schedule.visibility.invisible').subscribe(message => {
-            if (!(event.title === message && event.isSelf === 'false')) {
-                this.nav.push(EventDetailPage, {
-                    'sendDataToShowOrDeleteEvent': this.sendDataToShowOrDeleteEvent
-                });
-            }
-        });
+        if (event.visibility === 'public' || this.isAdmin || event.isSelf === 'true') {
+            this.nav.push(EventDetailPage, {
+                'sendDataToShowOrDeleteEvent': this.sendDataToShowOrDeleteEvent
+            });
+        }
     }
 
     addEvent() {

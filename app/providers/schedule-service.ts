@@ -198,11 +198,6 @@ export class ScheduleService {
                     let endDate;
                     for (let i = 0; i < eventOutputs.length; i++) {
                         let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
-                        if (!eventOutput.title && eventOutput.isSelf === 'false') {
-                            this.translate.get('app.schedule.visibility.invisible').subscribe(message => {
-                                eventOutput.title = message;
-                            });
-                        }
                         let ouputStartTime = eventOutput.startTime;
                         let ouputEndTime = eventOutput.endTime;            
                         // the start time is before the month
@@ -232,6 +227,7 @@ export class ScheduleService {
                             } else if (currentDayEndTime > Number(ouputEndTime) && currentDayStartTime > Number(ouputStartTime)) {
                                 startHourMinute = '00:00';
                             }
+                            // TODO: Dont use JSON.stringify and JSON.parse
                             let event: any = JSON.stringify(eventOutput);
                             event = JSON.parse(event);
                             event['ouputStartTime'] = ouputStartTime;
