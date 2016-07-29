@@ -110,7 +110,7 @@
             "title": "日程表",
             "event": {
                 "title": "标题", 
-                "schedule": "预订",
+                "schedule": "活动",
                 "start": "开始",
                 "end": "结束",
                 "startDate": "开始日期",
@@ -147,7 +147,6 @@
             "selectDevices": "选择设施",
             "selectParticipants": "选择参加者",
             "selectUser": "选择他人",
-            "scheduleOfPerson": "的日程表",
             "devices": {
                 "title": "设施一览"
             },
@@ -156,34 +155,34 @@
                 "mySchedule": "我"
             },
             "eventDetail": {
-                "title": "预订详细",
+                "title": "活动详细",
                 "delete": "删除"
             },
             "editEvent": {
                 "title": {
-                    "new": "新建预订", 
-                    "edit": "编辑预订"
+                    "new": "新建活动", 
+                    "edit": "编辑活动"
                 },
                 "saveEvent": {
                     "new": "追加", 
                     "edit": "保存"
                 },
                 "message": {
-                    "eventTitleNecessary": "请为预订输入标题", 
+                    "eventTitleNecessary": "请为活动输入标题", 
                     "endTimeShouldBeLater": "结束时间需要在开始时间之后",
                     "repeatEndTimeShouldBeLater": "重复的结束时间需要在开始时间之后",
-                    "addEventSuccess": "预订已保存",
-                    "updateEventSuccess": "预订已更新",
+                    "addEventSuccess": "活动已保存",
+                    "updateEventSuccess": "活动已更新",
                     "undoChanged": "是否放弃已编辑的数据？"
                 },
-                "selectRepeatEventUpdateFlag": "请选择本次更新的对象", 
-                "selectAll": "更新所有重复预订", 
-                "selectSpecial": "只更新当前选择的预订"
+                "selectRepeatEventUpdateFlag": "请选择本次更新的活动", 
+                "selectAll": "更新所有重复活动", 
+                "selectSpecial": "只更新当前选择的活动"
             },
-            "deleteEvent": "删除预订",
+            "deleteEvent": "删除活动",
             "deleteRepeatEvent": {
-                "deleteEventOfSelectedDay": "仅删除当天的预订",
-                "deleteAllEvents": "删除所有的预订"
+                "deleteEventOfSelectedDay": "仅删除当天的活动",
+                "deleteAllEvents": "删除所有的活动"
             }
         }
     }
