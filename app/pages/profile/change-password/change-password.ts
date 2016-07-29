@@ -18,7 +18,7 @@ import {UserService} from '../../../providers/user-service';
 })
 export class ChangePasswordPage {
     private user: any;
-    private isDisabled: boolean;
+    private isDisabled: boolean = true;
 
     constructor(private nav: NavController,
         private view: ViewController,
