@@ -257,7 +257,7 @@ export class EditEventPage {
 
         // 開始時間をただいまの時間に設定し、日付は選択した日付に設定します。
         let now = moment().year(sYear).month(sMonth).date(sDay).format();
-        this.setEndTimeHalfHourLater(now);
+        this.setEndTimeAnHourLater(now);
         // Used to page performance and sava data.
         this.userService.getUserDetails().then(user => {
             this.participants = [
@@ -296,7 +296,7 @@ export class EditEventPage {
         this.initEvent = Object.assign({}, this.event);
     }
 
-    setEndTimeHalfHourLater(time) {
+    setEndTimeAnHourLater(time) {
         let currentMinutes = time.substring(14, 16);
         let startMinutes = currentMinutes;
         if (currentMinutes < 10) {
@@ -318,7 +318,7 @@ export class EditEventPage {
             this.startTime = moment(time).minute(startMinutes).format();
         }
 
-        let endMinutes = startMinutes + 30;
+        let endMinutes = startMinutes + 60;
         if (endMinutes < 60) {
             this.endTime = moment(time).minute(endMinutes).format();
         } else {
@@ -343,7 +343,7 @@ export class EditEventPage {
     //                         {
     //                             text: ok,
     //                             handler: () => {
-    //                                 this.setEndTimeHalfHourLater(this.startTime);
+    //                                 this.setEndTimeAnHourLater(this.startTime);
     //                             }
     //                         }]
     //                 });
