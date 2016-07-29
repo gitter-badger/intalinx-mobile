@@ -10,7 +10,8 @@
                 "versionTooOld": "有新的版本更新。"
             },
             "warning": {
-                "title": "警告"
+                "title": "警告",
+                "logout": "确定退出登录?"
             }
         },
         "action": {

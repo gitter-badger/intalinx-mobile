@@ -1,7 +1,7 @@
 // Third party library.
 import {Component, ViewChild, PLATFORM_PIPES, provide} from '@angular/core';
 import {disableDeprecatedForms, provideForms} from '@angular/forms';
-import {ionicBootstrap, Platform, Config, MenuController, NavController} from 'ionic-angular';
+import {ionicBootstrap, Platform, Config, MenuController, NavController, Alert} from 'ionic-angular';
 import {HTTP_PROVIDERS, Http} from '@angular/http';
 import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
 import {StatusBar, GoogleAnalytics} from 'ionic-native';
@@ -116,8 +116,29 @@ class IntaLinx {
 
     logout() {
         this.menu.close();
-        this.util.logout().then(() => {
-            this.share.nav.setRoot(LoginPage);
+        this.translate.get([
+            'app.message.warning.title',
+            'app.message.warning.logout',
+            'app.action.yes',
+            'app.action.no']).subscribe(message => {
+                let content = message['app.message.warning.logout'];
+
+                let alert = Alert.create({
+                    title: message['app.message.warning.title'],
+                    subTitle: content,
+                    buttons: [{
+                        text: message['app.action.yes'],
+                        handler: () => {
+                            this.util.logout().then(() => {
+                                this.share.nav.setRoot(LoginPage);
+                            });
+                        }
+                    },
+                    {
+                        text: message['app.action.no']
+                    }]
+            });
+            this.nav.present(alert);
         });
     }
 }
