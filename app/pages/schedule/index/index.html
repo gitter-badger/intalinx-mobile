@@ -86,7 +86,7 @@
         <button clear (click)="selectUser()">
             <ion-icon name="ios-people"></ion-icon>
         </button>
-        <button clear (click)="showToday()">
+        <button clear [hidden]="selectedDay==today" (click)="showToday()">
             {{ "app.date.today" | translate }}
         </button>
         <button clear [hidden]="userID==myUserID" (click)="showMySchedule()">
