@@ -249,8 +249,14 @@ export class EditEventPage {
 
     setDefaultDataForNewEvent() {
         this.isNewEvent = true;
-        // 開始時間をただいまの時間に設定します。
-        let now = moment().format();
+        // 全画面からの選択した日付、'YYYY/MM/D' 
+        let selectedDay = this.sendDataToAddEvent.selectedDay;
+        let sYear = parseInt(selectedDay.substring(0, 4));
+        let sMonth = parseInt(selectedDay.substring(5, 7)) - 1;
+        let sDay = parseInt(selectedDay.substring(8, 10));
+
+        // 開始時間をただいまの時間に設定し、日付は選択した日付に設定します。
+        let now = moment().year(sYear).month(sMonth).date(sDay).format();
         this.setEndTimeHalfHourLater(now);
         // Used to page performance and sava data.
         this.userService.getUserDetails().then(user => {
