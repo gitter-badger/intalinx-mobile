@@ -48,7 +48,7 @@ class IntaLinx {
     initializeApp() {
         // Okay, so the platform is ready and our plugins are available.
         // Here you can do any higher level native things you might need.
-        StatusBar.styleDefault();
+        StatusBar.backgroundColorByHexString('#7B1FA2');
 
         // Google Analytics
         if (typeof GoogleAnalytics !== undefined && this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')) {
