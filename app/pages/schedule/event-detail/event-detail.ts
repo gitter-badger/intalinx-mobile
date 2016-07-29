@@ -99,11 +99,11 @@ export class EventDetailPage {
             this.eventEndTime = event.endTime;
             this.startDay = moment(event.startTime, 'X').format('LL');
             this.startDateAndWeekDay = moment(event.startTime, 'X').format('LLdddd');
-            this.startWeekDayMin = moment.weekdaysMin(true)[moment(event.startTime, 'X').format('d')];
+            this.startWeekDayMin = moment.weekdaysMin(false)[moment(event.startTime, 'X').format('d')];
             this.startTime = moment(event.startTime, 'X').format('HH:mm');
             this.endDay = moment(event.endTime, 'X').format('LL');
             this.endDateAndWeekDay = moment(event.endTime, 'X').format('LLdddd');
-            this.endWeekDayMin = moment.weekdaysMin(true)[moment(event.endTime, 'X').format('d')];
+            this.endWeekDayMin = moment.weekdaysMin(false)[moment(event.endTime, 'X').format('d')];
             this.endTime = moment(event.endTime, 'X').format('HH:mm');
 
             let deviceIDs = event.deviceID;
@@ -123,10 +123,10 @@ export class EventDetailPage {
             this.location = event.location;
             this.summary = event.summary;
             this.createUserName = event.createUserName;
-            this.createDateTime = moment(event.createDate).format('LL HH:MM:SS');
+            this.createDateTime = moment(event.createDate).format('LL HH:mm:ss');
             this.updateUserID = event.updateUserID;
             this.updateUserName = event.updateUserName;
-            this.updateDateTime = moment(event.updateDate).format('LL HH:MM:SS');
+            this.updateDateTime = moment(event.updateDate).format('LL HH:mm:ss');
 
             let participants = event.Participant;
             this.isParticiPantMember(participants);

@@ -161,8 +161,8 @@
             },
             "editEvent": {
                 "title": {
-                    "new": "予定新規", 
-                    "edit": "予定編集"
+                    "new": "新規", 
+                    "edit": "編集"
                 },
                 "saveEvent": {
                     "new": "追加", 

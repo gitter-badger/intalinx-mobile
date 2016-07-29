@@ -9,7 +9,6 @@
         <ion-buttons end>
             <button (click)="selectUsers()" [disabled]="selectedUserCount<=0">
                 {{"app.action.done" | translate}}
-                <span [hidden]="selectedUserCount<=0">({{selectedUserCount}})</span>
             </button>
         </ion-buttons>
     </ion-toolbar>
