@@ -99,11 +99,11 @@ export class EventDetailPage {
             this.eventEndTime = event.endTime;
             this.startDay = moment(event.startTime, 'X').format('LL');
             this.startDateAndWeekDay = moment(event.startTime, 'X').format('LLdddd');
-            this.startWeekDayMin = moment.weekdaysMin(true)[moment(event.startTime, 'X').format('d')];
+            this.startWeekDayMin = moment.weekdaysMin(false)[moment(event.startTime, 'X').format('d')];
             this.startTime = moment(event.startTime, 'X').format('HH:mm');
             this.endDay = moment(event.endTime, 'X').format('LL');
             this.endDateAndWeekDay = moment(event.endTime, 'X').format('LLdddd');
-            this.endWeekDayMin = moment.weekdaysMin(true)[moment(event.endTime, 'X').format('d')];
+            this.endWeekDayMin = moment.weekdaysMin(false)[moment(event.endTime, 'X').format('d')];
             this.endTime = moment(event.endTime, 'X').format('HH:mm');
 
             let deviceIDs = event.deviceID;
