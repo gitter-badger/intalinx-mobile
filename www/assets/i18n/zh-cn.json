@@ -107,7 +107,7 @@
             "new": "New"
         },
         "schedule": {
-            "title": "日程",
+            "title": "日程表",
             "event": {
                 "title": "标题", 
                 "schedule": "预订",
@@ -145,9 +145,9 @@
             "time": "时间",
             "colon": "：",
             "selectDevices": "选择设施",
-            "selectParticipants": "选择出席者",
-            "selectUser": "选择要查看的用户",
-            "scheduleOfPerson": "的日程",
+            "selectParticipants": "选择参加者",
+            "selectUser": "选择他人",
+            "scheduleOfPerson": "的日程表",
             "devices": {
                 "title": "设施一览"
             },

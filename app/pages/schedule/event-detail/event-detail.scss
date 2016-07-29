@@ -16,7 +16,7 @@
         
         .participant-name {
             float: left;
-            width: 45%;
+            width: 50%;
             text-align: left;
         }
         
@@ -29,6 +29,11 @@
         }
         .event-summary {
             margin: 0;
+            white-space: normal;
+        }
+        .device-name {
+            text-overflow: ellipsis;
+            overflow: hidden;
         }
     }
 }

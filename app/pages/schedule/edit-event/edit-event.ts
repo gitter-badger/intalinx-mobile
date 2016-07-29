@@ -249,8 +249,14 @@ export class EditEventPage {
 
     setDefaultDataForNewEvent() {
         this.isNewEvent = true;
-        // 開始時間をただいまの時間に設定します。
-        let now = moment().format();
+        // 全画面からの選択した日付、'YYYY/MM/D' 
+        let selectedDay = this.sendDataToAddEvent.selectedDay;
+        let sYear = parseInt(selectedDay.substring(0, 4));
+        let sMonth = parseInt(selectedDay.substring(5, 7)) - 1;
+        let sDay = parseInt(selectedDay.substring(8, 10));
+
+        // 開始時間をただいまの時間に設定し、日付は選択した日付に設定します。
+        let now = moment().year(sYear).month(sMonth).date(sDay).format();
         this.setEndTimeHalfHourLater(now);
         // Used to page performance and sava data.
         this.userService.getUserDetails().then(user => {
@@ -601,7 +607,8 @@ export class EditEventPage {
 
     convertWarningMessage(oldMessage) {
         // oldMessage:
-        // '下記の参加者は既に同じ時間帯の予定が入っています。<br/>王　茜: 1469412000~1469416500;スケジュールを登録しますか？'
+        // '下記の参加者は既に同じ時間帯の予定が入っています。\n王　茜: 1469412000~1469416500;スケジュールを登録しますか？'
+        oldMessage = oldMessage.replace(/\n/g, '<br/>');
         let aMessages = oldMessage.split(';');
         let newMessage = '';
         for (let i = 0; i < aMessages.length - 1; i++) {
