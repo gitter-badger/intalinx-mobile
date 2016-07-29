@@ -123,10 +123,10 @@ export class EventDetailPage {
             this.location = event.location;
             this.summary = event.summary;
             this.createUserName = event.createUserName;
-            this.createDateTime = moment(event.createDate).format('LL HH:MM:SS');
+            this.createDateTime = moment(event.createDate).format('LL HH:mm:ss');
             this.updateUserID = event.updateUserID;
             this.updateUserName = event.updateUserName;
-            this.updateDateTime = moment(event.updateDate).format('LL HH:MM:SS');
+            this.updateDateTime = moment(event.updateDate).format('LL HH:mm:ss');
 
             let participants = event.Participant;
             this.isParticiPantMember(participants);
