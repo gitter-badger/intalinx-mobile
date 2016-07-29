@@ -27,7 +27,8 @@ export class CordysUtil {
         WSSE_NAMESPACE: 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd',
         WSU_NAMESPACE: 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
         SAMLPROTOCOL_NAMESPACE: 'urn:oasis:names:tc:SAML:1.0:protocol',
-        SAML_NAMESPACE: 'urn:oasis:names:tc:SAML:1.0:assertion'
+        SAML_NAMESPACE: 'urn:oasis:names:tc:SAML:1.0:assertion',
+        ARTIFACT_UNBOUND_MESSAGE_CODE: 'Cordys.WebGateway.Messages.WG_Artifact_Unbound'
     };
 
     constructor(private http: Http, private appConfig: AppConfig, private xmlUtil: XmlUtil, private alertUtil: AlertUtil, private dateUtil: DateUtil, private storageUtil: StorageUtil, private share: ShareService) {
@@ -74,7 +75,14 @@ export class CordysUtil {
                             if (!hideError) {
                                 let responseText = error.text();
                                 let responseNode = this.xmlUtil.parseXML(responseText);
-                                this.alertUtil.presentModal(this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'faultstring\']'));
+                                let messageCode = this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'MessageCode\']');
+                                if (this.constants.ARTIFACT_UNBOUND_MESSAGE_CODE === messageCode) {
+                                    this.logout().then(() => {
+                                        this.share.redirectLoginPage();
+                                    });
+                                } else {
+                                    this.alertUtil.presentModal(this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'faultstring\']'));
+                                }
                             }
                         } else {
                             this.alertUtil.presentSystemErrorModal();

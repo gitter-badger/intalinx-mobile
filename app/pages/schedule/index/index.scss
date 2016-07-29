@@ -3,7 +3,7 @@
 @import "../pages/schedule/select-participants/select-participants";
 @import "../pages/schedule/select-devices/select-devices";
 
-.calendar-toolbar {
+.calendar-top-toolbar {
     display: flex;
     justify-content: space-between;
     .change-month {
@@ -12,20 +12,19 @@
         .item-cover {
             height: auto;
         }
+        .datetime-text {
+            align-self: center;
+        }
     }
 }
 
 .week-names {
-    text-align: center;
-    .week-days {
-        float: left;
-        width: 14.2%;
-        text-align: center;
-        .weekends {
-            color: $secondary-text-color;
-        }
-    }
-    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    font-weight: 600;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 .month-calendar {
@@ -33,51 +32,58 @@
         width: 100%;
     }
     .calendar {
-        display: block;
-        top: 0;
-        padding: 0;
-        .day-in-calendar {
-            background-color: rgb(248, 248, 248);
-            float: left;
-            width: 14.2%;
+        padding-top: 16px;
+        padding-bottom: 16px;
+        border: 0px;
+        border-top-width: 0.55px;
+        border-bottom-width: 0.55px;
+        border-style: solid;
+        border-color: $divider-color;
+        .day {
+            padding-top: 4px;
+            padding-bottom: 4px;
+            width: percentage(1 / 7);
+            height: 32px;
+            display: inline-block;
             text-align: center;
-            .day-default {
-                width: 24px;
-                height: 24px;
-                margin: auto;
-                line-height: 24px;
-            }
-            .day-default.hover {
+            cursor: pointer;
+            span {
+                padding: 4px;
                 border-radius: 24px;
-                background-color: $primary-text-color;
-                color: $primary-color-text;
+                display:inline-block;
+                width:24px;
             }
-            ion-badge.day-has-events {
-                padding: 3px 3px; 
-                min-width: 0px;
-                background-color: $secondary-text-color;
+            .hover {
+                span{
+                    background-color: $primary-text-color;
+                    color: $primary-color-text;
+                }
+                &.today {
+                    span{
+                        background-color: $primary-color-dark;
+                        color: $primary-color-text;
+                    }
+                }
             }
-            .day-not-this-month {
-                visibility: hidden;
-            }
-            .day-today {
+            .today {
                 color: $primary-color-dark;
             }
-            .weekends {
-                color: $secondary-text-color;
+            .not-this-month {
+                visibility: hidden;
             }
-            .day-today.hover {
-                border-radius: 24px;
-                background-color: $primary-color-dark;
-                color: $primary-color-text;
+            ion-badge {
+                min-width: 0px;
+                padding: 3px;
+                background-color: $secondary-text-color;
             }
+            
         }
     }
     
     .events{
-        position: relative;
-        width: 100%;
-        height: 50%;
+        ion-list > .item:first-child {
+            border-top: 0;
+        }
         .border-right-solid {
             border-right-style: solid;
             border-right-width: thin;
@@ -96,10 +102,6 @@
         }
         ion-label {
             margin: 5px;
-            ion-col {
-                padding-left: 10px;
-                padding-right: 10px;
-            }
         }
         .event-in-past-time {
             color: $secondary-text-color;
@@ -110,22 +112,9 @@
     }
 }
 
-.month-calendar-bottom-buttons {
-    .segment-button {
-        max-width: none;
-        border: none;
-        margin-left: 15px;
-        margin-right: 15px;
-        font-size: 1.8rem;
-        ion-icon {
-            font-size: 2.8rem;
-        }
-    }
-    .button-select-user {
-        text-align: left;
-    }
-    .button-show-my-schedule {
-        text-align: right;
+.calendar-bottom-toolbar {
+    .toolbar-content {
+        display: flex;
+        justify-content: space-between;
     }
 }
-
