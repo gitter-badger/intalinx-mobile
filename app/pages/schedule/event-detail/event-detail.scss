@@ -31,5 +31,9 @@
             margin: 0;
             white-space: normal;
         }
+        .device-name {
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
     }
 }
