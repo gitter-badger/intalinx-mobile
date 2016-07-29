@@ -243,13 +243,13 @@ export class ScheduleService {
                         let ouputEndTime = eventOutput.endTime;            
                         // the start time is before the month
                         if (Number(ouputStartTime) < startTime) {
-                            startDate = moment(moment(startTime).format('YYYY/MM/D'));
+                            startDate = moment(moment(startTime.toString(), 'X').format('YYYY/MM/D'));
                         }  else {
                             startDate = moment(moment(ouputStartTime, 'X').format('YYYY/MM/D'));
                         }
                         // the end time is after the month
                         if (Number(ouputEndTime) > endTime) {
-                            endDate = moment(moment(endTime).format('YYYY/MM/D'));
+                            endDate = moment(moment(endTime.toString(), 'X').format('YYYY/MM/D'));
                         } else {
                             endDate = moment(moment(ouputEndTime, 'X').format('YYYY/MM/D'));
                         }
