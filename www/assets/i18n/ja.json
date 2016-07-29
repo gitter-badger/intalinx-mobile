@@ -10,7 +10,8 @@
                 "versionTooOld": "最新のバージョンがあります。"
             },
             "warning": {
-                "title": "警告"
+                "title": "警告",
+                "logout": "ログアウトしますか？"
             }
         },
         "action": {

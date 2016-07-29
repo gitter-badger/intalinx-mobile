@@ -10,7 +10,8 @@
                 "versionTooOld": "We have a new version."
             },
             "warning": {
-                "title": "warning"
+                "title": "warning",
+                "logout": "logout?"
             }
         },
         "action": {
