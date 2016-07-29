@@ -150,7 +150,7 @@ export class EventDetailPage {
             } else if (this.repeatType === 'WEEKLY') {
                 this.translate.get('app.date.weeekly').subscribe(message => {
                     this.repeatTypeName = message;
-                    this.repeatValueName = moment.weekdays(true)[Number(repeatValue)];
+                    this.repeatValueName = moment.weekdays(false)[Number(repeatValue)];
                 });
             } else if (this.repeatType === 'MONTHLY') {
                 this.translate.get(['app.date.monthly', 'app.date.day']).subscribe(message => {
