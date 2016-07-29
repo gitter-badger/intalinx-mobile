@@ -80,7 +80,7 @@
         },
         "blog": {
             "title": "博客",
-            "detail": "博客正文",
+            "detail": "博客内容",
             "newBlog": "新",
             "newReturn": "新",
             "comment": {
@@ -97,7 +97,7 @@
         },
         "notification": {
             "title": "通知",
-            "detail": "通知详细",
+            "detail": "通知内容",
             "newNotification": "新"
         },
         "about": {
@@ -121,7 +121,7 @@
                 "repeat": "重复", 
                 "category": "类型",
                 "location": "位置",
-                "summary": "备注",
+                "summary": "内容",
                 "participant": "参加者",
                 "device": "设施",
                 "createUser": "创建者",
@@ -155,7 +155,7 @@
                 "mySchedule": "我"
             },
             "eventDetail": {
-                "title": "活动详细",
+                "title": "活动详情",
                 "delete": "删除"
             },
             "editEvent": {
