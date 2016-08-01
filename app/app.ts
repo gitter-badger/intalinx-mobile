@@ -80,7 +80,8 @@ class IntaLinx {
         this.share.initializeUser = this.initializeUser(this);
         this.share.redirectLoginPage = this.redirectLoginPage(this, LoginPage);
         this.share.nav = this.nav;
-        this.share.nav.viewDidEnter.subscribe((args)=>{
+        this.share.platform = this.platform;
+        this.share.nav.viewDidEnter.subscribe((args) => {
             GoogleAnalytics.trackView(args.componentType.name);
         });
 
