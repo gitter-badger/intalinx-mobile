@@ -22,9 +22,7 @@ export class ShareService {
         this._notificationNewInformationCount = count;
         if (this.platform.is('cordova')) {
             Badge.clear();
-            Badge.get().then((coutner) => {
-                Badge.set(count + this._blogNewInformationCount);
-            });
+            Badge.set(this._notificationNewInformationCount + this._blogNewInformationCount);
         }
     }
 
@@ -36,9 +34,7 @@ export class ShareService {
         this._blogNewInformationCount = count;
         if (this.platform.is('cordova')) {
             Badge.clear();
-            Badge.get().then((coutner) => {
-                Badge.set(count + this._notificationNewInformationCount);
-            });
+            Badge.set(this._notificationNewInformationCount + this._blogNewInformationCount);
         }
     }
 
