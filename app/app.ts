@@ -53,6 +53,7 @@ class IntaLinx {
         // Google Analytics
         if (typeof GoogleAnalytics !== undefined && this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')) {
             GoogleAnalytics.startTrackerWithId(this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID'));
+            this.share.analytics = GoogleAnalytics;
         }
 
         // initialize translate library
@@ -69,6 +70,9 @@ class IntaLinx {
         this.share.initializeUser = this.initializeUser(this);
         this.share.redirectLoginPage = this.redirectLoginPage(this, LoginPage);
         this.share.nav = this.nav;
+        this.share.nav.viewDidEnter.subscribe((args)=>{
+            this.share.analytics.trackView(args.componentType.name);
+        });
 
         // auto login.
         this.util.loggedOn().then((isLoggedOn: boolean) => {
