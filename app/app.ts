@@ -54,10 +54,12 @@ class IntaLinx {
         // set default server.
         if (userLang.indexOf('zh') >= 0) {
             this.appConfig.set('BASE_URL', this.appConfig.get('BASE_URL_CHINA'));
+            this.appConfig.set('GOOGLE_ANALYTICS_TRACK_ID', this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID_CHINA'));
         } else {
             this.appConfig.set('BASE_URL', this.appConfig.get('BASE_URL_JAPAN'));
+            this.appConfig.set('GOOGLE_ANALYTICS_TRACK_ID', this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID_JAPAN'));
         }
-
+        
         if (this.platform.is('cordova')) {
             // Okay, so the platform is ready and our plugins are available.
             // Here you can do any higher level native things you might need.
