@@ -156,7 +156,7 @@
             },
             "index": {
                 "allDay": "終日", 
-                "mySchedule": "本人"
+                "mySchedule": "自分"
             },
             "eventDetail": {
                 "title": "予定詳細",
