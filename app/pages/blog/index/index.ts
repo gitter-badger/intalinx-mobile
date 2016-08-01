@@ -76,9 +76,9 @@ export class BlogIndexPage {
     }
 
     getBlogNewInformationCount() {
-        this.blogService.getNotReadCommunityCountBySelf().then((data: any) => {
+        this.blogService.getNotReadCommunityCountBySelf().then((data: string) => {
             if (data) {
-                this.share.blogNewInformationCount = data;
+                this.share.blogNewInformationCount = Number(data);
             }
         });
     }
