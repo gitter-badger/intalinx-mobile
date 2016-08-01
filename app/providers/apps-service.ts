@@ -50,14 +50,14 @@ export class AppsService {
         if (item.componentsId === 'blog') {
             this.blogService.getNotReadCommunityCountBySelf().then((data: string) => {
                 if (data) {
-                    this.share.blogNewInformationCount = data;
+                    this.share.blogNewInformationCount = Number(data);
                 }
             });
         }
         if (item.componentsId === 'notification') {
             this.notificationService.getNotReadNotificationCountBySelf().then((data: string) => {
                 if (data) {
-                    this.share.notificationNewInformationCount = data;
+                    this.share.notificationNewInformationCount = Number(data);
                 }
             });
         }
