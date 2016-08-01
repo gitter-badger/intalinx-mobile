@@ -81,9 +81,9 @@ export class NotificationIndexPage {
     }
 
     getNotReadNotificationCountBySelf(): void {
-        this.notificationService.getNotReadNotificationCountBySelf().then((data: string) => {
+        this.notificationService.getNotReadNotificationCountBySelf().then((data: any) => {
             if (data) {
-                this.share.notificationNewInformationCount = Number(data);
+                this.share.notificationNewInformationCount = data;
             }
         });
     }

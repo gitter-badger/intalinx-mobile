@@ -20,8 +20,8 @@ export class AppConfig {
         'PGYER_IOS_URL' : 'https://www.pgyer.com/MMHB',
         'USER_LANG': 'en-US',
         'GOOGLE_ANALYTICS_TRACK_ID': 'UA-81438804-1',
-        'DATETIME_YEAR_MONTH_DAY_MIN': '2005-01-01',
-        'DATETIME_YEAR_MONTH_DAY_MAX': '2020-12-31',
+        'DATETIME_YEAR_MONTH_DAY_MIN': '2004-01-01',
+        'DATETIME_YEAR_MONTH_DAY_MAX': '2080-12-31',
         'DATETIME_MINUTE_VALUES': '00, 15, 30, 45'
     };
     get(key: string): string {

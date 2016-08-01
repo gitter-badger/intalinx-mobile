@@ -74,11 +74,13 @@ class IntaLinx {
             this.config.set('ios', 'backButtonText', message);
         });
 
-        this.share.platform = this.platform;
         this.share.initializeMenu = this.initializeMenu(this);
         this.share.initializeUser = this.initializeUser(this);
         this.share.redirectLoginPage = this.redirectLoginPage(this, LoginPage);
         this.share.nav = this.nav;
+        this.share.nav.viewDidEnter.subscribe((args)=>{
+            GoogleAnalytics.trackView(args.componentType.name);
+        });
 
         // auto login.
         this.util.loggedOn().then((isLoggedOn: boolean) => {

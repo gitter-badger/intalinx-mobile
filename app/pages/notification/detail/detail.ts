@@ -86,7 +86,7 @@ export class DetailPage {
             if (data === 'true') {
                 this.notification.readStatus = readStatus;
                 let notificationNewInformationCount = Number(this.share.notificationNewInformationCount);
-                this.share.notificationNewInformationCount = notificationNewInformationCount - 1;
+                this.share.notificationNewInformationCount = String(notificationNewInformationCount - 1);
             }
         });
     }
@@ -106,6 +106,6 @@ export class DetailPage {
             } else {
                 that.isScrollToTopButtonVisible = false;
             }
-        };
+        }
     }
 }

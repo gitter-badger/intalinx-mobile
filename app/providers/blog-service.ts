@@ -2,6 +2,8 @@
 import {Injectable} from '@angular/core';
 import {NavController} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {Badge} from 'ionic-native';
+import {Platform} from 'ionic-angular';
 
 // Config.
 import {AppConfig} from '../appconfig';
@@ -15,6 +17,7 @@ export class BlogService {
 
     constructor(private translate: TranslateService, 
         private nav: NavController, 
+        private platform: Platform,
         private util: Util, 
         private appConfig: AppConfig) {
     }
@@ -88,6 +91,11 @@ export class BlogService {
 
                     let returnOutPut = this.util.selectXMLNode(objResponse, './/*[local-name()=\'return\']');
                     let returnData = this.util.xml2json(returnOutPut).return;
+                    if (this.platform.is('cordova')) {
+                        Badge.get().then((coutner) => {
+                            Badge.set(Number(coutner) + Number(returnData));
+                        });
+                    }
                     resolve(returnData);
                 });
             });
