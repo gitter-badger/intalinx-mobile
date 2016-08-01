@@ -12,23 +12,6 @@
     </ion-navbar>
 </ion-header>
 <ion-content class="edit-event">
-    <ion-list radio-group 
-              [hidden]="event.eventID=='' || !isOriginalRepeat" 
-              [(ngModel)]="isFromRepeatToSpecial"
-              (ngModelChange)="changeRepeatEventUpdateFlag($event)">
-        <ion-list-header class="repeat-edit-warn">
-            {{"app.schedule.editEvent.selectRepeatEventUpdateFlag" | translate}}
-        </ion-list-header>
-        <ion-item>
-            <ion-label>{{"app.schedule.editEvent.selectAll" | translate}}</ion-label>
-            <ion-radio value="all"></ion-radio>
-        </ion-item>
-        <ion-item>
-            <ion-label>{{"app.schedule.editEvent.selectSpecial" | translate}}</ion-label>
-            <ion-radio value="special"></ion-radio>
-        </ion-item>
-        <div class="separation-section"></div>
-    </ion-list>
     <ion-item>
         <!-- event title -->
         <ion-input placeholder='{{"app.schedule.event.title" | translate}}' 
@@ -94,7 +77,7 @@
         <ion-toggle id="isRepeatToggle" [(ngModel)]="event.isAllDay" 
                     (ngModelChange)="changeIsAllDay($event)"></ion-toggle>
     </ion-item>
-    <ion-item [hidden]="isFromRepeatToSpecial=='special'">
+    <ion-item [hidden]="event.isFromRepeatToSpecial">
         <!-- repeat -->
         <ion-label>{{"app.schedule.event.repeat" | translate}}</ion-label>
         <ion-toggle id="isAlldayToggle" [(ngModel)]="event.isRepeat" 
