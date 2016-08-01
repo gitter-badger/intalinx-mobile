@@ -4,7 +4,8 @@ import {Injectable} from '@angular/core';
 export class AppConfig {
     private config: any = {
         'BASE_URL': 'https://iscsys-staging.intasect.co.jp/home/InternalSystem/',
-        //'BASE_URL': 'http://192.168.11.29/home/intalinxcloud/',
+        'BASE_URL_JAPAN': 'http://192.168.11.29/home/intalinxcloud/',
+        'BASE_URL_CHINA': 'http://www.intalinx.cn/home/intalinxcloud/',
         'GATEWAY_URL': 'com.eibus.web.soap.Gateway.wcp',
         'PRE_LOGIN_INFO_URL': 'com.eibus.sso.web.authentication.PreLoginInfo.wcp',
         'SAMLART_NAME': 'SAMLart',
@@ -13,6 +14,7 @@ export class AppConfig {
         'AUTO_LOGIN_STORAGE_NAME': 'autoLogin',
         'LOGIN_ID_STORAGE_NAME': 'loginID',
         'PASSWORD_STORAGE_NAME': 'password',
+        'SERVER_STORAGE_NAME': 'server',
         'USER_DEFAULT_AVATAR_IMAGE_URL': 'img/default',
         'PGYER_ANDROID_URL' : 'https://www.pgyer.com/MMHC',
         'PGYER_IOS_URL' : 'https://www.pgyer.com/MMHB',

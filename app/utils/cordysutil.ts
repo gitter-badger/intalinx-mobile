@@ -205,7 +205,7 @@ export class CordysUtil {
             if (!isLoggedOn) {
                 this.isAutoLogin().then((isAutoLogin: boolean) => {
                     if (isAutoLogin) {
-                        Promise.all([this.getLoginID(), this.getPassword()]).then((values: any) => {
+                        Promise.all([this.getLoginID(), this.getPassword(), this.getServer()]).then((values: any) => {
                             this.authenticate(values[0], values[1]).then((result: boolean) => {
                                 // use saved login id and password faild, then remove it and set auto login to false.
                                 if (!result) {
@@ -225,20 +225,25 @@ export class CordysUtil {
     }
 
     logout() {
+        return this.disableAutoLogin();
+    }
+
+    enableAutoLogin(loginID, password, server) {
         return Promise.all([
-            this.disableAutoLogin(),
-            this.removeLoginID(),
-            this.removePassword(),
-            this.removeSAMLart(),
+            this.storageUtil.set(this.appConfig.get('AUTO_LOGIN_STORAGE_NAME'), true),
+            this.setLoginID(loginID),
+            this.setPassword(password),
+            this.setServer(server)
         ]);
     }
 
-    enableAutoLogin() {
-        return this.storageUtil.set(this.appConfig.get('AUTO_LOGIN_STORAGE_NAME'), true);
-    }
-
     disableAutoLogin() {
-        return this.storageUtil.remove(this.appConfig.get('AUTO_LOGIN_STORAGE_NAME'));
+        return Promise.all([
+            this.storageUtil.remove(this.appConfig.get('AUTO_LOGIN_STORAGE_NAME')),
+            this.removeLoginID(),
+            this.removePassword(),
+            this.removeSAMLart()
+        ]);
     }
 
     isAutoLogin() {
@@ -253,6 +258,11 @@ export class CordysUtil {
         return this.storageUtil.set(this.appConfig.get('PASSWORD_STORAGE_NAME'), value);
     }
 
+    setServer(value) {
+        this.appConfig.set('BASE_URL', value);
+        return this.storageUtil.set(this.appConfig.get('SERVER_STORAGE_NAME'), value);
+    }
+
     getLoginID() {
         return this.storageUtil.get(this.appConfig.get('LOGIN_ID_STORAGE_NAME'));
     }
@@ -261,12 +271,23 @@ export class CordysUtil {
         return this.storageUtil.get(this.appConfig.get('PASSWORD_STORAGE_NAME'));
     }
 
+    getServer() {
+        return this.storageUtil.get(this.appConfig.get('SERVER_STORAGE_NAME')).then(value => {
+            this.appConfig.set('BASE_URL', value);
+            return value;
+        });
+    }
+
     removeLoginID() {
         return this.storageUtil.remove(this.appConfig.get('LOGIN_ID_STORAGE_NAME'));
     }
 
     removePassword() {
         return this.storageUtil.remove(this.appConfig.get('PASSWORD_STORAGE_NAME'));
+    }
+
+    removeServer() {
+        return this.storageUtil.remove(this.appConfig.get('SERVER_STORAGE_NAME'));
     }
 
     setSAMLart(value, notOnOrAfter) {

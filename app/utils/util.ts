@@ -182,8 +182,8 @@ export class Util {
         return this.cordysUtil.logout();
     }
 
-    enableAutoLogin() {
-        return this.cordysUtil.enableAutoLogin();
+    enableAutoLogin(loginID, password, server) {
+        return this.cordysUtil.enableAutoLogin(loginID, password, server);
     }
 
     disableAutoLogin() {
@@ -202,6 +202,10 @@ export class Util {
         return this.cordysUtil.setPassword(value);
     }
 
+    setServer(value) {
+        return this.cordysUtil.setServer(value);
+    }
+
     getLoginID() {
         return this.cordysUtil.getLoginID();
     }
@@ -210,12 +214,20 @@ export class Util {
         return this.cordysUtil.getPassword();
     }
 
+    getServer() {
+        return this.cordysUtil.getServer();
+    }
+
     removeLoginID() {
         return this.cordysUtil.removeLoginID();
     }
 
     removePassword() {
         return this.cordysUtil.removePassword();
+    }
+
+    removeServer() {
+        return this.cordysUtil.removeServer();
     }
 
     setSAMLart(value, notOnOrAfter) {

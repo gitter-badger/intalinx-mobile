@@ -47,6 +47,9 @@
             "loginId": "Account",
             "password": "Password",
             "autoLogin": "Keep me logged in",
+            "server": "Server",
+            "iscsys": "Intalinx in Japan",
+            "intalinx_cn": "Intalinx in China",
             "login": "Login",
             "message": {
                 "error": {

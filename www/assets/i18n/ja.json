@@ -47,6 +47,9 @@
             "loginId": "ログインID",
             "password": "パスワード",
             "autoLogin": "ログイン状態を保持する",
+            "server": "サーバー",
+            "iscsys": "日本Intalinx",
+            "intalinx_cn": "中国Intalinx",
             "login": "ログイン",
             "message": {
                 "error": {

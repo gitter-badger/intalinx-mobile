@@ -16,32 +16,15 @@ export class UserService {
     }
 
     loggedOn(): Promise<boolean> {
-        return new Promise(resolve => {
-            this.util.loggedOn().then((result: boolean) => {
-                if (!result) {
-                    this.util.isAutoLogin().then((isAutoLogin: string) => {
-                        if (isAutoLogin === 'true') {
-                            Promise.all([this.util.getLoginID(), this.util.getPassword()]).then((values: any) => {
-                                return this.authenticate(values[0], values[1]);
-                            });
-                        }
-                    });
-                }
-                return result;
-            });
-        });
+        return this.util.loggedOn();
     }
 
-    enableAutoLogin(loginID, password) {
-        this.util.enableAutoLogin();
-        this.util.setLoginID(loginID);
-        this.util.setPassword(password);
+    enableAutoLogin(loginID, password, server) {
+        this.util.enableAutoLogin(loginID, password, server);
     }
 
     disableAutoLogin() {
         this.util.disableAutoLogin();
-        this.util.removeLoginID();
-        this.util.removePassword();
     }
 
     authenticate(loginID, password): Promise<any> {

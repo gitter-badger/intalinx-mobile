@@ -22,3 +22,15 @@
         <button disabled={{isDisabled}} full type="submit">{{ "app.login.login" | translate }}</button>
     </form>
 </ion-content>
+<ion-footer>
+    <ion-item>
+        <ion-label>{{ "app.login.server" | translate }}</ion-label>
+        <ion-select multiple="false" 
+                    interface = "alert" 
+                    okText='{{"app.action.ok" | translate}}' 
+                    cancelText='{{"app.action.cancel" | translate}}'
+                    [(ngModel)]="user.server" (ngModelChange)="changeUser($event)">
+            <ion-option *ngFor="let server of servers" value={{server.url}}>{{server.name}}</ion-option>
+        </ion-select>
+    </ion-item>
+</ion-footer>

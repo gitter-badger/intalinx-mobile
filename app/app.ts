@@ -46,6 +46,18 @@ class IntaLinx {
     }
     
     initializeApp() {
+        // initialize translate library
+        let userLang = navigator.language.toLowerCase();
+        this.appConfig.set('USER_LANG', userLang);
+        this.translate.use(userLang);
+
+        // set default server.
+        if (userLang.indexOf('zh') >= 0) {
+            this.appConfig.set('BASE_URL', this.appConfig.get('BASE_URL_CHINA'));
+        } else {
+            this.appConfig.set('BASE_URL', this.appConfig.get('BASE_URL_JAPAN'));
+        }
+
         if (this.platform.is('cordova')) {
             // Okay, so the platform is ready and our plugins are available.
             // Here you can do any higher level native things you might need.
@@ -56,11 +68,6 @@ class IntaLinx {
                 GoogleAnalytics.startTrackerWithId(this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID'));
             }
         }
-
-        // initialize translate library
-        let userLang = navigator.language.toLowerCase();
-        this.appConfig.set('USER_LANG', userLang);
-        this.translate.use(userLang);
 
         this.user.userAvatar = this.appConfig.get('USER_DEFAULT_AVATAR_IMAGE_URL');
         this.getBackButtonText().then(message => {
