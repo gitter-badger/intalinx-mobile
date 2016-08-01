@@ -46,13 +46,15 @@ class IntaLinx {
     }
     
     initializeApp() {
-        // Okay, so the platform is ready and our plugins are available.
-        // Here you can do any higher level native things you might need.
-        StatusBar.backgroundColorByHexString('#7B1FA2');
+        if (this.platform.is('cordova')) {
+            // Okay, so the platform is ready and our plugins are available.
+            // Here you can do any higher level native things you might need.
+            StatusBar.backgroundColorByHexString('#7B1FA2');
 
-        // Google Analytics
-        if (typeof GoogleAnalytics !== undefined && this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')) {
-            GoogleAnalytics.startTrackerWithId(this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID'));
+            // Google Analytics
+            if (typeof GoogleAnalytics !== undefined && this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')) {
+                GoogleAnalytics.startTrackerWithId(this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID'));
+            }
         }
 
         // initialize translate library
@@ -65,6 +67,7 @@ class IntaLinx {
             this.config.set('ios', 'backButtonText', message);
         });
 
+        this.share.platform = this.platform;
         this.share.initializeMenu = this.initializeMenu(this);
         this.share.initializeUser = this.initializeUser(this);
         this.share.redirectLoginPage = this.redirectLoginPage(this, LoginPage);
