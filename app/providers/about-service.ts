@@ -23,18 +23,19 @@ export class AboutService {
     getLatestVersion(): any {
         return new Promise<string>(resolve => {
             // Get app version from pgyer.
-            let url = 'http://www.pgyer.com/apiv1/app/view';
+            let url = 'http://www.pgyer.com/apiv1/app/viewGroup';
             let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
-            var parameters = 'uKey=3ef865272b876a357bd12b1a0c3b6adc';
+            var parameters = 'aId=3faa45a6bbc5cb46c195ba94b01ac85a';
             parameters += '&_api_key=61b73e850a3cc863a5d34dfe6d8bed85';
-            parameters += '&aKey=c6a2b64fb666d2535a6c280daf70f806';
 
             this.http.post(url, parameters, {
                 headers: headers
             })
                 .map(res => res.json())
                 .subscribe(data => {
-                    resolve(data.data.appVersion);
+                    if (data.data.length > 0) {
+                        resolve(data.data[data.data.length - 1].appVersion);
+                    }
                 }, error => {
                     this.util.presentSystemErrorModal();
                 });
