@@ -62,6 +62,7 @@ export class EditEventPage {
     private maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
     private minuteValues: string = this.appConfig.get('DATETIME_MINUTE_VALUES');
     private isSavedOrChecked: boolean = false;
+    private hadChangedEndTime: boolean = false;
 
     constructor(private nav: NavController,
         private params: NavParams,
@@ -320,6 +321,35 @@ export class EditEventPage {
             endMinutes = endMinutes - 60;
             this.endTime = moment(time).minute(endMinutes).add(1, 'hours').format();
         }
+    }
+    changeStartDate() {
+        if (!this.hadChangedEndTime) {
+            this.setEndTimeAnHourLater(this.startTime);
+        }
+    }
+
+    changeStartTime() {
+        if (!this.hadChangedEndTime) {
+            this.setEndTimeAnHourLater(this.startTime);
+        }
+    }
+
+    changeRepeatStartTime() {
+        if (!this.hadChangedEndTime) {
+            this.setEndTimeAnHourLater(this.startTime);
+        }
+    }
+
+    changeEndDate() {
+        this.hadChangedEndTime = true;
+    }
+
+    changeEndTime() {
+        this.hadChangedEndTime = true;
+    }
+
+    changeRepeatEndTime() {
+        this.hadChangedEndTime = true;
     }
 
     changeIsAllDay(isAllDay) {
