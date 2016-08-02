@@ -2,6 +2,7 @@
 .devices {
     $grey-border: 1px solid #D7D7D7;
     $red-border: 2px solid red;
+    $white-border: 1px solid #FFFFFF;
     $device-list-width: 280px;
     $cell-height: 70px;
     $cell-width: 120px;
@@ -208,6 +209,8 @@
                         color: white;
                         background: grey;
                         padding: $event-padding;
+                        border-left: $white-border;
+                        border-right: $white-border;
                         .event-text {
                             height: 100%;
                             text-align: left;
