@@ -2,6 +2,7 @@
 import {Component} from '@angular/core';
 import {ActionSheet, NavController, NavParams} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {GoogleAnalytics} from 'ionic-native';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -265,6 +266,7 @@ export class EventDetailPage {
                 this.sendDataToShowOrDeleteEvent.isRefreshFlag = true;
                 setTimeout(() => {
                     this.nav.pop();
+                    GoogleAnalytics.trackEvent("Schedule","delete","event");
                 }, 500);
             }
         });
