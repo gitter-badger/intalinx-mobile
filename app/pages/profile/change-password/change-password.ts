@@ -37,8 +37,8 @@ export class ChangePasswordPage {
         this.userService.updateProfile(this.user).then(data => {
             if (data === true) {
                 // refresh password in storage.
-                this.util.isAutoLogin().then((isAutoLogin: string) => {
-                    if (isAutoLogin === 'true') {
+                this.util.isAutoLogin().then((isAutoLogin: boolean) => {
+                    if (isAutoLogin) {
                         this.util.setPassword(this.user.confirmPassword);
                     }
                 });
