@@ -1,5 +1,5 @@
 // Third party library.
-import {Component, ViewChild} from '@angular/core';
+import {Component, ViewChild, Directive} from '@angular/core';
 import {NavController, NavParams, Content} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 
@@ -12,12 +12,13 @@ import {ShareService} from '../../../providers/share-service';
 
 // Pages.
 import {AddCommentPage} from '../add-comment/add-comment';
+import {DownloadDirective} from '../../../shared/components/download/download';
 
 @Component({
     templateUrl: 'build/pages/blog/detail/detail.html',
-    providers: [BlogService, Util],
+    providers: [BlogService, Util, DownloadDirective],
+    directives: [DownloadDirective]
 })
-
 export class BlogDetailPage {
     @ViewChild(Content) pageContent: Content;
 
@@ -38,10 +39,11 @@ export class BlogDetailPage {
 
     private comments: any;
     private commentCount: string;
+    private attachFiles: any;
 
     private pageLoadTime: number;
 
-    constructor(private nav: NavController, private params: NavParams, private blogService: BlogService, private share: ShareService) {
+    constructor(private nav: NavController, private params: NavParams, private blogService: BlogService, private share: ShareService, private downloadDirective: DownloadDirective) {
         this.community = this.params.get('community');
         this.id = this.community.communityID;
         this.readStatus = this.community.readStatus;
@@ -70,6 +72,7 @@ export class BlogDetailPage {
             this.createUserAvatar = data.createUserAvatar;
             this.status = data.status;
             this.readCount = data.readCount;
+            this.attachFiles = data.attachFileList;
             this.isLoadCompleted = true;
             this.isScrollToTopButtonVisible = false;
             if (this.status === 'PUBLISH' && this.newReplyFlag === 'TRUE') {

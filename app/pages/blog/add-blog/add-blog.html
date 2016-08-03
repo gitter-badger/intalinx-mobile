@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>ブログ追加</ion-title>
+    <ion-buttons>
+        <button type="" class="button-left" (click)="saveBlog()">{{ "登録" | translate }}</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content class="add-blog">
+  <ion-item>
+    <!--<ion-input placeholder='{{"app.blog.title" | translate}}' [(ngModel)]="blog.title"></ion-input>-->
+    <ion-input placeholder='タイトル' [(ngModel)]="blog.title" (ngModelChange)="changeTitle($event)"></ion-input>
+  </ion-item>
+  <!--<ion-item>
+    <ion-input placeholder='対象者' [(ngModel)]="blog.replyList"></ion-input>
+  </ion-item>-->
+  <ion-item>
+    <!-- content -->
+    <ion-textarea placeholder='内容' rows=5 [(ngModel)]="blog.content" (ngModelChange)="changeContent($event)"></ion-textarea>
+  </ion-item>
+  <ion-item>
+    <ion-thumbnail *ngFor="let picture of pictures">
+      <h2>{{picture.pictureName}}</h2>
+      <img src="{{picture.pictureSrc}}" />
+    </ion-thumbnail>
+  </ion-item>
+  <ion-item>
+    <button>
+        <ion-icon name="image"></ion-icon>
+    </button>
+    <input #fileInput type=file accept="image/*" (change)="addPicture($event)" class="upload-input" />
+  </ion-item>
+  <ion-list>
+    <button ion-item (click)="openChangeAvatar(user)">
+        <ion-icon name="md-globe" item-left></ion-icon>共有
+    </button>
+  </ion-list>
+</ion-content>
+<ion-footer class="change-avatar">
+    <ion-toolbar position="bottom" [style.display]="true ? 'inherit' : 'none'">
+        <ion-buttons>
+            <button type="" class="button-left" (click)="resetUserAvatar()">{{ "プレビュー" | translate }}</button>
+            <button type="submit" class="button-right" (click)="saveBlog()">{{ "一時保存" | translate }}</button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-footer>

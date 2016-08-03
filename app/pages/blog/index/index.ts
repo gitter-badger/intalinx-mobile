@@ -12,6 +12,7 @@ import {ShareService} from '../../../providers/share-service';
 
 // Pages.
 import {BlogDetailPage} from '../detail/detail';
+import {AddBlogPage} from '../add-blog/add-blog';
 
 @Component({
     templateUrl: 'build/pages/blog/index/index.html',
@@ -99,5 +100,10 @@ export class BlogIndexPage {
                 that.isScrollToTopButtonVisible = false;
             }
         };
+    }
+
+    
+    addComment(): void {
+        this.nav.push(AddBlogPage, { 'sendData': 'this.sendData' });
     }
 }

@@ -1,5 +1,6 @@
 @import "../pages/blog/detail/detail";
 @import "../pages/blog/add-comment/add-comment";
+@import "../pages/blog/add-blog/add-blog";
 
 .blog-index {
     ion-avatar {
@@ -62,4 +63,8 @@
             }
         }
     }
+}
+
+&.scroll-to-top {
+    bottom: 88px;
 }

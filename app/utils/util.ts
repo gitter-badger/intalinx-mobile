@@ -52,7 +52,11 @@ export class Util {
         return this.xmlUtil.getNodeText(node, xpath, defaultValue, namespaces);
     }
 
-    selectXMLNode(object: any, xpathExpression: string, namespaces?: string) {
+    getTextContent(node: any) {
+        return this.xmlUtil.getTextContent(node);
+    }
+
+    selectXMLNode(object: any, xpathExpression: string, namespaces?: any) {
         return this.xmlUtil.selectXMLNode(object, xpathExpression, namespaces);
     }
 
@@ -144,22 +148,16 @@ export class Util {
         return content;
     }
 
-    changeErrorMessageOfWebservice(message): Promise<string> {
-        return new Promise(resolve => {
-            if (this.appConfig.get('USER_LANG').toLowerCase() === 'zh-cn') {
-                if (message.indexOf('The username or password you entered is incorrect') >= 0) {
-                    this.translate.get(['app.login.message.error.idOrPasswordNotCorrect']).subscribe(message => {
-                        resolve(message['app.login.message.error.idOrPasswordNotCorrect']);
-                    });
-                } else if (message.indexOf('does not match the current password') >= 0) {
-                    this.translate.get(['app.profile.message.error.mismatchCurrentPassword']).subscribe(message => {
-                        resolve(message['app.profile.message.error.mismatchCurrentPassword']);
-                    });
-                }
-            } else {
-                resolve(message);
+    getUUID() {
+        let uuid = '', i, random;
+        for (i = 0; i < 32; i++) {
+            random = Math.random() * 16 | 0;
+            if (i === 8 || i === 12 || i === 16 || i === 20) {
+                uuid += '_';
             }
-        });
+            uuid += (i === 12 ? 4 : (i === 16 ? (random & 3 | 8) : random)).toString(16);
+        }
+        return uuid;
     }
 
     presentModal(content: string, level?: string) {
@@ -212,7 +210,7 @@ export class Util {
 
     getPassword() {
         return this.cordysUtil.getPassword();
-    }
+     }
 
     getServer() {
         return this.cordysUtil.getServer();
