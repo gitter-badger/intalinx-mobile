@@ -72,6 +72,9 @@ export class BlogDetailPage {
             this.readCount = data.readCount;
             this.isLoadCompleted = true;
             this.isScrollToTopButtonVisible = false;
+            if (this.status === 'PUBLISH' && this.newReplyFlag === 'TRUE') {
+                this.updateNewReplyFlag();
+            }
         });
     }
 
@@ -117,10 +120,6 @@ export class BlogDetailPage {
         if (isRefreshFlag === true) {
             this.pageContent.scrollToBottom();
             this.sendData.unrepliedCommentcontent = '';
-        }
-
-        if (this.status === 'PUBLISH' && this.newReplyFlag === 'TRUE') {
-            this.updateNewReplyFlag();
         }
     }
 
