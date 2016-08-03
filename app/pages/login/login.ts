@@ -1,6 +1,6 @@
 // Third party library.
 import {Component} from '@angular/core';
-import {NavController, ViewController, Popover, Alert} from 'ionic-angular';
+import {NavController, ViewController, Alert} from 'ionic-angular';
 
 // Utils.
 import {Util} from '../../utils/util';
@@ -25,12 +25,32 @@ export class LoginPage {
     public user: any = {
         loginID: '', 
         password: '', 
-        autoLogin: false
+        autoLogin: false,
+        server: this.appConfig.get('BASE_URL')
     };
+
+    servers: any = [
+        {
+            id: 'iscsys',
+            url : this.appConfig.get('BASE_URL_JAPAN'),
+            name: ''
+        },
+        {
+            id: 'intalinx_cn',
+            url : this.appConfig.get('BASE_URL_CHINA'),
+            name: ''
+        }
+    ];
 
     isDisabled: boolean = true;
 
-    constructor(private nav: NavController, private userService: UserService, private translate: TranslateService, private util: Util) {
+    constructor(private nav: NavController, private appConfig: AppConfig, private userService: UserService, private translate: TranslateService, private util: Util) {
+        // set default server.
+        this.translate.get(['app.login.iscsys', 'app.login.intalinx_cn']).subscribe(message => {
+            this.servers.forEach(element => {
+                element.name = message['app.login.' + element.id];
+            });
+        });
     }
 
     loggedOn() {
@@ -43,10 +63,11 @@ export class LoginPage {
 
     login() {
         this.isDisabled = true;
+        this.appConfig.set('BASE_URL', this.user.server);
         this.userService.authenticate(this.user.loginID, this.user.password).then(authenticationResult => {
             if (authenticationResult) {
                 if (this.user.autoLogin) {
-                    this.userService.enableAutoLogin(this.user.loginID, this.user.password);
+                    this.userService.enableAutoLogin(this.user.loginID, this.user.password, this.user.server);
                 } else {
                     this.userService.disableAutoLogin();
                 }
@@ -83,35 +104,10 @@ export class LoginPage {
     }
     
     changeUser(): void {
-        if (this.user.loginID && this.user.password) {
+        if (this.user.loginID && this.user.password && this.user.server) {
             this.isDisabled = null;
         } else {
             this.isDisabled = true;
         }
-    }
-
-    presentPopover(event) {
-        let popover = Popover.create(ServerInfoPage);
-        this.nav.present(popover, {
-            ev: event
-        });
-    }
-}
-
-@Component({
-  template: `
-    <ion-list>
-      <ion-item>{{ server }}</ion-item>
-    </ion-list>
-  `
-})
-export class ServerInfoPage {
-    private server: string;
-    constructor(private viewCtrl: ViewController, private appConfig: AppConfig) {
-        this.server = this.appConfig.get('BASE_URL');
-    }
-
-    close() {
-        this.viewCtrl.dismiss();
     }
 }

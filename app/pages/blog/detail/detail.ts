@@ -142,8 +142,8 @@ export class BlogDetailPage {
         this.blogService.updateReplyStatus(this.id, readStatus).then((data: string) => {
             if (data === 'true') {
                 this.community.readStatus = readStatus;
-                let blogNewInformationCount = Number(this.share.blogNewInformationCount);
-                this.share.blogNewInformationCount = (blogNewInformationCount - 1).toString();
+                let blogNewInformationCount = this.share.blogNewInformationCount;
+                this.share.blogNewInformationCount = blogNewInformationCount - 1;
             }
         });
     }

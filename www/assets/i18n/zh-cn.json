@@ -47,6 +47,9 @@
             "loginId": "账号",
             "password": "密码",
             "autoLogin": "保持登录状态",
+            "server": "服务器",
+            "iscsys": "日本Intalinx",
+            "intalinx_cn": "中国Intalinx",
             "login": "登录",
             "message": {
                 "error": {
@@ -102,7 +105,7 @@
             "newNotification": "新"
         },
         "about": {
-            "title": "关于本App",
+            "title": "关于本应用",
             "version": "版本",
             "latestVersion": "最新版本",
             "new": "New"

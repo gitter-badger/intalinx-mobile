@@ -2,6 +2,7 @@
 import {Component} from '@angular/core';
 import {ActionSheet, NavController, NavParams} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {GoogleAnalytics} from 'ionic-native';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -78,7 +79,8 @@ export class EventDetailPage {
         this.sendDataToEditEvent = {
             'eventID': this.eventID,
             'selectedDay': this.selectedDay,
-            'isRefreshFlag': false
+            'isRefreshFlag': false,
+            'isFromRepeatToSpecial': false
         };
         this.getEventByEventID();
 
@@ -264,15 +266,61 @@ export class EventDetailPage {
                 this.sendDataToShowOrDeleteEvent.isRefreshFlag = true;
                 setTimeout(() => {
                     this.nav.pop();
+                    GoogleAnalytics.trackEvent("Schedule","delete","event");
                 }, 500);
             }
         });
     }
 
     editEvent() {
-        this.nav.push(EditEventPage, {
-            'sendDataToEditEvent': this.sendDataToEditEvent
-        });
+        if (this.isRepeat === 'true') {
+            this.presentEditRepeatEventActionSheet();
+        } else {
+            this.nav.push(EditEventPage, {
+                'sendDataToEditEvent': this.sendDataToEditEvent
+            });
+        }
+    }
+
+    presentEditRepeatEventActionSheet() {
+        this.translate.get(['app.schedule.editEvent.selectRepeatEventUpdateFlag',
+            'app.schedule.editEvent.selectAll',
+            'app.schedule.editEvent.selectSpecial',
+            'app.action.cancel']).subscribe(message => {
+                let selectRepeatEventUpdateFlag = message['app.schedule.editEvent.selectRepeatEventUpdateFlag'];
+                let selectAll = message['app.schedule.editEvent.selectAll'];
+                let selectSpecial = message['app.schedule.editEvent.selectSpecial'];
+                let cancelButton = message['app.action.cancel'];
+                let actionSheet = ActionSheet.create({
+                    title: selectRepeatEventUpdateFlag,
+                    buttons: [
+                        {
+                            text: selectAll,
+                            handler: () => {
+                                this.sendDataToEditEvent.isFromRepeatToSpecial = false;
+                                setTimeout(() => {
+                                    this.nav.push(EditEventPage, {
+                                        'sendDataToEditEvent': this.sendDataToEditEvent
+                                    });
+                                }, 500);
+                            }
+                        }, {
+                            text: selectSpecial,
+                            handler: () => {
+                                this.sendDataToEditEvent.isFromRepeatToSpecial = true;
+                                setTimeout(() => {
+                                    this.nav.push(EditEventPage, {
+                                        'sendDataToEditEvent': this.sendDataToEditEvent
+                                    });
+                                }, 500);
+                            }
+                        }, {
+                            text: cancelButton
+                        }
+                    ]
+                });
+                this.nav.present(actionSheet);
+            });
     }
 
     ionViewWillEnter() {

@@ -2,8 +2,6 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {NavController} from 'ionic-angular';
-import {Badge} from 'ionic-native';
-import {Platform} from 'ionic-angular';
 
 // Config.
 import {AppConfig} from '../appconfig';
@@ -17,7 +15,6 @@ export class NotificationService {
 
     constructor(private http: Http,
         private nav: NavController,
-        private platform: Platform,
         private appConfig: AppConfig,
         private util: Util) {
         this.userDefaultAvatarImageUrl = this.appConfig.get('USER_DEFAULT_AVATAR_IMAGE_URL');
@@ -58,7 +55,7 @@ export class NotificationService {
         });
     }
 
-    getNotReadNotificationCountBySelf(): any {
+    getNotReadNotificationCountBySelf(): Promise<string> {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/notification/get_not_read_notification_count_by_self.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -69,18 +66,13 @@ export class NotificationService {
 
                     let returnOutPut = this.util.selectXMLNode(objResponse, './/*[local-name()=\'return\']');
                     let returnData = this.util.xml2json(returnOutPut).return;
-                    if (this.platform.is('cordova')) {
-                        Badge.get().then((coutner) => {
-                            Badge.set(Number(coutner) + Number(returnData));
-                        });
-                    }
                     resolve(returnData);
                 });
             });
         });
     }
 
-    getNotificationDetailByNotificationID(notificationID: string): any {
+    getNotificationDetailByNotificationID(notificationID: string): Promise<any> {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/notification/get_notification_detail_by_notification_id_request.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);

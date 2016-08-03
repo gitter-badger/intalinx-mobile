@@ -2,6 +2,7 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {GoogleAnalytics} from 'ionic-native';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -37,6 +38,7 @@ export class AddCommentPage {
             if (data === 'true') {
                 this.sendData.isRefreshFlag = true;
                 this.nav.pop();
+                GoogleAnalytics.trackEvent("Blog","add","comment");
             } else {
                 this.isDisabled = null;
             }

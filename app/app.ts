@@ -46,19 +46,30 @@ class IntaLinx {
     }
     
     initializeApp() {
-        // Okay, so the platform is ready and our plugins are available.
-        // Here you can do any higher level native things you might need.
-        StatusBar.styleDefault();
-
-        // Google Analytics
-        if (typeof GoogleAnalytics !== undefined && this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')) {
-            GoogleAnalytics.startTrackerWithId(this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID'));
-        }
-
         // initialize translate library
         let userLang = navigator.language.toLowerCase();
         this.appConfig.set('USER_LANG', userLang);
         this.translate.use(userLang);
+
+        // set default server.
+        if (userLang.indexOf('zh') >= 0) {
+            this.appConfig.set('BASE_URL', this.appConfig.get('BASE_URL_CHINA'));
+            this.appConfig.set('GOOGLE_ANALYTICS_TRACK_ID', this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID_CHINA'));
+        } else {
+            this.appConfig.set('BASE_URL', this.appConfig.get('BASE_URL_JAPAN'));
+            this.appConfig.set('GOOGLE_ANALYTICS_TRACK_ID', this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID_JAPAN'));
+        }
+        
+        if (this.platform.is('cordova')) {
+            // Okay, so the platform is ready and our plugins are available.
+            // Here you can do any higher level native things you might need.
+            StatusBar.backgroundColorByHexString('#7B1FA2');
+
+            // Google Analytics
+            if (typeof GoogleAnalytics !== undefined && this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')) {
+                GoogleAnalytics.startTrackerWithId(this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID'));
+            }
+        }
 
         this.user.userAvatar = this.appConfig.get('USER_DEFAULT_AVATAR_IMAGE_URL');
         this.getBackButtonText().then(message => {
@@ -69,6 +80,10 @@ class IntaLinx {
         this.share.initializeUser = this.initializeUser(this);
         this.share.redirectLoginPage = this.redirectLoginPage(this, LoginPage);
         this.share.nav = this.nav;
+        this.share.platform = this.platform;
+        this.share.nav.viewDidEnter.subscribe((args) => {
+            GoogleAnalytics.trackView(args.componentType.name);
+        });
 
         // auto login.
         this.util.loggedOn().then((isLoggedOn: boolean) => {

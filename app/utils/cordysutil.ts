@@ -54,42 +54,64 @@ export class CordysUtil {
         return this.callCordysWebservice(request, hideError, useAnonymous);
     }
 
-    callCordysWebservice(request: any, hideError?: boolean, useAnonymous?: boolean) {
-        if (!useAnonymous) {
-            // If there is not a saml artifact in cookie, then redirect to Login page.
-            if (!this.loggedOn()) {
-                // redirect to Login page.
-                this.share.redirectLoginPage();
-                // TODO
-                return;
-            }
-        }
+    callCordysWebservice(request: any, hideError: boolean = false, useAnonymous: boolean = false) {
         return new Promise((resolve, reject) => {
-            this.getCallCordysWebserviceURL(useAnonymous).then((url: string) => {
-                this.http.post(url, request)
-                    .map(res => res.text())
-                    .subscribe(data => {
-                        resolve(data);
-                    }, error => {
-                        if (error.status === 500 && error.type === 2) {
-                            if (!hideError) {
-                                let responseText = error.text();
-                                let responseNode = this.xmlUtil.parseXML(responseText);
-                                let messageCode = this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'MessageCode\']');
-                                if (this.constants.ARTIFACT_UNBOUND_MESSAGE_CODE === messageCode) {
-                                    this.logout().then(() => {
-                                        this.share.redirectLoginPage();
-                                    });
+            if (!useAnonymous) {
+                this.loggedOn().then((result: boolean) => {
+                    if (!result) {
+                        // redirect to Login page.
+                        this.share.redirectLoginPage();
+                        // TODO
+                        return reject();
+                    }
+                }).then(() => {
+                    this.getCallCordysWebserviceURL(useAnonymous).then((url: string) => {
+                        this.http.post(url, request)
+                            .map(res => res.text())
+                            .subscribe(data => {
+                                resolve(data);
+                            }, error => {
+                                if (error.status === 500 && error.type === 2) {
+                                    if (!hideError) {
+                                        let responseText = error.text();
+                                        let responseNode = this.xmlUtil.parseXML(responseText);
+                                        let messageCode = this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'MessageCode\']');
+                                        if (this.constants.ARTIFACT_UNBOUND_MESSAGE_CODE === messageCode) {
+                                            this.logout().then(() => {
+                                                this.share.redirectLoginPage();
+                                            });
+                                        } else {
+                                            this.alertUtil.presentModal(this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'faultstring\']'));
+                                        }
+                                    }
                                 } else {
+                                    this.alertUtil.presentSystemErrorModal();
+                                }
+                                reject(error);
+                            });
+                    });
+                });
+            } else {
+                this.getCallCordysWebserviceURL(useAnonymous).then((url: string) => {
+                    this.http.post(url, request)
+                        .map(res => res.text())
+                        .subscribe(data => {
+                            resolve(data);
+                        }, error => {
+                            if (error.status === 500 && error.type === 2) {
+                                if (!hideError) {
+                                    let responseText = error.text();
+                                    let responseNode = this.xmlUtil.parseXML(responseText);
+                                    let messageCode = this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'MessageCode\']');
                                     this.alertUtil.presentModal(this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'faultstring\']'));
                                 }
+                            } else {
+                                this.alertUtil.presentSystemErrorModal();
                             }
-                        } else {
-                            this.alertUtil.presentSystemErrorModal();
-                        }
-                        reject(error);
-                    });
-            });
+                            reject(error);
+                        });
+                });
+            }
         });
     }
 
@@ -173,13 +195,14 @@ export class CordysUtil {
 
                         let assertions = this.xmlUtil.selectXMLNode(samlResponse, './/saml:Assertion');
                         let authenticationResult = false;
+                        let samlArtifact;
+                        let notOnOrAfterDate;
                         if (assertions != null) {
-                            let samlArtifact = this.xmlUtil.getNodeText(samlResponse, './/samlp:AssertionArtifact', null);
+                            samlArtifact = this.xmlUtil.getNodeText(samlResponse, './/samlp:AssertionArtifact', null);
                             if (samlArtifact) {
                                 let notOnOrAfterString = this.xmlUtil.getNodeText(samlResponse, './/saml:Conditions/@NotOnOrAfter', null);
                                 if (notOnOrAfterString) {
-                                    let notOnOrAfterDate = this.dateUtil.transferCordysDateStringToUTC(notOnOrAfterString);
-                                    this.setSAMLart(samlArtifact, notOnOrAfterDate);
+                                    notOnOrAfterDate = this.dateUtil.transferCordysDateStringToUTC(notOnOrAfterString);
                                     authenticationResult = true;    
                                 }
                                 /*
@@ -189,7 +212,13 @@ export class CordysUtil {
                                 */
                             }
                         }
-                        resolve(authenticationResult);
+                        if (authenticationResult) {
+                            this.setSAMLart(samlArtifact, notOnOrAfterDate).then(() => {
+                                resolve(true);
+                            });
+                        } else {
+                            resolve(false);
+                        }
                     }, (error: any) => {
                         resolve(false);
                     });
@@ -201,11 +230,11 @@ export class CordysUtil {
     loggedOn(): Promise<boolean> {
         return this.getSAMLart().then((samlart: string) => {
             let isLoggedOn = false;
-            isLoggedOn = samlart != null && samlart !== '';
+            isLoggedOn = (samlart !== null && samlart !== '' && samlart !== 'null');
             if (!isLoggedOn) {
                 this.isAutoLogin().then((isAutoLogin: boolean) => {
                     if (isAutoLogin) {
-                        Promise.all([this.getLoginID(), this.getPassword()]).then((values: any) => {
+                        Promise.all([this.getLoginID(), this.getPassword(), this.getServer()]).then((values: any) => {
                             this.authenticate(values[0], values[1]).then((result: boolean) => {
                                 // use saved login id and password faild, then remove it and set auto login to false.
                                 if (!result) {
@@ -229,12 +258,17 @@ export class CordysUtil {
             this.disableAutoLogin(),
             this.removeLoginID(),
             this.removePassword(),
-            this.removeSAMLart(),
+            this.removeSAMLart()
         ]);
     }
 
-    enableAutoLogin() {
-        return this.storageUtil.set(this.appConfig.get('AUTO_LOGIN_STORAGE_NAME'), true);
+    enableAutoLogin(loginID, password, server) {
+        return Promise.all([
+            this.storageUtil.set(this.appConfig.get('AUTO_LOGIN_STORAGE_NAME'), true),
+            this.setLoginID(loginID),
+            this.setPassword(password),
+            this.setServer(server)
+        ]);
     }
 
     disableAutoLogin() {
@@ -253,12 +287,24 @@ export class CordysUtil {
         return this.storageUtil.set(this.appConfig.get('PASSWORD_STORAGE_NAME'), value);
     }
 
+    setServer(value) {
+        this.appConfig.set('BASE_URL', value);
+        return this.storageUtil.set(this.appConfig.get('SERVER_STORAGE_NAME'), value);
+    }
+
     getLoginID() {
         return this.storageUtil.get(this.appConfig.get('LOGIN_ID_STORAGE_NAME'));
     }
 
     getPassword() {
         return this.storageUtil.get(this.appConfig.get('PASSWORD_STORAGE_NAME'));
+    }
+
+    getServer() {
+        return this.storageUtil.get(this.appConfig.get('SERVER_STORAGE_NAME')).then(value => {
+            this.appConfig.set('BASE_URL', value);
+            return value;
+        });
     }
 
     removeLoginID() {
@@ -269,12 +315,14 @@ export class CordysUtil {
         return this.storageUtil.remove(this.appConfig.get('PASSWORD_STORAGE_NAME'));
     }
 
+    removeServer() {
+        return this.storageUtil.remove(this.appConfig.get('SERVER_STORAGE_NAME'));
+    }
+
     setSAMLart(value, notOnOrAfter) {
-        return new Promise(resolve => {
-            let p1 = this.storageUtil.set(this.appConfig.get('SAML_ARTIFACT_STORAGE_NAME'), value);
-            let p2 = this.storageUtil.set(this.appConfig.get('SAML_NOT_ON_AFTER_STORAGE_NAME'), notOnOrAfter);
-            resolve(Promise.all([p1, p2]));
-        });
+        let p1 = this.storageUtil.set(this.appConfig.get('SAML_ARTIFACT_STORAGE_NAME'), value);
+        let p2 = this.storageUtil.set(this.appConfig.get('SAML_NOT_ON_AFTER_STORAGE_NAME'), notOnOrAfter);
+        return Promise.all([p1, p2]);
     }
 
     getSAMLart(): Promise<string> {

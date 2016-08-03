@@ -2,6 +2,7 @@
 import {Component} from '@angular/core';
 import {NavController, Content, Alert, Modal, ViewController, NavParams} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {GoogleAnalytics} from 'ionic-native';
 
 // Config.
 import {AppConfig} from '../../../appconfig';
@@ -41,8 +42,6 @@ export class EditEventPage {
     private repeatRules: any;
     private categories: any;
     private selectedRepeatRules: any;
-    private isFromRepeatToSpecial: string;
-    private isOriginalRepeat: boolean;
     private sendDataToEditEvent: any;
     private sendDataToAddEvent: any;
     private receivedData: any;
@@ -121,8 +120,8 @@ export class EditEventPage {
             for (let i = 1; i <= 31; i++) {
                 let dateDescription = i + dayDescription;
                 let dateObject = {
-                    value: i,
-                    description: dateDescription
+                    'value': i,
+                    'description': dateDescription
                 };
                 this.monthlySelections.push(dateObject);
             }
@@ -130,16 +129,16 @@ export class EditEventPage {
 
         this.repeatRules = [
             {
-                value: 'DAILY',
-                description: this.repeatEveryDay
+                'value': 'DAILY',
+                'description': this.repeatEveryDay
             },
             {
-                value: 'WEEKLY',
-                description: this.repeatEveryWeek
+                'value': 'WEEKLY',
+                'description': this.repeatEveryWeek
             },
             {
-                value: 'MONTHLY',
-                description: this.repeatEveryMonth
+                'value': 'MONTHLY',
+                'description': this.repeatEveryMonth
             }
         ];
     }
@@ -150,28 +149,23 @@ export class EditEventPage {
             // The 'action-sheet' option will be invalid, when the count of option over 6.
             this.categories = data;
             this.categories.unshift({
-                categoryID: '',
-                categoryName: '未選択'  // Adding a japanese select-option for the other data is japanese.
+                'categoryID': '',
+                'categoryName': '未選択'  // Adding a japanese select-option for the other data is japanese.
             });
         });
         this.selectedRepeatRules = {
             'rule': 'DAILY',
             'index': 1
         };
-        this.isFromRepeatToSpecial = 'all';
-        this.isOriginalRepeat = false;
 
         // Just to get event will get the 'event' action, not our schedule.
         this.sendDataToEditEvent = this.params.get('sendDataToEditEvent');
         this.sendDataToAddEvent = this.params.get('sendDataToAddEvent');
 
         if (this.sendDataToEditEvent) {
-            this.receivedData = {
-                'eventID': this.sendDataToEditEvent.eventID,
-                'selectedDay': this.sendDataToEditEvent.selectedDay
-            };
+            this.receivedData = this.sendDataToEditEvent;
             this.event = {
-                eventID: this.receivedData.eventID
+                'eventID': this.receivedData.eventID
             };
             this.getEventByEventID(this.event.eventID);
         } else {
@@ -191,9 +185,6 @@ export class EditEventPage {
                 this.event.isAllDay = false;
             }
             if (this.event.isRepeat === 'true') {
-                this.event.isRepeat = true;
-                this.isOriginalRepeat = true;
-                this.event.parentEventID = this.event.eventID;
                 this.transRepeatRuleToPerformanceData(event.repeatRule);
             } else {
                 this.event.isRepeat = false;
@@ -204,7 +195,6 @@ export class EditEventPage {
             // To set some default value for updating data.
             this.event.isDeviceRepeatWarned = false;
             this.event.isEventRepeatWarned = false;
-            this.event.isFromRepeatToSpecial = false;
             this.initEvent = Object.assign({}, this.event);
         });
     }
@@ -220,19 +210,27 @@ export class EditEventPage {
             minute: repeatRuleArray[2].substring(2, 4)
         };
         this.repeatEndTime = {
-            hour: repeatRuleArray[3].substring(0, 2),
-            minute: repeatRuleArray[3].substring(2, 4)
+            'hour': repeatRuleArray[3].substring(0, 2),
+            'minute': repeatRuleArray[3].substring(2, 4)
         };
-        this.startTime = moment.unix(this.event.startTime);
-        this.endTime = moment.unix(this.event.endTime);
-        this.startTime = moment(this.startTime).hour(this.repeatStartTime.hour).minute(this.repeatStartTime.minute).format();
-        this.endTime = moment(this.endTime).hour(this.repeatEndTime.hour).minute(this.repeatEndTime.minute).format();
 
-        let specialStartTime = moment(this.receivedData.selectedDay).hour(this.repeatStartTime.hour).minute(this.repeatStartTime.minute).format();
-        let specialEndTime = moment(this.receivedData.selectedDay).hour(this.repeatEndTime.hour).minute(this.repeatEndTime.minute).format();
-        this.event.oldStartTime = moment(specialStartTime).unix();
-        this.event.oldEndTime = moment(specialEndTime).unix();
-
+        if (this.receivedData.isFromRepeatToSpecial === false) {
+            this.event.isFromRepeatToSpecial = false;
+            this.event.isRepeat = true;
+            this.startTime = moment.unix(this.event.startTime);
+            this.endTime = moment.unix(this.event.endTime);
+            this.startTime = moment(this.startTime).hour(this.repeatStartTime.hour).minute(this.repeatStartTime.minute).format();
+            this.endTime = moment(this.endTime).hour(this.repeatEndTime.hour).minute(this.repeatEndTime.minute).format();
+        } else {
+            this.event.isFromRepeatToSpecial = true;
+            this.event.isRepeat = false;
+            this.event.parentEventID = this.event.eventID;
+            this.startTime = moment(this.receivedData.selectedDay).hour(this.repeatStartTime.hour).minute(this.repeatStartTime.minute).format();
+            this.endTime = moment(this.receivedData.selectedDay).hour(this.repeatEndTime.hour).minute(this.repeatEndTime.minute).format();
+            this.event.oldStartTime = moment(this.startTime).unix();
+            this.event.oldEndTime = moment(this.endTime).unix();
+        }
+        
         // set rule-index to 1, when the repeat rule is everyday.
         if (this.selectedRepeatRules.index === 0) {
             this.selectedRepeatRules.index = 1;
@@ -288,10 +286,7 @@ export class EditEventPage {
             'status': '',
             'isDeviceRepeatWarned': false,
             'isEventRepeatWarned': false,
-            'parentEventID': '',
-            'oldStartTime': '',
-            'oldEndTime': '',
-            'isFromRepeatToSpecial': ''
+            'isFromRepeatToSpecial': false
         };
         this.initEvent = Object.assign({}, this.event);
     }
@@ -324,47 +319,6 @@ export class EditEventPage {
         } else {
             endMinutes = endMinutes - 60;
             this.endTime = moment(time).minute(endMinutes).add(1, 'hours').format();
-        }
-    }
-
-    // Q: Did we need to show warnning when the user is editing?
-    // Q: And change the endTime half hour after startTime auto?
-    // changeEndTime() {
-    //   if(this.endTime < this.startTime) {
-    //       this.app.translate.get(['app.message.error.title', 'app.schedule.editEvent.error.endTimeBigger', 'app.action.ok']).subscribe(message => {
-    //                 let title = message['app.message.error.title'];
-    //                 let ok = message['app.action.ok'];
-    //                 let content = message['app.schedule.editEvent.error.endTimeBigger'];
-
-    //                 let alert = Alert.create({
-    //                     title: title,
-    //                     subTitle: content,
-    //                     buttons: [
-    //                         {
-    //                             text: ok,
-    //                             handler: () => {
-    //                                 this.setEndTimeAnHourLater(this.startTime);
-    //                             }
-    //                         }]
-    //                 });
-    //                 this.nav.present(alert);
-    //             });
-    //     }
-    // }
-
-    changeRepeatEventUpdateFlag() {
-        if (this.isFromRepeatToSpecial === 'all') {
-            this.event.isFromRepeatToSpecial = false;
-            this.event.isRepeat = true;
-            this.startTime = moment.unix(this.event.startTime);
-            this.endTime = moment.unix(this.event.endTime);
-            this.startTime = moment(this.startTime).hour(this.repeatStartTime.hour).minute(this.repeatStartTime.minute).format();
-            this.endTime = moment(this.endTime).hour(this.repeatEndTime.hour).minute(this.repeatEndTime.minute).format();
-        } else {
-            this.event.isFromRepeatToSpecial = true;
-            this.event.isRepeat = false;
-            this.startTime = moment.unix(this.event.oldStartTime).format();
-            this.endTime = moment.unix(this.event.oldEndTime).format();
         }
     }
 
@@ -505,11 +459,6 @@ export class EditEventPage {
                 saveStartTime = moment(this.startTime).second(0).unix();
                 saveEndTime = moment(this.endTime).second(0).unix();
             }
-            if (this.isOriginalRepeat && (this.isFromRepeatToSpecial === 'all')) {
-                this.event.parentEventID = '';
-                this.event.oldStartTime = '';
-                this.event.oldEndTime = '';
-            }
             this.event.startTime = saveStartTime;
             this.event.endTime = saveEndTime;
             resolve(true);
@@ -521,6 +470,9 @@ export class EditEventPage {
             return false;
         }
         if (!this.checkTime()) {
+            return false;
+        }
+        if (!this.checkParticipants()) {
             return false;
         }
         return true;
@@ -563,12 +515,21 @@ export class EditEventPage {
         return true;
     }
 
+    checkParticipants() {
+        if (this.participants && this.participants.length > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     addEvent() {
         this.scheduleService.addEvent(this.event, this.participants).then(data => {
             if (data === 'true') {
                 this.isSavedOrChecked = true;
                 this.sendDataToAddEvent.isRefreshFlag = true;
                 this.nav.pop();
+                GoogleAnalytics.trackEvent("Schedule","add","event");
             } else {
                 this.showError(data);
             }
@@ -590,6 +551,7 @@ export class EditEventPage {
                 this.isSavedOrChecked = true;
                 this.sendDataToEditEvent.isRefreshFlag = true;
                 this.nav.pop();
+                GoogleAnalytics.trackEvent("Schedule","update","event");
             } else {
                 this.showError(data);
             }
@@ -627,11 +589,11 @@ export class EditEventPage {
 
     confirmRepeatWarn(title, content, yes, no, faultCode, type) {
         let alert = Alert.create({
-            title: title,
-            subTitle: content,
-            buttons: [{
-                text: yes,
-                handler: () => {
+            'title': title,
+            'subTitle': content,
+            'buttons': [{
+                'text': yes,
+                'handler': () => {
                     if (faultCode.indexOf('WARN002') > -1) {
                         // The same people had have scheduling at selected peroid.
                         this.event.isDeviceRepeatWarned = false;
@@ -653,7 +615,7 @@ export class EditEventPage {
                 }
             },
             {
-                text: no
+                'text': no
             }]
         });
         this.nav.present(alert);
