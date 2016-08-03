@@ -13,6 +13,7 @@ import {StorageUtil} from './storageutil';
 
 // Services.
 import {ShareService} from '../providers/share-service';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 
 @Injectable()
 export class CordysUtil {
@@ -31,7 +32,7 @@ export class CordysUtil {
         ARTIFACT_UNBOUND_MESSAGE_CODE: 'Cordys.WebGateway.Messages.WG_Artifact_Unbound'
     };
 
-    constructor(private http: Http, private appConfig: AppConfig, private xmlUtil: XmlUtil, private alertUtil: AlertUtil, private dateUtil: DateUtil, private storageUtil: StorageUtil, private share: ShareService) {
+    constructor(private http: Http, private translate: TranslateService, private appConfig: AppConfig, private xmlUtil: XmlUtil, private alertUtil: AlertUtil, private dateUtil: DateUtil, private storageUtil: StorageUtil, private share: ShareService) {
     }
 
     getRequestXml(url: string) {
@@ -56,42 +57,7 @@ export class CordysUtil {
 
     callCordysWebservice(request: any, hideError: boolean = false, useAnonymous: boolean = false) {
         return new Promise((resolve, reject) => {
-            if (!useAnonymous) {
-                this.loggedOn().then((result: boolean) => {
-                    if (!result) {
-                        // redirect to Login page.
-                        this.share.redirectLoginPage();
-                        // TODO
-                        return reject();
-                    }
-                }).then(() => {
-                    this.getCallCordysWebserviceURL(useAnonymous).then((url: string) => {
-                        this.http.post(url, request)
-                            .map(res => res.text())
-                            .subscribe(data => {
-                                resolve(data);
-                            }, error => {
-                                if (error.status === 500 && error.type === 2) {
-                                    if (!hideError) {
-                                        let responseText = error.text();
-                                        let responseNode = this.xmlUtil.parseXML(responseText);
-                                        let messageCode = this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'MessageCode\']');
-                                        if (this.constants.ARTIFACT_UNBOUND_MESSAGE_CODE === messageCode) {
-                                            this.logout().then(() => {
-                                                this.share.redirectLoginPage();
-                                            });
-                                        } else {
-                                            this.alertUtil.presentModal(this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'faultstring\']'));
-                                        }
-                                    }
-                                } else {
-                                    this.alertUtil.presentSystemErrorModal();
-                                }
-                                reject(error);
-                            });
-                    });
-                });
-            } else {
+            if (useAnonymous) {
                 this.getCallCordysWebserviceURL(useAnonymous).then((url: string) => {
                     this.http.post(url, request)
                         .map(res => res.text())
@@ -109,6 +75,60 @@ export class CordysUtil {
                                 this.alertUtil.presentSystemErrorModal();
                             }
                             reject(error);
+                        });
+                });
+            } else {
+                this.loggedOn().then((result: boolean) => {
+                    if (!result) {
+                        // redirect to Login page.
+                        this.share.redirectLoginPage();
+                        // TODO
+                        reject(false);
+                    }
+                }).then(() => {
+                    return this.getCallCordysWebserviceURL(useAnonymous);
+                }).then((url: string) => {
+                    this.http.post(url, request)
+                        .map(res => res.text())
+                        .subscribe(data => {
+                            resolve(data);
+                        }, error => {
+                            if (error.status === 500 && error.type === 2) {
+                                let responseText = error.text();
+                                let responseNode = this.xmlUtil.parseXML(responseText);
+                                let messageCode = this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'MessageCode\']');
+                                // when samlart became invalid
+                                if (this.constants.ARTIFACT_UNBOUND_MESSAGE_CODE === messageCode) {
+                                    // 1. remove samlart
+                                    this.removeSAMLart().then(() => {
+                                        // 2. try to login again
+                                        return this.loggedOn();
+                                    }).then((reLoginResult: boolean) => {
+                                        // 3. if login success, call webservice again
+                                        if (reLoginResult) {
+                                            this.callCordysWebservice(request, hideError, useAnonymous).then((data: any) => {
+                                                resolve(data);
+                                            });
+                                        } else {
+                                            // 4. login faild, remove stored password and redirect to login
+                                            this.removePassword();
+                                            this.share.redirectLoginPage().then(() => {
+                                                this.translate.get('app.message.error.faildToLogin').subscribe(message => {
+                                                    this.alertUtil.presentModal(message);
+                                                });
+                                            });
+                                            reject(error);
+                                        }
+                                    });
+                                } else if (!hideError) {
+                                    // show error                                    
+                                    this.alertUtil.presentModal(this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'faultstring\']'));
+                                    // TODO
+                                    reject(error);
+                                }
+                            } else {
+                                reject(error);
+                            }
                         });
                 });
             }
@@ -232,24 +252,18 @@ export class CordysUtil {
             let isLoggedOn = false;
             isLoggedOn = (samlart !== null && samlart !== '' && samlart !== 'null');
             if (!isLoggedOn) {
-                this.isAutoLogin().then((isAutoLogin: boolean) => {
+                return this.isAutoLogin().then((isAutoLogin: boolean) => {
                     if (isAutoLogin) {
-                        Promise.all([this.getLoginID(), this.getPassword(), this.getServer()]).then((values: any) => {
-                            this.authenticate(values[0], values[1]).then((result: boolean) => {
-                                // use saved login id and password faild, then remove it and set auto login to false.
-                                if (!result) {
-                                    return this.logout().then(() => {
-                                        return false;
-                                    });
-                                } else {
-                                    return Promise.resolve(result);
-                                }
-                            });
+                        return Promise.all([this.getLoginID(), this.getPassword(), this.getServer()]).then((values: any) => {
+                            return this.authenticate(values[0], values[1]);
                         });
+                    } else {
+                        return Promise.resolve(false);
                     }
                 });
+            } else {
+                return Promise.resolve(true);
             }
-            return isLoggedOn;
         });
     }
 
@@ -276,7 +290,13 @@ export class CordysUtil {
     }
 
     isAutoLogin() {
-        return this.storageUtil.get(this.appConfig.get('AUTO_LOGIN_STORAGE_NAME'));
+        return this.storageUtil.get(this.appConfig.get('AUTO_LOGIN_STORAGE_NAME')).then((result: string) => {
+            if (result === 'true') {
+                return Promise.resolve(true);
+            } else {
+                return Promise.resolve(false);
+            }
+        });
     }
 
     setLoginID(value) {

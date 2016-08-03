@@ -3,7 +3,8 @@
         "message": {
             "error": {
                 "title": "错误",
-                "systemError": "系统发生异常，请联系管理员！"
+                "systemError": "系统发生异常，请联系管理员！",
+                "faildToLogin": "无法登陆系统。"
             },
             "info": {
                 "title": "提示",

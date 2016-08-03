@@ -51,6 +51,21 @@ export class LoginPage {
                 element.name = message['app.login.' + element.id];
             });
         });
+
+        // show stored loginID, autoLogin, server except password.
+        this.util.getLoginID().then((loginID: string) => {
+            this.user.loginID = loginID;
+        });
+
+        this.util.isAutoLogin().then((isAutoLogin: boolean) => {
+            this.user.autoLogin = isAutoLogin;
+        });
+
+        this.util.getServer().then((server: string) => {
+            if (server != null) {
+                this.user.server = server;
+            }
+        });
     }
 
     loggedOn() {

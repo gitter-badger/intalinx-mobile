@@ -3,7 +3,8 @@
         "message": {
             "error": {
                 "title": "error",
-                "systemError": "An error occurred in this system.Please contact the system administrator."
+                "systemError": "An error occurred in this system.Please contact the system administrator.",
+                "faildToLogin": "Faild to login."
             },
             "info": {
                 "title": "info",
