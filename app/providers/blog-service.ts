@@ -115,6 +115,17 @@ export class BlogService {
                     this.util.fromNow(community.createDate).then(data => {
                         community.createDate = data;
                     });
+
+                    let attachFiles = [];
+                    let attachFileList = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'attachFileList\']');
+                    for (let i = 0; i < attachFileList.length; i++) {
+                        let attachFile = this.util.xml2json(attachFileList[i]).attachFileList;
+                        this.getRequestOfDownloadAttachmentByAttachmentId(attachFile.attachmentID).then((req) => {
+                            attachFile['soapMessage'] = req;
+                        });
+                        attachFiles.push(attachFile);
+                    }
+                    community.attachFileList = attachFiles;
                     resolve(community);
                 });
             });
@@ -210,6 +221,18 @@ export class BlogService {
                     this.util.presentModal(message);
                 });
             }
+        });
+    }
+
+    getRequestOfDownloadAttachmentByAttachmentId(attachmentID: string): any{
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/blog/download_attachment_by_attachment_id.xml').then((req: string) => {
+                let objRequest = this.util.parseXml(req);
+
+                this.util.setNodeText(objRequest, './/*[local-name()=\'attachmentID\']', attachmentID);
+                req = this.util.xml2string(objRequest);
+                resolve(req);
+            });
         });
     }
 }

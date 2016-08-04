@@ -3,9 +3,14 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export class AppConfig {
     private config: any = {
-        'BASE_URL': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
-        'BASE_URL_JAPAN': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
-        'BASE_URL_CHINA': 'http://www.intalinx.cn/home/intalinxcloud/',
+        // 'BASE_URL': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
+        // 'BASE_URL_JAPAN': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
+        // 'BASE_URL_CHINA': 'http://www.intalinx.cn/home/intalinxcloud/',
+        'BASE_URL': 'http://192.168.11.29/home/intalinxcloud/',
+        'BASE_URL_JAPAN': 'http://192.168.11.29/home/intalinxcloud/',
+        'BASE_URL_CHINA': 'http://192.168.11.29/home/intalinxcloud/',
+        'ORGANIZATION_CONTEXT': 'o=fc,cn=cordys,cn=defaultInst,o=cordys.com',
+        'DOWNLOAD_GATEWAY_URL': 'com.eibus.web.tools.download.Download.wcp',
         'GATEWAY_URL': 'com.eibus.web.soap.Gateway.wcp',
         'PRE_LOGIN_INFO_URL': 'com.eibus.sso.web.authentication.PreLoginInfo.wcp',
         'SAMLART_NAME': 'SAMLart',

@@ -117,7 +117,7 @@ class IntaLinx {
 
     redirectLoginPage(that, loginPage) {
         return function () {
-            that.rootPage = loginPage;
+            return that.share.nav.setRoot(loginPage);
         };
     }
 
