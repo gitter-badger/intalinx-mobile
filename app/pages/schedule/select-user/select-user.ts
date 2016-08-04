@@ -40,19 +40,11 @@ export class SelectUserPage {
         private params: NavParams, 
         private scheduleService: ScheduleService, 
         private userService: UserService) {
-        this.userID = this.params.get('userID');
-        if (this.userID) {
-            this.getGroupListByUserID(this.userID);
-        } else {
-            this.userService.getUserDetails().then((user: any) => {
-                this.userID = user.userID;
-                this.getGroupListByUserID(user.userID);
-            });
-        }
+        this.getGroupListForCurrentUser();
     }
 
-    getGroupListByUserID(userID: string): void {
-        this.scheduleService.getGroupListByUserID(userID).then((data: any[]) => {
+    getGroupListForCurrentUser(): void {
+        this.scheduleService.getGroupListForCurrentUser().then((data: any[]) => {
             this.groupsWithUsers = data;
             let allUsersInGroup = new Array();
             this.groupsWithUsers.forEach(function (groupWithUsers) {

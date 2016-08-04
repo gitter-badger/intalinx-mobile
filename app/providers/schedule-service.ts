@@ -646,12 +646,10 @@ export class ScheduleService {
         });
     }
 
-    getGroupListByUserID(userID: string): any {
+    getGroupListForCurrentUser(): any {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/schedule/get_group_list_by_user_id.xml').then((req: string) => {
+            this.util.getRequestXml('./assets/requests/schedule/get_group_list_for_current_user.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
-
-                this.util.setNodeText(objRequest, './/*[local-name()=\'userID\']', userID);
 
                 req = this.util.xml2string(objRequest);
 

@@ -13,6 +13,7 @@ import {Util} from '../../../utils/util';
 // Services.
 import {ScheduleService} from '../../../providers/schedule-service';
 import {UserService} from '../../../providers/user-service';
+import {ShareService} from '../../../providers/share-service';
 
 // Pages.
 import {SelectParticipantsPage} from '../select-participants/select-participants';
@@ -70,7 +71,8 @@ export class EditEventPage {
         private scheduleService: ScheduleService,
         private util: Util,
         private appConfig: AppConfig,
-        private userService: UserService) {
+        private userService: UserService, 
+        private share: ShareService) {
         this.initTranslation();
         this.initData();
     }
@@ -257,14 +259,12 @@ export class EditEventPage {
         // 開始時間をただいまの時間に設定し、日付は選択した日付に設定します。
         let now = moment().year(sYear).month(sMonth).date(sDay).format();
         this.setEndTimeAnHourLater(now);
-        // Used to page performance and sava data.
-        this.userService.getUserDetails().then(user => {
-            this.participants = [
-                {
-                    'userID': user.userID,
-                    'userName': user.userName
-                }];
-        });
+        // Set the logined user as default participant.
+        this.participants = [
+            {
+                'userID': this.share.user.userID,
+                'userName': this.share.user.userName
+            }];
 
         // Just used to page performance.
         this.devices = [];
