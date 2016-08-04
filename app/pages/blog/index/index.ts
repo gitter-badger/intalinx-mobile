@@ -101,9 +101,8 @@ export class BlogIndexPage {
             }
         };
     }
-
     
-    addComment(): void {
+    addBlog(): void {
         this.nav.push(AddBlogPage, { 'sendData': 'this.sendData' });
     }
 }

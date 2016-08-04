@@ -11,14 +11,8 @@ import {Util} from '../../../utils/util';
 
 // Pages.
 import {BlogIndexPage} from '../index/index';
-import {DownloadDirective} from '../../../shared/components/download/download';
+import {PreviewBlogPage} from '../preview-blog/preview-blog';
 
-/*
-  Generated class for the AddBlogPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   templateUrl: 'build/pages/blog/add-blog/add-blog.html',
 })
@@ -27,7 +21,7 @@ export class AddBlogPage {
   private pictureName: string = 'picture';
   private pictureCount: number = 0;
   private blog: any = {
-    'titile': '',
+    'title': '',
     'replyList': '',
     'content': ''
   }
@@ -41,14 +35,13 @@ export class AddBlogPage {
     private platform: Platform,
     private translate: TranslateService,
     private util: Util) {
-
   }
 
   changeTitle() {
 
   }
 
-  changeContent() {
+  changeContent(event) {
 
   }
 
@@ -160,6 +153,37 @@ export class AddBlogPage {
       };
       image.src = src;
     });
+  }
+
+  previewBlog() {
+    let content = this.getRealContent();
+    let previewBlog: any = {
+      'title': this.blog.title,
+      'replyList': this.blog.replyList,
+      'content': content
+    }
+    let previewModal = Modal.create(PreviewBlogPage, { 'previewBlog': previewBlog });
+    this.nav.present(previewModal);
+  }
+
+  getHoverPosition(event) {
+    // debugger
+  }
+
+  saveBlog() {
+    let content = this.getRealContent();
+
+  }
+
+  getRealContent(): string {
+    let content = this.blog.content;
+    for (let i = 0; i < this.pictures.length; i++) {
+      let pictureName = '{{' + this.pictures[i].pictureName + '}}';
+      if (content.indexOf(pictureName)) {
+        content = content.replace(pictureName, '<img src=' + this.pictures[i].pictureSrc + ' />');
+      }
+    }
+    return content;
   }
 
 }

@@ -224,7 +224,7 @@ export class BlogService {
         });
     }
 
-    getRequestOfDownloadAttachmentByAttachmentId(attachmentID: string): any{
+    getRequestOfDownloadAttachmentByAttachmentId(attachmentID: string): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/blog/download_attachment_by_attachment_id.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -235,4 +235,53 @@ export class BlogService {
             });
         });
     }
+
+    // insertCommunity(community: any): any {
+    //     return new Promise(resolve => {
+    //         this.util.getRequestXml('./assets/requests/blog/insert_community.xml').then((req: string) => {
+    //             let objRequest = this.util.parseXml(req);
+    //             this.util.setNodeText(objRequest, './/*[local-name()=\'communityID\']', community.communityID);
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='title']", community.title);
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='content']", community.content);
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='allMemberFlag']", community.allMemberFlag);
+    //             this.util.setNodeText(objRequest, ".//*[local-name()='status']", community.actionFlag);
+                
+    //             var nCommunityInput = this.util.selectXMLNode(objRequest, ".//*[local-name()='CommunityInput']");
+                
+    //             if (community.allMemberFlag == "FALSE") {
+    //                 for (var i = 0; i < community.replyList.length; i++) {
+    //                     var userListNode = this.util.cloneXMLDocument(replyListXML.XMLDocument);
+    //                     var oUserListNode = this.util.selectXMLNode(userListNode, ".//*[local-name()='replyList']");
+    //                     this.util.setNodeText(oUserListNode, ".//*[local-name()='userID']", gaEmployees[i]);
+    //                     this.util.setNodeText(oUserListNode, ".//*[local-name()='userName']", gaEmpName[i]);
+    //                     this.util.appendXMLNode(oUserListNode, nCommunityInput);
+    //                 }
+    //             }
+                
+    //             var fileSpanList = $('span[id^=spanFile]');
+    //             for(var j = 1; j <= fileSpanList.length; j++){
+    //                 if($(fileSpanList[j - 1]).css('display') != 'none') {
+    //                     var attachmentListNode = this.util.cloneXMLDocument(attachFileListXML.XMLDocument);
+    //                     var oAttachmentNode = this.util.selectXMLNode(attachmentListNode, ".//*[local-name()='attachFileList']");
+    //                     //var dataId = $(fileSpanList[j - 1]).attr('dataid');
+    //                     var dataId = $(fileSpanList[j - 1]).find("input[type='text']").attr('dataid');
+    //                     if (dataId) {
+    //                         this.util.setTextContent(this.util.selectXMLNode(oAttachmentNode, ".//*[local-name()='attachmentID']"), dataId);
+    //                     } else {
+    //                 this.util.setTextContent(this.util.selectXMLNode(oAttachmentNode, ".//*[local-name()='attachmentName']"), "Upload:FileName" + j);
+    //                 this.util.setTextContent(this.util.selectXMLNode(oAttachmentNode, ".//*[local-name()='attachmentContent']"), "Upload:FileContent" + j);
+    //                     }
+    //                     this.util.appendXMLNode(oAttachmentNode, nCommunityInput );
+    //                 }
+    //             }
+                
+    //             req = this.util.xml2string(objRequest);
+
+    //             this.util.callCordysWebservice(req).then(data => {
+    //                 resolve('true');
+    //             });
+    //         });
+    //     });
+    // }
+
 }

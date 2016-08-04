@@ -1,0 +1,30 @@
+<SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP:Body>
+    <InsertCommunity xmlns="http://schemas.intasect.co.jp/generictools/service/Community" preserveSpace="no" qAccess="0" qValues="">
+      <communityParam>
+        <CommunityInput>
+          <communityID />
+          <title />
+          <content />
+          <allMemberFlag />
+          <status />
+          <replyList>
+            <replyID />
+            <communityID />
+            <userID />
+            <userName />
+            <status />
+          </replyList>
+          <attachFileList>
+            <communityID />
+            <attachmentPath />
+            <attachmentContent />
+            <attachmentName />
+            <attachmentSize />
+            <attachmentID />
+          </attachFileList>
+        </CommunityInput>
+      </communityParam>
+    </InsertCommunity>
+  </SOAP:Body>
+</SOAP:Envelope>
