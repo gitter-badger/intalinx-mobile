@@ -273,10 +273,10 @@ export class ScheduleIndexPage {
     }
 
     selectUser() {
-        let selectUserModal = Modal.create(SelectUserPage);
+        let selectUserModal = Modal.create(SelectUserPage, {'userID': this.myUserID});
         selectUserModal.onDismiss(data => {
             if (data) {
-                this.userID = data.userId;
+                this.userID = data.userID;
                 // hidden my user name
                 if (data.userId === this.myUserID) {
                     this.selectedOtherUserName = '';
