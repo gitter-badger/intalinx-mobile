@@ -13,6 +13,7 @@ export class ShareService {
     public showMenu: any;
     public alertForSystemError: any;
     public nav: any;
+    public user: any;
     
     constructor() {
 

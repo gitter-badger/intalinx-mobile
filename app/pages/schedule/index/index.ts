@@ -98,9 +98,9 @@ export class ScheduleIndexPage {
         this.selectedDay = this.today;
 
         // let userID =this.app.user.userID;
-        this.userService.getUserDetails().then(user => {
-            this.myUserID = user.userID;
-            this.userID = user.userID;
+        this.userService.getUserID().then((userID: string) => {
+            this.myUserID = userID;
+            this.userID = userID;
             this.selectedOtherUserName = '';
             this.getLocalsFromSetting().then(local => {
                 this.showCalendar(firstDateWeek);
