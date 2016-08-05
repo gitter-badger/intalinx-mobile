@@ -10,6 +10,7 @@ import {Util} from '../../../utils/util';
 
 // Services.
 import {BlogService} from '../../../providers/blog-service';
+import {UserService} from '../../../providers/user-service';
 
 // Pages.
 import {BlogIndexPage} from '../index/index';
@@ -20,18 +21,23 @@ import {SelectParticipantsPage} from '../../schedule/select-participants/select-
   templateUrl: 'build/pages/blog/add-blog/add-blog.html',
   providers: [
     BlogService,
+    UserService,
     Util,
     SelectParticipantsPage
   ]
 })
 export class AddBlogPage {
   private loading: any;
+  private sendData: any;
   private isDisabled: boolean = true;
   private pictureName: string = 'picture';
   private pictureCount: number = 0;
+  private allUsersType: string;
+  private selectUsersType: string;
   private blog: any = {
     'title': '',
-    'selectedUsers': '',
+    'selectedUsers': [],
+    'allMemberFlag': 'TRUE',
     'content': ''
   }
   private picture: any;
@@ -43,7 +49,7 @@ export class AddBlogPage {
   private sendDataToSelectReadLimitTypePage: any = {
     'isSelected': false,
     'readLimit': '',
-    'selectedUsers': ''
+    'selectedUsers': []
   };
 
   constructor(private nav: NavController,
@@ -53,18 +59,26 @@ export class AddBlogPage {
     private platform: Platform,
     private blogService: BlogService,
     private translate: TranslateService,
+    private userService: UserService,
     private util: Util) {
+
+    this.sendData = this.params.get('sendData');
+    this.userService.getUser().then(data => {
+      this.sendDataToSelectReadLimitTypePage.selectedUsers.push(data);
+    });
+
+    this.getMultiMessageOfReadLimitTypeName();
+  }
+
+  getMultiMessageOfReadLimitTypeName() {
+    this.translate.get(['app.common.readLimitType.allUsers', 'app.common.readLimitType.selectUsers']).subscribe(message => {
+      this.allUsersType = message['app.common.readLimitType.allUsers'];
+      this.selectUsersType = message['app.common.readLimitType.selectUsers'];
+      this.readLimit.readLimitTypeName = this.allUsersType;
+    });
   }
 
   addPicture() {
-    this.translate.get(['app.profile.message.loading.avatarLoading']).subscribe(message => {
-      let content = message['app.profile.message.loading.avatarLoading'];
-      this.loading = Loading.create({
-        spinner: 'ios',
-        content: content
-      });
-      this.nav.present(this.loading);
-    });
     let a = event.bubbles;
     // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
     let fileInput = (<any>event.currentTarget);
@@ -157,7 +171,6 @@ export class AddBlogPage {
           other.pictures.push(other.picture);
           other.isSelectChange = true;
           other.isLoadCompleted = true;
-          other.loading.dismiss();
         });
       };
       image.src = src;
@@ -170,12 +183,21 @@ export class AddBlogPage {
       'title': this.blog.title,
       'selectedUsers': this.blog.selectedUsers,
       'content': content
-    }
+    };
     let previewModal = Modal.create(PreviewBlogPage, { 'previewBlog': previewBlog });
     this.nav.present(previewModal);
   }
 
   saveBlog() {
+    this.translate.get(['app.profile.message.loading.avatarLoading']).subscribe(message => {
+      let content = message['app.profile.message.loading.avatarLoading'];
+      this.loading = Loading.create({
+        spinner: 'ios',
+        content: content
+      });
+      this.nav.present(this.loading);
+    });
+    this.isDisabled = true;
     let content = this.getRealContent();
     let saveBlog: any = {
       'title': this.blog.title,
@@ -187,6 +209,8 @@ export class AddBlogPage {
     // this.saveBlog.selectedUsers.push();
     this.blogService.insertCommunity(saveBlog).then(data => {
       if (data === 'true') {
+        this.sendData.isRefreshFlag = true;
+        this.loading.dismiss();
         this.nav.pop();
       }
     });
@@ -213,20 +237,24 @@ export class AddBlogPage {
     }
   }
 
+  deletePicture(picture) {
+    let index = this.pictures.indexOf(picture, 0);
+    if (index > -1) {
+      this.pictures.splice(index, 1);
+    }
+  }
+
   ionViewWillEnter(): void {
     if (this.sendDataToSelectReadLimitTypePage.isSelected) {
       this.readLimit = this.sendDataToSelectReadLimitTypePage.readLimit;
       if (this.readLimit.readLimitType === 'selectUsers') {
         this.blog.allMemberFlag = 'FALSE';
-
-        this.readLimit.readLimitTypeName = '指定';
+        this.readLimit.readLimitTypeName = this.selectUsersType;
+        this.blog.selectedUsers = this.sendDataToSelectReadLimitTypePage.selectedUsers;
       } else {
         this.blog.allMemberFlag = 'TRUE';
-        this.readLimit.readLimitTypeName = '全員';
+        this.readLimit.readLimitTypeName = this.allUsersType;
       }
-    } else {
-      this.blog.allMemberFlag = 'TRUE';
-      this.readLimit.readLimitTypeName = '全員';
     }
   }
 }
@@ -235,28 +263,34 @@ export class AddBlogPage {
   template: `
   <ion-header>
     <ion-navbar>
-      <ion-title>{{"閲覧権限" | translate}}</ion-title>
+      <ion-title>{{"app.common.setReadLimitType" | translate}}</ion-title>
       <ion-buttons end>
-          <button (click)="setReadLimitType()">{{ "選択" | translate }}</button>
+          <button (click)="setReadLimitType()">{{ "app.action.select" | translate }}</button>
       </ion-buttons>
       </ion-navbar>
   </ion-header>
   <ion-content>
       <ion-list radio-group [(ngModel)]="readLimitType" (ionChange)="changeReadLimit()">
         <ion-item>
-          <ion-label>全員</ion-label>
+          <ion-label>{{"app.common.readLimitType.allUsers" | translate}}</ion-label>
           <ion-radio value="allUsers"></ion-radio>
         </ion-item>
         <button ion-item>
-          <ion-label>指定<span [hidden]="!selectedUsers || selectedUsers.length<0">{{selectedUsers.length}}人</span></ion-label>
+          <ion-label>{{"app.common.readLimitType.selectUsers" | translate}}<span [hidden]="readLimitType=='allUsers' || !selectedUsers">{{selectedUsers.length}}{{"app.common.person" | translate}}</span></ion-label>
           <ion-radio value="selectUsers">
           </ion-radio>
         </button>
       </ion-list>
+      <ion-item [hidden]="readLimitType=='allUsers'">
+        <h2>{{"app.common.selectedUserNames" | translate}}</h2>
+        <div class="selected-users" *ngFor="let selectedUser of selectedUsers">{{selectedUser.userName}}</div>
+      </ion-item>
     </ion-content>
   `
 })
 class SelectReadLimitTypePage {
+  private allUsersType: string;
+  private selectUsersType: string;
   private readLimitType: string = '';
   private readLimitTypeName: string = '';
   private selectedUsers: any;
@@ -271,8 +305,8 @@ class SelectReadLimitTypePage {
 
   setReadLimitType(): void {
     if (this.readLimitType === 'selectUsers' && (!this.selectedUsers || this.selectedUsers.length <= 0)) {
-      this.translate.get('指定の場合').subscribe(message => {
-          this.util.presentModal(message);
+      this.translate.get('app.common.message.noUserSelected').subscribe(message => {
+        this.util.presentModal(message);
       });
     } else {
       this.sendDataToSelectReadLimitTypePage.isSelected = true;
@@ -286,11 +320,11 @@ class SelectReadLimitTypePage {
   changeReadLimit(): void {
     if (!this.isFirstTimeEnterPage) {
       if (this.readLimitType === 'selectUsers') {
-        this.readLimitTypeName = '指定';
+        this.readLimitTypeName = this.selectUsersType;
         this.chooseUsers();
       } else {
-        this.readLimitTypeName = '全員';
-        this.selectedUsers = '';
+        this.readLimitTypeName = this.allUsersType;
+        this.selectedUsers = this.sendDataToSelectReadLimitTypePage.selectedUsers;
       }
     }
     this.isFirstTimeEnterPage = false;
@@ -303,8 +337,11 @@ class SelectReadLimitTypePage {
     });
     this.nav.present(participantsModal);
   }
+
+  getMultiMessageOfReadLimitTypeName() {
+    this.translate.get(['app.common.readLimitType.allUsers', 'app.common.readLimitType.selectUsers']).subscribe(message => {
+      this.allUsersType = message['app.common.readLimitType.allUsers'];
+      this.selectUsersType = message['app.common.readLimitType.selectUsers'];
+    });
+  }
 }
-
-
-
-

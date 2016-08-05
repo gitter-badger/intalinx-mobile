@@ -19,12 +19,6 @@
             <h2 class="title">{{title}}</h2>
         </ion-item>
         <div class="contents" padding [innerHTML]="content"></div>
-        <div class="file-download" flex-sm="100" *ngFor="let attachFile of attachFiles">
-            <im-download file-name="{{attachFile.attachmentName}}" file-size="{{attachFile.attachmentSize}}" soap-message="{{attachFile.soapMessage}}"
-                search-path="<tuple><old><downloadAttachmentByAttachmentId><downloadAttachmentByAttachmentId>">
-                <a>{{attachFile.attachmentName}}</a>
-            </im-download>
-        </div>
     </div>
 </ion-content>
 <button class="blog-detail scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">

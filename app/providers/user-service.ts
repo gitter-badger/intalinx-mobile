@@ -147,4 +147,10 @@ export class UserService {
             resolve(this.shareService.user.userID);
         });
     }
+
+    getUser(): Promise<any> {
+        return new Promise(resolve => {
+            resolve(this.shareService.user);
+        });
+    }
 }

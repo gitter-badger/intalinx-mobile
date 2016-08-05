@@ -27,7 +27,21 @@
             "yes": "是的", 
             "no": "不是", 
             "done": "选择",
-            "search": "搜索"
+            "search": "搜索",
+            "preview": "预览"
+        },
+        "common": {
+            "readLimitType": {
+                "allUsers" : "所有人",
+                "selectUsers" : "部分用户"
+            },
+            "selectedUserNames": "可见用户",
+            "uploadPicture": "上传图片",
+            "setReadLimitType": "设置阅读权限",
+            "person": "人",
+            "message": {
+                "noUserSelected": "请选择至少一个用户！"
+            }
         },
         "date": {
             "YYYYMM": "{{YYYY}}年{{MM}}月",
@@ -86,6 +100,9 @@
         "blog": {
             "title": "博客",
             "detail": "博客内容",
+            "add": "新建博客",
+            "blogTitile": "博客标题",
+            "blogContent": "博客内容",
             "newBlog": "新",
             "newReturn": "新",
             "comment": {

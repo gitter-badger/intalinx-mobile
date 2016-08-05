@@ -25,19 +25,30 @@ import {AddBlogPage} from '../add-blog/add-blog';
 export class BlogIndexPage {
     @ViewChild(Content) pageContent: Content;
 
+    private sendData: any;
     private isLoadCompleted: boolean;
     private communityListForTop: any[] = [];
 
     private isScrollToTopButtonVisible: boolean;
 
     constructor(private nav: NavController, private blogService: BlogService, private share: ShareService) {
-
+        this.sendData = {
+            'isRefreshFlag': false
+        };
         this.getCommunityListForTop();
         this.getBlogNewInformationCount();
     }
 
     ionViewLoaded(): void {
         this.isLoadCompleted = false;
+    }
+
+    ionViewWillEnter(): void {
+        if (this.sendData.isRefreshFlag) {
+            this.getCommunityListForTop();
+            this.getBlogNewInformationCount();
+        }
+        this.sendData.isRefreshFlag = false;
     }
 
     openDetail(community): void {
@@ -101,8 +112,8 @@ export class BlogIndexPage {
             }
         };
     }
-    
+
     addBlog(): void {
-        this.nav.push(AddBlogPage, { 'sendData': 'this.sendData' });
+        this.nav.push(AddBlogPage, { 'sendData': this.sendData });
     }
 }
