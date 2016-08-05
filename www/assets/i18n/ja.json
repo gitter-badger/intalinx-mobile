@@ -27,7 +27,21 @@
             "yes": "はい", 
             "no": "いいえ", 
             "done": "選択", 
-            "search": "検索"
+            "search": "検索",
+            "preview": "プレビュー"
+        },
+        "common": {
+            "readLimitType": {
+                "allUsers" : "全員",
+                "selectUsers" : "指定"
+            },
+            "selectedUserNames": "指定対象",
+            "uploadPicture": "画像アップロード",
+            "setReadLimitType": "公開設定",
+            "person": "人",
+            "message": {
+                "noUserSelected": "１人以上を指定してください。"
+            }
         },
         "date": {
             "YYYYMM": "{{YYYY}}年{{MM}}月",
@@ -86,6 +100,9 @@
         "blog": {
             "title": "ブログ",
             "detail": "ブログ詳細",
+            "add": "ブログ追加",
+            "blogTitile": "タイトル",
+            "blogContent": "内容",
             "newBlog": "新",
             "newReturn": "新",
             "comment": {

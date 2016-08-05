@@ -5,79 +5,97 @@ import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticL
 /// <reference path="./exif-ts/exif.d.ts" />
 import * as EXIF from 'exif-ts/exif';
 
-
 // Utils.
 import {Util} from '../../../utils/util';
 
+// Services.
+import {BlogService} from '../../../providers/blog-service';
+import {UserService} from '../../../providers/user-service';
+
 // Pages.
 import {BlogIndexPage} from '../index/index';
-import {DownloadDirective} from '../../../shared/components/download/download';
+import {PreviewBlogPage} from '../preview-blog/preview-blog';
+import {SelectParticipantsPage} from '../../schedule/select-participants/select-participants';
 
-/*
-  Generated class for the AddBlogPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   templateUrl: 'build/pages/blog/add-blog/add-blog.html',
+  providers: [
+    BlogService,
+    UserService,
+    Util,
+    SelectParticipantsPage
+  ]
 })
 export class AddBlogPage {
   private loading: any;
+  private sendData: any;
+  private isDisabled: boolean = true;
   private pictureName: string = 'picture';
   private pictureCount: number = 0;
+  private allUsersType: string;
+  private selectUsersType: string;
   private blog: any = {
-    'titile': '',
-    'replyList': '',
+    'title': '',
+    'selectedUsers': [],
+    'allMemberFlag': 'TRUE',
     'content': ''
   }
   private picture: any;
   private pictures: any = new Array();
+  private readLimit = {
+    'readLimitType': 'allUsers',
+    'readLimitTypeName': ''
+  };
+  private sendDataToSelectReadLimitTypePage: any = {
+    'isSelected': false,
+    'readLimit': '',
+    'selectedUsers': []
+  };
 
   constructor(private nav: NavController,
     private params: NavParams,
     private view: ViewController,
     private zone: NgZone,
     private platform: Platform,
+    private blogService: BlogService,
     private translate: TranslateService,
+    private userService: UserService,
     private util: Util) {
 
+    this.sendData = this.params.get('sendData');
+    this.userService.getUser().then(data => {
+      this.sendDataToSelectReadLimitTypePage.selectedUsers.push(data);
+    });
+
+    this.getMultiMessageOfReadLimitTypeName();
   }
 
-  changeTitle() {
-
+  getMultiMessageOfReadLimitTypeName() {
+    this.translate.get(['app.common.readLimitType.allUsers', 'app.common.readLimitType.selectUsers']).subscribe(message => {
+      this.allUsersType = message['app.common.readLimitType.allUsers'];
+      this.selectUsersType = message['app.common.readLimitType.selectUsers'];
+      this.readLimit.readLimitTypeName = this.allUsersType;
+    });
   }
-
-  changeContent() {
-
-  }
-
 
   addPicture() {
-    this.translate.get(['app.profile.message.loading.avatarLoading']).subscribe(message => {
-      let content = message['app.profile.message.loading.avatarLoading'];
-      this.loading = Loading.create({
-        spinner: 'ios',
-        content: content
-      });
-      this.nav.present(this.loading);
-    });
     let a = event.bubbles;
     // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
     let fileInput = (<any>event.currentTarget);
-    let file = fileInput.files[0];
-
-    if (file) {
-      if (file.type && !/image/i.test(file.type)) {
-        return false;
+    for (let i = 0; i < fileInput.files.length; i++) {
+      let file = fileInput.files[i];
+      if (file) {
+        if (file.type && !/image/i.test(file.type)) {
+          return false;
+        }
+        let reader = new FileReader();
+        let wholeThis = this;
+        reader.onload = function (e) {
+          // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
+          wholeThis.render(file, (<any>e.target).result, wholeThis);
+        };
+        reader.readAsDataURL(file);
       }
-      let reader = new FileReader();
-      let wholeThis = this;
-      reader.onload = function (e) {
-        // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
-        wholeThis.render(file, (<any>e.target).result, wholeThis);
-      };
-      reader.readAsDataURL(file);
     }
   }
 
@@ -151,15 +169,179 @@ export class AddBlogPage {
             'pictureSrc': base64
           };
           other.pictures.push(other.picture);
-          other.blog.content = other.blog.content + '{{' + other.picture.pictureName + '}}';
-          // other.blog.content = other.blog.content + '<img src=' + base64 + ' />';
           other.isSelectChange = true;
           other.isLoadCompleted = true;
-          other.loading.dismiss();
         });
       };
       image.src = src;
     });
   }
 
+  previewBlog() {
+    let content = this.getRealContent();
+    let previewBlog: any = {
+      'title': this.blog.title,
+      'selectedUsers': this.blog.selectedUsers,
+      'content': content
+    };
+    let previewModal = Modal.create(PreviewBlogPage, { 'previewBlog': previewBlog });
+    this.nav.present(previewModal);
+  }
+
+  saveBlog() {
+    this.translate.get(['app.profile.message.loading.avatarLoading']).subscribe(message => {
+      let content = message['app.profile.message.loading.avatarLoading'];
+      this.loading = Loading.create({
+        spinner: 'ios',
+        content: content
+      });
+      this.nav.present(this.loading);
+    });
+    this.isDisabled = true;
+    let content = this.getRealContent();
+    let saveBlog: any = {
+      'title': this.blog.title,
+      'selectedUsers': this.blog.selectedUsers,
+      'content': content,
+      'allMemberFlag': this.blog.allMemberFlag,
+      'actionFlag': 'PUBLISH'
+    };
+    // this.saveBlog.selectedUsers.push();
+    this.blogService.insertCommunity(saveBlog).then(data => {
+      if (data === 'true') {
+        this.sendData.isRefreshFlag = true;
+        this.loading.dismiss();
+        this.nav.pop();
+      }
+    });
+  }
+
+  getRealContent(): string {
+    let content = this.util.replaceHtmlTagCharacter(this.blog.content);
+    for (let i = 0; i < this.pictures.length; i++) {
+      content = content + '<img src=' + this.pictures[i].pictureSrc + ' />';
+    }
+    return content;
+  }
+
+  selectReadLimitType() {
+    this.sendDataToSelectReadLimitTypePage.readLimit = this.readLimit;
+    this.nav.push(SelectReadLimitTypePage, { 'sendDataToSelectReadLimitTypePage': this.sendDataToSelectReadLimitTypePage });
+  }
+
+  changeBlog() {
+    if (this.blog.title && this.blog.content && (this.blog.allMemberFlag === 'TRUE' || this.sendDataToSelectReadLimitTypePage.selectedUsers.length > 0)) {
+      this.isDisabled = null;
+    } else {
+      this.isDisabled = true;
+    }
+  }
+
+  deletePicture(picture) {
+    let index = this.pictures.indexOf(picture, 0);
+    if (index > -1) {
+      this.pictures.splice(index, 1);
+    }
+  }
+
+  ionViewWillEnter(): void {
+    if (this.sendDataToSelectReadLimitTypePage.isSelected) {
+      this.readLimit = this.sendDataToSelectReadLimitTypePage.readLimit;
+      if (this.readLimit.readLimitType === 'selectUsers') {
+        this.blog.allMemberFlag = 'FALSE';
+        this.readLimit.readLimitTypeName = this.selectUsersType;
+        this.blog.selectedUsers = this.sendDataToSelectReadLimitTypePage.selectedUsers;
+      } else {
+        this.blog.allMemberFlag = 'TRUE';
+        this.readLimit.readLimitTypeName = this.allUsersType;
+      }
+    }
+  }
+}
+
+@Component({
+  template: `
+  <ion-header>
+    <ion-navbar>
+      <ion-title>{{"app.common.setReadLimitType" | translate}}</ion-title>
+      <ion-buttons end>
+          <button (click)="setReadLimitType()">{{ "app.action.select" | translate }}</button>
+      </ion-buttons>
+      </ion-navbar>
+  </ion-header>
+  <ion-content>
+      <ion-list radio-group [(ngModel)]="readLimitType" (ionChange)="changeReadLimit()">
+        <ion-item>
+          <ion-label>{{"app.common.readLimitType.allUsers" | translate}}</ion-label>
+          <ion-radio value="allUsers"></ion-radio>
+        </ion-item>
+        <button ion-item>
+          <ion-label>{{"app.common.readLimitType.selectUsers" | translate}}<span [hidden]="readLimitType=='allUsers' || !selectedUsers">{{selectedUsers.length}}{{"app.common.person" | translate}}</span></ion-label>
+          <ion-radio value="selectUsers">
+          </ion-radio>
+        </button>
+      </ion-list>
+      <ion-item [hidden]="readLimitType=='allUsers'">
+        <h2>{{"app.common.selectedUserNames" | translate}}</h2>
+        <div class="selected-users" *ngFor="let selectedUser of selectedUsers">{{selectedUser.userName}}</div>
+      </ion-item>
+    </ion-content>
+  `
+})
+class SelectReadLimitTypePage {
+  private allUsersType: string;
+  private selectUsersType: string;
+  private readLimitType: string = '';
+  private readLimitTypeName: string = '';
+  private selectedUsers: any = [];
+  private sendDataToSelectReadLimitTypePage: any;
+  private isFirstTimeEnterPage: boolean = true;
+  constructor(private nav: NavController, private params: NavParams, private translate: TranslateService, private util: Util) {
+    this.sendDataToSelectReadLimitTypePage = this.params.get('sendDataToSelectReadLimitTypePage');
+    this.readLimitType = this.sendDataToSelectReadLimitTypePage.readLimit.readLimitType;
+    this.selectedUsers = this.sendDataToSelectReadLimitTypePage.selectedUsers;
+    this.sendDataToSelectReadLimitTypePage.isSelected = false;
+  }
+
+  setReadLimitType(): void {
+    if (this.readLimitType === 'selectUsers' && (!this.selectedUsers || this.selectedUsers.length <= 0)) {
+      this.translate.get('app.common.message.noUserSelected').subscribe(message => {
+        this.util.presentModal(message);
+      });
+    } else {
+      this.sendDataToSelectReadLimitTypePage.isSelected = true;
+      this.sendDataToSelectReadLimitTypePage.readLimit.readLimitType = this.readLimitType;
+      this.sendDataToSelectReadLimitTypePage.readLimit.readLimitTypeName = this.readLimitTypeName;
+      this.sendDataToSelectReadLimitTypePage.selectedUsers = this.selectedUsers;
+      this.nav.pop();
+    }
+  }
+
+  changeReadLimit(): void {
+    if (!this.isFirstTimeEnterPage) {
+      if (this.readLimitType === 'selectUsers') {
+        this.readLimitTypeName = this.selectUsersType;
+        this.chooseUsers();
+      } else {
+        this.readLimitTypeName = this.allUsersType;
+        this.selectedUsers = this.sendDataToSelectReadLimitTypePage.selectedUsers;
+      }
+    }
+    this.isFirstTimeEnterPage = false;
+  }
+
+  chooseUsers(): void {
+    let participantsModal = Modal.create(SelectParticipantsPage, { 'participants': this.selectedUsers });
+    participantsModal.onDismiss(data => {
+      this.selectedUsers = data;
+    });
+    this.nav.present(participantsModal);
+  }
+
+  getMultiMessageOfReadLimitTypeName() {
+    this.translate.get(['app.common.readLimitType.allUsers', 'app.common.readLimitType.selectUsers']).subscribe(message => {
+      this.allUsersType = message['app.common.readLimitType.allUsers'];
+      this.selectUsersType = message['app.common.readLimitType.selectUsers'];
+    });
+  }
 }
