@@ -293,7 +293,7 @@ class SelectReadLimitTypePage {
   private selectUsersType: string;
   private readLimitType: string = '';
   private readLimitTypeName: string = '';
-  private selectedUsers: any;
+  private selectedUsers: any = [];
   private sendDataToSelectReadLimitTypePage: any;
   private isFirstTimeEnterPage: boolean = true;
   constructor(private nav: NavController, private params: NavParams, private translate: TranslateService, private util: Util) {
