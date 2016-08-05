@@ -236,52 +236,37 @@ export class BlogService {
         });
     }
 
-    // insertCommunity(community: any): any {
-    //     return new Promise(resolve => {
-    //         this.util.getRequestXml('./assets/requests/blog/insert_community.xml').then((req: string) => {
-    //             let objRequest = this.util.parseXml(req);
-    //             this.util.setNodeText(objRequest, './/*[local-name()=\'communityID\']', community.communityID);
-    //             this.util.setNodeText(objRequest, ".//*[local-name()='title']", community.title);
-    //             this.util.setNodeText(objRequest, ".//*[local-name()='content']", community.content);
-    //             this.util.setNodeText(objRequest, ".//*[local-name()='allMemberFlag']", community.allMemberFlag);
-    //             this.util.setNodeText(objRequest, ".//*[local-name()='status']", community.actionFlag);
+    insertCommunity(community: any): any {
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/blog/insert_community.xml').then((req: string) => {
+                let objRequest = this.util.parseXml(req);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'title\']', community.title);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'content\']', community.content);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'allMemberFlag\']', community.allMemberFlag);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'status\']', community.actionFlag);
+                var communityInput = this.util.selectXMLNode(objRequest, './/*[local-name()=\'CommunityInput\']');
+                let communityNamespace = 'http://schemas.intasect.co.jp/generictools/service/Community';
+                let replyList = community.selectedUsers;
+                if (community.allMemberFlag === 'FALSE') {
+                    for (var i = 0; i < replyList.length; i++) {
+                        var replyListNode = this.util.createXMLElement(communityInput, communityNamespace, 'replyList');
+                        var userID = this.util.createXMLElement(replyListNode, communityNamespace, 'userID');
+                        var userName = this.util.createXMLElement(replyListNode, communityNamespace, 'userName');
+                        this.util.setTextContent(userID, replyList[i].userID);
+                        this.util.appendXMLNode(userID, replyListNode);
+                        this.util.setTextContent(userName, replyList[i].userName);
+                        this.util.appendXMLNode(userName, replyListNode);
+                        this.util.appendXMLNode(replyListNode, communityInput);
+                    }
+                }
                 
-    //             var nCommunityInput = this.util.selectXMLNode(objRequest, ".//*[local-name()='CommunityInput']");
-                
-    //             if (community.allMemberFlag == "FALSE") {
-    //                 for (var i = 0; i < community.replyList.length; i++) {
-    //                     var userListNode = this.util.cloneXMLDocument(replyListXML.XMLDocument);
-    //                     var oUserListNode = this.util.selectXMLNode(userListNode, ".//*[local-name()='replyList']");
-    //                     this.util.setNodeText(oUserListNode, ".//*[local-name()='userID']", gaEmployees[i]);
-    //                     this.util.setNodeText(oUserListNode, ".//*[local-name()='userName']", gaEmpName[i]);
-    //                     this.util.appendXMLNode(oUserListNode, nCommunityInput);
-    //                 }
-    //             }
-                
-    //             var fileSpanList = $('span[id^=spanFile]');
-    //             for(var j = 1; j <= fileSpanList.length; j++){
-    //                 if($(fileSpanList[j - 1]).css('display') != 'none') {
-    //                     var attachmentListNode = this.util.cloneXMLDocument(attachFileListXML.XMLDocument);
-    //                     var oAttachmentNode = this.util.selectXMLNode(attachmentListNode, ".//*[local-name()='attachFileList']");
-    //                     //var dataId = $(fileSpanList[j - 1]).attr('dataid');
-    //                     var dataId = $(fileSpanList[j - 1]).find("input[type='text']").attr('dataid');
-    //                     if (dataId) {
-    //                         this.util.setTextContent(this.util.selectXMLNode(oAttachmentNode, ".//*[local-name()='attachmentID']"), dataId);
-    //                     } else {
-    //                 this.util.setTextContent(this.util.selectXMLNode(oAttachmentNode, ".//*[local-name()='attachmentName']"), "Upload:FileName" + j);
-    //                 this.util.setTextContent(this.util.selectXMLNode(oAttachmentNode, ".//*[local-name()='attachmentContent']"), "Upload:FileContent" + j);
-    //                     }
-    //                     this.util.appendXMLNode(oAttachmentNode, nCommunityInput );
-    //                 }
-    //             }
-                
-    //             req = this.util.xml2string(objRequest);
+                req = this.util.xml2string(objRequest);
 
-    //             this.util.callCordysWebservice(req).then(data => {
-    //                 resolve('true');
-    //             });
-    //         });
-    //     });
-    // }
+                this.util.callCordysWebservice(req).then(data => {
+                    resolve('true');
+                });
+            });
+        });
+    }
 
 }

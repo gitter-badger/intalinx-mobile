@@ -5,46 +5,56 @@ import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticL
 /// <reference path="./exif-ts/exif.d.ts" />
 import * as EXIF from 'exif-ts/exif';
 
-
 // Utils.
 import {Util} from '../../../utils/util';
+
+// Services.
+import {BlogService} from '../../../providers/blog-service';
 
 // Pages.
 import {BlogIndexPage} from '../index/index';
 import {PreviewBlogPage} from '../preview-blog/preview-blog';
+import {SelectParticipantsPage} from '../../schedule/select-participants/select-participants';
 
 @Component({
   templateUrl: 'build/pages/blog/add-blog/add-blog.html',
+  providers: [
+    BlogService,
+    Util,
+    SelectParticipantsPage
+  ]
 })
 export class AddBlogPage {
   private loading: any;
+  private isDisabled: boolean = true;
   private pictureName: string = 'picture';
   private pictureCount: number = 0;
   private blog: any = {
     'title': '',
-    'replyList': '',
+    'selectedUsers': '',
     'content': ''
   }
   private picture: any;
   private pictures: any = new Array();
+  private readLimit = {
+    'readLimitType': 'allUsers',
+    'readLimitTypeName': ''
+  };
+  private sendDataToSelectReadLimitTypePage: any = {
+    'isSelected': false,
+    'readLimit': '',
+    'selectedUsers': ''
+  };
 
   constructor(private nav: NavController,
     private params: NavParams,
     private view: ViewController,
     private zone: NgZone,
     private platform: Platform,
+    private blogService: BlogService,
     private translate: TranslateService,
     private util: Util) {
   }
-
-  changeTitle() {
-
-  }
-
-  changeContent(event) {
-
-  }
-
 
   addPicture() {
     this.translate.get(['app.profile.message.loading.avatarLoading']).subscribe(message => {
@@ -58,19 +68,20 @@ export class AddBlogPage {
     let a = event.bubbles;
     // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
     let fileInput = (<any>event.currentTarget);
-    let file = fileInput.files[0];
-
-    if (file) {
-      if (file.type && !/image/i.test(file.type)) {
-        return false;
+    for (let i = 0; i < fileInput.files.length; i++) {
+      let file = fileInput.files[i];
+      if (file) {
+        if (file.type && !/image/i.test(file.type)) {
+          return false;
+        }
+        let reader = new FileReader();
+        let wholeThis = this;
+        reader.onload = function (e) {
+          // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
+          wholeThis.render(file, (<any>e.target).result, wholeThis);
+        };
+        reader.readAsDataURL(file);
       }
-      let reader = new FileReader();
-      let wholeThis = this;
-      reader.onload = function (e) {
-        // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
-        wholeThis.render(file, (<any>e.target).result, wholeThis);
-      };
-      reader.readAsDataURL(file);
     }
   }
 
@@ -144,8 +155,6 @@ export class AddBlogPage {
             'pictureSrc': base64
           };
           other.pictures.push(other.picture);
-          other.blog.content = other.blog.content + '{{' + other.picture.pictureName + '}}';
-          // other.blog.content = other.blog.content + '<img src=' + base64 + ' />';
           other.isSelectChange = true;
           other.isLoadCompleted = true;
           other.loading.dismiss();
@@ -159,31 +168,143 @@ export class AddBlogPage {
     let content = this.getRealContent();
     let previewBlog: any = {
       'title': this.blog.title,
-      'replyList': this.blog.replyList,
+      'selectedUsers': this.blog.selectedUsers,
       'content': content
     }
     let previewModal = Modal.create(PreviewBlogPage, { 'previewBlog': previewBlog });
     this.nav.present(previewModal);
   }
 
-  getHoverPosition(event) {
-    // debugger
-  }
-
   saveBlog() {
     let content = this.getRealContent();
-
+    let saveBlog: any = {
+      'title': this.blog.title,
+      'selectedUsers': this.blog.selectedUsers,
+      'content': content,
+      'allMemberFlag': this.blog.allMemberFlag,
+      'actionFlag': 'PUBLISH'
+    };
+    // this.saveBlog.selectedUsers.push();
+    this.blogService.insertCommunity(saveBlog).then(data => {
+      if (data === 'true') {
+        this.nav.pop();
+      }
+    });
   }
 
   getRealContent(): string {
-    let content = this.blog.content;
+    let content = this.util.replaceHtmlTagCharacter(this.blog.content);
     for (let i = 0; i < this.pictures.length; i++) {
-      let pictureName = '{{' + this.pictures[i].pictureName + '}}';
-      if (content.indexOf(pictureName)) {
-        content = content.replace(pictureName, '<img src=' + this.pictures[i].pictureSrc + ' />');
-      }
+      content = content + '<img src=' + this.pictures[i].pictureSrc + ' />';
     }
     return content;
   }
 
+  selectReadLimitType() {
+    this.sendDataToSelectReadLimitTypePage.readLimit = this.readLimit;
+    this.nav.push(SelectReadLimitTypePage, { 'sendDataToSelectReadLimitTypePage': this.sendDataToSelectReadLimitTypePage });
+  }
+
+  changeBlog() {
+    if (this.blog.title && this.blog.content && (this.blog.allMemberFlag === 'TRUE' || this.sendDataToSelectReadLimitTypePage.selectedUsers.length > 0)) {
+      this.isDisabled = null;
+    } else {
+      this.isDisabled = true;
+    }
+  }
+
+  ionViewWillEnter(): void {
+    if (this.sendDataToSelectReadLimitTypePage.isSelected) {
+      this.readLimit = this.sendDataToSelectReadLimitTypePage.readLimit;
+      if (this.readLimit.readLimitType === 'selectUsers') {
+        this.blog.allMemberFlag = 'FALSE';
+
+        this.readLimit.readLimitTypeName = '指定';
+      } else {
+        this.blog.allMemberFlag = 'TRUE';
+        this.readLimit.readLimitTypeName = '全員';
+      }
+    } else {
+      this.blog.allMemberFlag = 'TRUE';
+      this.readLimit.readLimitTypeName = '全員';
+    }
+  }
 }
+
+@Component({
+  template: `
+  <ion-header>
+    <ion-navbar>
+      <ion-title>{{"閲覧権限" | translate}}</ion-title>
+      <ion-buttons end>
+          <button (click)="setReadLimitType()">{{ "選択" | translate }}</button>
+      </ion-buttons>
+      </ion-navbar>
+  </ion-header>
+  <ion-content>
+      <ion-list radio-group [(ngModel)]="readLimitType" (ionChange)="changeReadLimit()">
+        <ion-item>
+          <ion-label>全員</ion-label>
+          <ion-radio value="allUsers"></ion-radio>
+        </ion-item>
+        <button ion-item>
+          <ion-label>指定<span [hidden]="!selectedUsers || selectedUsers.length<0">{{selectedUsers.length}}人</span></ion-label>
+          <ion-radio value="selectUsers">
+          </ion-radio>
+        </button>
+      </ion-list>
+    </ion-content>
+  `
+})
+class SelectReadLimitTypePage {
+  private readLimitType: string = '';
+  private readLimitTypeName: string = '';
+  private selectedUsers: any;
+  private sendDataToSelectReadLimitTypePage: any;
+  private isFirstTimeEnterPage: boolean = true;
+  constructor(private nav: NavController, private params: NavParams, private translate: TranslateService, private util: Util) {
+    this.sendDataToSelectReadLimitTypePage = this.params.get('sendDataToSelectReadLimitTypePage');
+    this.readLimitType = this.sendDataToSelectReadLimitTypePage.readLimit.readLimitType;
+    this.selectedUsers = this.sendDataToSelectReadLimitTypePage.selectedUsers;
+    this.sendDataToSelectReadLimitTypePage.isSelected = false;
+  }
+
+  setReadLimitType(): void {
+    if (this.readLimitType === 'selectUsers' && (!this.selectedUsers || this.selectedUsers.length <= 0)) {
+      this.translate.get('指定の場合').subscribe(message => {
+          this.util.presentModal(message);
+      });
+    } else {
+      this.sendDataToSelectReadLimitTypePage.isSelected = true;
+      this.sendDataToSelectReadLimitTypePage.readLimit.readLimitType = this.readLimitType;
+      this.sendDataToSelectReadLimitTypePage.readLimit.readLimitTypeName = this.readLimitTypeName;
+      this.sendDataToSelectReadLimitTypePage.selectedUsers = this.selectedUsers;
+      this.nav.pop();
+    }
+  }
+
+  changeReadLimit(): void {
+    if (!this.isFirstTimeEnterPage) {
+      if (this.readLimitType === 'selectUsers') {
+        this.readLimitTypeName = '指定';
+        this.chooseUsers();
+      } else {
+        this.readLimitTypeName = '全員';
+        this.selectedUsers = '';
+      }
+    }
+    this.isFirstTimeEnterPage = false;
+  }
+
+  chooseUsers(): void {
+    let participantsModal = Modal.create(SelectParticipantsPage, { 'participants': this.selectedUsers });
+    participantsModal.onDismiss(data => {
+      this.selectedUsers = data;
+    });
+    this.nav.present(participantsModal);
+  }
+}
+
+
+
+

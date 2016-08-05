@@ -8,21 +8,6 @@
           <content />
           <allMemberFlag />
           <status />
-          <replyList>
-            <replyID />
-            <communityID />
-            <userID />
-            <userName />
-            <status />
-          </replyList>
-          <attachFileList>
-            <communityID />
-            <attachmentPath />
-            <attachmentContent />
-            <attachmentName />
-            <attachmentSize />
-            <attachmentID />
-          </attachFileList>
         </CommunityInput>
       </communityParam>
     </InsertCommunity>
