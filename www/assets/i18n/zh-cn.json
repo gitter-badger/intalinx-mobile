@@ -151,7 +151,11 @@
             "colon": "：",
             "selectDevices": "选择设施",
             "selectParticipants": "选择参加者",
-            "selectUser": "选择他人",
+            "selectUser": {
+                "title": "选择他人",
+                "group": "分组",
+                "organization": "部门"
+            },
             "devices": {
                 "title": "设施一览"
             },

@@ -151,7 +151,11 @@
             "colon": "：",
             "selectDevices": "Select Devices",
             "selectParticipants": "Select Participants",
-            "selectUser": "Select User",
+            "selectUser": {
+                "title": "Select User",
+                "group": "Group",
+                "organization": "Organization"
+            },
             "devices": {
                 "title": "Devices"
             },

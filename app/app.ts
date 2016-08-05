@@ -112,6 +112,7 @@ class IntaLinx {
     initializeUser(that) {
         return function (user) {
             that.user = user;
+            that.share.user = user;
         };
     }
 

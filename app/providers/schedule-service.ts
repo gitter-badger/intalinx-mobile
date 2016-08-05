@@ -645,4 +645,43 @@ export class ScheduleService {
             });
         });
     }
+
+    getGroupListForCurrentUser(): any {
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/schedule/get_group_list_for_current_user.xml').then((req: string) => {
+                let objRequest = this.util.parseXml(req);
+
+                req = this.util.xml2string(objRequest);
+
+                this.util.callCordysWebservice(req).then((data: string) => {
+                    let objResponse = this.util.parseXml(data);
+                    let groupNodeList = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'GroupOutput\']');
+                    let groupList = new Array();
+                    let userList = new Array();
+                    for (let i = 0; i < groupNodeList.length; i++) {
+                        let groupID = this.util.getNodeText(groupNodeList[i], './/*[local-name()=\'groupID\']');
+                        let groupName = this.util.getNodeText(groupNodeList[i], './/*[local-name()=\'groupName\']');
+                        
+                        userList = [];
+                        let groupUserList = this.util.selectXMLNodes(groupNodeList[i], './/*[local-name()=\'GroupUserList\']');
+                        for (let j = 0; j < groupUserList.length; j++) {
+                            let userInfoWS = this.util.xml2json(groupUserList[j]).GroupUserList;
+                            let userInfo = {
+                                'userID': userInfoWS.groupUserID,
+                                'userName': userInfoWS.groupUserName
+                            };
+                            userList.push(userInfo);
+                        }
+                        let groupWithUsers = {
+                            'groupID': groupID,
+                            'groupName': groupName,
+                            'users': userList
+                        };
+                        groupList.push(groupWithUsers);
+                    }
+                    resolve(groupList);
+                });
+            });
+        });
+    }
 }
