@@ -13,6 +13,7 @@ import {Util} from '../../../utils/util';
 // Services.
 import {ScheduleService} from '../../../providers/schedule-service';
 import {UserService} from '../../../providers/user-service';
+import {ShareService} from '../../../providers/share-service';
 
 // Pages.
 import {SelectParticipantsPage} from '../select-participants/select-participants';
@@ -62,6 +63,7 @@ export class EditEventPage {
     private maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
     private minuteValues: string = this.appConfig.get('DATETIME_MINUTE_VALUES');
     private isSavedOrChecked: boolean = false;
+    private hadChangedEndTime: boolean = false;
 
     constructor(private nav: NavController,
         private params: NavParams,
@@ -69,7 +71,8 @@ export class EditEventPage {
         private scheduleService: ScheduleService,
         private util: Util,
         private appConfig: AppConfig,
-        private userService: UserService) {
+        private userService: UserService, 
+        private share: ShareService) {
         this.initTranslation();
         this.initData();
     }
@@ -256,14 +259,12 @@ export class EditEventPage {
         // 開始時間をただいまの時間に設定し、日付は選択した日付に設定します。
         let now = moment().year(sYear).month(sMonth).date(sDay).format();
         this.setEndTimeAnHourLater(now);
-        // Used to page performance and sava data.
-        this.userService.getUserDetails().then(user => {
-            this.participants = [
-                {
-                    'userID': user.userID,
-                    'userName': user.userName
-                }];
-        });
+        // Set the logined user as default participant.
+        this.participants = [
+            {
+                'userID': this.share.user.userID,
+                'userName': this.share.user.userName
+            }];
 
         // Just used to page performance.
         this.devices = [];
@@ -320,6 +321,35 @@ export class EditEventPage {
             endMinutes = endMinutes - 60;
             this.endTime = moment(time).minute(endMinutes).add(1, 'hours').format();
         }
+    }
+    changeStartDate() {
+        if (!this.hadChangedEndTime) {
+            this.setEndTimeAnHourLater(this.startTime);
+        }
+    }
+
+    changeStartTime() {
+        if (!this.hadChangedEndTime) {
+            this.setEndTimeAnHourLater(this.startTime);
+        }
+    }
+
+    changeRepeatStartTime() {
+        if (!this.hadChangedEndTime) {
+            this.setEndTimeAnHourLater(this.startTime);
+        }
+    }
+
+    changeEndDate() {
+        this.hadChangedEndTime = true;
+    }
+
+    changeEndTime() {
+        this.hadChangedEndTime = true;
+    }
+
+    changeRepeatEndTime() {
+        this.hadChangedEndTime = true;
     }
 
     changeIsAllDay(isAllDay) {

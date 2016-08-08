@@ -224,7 +224,7 @@ export class BlogService {
         });
     }
 
-    getRequestOfDownloadAttachmentByAttachmentId(attachmentID: string): any{
+    getRequestOfDownloadAttachmentByAttachmentId(attachmentID: string): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/blog/download_attachment_by_attachment_id.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -235,4 +235,38 @@ export class BlogService {
             });
         });
     }
+
+    insertCommunity(community: any): any {
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/blog/insert_community.xml').then((req: string) => {
+                let objRequest = this.util.parseXml(req);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'title\']', community.title);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'content\']', community.content);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'allMemberFlag\']', community.allMemberFlag);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'status\']', community.actionFlag);
+                var communityInput = this.util.selectXMLNode(objRequest, './/*[local-name()=\'CommunityInput\']');
+                let communityNamespace = 'http://schemas.intasect.co.jp/generictools/service/Community';
+                let replyList = community.selectedUsers;
+                if (community.allMemberFlag === 'FALSE') {
+                    for (var i = 0; i < replyList.length; i++) {
+                        var replyListNode = this.util.createXMLElement(communityInput, communityNamespace, 'replyList');
+                        var userID = this.util.createXMLElement(replyListNode, communityNamespace, 'userID');
+                        var userName = this.util.createXMLElement(replyListNode, communityNamespace, 'userName');
+                        this.util.setTextContent(userID, replyList[i].userID);
+                        this.util.appendXMLNode(userID, replyListNode);
+                        this.util.setTextContent(userName, replyList[i].userName);
+                        this.util.appendXMLNode(userName, replyListNode);
+                        this.util.appendXMLNode(replyListNode, communityInput);
+                    }
+                }
+                
+                req = this.util.xml2string(objRequest);
+
+                this.util.callCordysWebservice(req).then(data => {
+                    resolve('true');
+                });
+            });
+        });
+    }
+
 }

@@ -6,13 +6,19 @@ import {NavController} from 'ionic-angular';
 // Config.
 import {AppConfig} from '../appconfig';
 
+import {ShareService} from './share-service';
+
 // Utils.
 import {Util} from '../utils/util';
 
 @Injectable()
 export class UserService {
 
-    constructor(private translate: TranslateService, private nav: NavController, private appConfig: AppConfig, private util: Util) {
+    constructor(private translate: TranslateService, 
+        private nav: NavController, 
+        private appConfig: AppConfig, 
+        private util: Util,
+        private shareService: ShareService) {
     }
 
     loggedOn(): Promise<boolean> {
@@ -138,9 +144,13 @@ export class UserService {
     
     getUserID(): Promise<any> {
         return new Promise(resolve => {
-            this.getUserDetails().then((user: any) => {
-                resolve(user.userID);
-            });
+            resolve(this.shareService.user.userID);
+        });
+    }
+
+    getUser(): Promise<any> {
+        return new Promise(resolve => {
+            resolve(this.shareService.user);
         });
     }
 }

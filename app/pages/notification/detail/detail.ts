@@ -17,7 +17,7 @@ import {ShareService} from '../../../providers/share-service';
     ]
 })
 
-export class DetailPage {
+export class NotificationDetailPage {
     @ViewChild(Content) pageContent: Content;
 
     private notification: any;

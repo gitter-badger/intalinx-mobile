@@ -27,7 +27,21 @@
             "yes": "yes", 
             "no": "no", 
             "done": "select",
-            "search": "search"
+            "search": "search",
+            "preview": "preview"
+        },
+        "common": {
+            "readLimitType": {
+                "allUsers" : "all users",
+                "selectUsers" : "select users"
+            },
+            "selectedUserNames": "Selected Users",
+            "uploadPicture": "upload picture",
+            "setReadLimitType": "set read limit",
+            "person": "person",
+            "message": {
+                "noUserSelected": "Please select one user at least."
+            }
         },
         "date": {
             "YYYYMM": "{{MM}}/{{YYYY}}",
@@ -86,6 +100,9 @@
         "blog": {
             "title": "Blog",
             "detail": "Detail Info",
+            "add": "ADD Blog",
+            "blogTitile": "Title",
+            "blogContent": "Content",
             "newBlog": "new",
             "newReturn": "new",
             "comment": {
@@ -151,7 +168,11 @@
             "colon": "：",
             "selectDevices": "Select Devices",
             "selectParticipants": "Select Participants",
-            "selectUser": "Select User",
+            "selectUser": {
+                "title": "Select User",
+                "group": "Group",
+                "organization": "Organization"
+            },
             "devices": {
                 "title": "Devices"
             },

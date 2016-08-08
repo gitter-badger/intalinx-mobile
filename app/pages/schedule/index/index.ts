@@ -98,9 +98,9 @@ export class ScheduleIndexPage {
         this.selectedDay = this.today;
 
         // let userID =this.app.user.userID;
-        this.userService.getUserDetails().then(user => {
-            this.myUserID = user.userID;
-            this.userID = user.userID;
+        this.userService.getUserID().then((userID: string) => {
+            this.myUserID = userID;
+            this.userID = userID;
             this.selectedOtherUserName = '';
             this.getLocalsFromSetting().then(local => {
                 this.showCalendar(firstDateWeek);
@@ -273,10 +273,10 @@ export class ScheduleIndexPage {
     }
 
     selectUser() {
-        let selectUserModal = Modal.create(SelectUserPage);
+        let selectUserModal = Modal.create(SelectUserPage, {'userID': this.myUserID});
         selectUserModal.onDismiss(data => {
             if (data) {
-                this.userID = data.userId;
+                this.userID = data.userID;
                 // hidden my user name
                 if (data.userId === this.myUserID) {
                     this.selectedOtherUserName = '';

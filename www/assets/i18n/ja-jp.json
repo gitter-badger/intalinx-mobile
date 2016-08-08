@@ -27,7 +27,21 @@
             "yes": "はい", 
             "no": "いいえ", 
             "done": "選択",
-            "search": "検索"
+            "search": "検索",
+            "preview": "プレビュー"
+        },
+        "common": {
+            "readLimitType": {
+                "allUsers" : "全員",
+                "selectUsers" : "指定"
+            },
+            "selectedUserNames": "指定対象",
+            "uploadPicture": "画像アップロード",
+            "setReadLimitType": "公開設定",
+            "person": "人",
+            "message": {
+                "noUserSelected": "１人以上を指定してください。"
+            }
         },
         "date": {
             "YYYYMM": "{{YYYY}}年{{MM}}月",
@@ -151,7 +165,11 @@
             "colon": "：",
             "selectDevices": "施設を選択",
             "selectParticipants": "参加者を選択",
-            "selectUser": "検索対象を選択",
+            "selectUser": {
+                "title": "検索対象を選択",
+                "group": "グループ",
+                "organization": "組織"
+            },
             "devices": {
                 "title": "施設一覧" 
             },

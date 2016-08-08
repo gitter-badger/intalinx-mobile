@@ -10,7 +10,7 @@ import {NotificationService} from '../../../providers/notification-service';
 import {ShareService} from '../../../providers/share-service';
 
 // Pages.
-import {DetailPage} from '../detail/detail';
+import {NotificationDetailPage} from '../detail/detail';
 
 @Component({
     templateUrl: 'build/pages/notification/index/index.html',
@@ -39,7 +39,7 @@ export class NotificationIndexPage {
     }
 
     openDetail(notification): void {
-        this.nav.push(DetailPage, {
+        this.nav.push(NotificationDetailPage, {
             'notification': notification
         });
     }
