@@ -168,7 +168,7 @@
                 "invisible": "[Invisible]"
             },
             "time": "Time",
-            "colon": "Ａ�,
+            "colon": "：",
             "selectDevices": "Select Devices",
             "selectParticipants": "Select Participants",
             "selectUser": {

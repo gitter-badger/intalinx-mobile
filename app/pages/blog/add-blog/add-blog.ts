@@ -1,6 +1,6 @@
 // Third party library.
 import {ViewChild, Component, NgZone, ElementRef} from '@angular/core';
-import {NavController, Loading, Modal, Toast, NavParams, ViewController, Platform} from 'ionic-angular';
+import {NavController, Loading, Modal, NavParams} from 'ionic-angular';
 import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
 /// <reference path="./exif-ts/exif.d.ts" />
 import * as EXIF from 'exif-ts/exif';
@@ -54,9 +54,7 @@ export class AddBlogPage {
 
   constructor(private nav: NavController,
     private params: NavParams,
-    private view: ViewController,
     private zone: NgZone,
-    private platform: Platform,
     private blogService: BlogService,
     private translate: TranslateService,
     private userService: UserService,

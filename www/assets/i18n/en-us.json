@@ -167,8 +167,8 @@
                 "private": "Private",
                 "invisible": "[Invisible]"
             },
-            "time": "Time",
-            "colon": "Ａ�,
+           "time": "Time",
+            "colon": "：",
             "selectDevices": "Select Devices",
             "selectParticipants": "Select Participants",
             "selectUser": {
