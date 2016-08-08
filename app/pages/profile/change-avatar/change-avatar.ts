@@ -1,6 +1,6 @@
 // Third party library.
 import {ViewChild, Component, NgZone, ElementRef} from '@angular/core';
-import {NavController, Loading, Modal, Toast, NavParams, ViewController, Platform} from 'ionic-angular';
+import {NavController, NavParams, ViewController, LoadingController, ToastController, Platform} from 'ionic-angular';
 import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
 /// <reference path="./exif-ts/exif.d.ts" />
 import * as EXIF from 'exif-ts/exif';
@@ -36,6 +36,8 @@ export class ChangeAvatarPage {
     constructor(private nav: NavController,
         private params: NavParams,
         private view: ViewController,
+        private loadingCtrl: LoadingController,
+        private toastCtrl: ToastController,
         private zone: NgZone,
         private platform: Platform,
         private userService: UserService,
@@ -63,11 +65,11 @@ export class ChangeAvatarPage {
         this.isLoadCompleted = false;
         this.translate.get(['app.profile.message.loading.avatarLoading']).subscribe(message => {
             let content = message['app.profile.message.loading.avatarLoading'];
-            this.loading = Loading.create({
+            this.loading = this.loadingCtrl.create({
                 spinner: 'ios',
                 content: content
             });
-            this.nav.present(this.loading);
+            this.loading.present();
         });
         let a = event.bubbles;
         // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
@@ -166,11 +168,11 @@ export class ChangeAvatarPage {
         this.isLoadCompleted = false;
         this.translate.get(['app.profile.message.loading.avatarUploading']).subscribe(message => {
             let content = message['app.profile.message.loading.avatarUploading'];
-            let upLoading = Loading.create({
+            let upLoading = this.loadingCtrl.create({
                 spinner: 'ios',
                 content: content
             });
-            this.nav.present(upLoading).then(() => {
+            upLoading.present().then(() => {
                 this.userService.changeUserAvatar(this.userAvatar).then(user => {
                     if (user) {
                         this.isSelectChange = false;
@@ -179,12 +181,12 @@ export class ChangeAvatarPage {
                         this.translate.get(['app.profile.message.success.changeAvatar']).subscribe(message => {
                             let content = message['app.profile.message.success.changeAvatar'];
                             setTimeout(() => {
-                                let toast = Toast.create({
+                                let toast = this.toastCtrl.create({
                                     message: content,
                                     duration: 3000,
                                     cssClass: 'middle'
                                 });
-                                this.nav.present(toast);
+                                toast.present();
                             }, 500);
                         });
                     }

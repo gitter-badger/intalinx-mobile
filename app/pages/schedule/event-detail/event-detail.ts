@@ -1,6 +1,6 @@
 // Third party library.
 import {Component} from '@angular/core';
-import {ActionSheet, NavController, NavParams} from 'ionic-angular';
+import {ActionSheetController, NavController, NavParams} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {GoogleAnalytics} from 'ionic-native';
 
@@ -68,6 +68,7 @@ export class EventDetailPage {
 
     constructor(private nav: NavController,
         private params: NavParams,
+        private actionSheetCtrl: ActionSheetController,
         private translate: TranslateService,
         private scheduleService: ScheduleService,
         private userService: UserService) {
@@ -211,7 +212,7 @@ export class EventDetailPage {
                 let deleteEventOfSelectedDay = message['app.schedule.deleteRepeatEvent.deleteEventOfSelectedDay'];
                 let deleteAllEvents = message['app.schedule.deleteRepeatEvent.deleteAllEvents'];
                 let cancelButton = message['app.action.cancel'];
-                let actionSheet = ActionSheet.create({
+                let actionSheet = this.actionSheetCtrl.create({
                     buttons: [
                         {
                             text: deleteEventOfSelectedDay,
@@ -233,7 +234,7 @@ export class EventDetailPage {
                         }
                     ]
                 });
-                this.nav.present(actionSheet);
+                actionSheet.present();
             });
     }
 
@@ -241,7 +242,7 @@ export class EventDetailPage {
         this.translate.get(['app.schedule.deleteEvent', 'app.action.cancel']).subscribe(message => {
             let deleteEvent = message['app.schedule.deleteEvent'];
             let cancelButton = message['app.action.cancel'];
-            let actionSheet = ActionSheet.create({
+            let actionSheet = this.actionSheetCtrl.create({
                 buttons: [
                     {
                         text: deleteEvent,
@@ -256,7 +257,7 @@ export class EventDetailPage {
                     }
                 ]
             });
-            this.nav.present(actionSheet);
+            actionSheet.present();
         });
     }
 
@@ -266,7 +267,7 @@ export class EventDetailPage {
                 this.sendDataToShowOrDeleteEvent.isRefreshFlag = true;
                 setTimeout(() => {
                     this.nav.pop();
-                    GoogleAnalytics.trackEvent("Schedule","delete","event");
+                    GoogleAnalytics.trackEvent('Schedule', 'delete', 'event');
                 }, 500);
             }
         });
@@ -291,7 +292,7 @@ export class EventDetailPage {
                 let selectAll = message['app.schedule.editEvent.selectAll'];
                 let selectSpecial = message['app.schedule.editEvent.selectSpecial'];
                 let cancelButton = message['app.action.cancel'];
-                let actionSheet = ActionSheet.create({
+                let actionSheet = this.actionSheetCtrl.create({
                     title: selectRepeatEventUpdateFlag,
                     buttons: [
                         {
@@ -319,7 +320,7 @@ export class EventDetailPage {
                         }
                     ]
                 });
-                this.nav.present(actionSheet);
+                actionSheet.present();
             });
     }
 

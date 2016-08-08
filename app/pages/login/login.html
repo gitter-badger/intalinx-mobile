@@ -9,15 +9,15 @@
     <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
         <ion-item>
             <ion-label floating>{{ "app.login.loginId" | translate }}</ion-label>
-            <ion-input type="text" name="user.loginID" [(ngModel)]="user.loginID" (ngModelChange)="changeUser($event)"></ion-input>
+            <ion-input type="text" name="user.loginID" [(ngModel)]="user.loginID" (ngModelChange)="changeUser($event)" [ngModelOptions]="{standalone: true}"></ion-input>
         </ion-item>
         <ion-item>
             <ion-label floating>{{ "app.login.password" | translate }}</ion-label>
-            <ion-input type="password" name="user.password" [(ngModel)]="user.password" (ngModelChange)="changeUser($event)"></ion-input>
+            <ion-input type="password" name="user.password" [(ngModel)]="user.password" (ngModelChange)="changeUser($event)" [ngModelOptions]="{standalone: true}"></ion-input>
         </ion-item>
         <ion-item no-lines class="auto-login">
             <ion-label>{{ "app.login.autoLogin" | translate }}</ion-label>
-            <ion-checkbox checked="false" name="user.autoLogin" [(ngModel)]="user.autoLogin" (ngModelChange)="changeUser($event)"></ion-checkbox>
+            <ion-checkbox checked="false" name="user.autoLogin" [(ngModel)]="user.autoLogin" (ngModelChange)="changeUser($event)" [ngModelOptions]="{standalone: true}"></ion-checkbox>
         </ion-item>
         <button disabled={{isDisabled}} full type="submit">{{ "app.login.login" | translate }}</button>
     </form>

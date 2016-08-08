@@ -4,7 +4,7 @@ import {disableDeprecatedForms, provideForms} from '@angular/forms';
 import {ionicBootstrap, Platform, Config, MenuController, NavController, Alert} from 'ionic-angular';
 import {HTTP_PROVIDERS, Http} from '@angular/http';
 import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
-import {StatusBar, GoogleAnalytics} from 'ionic-native';
+import {StatusBar, GoogleAnalytics, ScreenOrientation} from 'ionic-native';
 
 // Config.
 import {AppConfig} from './appconfig';
@@ -68,6 +68,11 @@ class IntaLinx {
             // Google Analytics
             if (typeof GoogleAnalytics !== undefined && this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')) {
                 GoogleAnalytics.startTrackerWithId(this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID'));
+            }
+            if (this.platform.is('tablet')) {
+                if (typeof ScreenOrientation !== undefined) {
+                    ScreenOrientation.lockOrientation('landscape');
+                }
             }
         }
 
@@ -138,23 +143,12 @@ class IntaLinx {
             'app.action.yes',
             'app.action.no']).subscribe(message => {
                 let content = message['app.message.warning.logout'];
-
-                let alert = Alert.create({
-                    title: message['app.message.warning.title'],
-                    subTitle: content,
-                    buttons: [{
-                        text: message['app.action.yes'],
-                        handler: () => {
-                            this.util.logout().then(() => {
-                                this.share.nav.setRoot(LoginPage);
-                            });
-                        }
-                    },
-                    {
-                        text: message['app.action.no']
-                    }]
-            });
-            this.nav.present(alert);
+                let okHandler = function() {
+                    this.util.logout().then(() => {
+                        this.share.nav.setRoot(LoginPage);
+                    });
+                };
+                let alert = this.util.presentConfirmModal(content, 'warning', okHandler);
         });
     }
 }
