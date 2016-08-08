@@ -1,6 +1,6 @@
 // Third party library.
 import {Component} from '@angular/core';
-import {NavController, Content, Alert, Modal, ViewController, NavParams} from 'ionic-angular';
+import {NavController, Content, AlertController, ModalController, ViewController, NavParams} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {GoogleAnalytics} from 'ionic-native';
 
@@ -67,6 +67,8 @@ export class EditEventPage {
 
     constructor(private nav: NavController,
         private params: NavParams,
+        private alertCtrl: AlertController,
+        private modalCtrl: ModalController,
         private translate: TranslateService,
         private scheduleService: ScheduleService,
         private util: Util,
@@ -371,18 +373,18 @@ export class EditEventPage {
                 'title': message,
                 'selectedUsers': this.participants
             };
-            let participantsModal = Modal.create(SelectUsersPage, { 'sendDataToSelectUsers': sendDataToSelectUsers });
-            participantsModal.onDismiss(data => {
+            let participantsModal = this.modalCtrl.create(SelectUsersPage, { 'sendDataToSelectUsers': sendDataToSelectUsers });
+            participantsModal.onDidDismiss(data => {
                 this.participants = data;
             });
-            this.nav.present(participantsModal);
+            participantsModal.present();
         });
     }
 
     // Calling the sub-page to select the devices.
     chooseDevices() {
-        let devicesModal = Modal.create(SelectDevicesPage, { 'devices': this.devices });
-        devicesModal.onDismiss(data => {
+        let devicesModal = this.modalCtrl.create(SelectDevicesPage, { 'devices': this.devices });
+        devicesModal.onDidDismiss(data => {
             this.devices = data;
             this.event.deviceID = '';
             for (let i = 0; i < data.length; i++) {
@@ -392,7 +394,7 @@ export class EditEventPage {
                 }
             }
         });
-        this.nav.present(devicesModal);
+        devicesModal.present();
     }
 
     ionViewWillLeave(): void {
@@ -419,7 +421,7 @@ export class EditEventPage {
                 this.actionNo = message['app.action.no'];
                 let content = message['app.schedule.editEvent.message.undoChanged'];
 
-                let alert = Alert.create({
+                let alert = this.alertCtrl.create({
                     title: this.warningTitle,
                     subTitle: content,
                     buttons: [{
@@ -435,7 +437,7 @@ export class EditEventPage {
                             text: this.actionNo
                         }]
                 });
-                this.nav.present(alert);
+                alert.present();
             });
     }
 
@@ -624,7 +626,7 @@ export class EditEventPage {
     }
 
     confirmRepeatWarn(title, content, yes, no, faultCode, type) {
-        let alert = Alert.create({
+        let alert = this.alertCtrl.create({
             'title': title,
             'subTitle': content,
             'buttons': [{
@@ -654,7 +656,7 @@ export class EditEventPage {
                     'text': no
                 }]
         });
-        this.nav.present(alert);
+        alert.present();
     }
 
     showError(errorMessage) {

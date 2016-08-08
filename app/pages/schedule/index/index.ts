@@ -1,6 +1,6 @@
 // Third party library.
 import {Component, ViewChild} from '@angular/core';
-import {NavController, NavParams, Content, Slides, Modal} from 'ionic-angular';
+import {NavController, NavParams, ModalController, Content, Slides, Modal} from 'ionic-angular';
 import {NgForm, NgClass} from '@angular/common';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import * as moment from 'moment';
@@ -75,7 +75,7 @@ export class ScheduleIndexPage {
     private eventsByDays: any = new Map(Array());
     private specialDaysByDays: any = new Map(Array());
 
-    constructor(private nav: NavController, private translate: TranslateService, private scheduleService: ScheduleService, private userService: UserService, private appConfig: AppConfig) {
+    constructor(private nav: NavController, private modalCtrl: ModalController, private translate: TranslateService, private scheduleService: ScheduleService, private userService: UserService, private appConfig: AppConfig) {
         this.calendarSlideOptions = {
             direction: 'vertical',
             initialSlide: this.cachedSlidesOnOneSide
@@ -273,8 +273,8 @@ export class ScheduleIndexPage {
     }
 
     selectUser() {
-        let selectUserModal = Modal.create(SelectUserPage, {'userID': this.myUserID});
-        selectUserModal.onDismiss(data => {
+        let selectUserModal = this.modalCtrl.create(SelectUserPage, {'userID': this.myUserID});
+        selectUserModal.onDidDismiss(data => {
             if (data) {
                 this.userID = data.userID;
                 // hidden my user name
@@ -286,7 +286,7 @@ export class ScheduleIndexPage {
                 this.showCalendar(moment(this.yearMonth));
             }
         });
-        this.nav.present(selectUserModal);
+        selectUserModal.present();
     }
 
     showToday() {

@@ -160,6 +160,10 @@ export class Util {
         return uuid;
     }
 
+    presentConfirmModal(content, level?: string, okHandler?, noHandler?) {
+        return this.alertUtil.presentConfirmModal(content, level, okHandler, noHandler);
+    }
+
     presentModal(content: string, level?: string) {
         return this.alertUtil.presentModal(content, level);
     }

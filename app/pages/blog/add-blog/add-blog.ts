@@ -1,6 +1,6 @@
 // Third party library.
 import {ViewChild, Component, NgZone, ElementRef} from '@angular/core';
-import {NavController, Loading, Modal, NavParams} from 'ionic-angular';
+import {NavController, ModalController, LoadingController, NavParams} from 'ionic-angular';
 import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
 /// <reference path="./exif-ts/exif.d.ts" />
 import * as EXIF from 'exif-ts/exif';
@@ -54,6 +54,8 @@ export class AddBlogPage {
 
   constructor(private nav: NavController,
     private params: NavParams,
+    private loadingCtrl: LoadingController,
+    private modalCtrl: ModalController,
     private zone: NgZone,
     private blogService: BlogService,
     private translate: TranslateService,
@@ -182,18 +184,18 @@ export class AddBlogPage {
       'selectedUsers': this.blog.selectedUsers,
       'content': content
     };
-    let previewModal = Modal.create(PreviewBlogPage, { 'previewBlog': previewBlog });
-    this.nav.present(previewModal);
+    let previewModal = this.modalCtrl.create(PreviewBlogPage, { 'previewBlog': previewBlog });
+    previewModal.present();
   }
 
   saveBlog() {
     this.translate.get(['app.profile.message.loading.avatarLoading']).subscribe(message => {
       let content = message['app.profile.message.loading.avatarLoading'];
-      this.loading = Loading.create({
+      this.loading = this.loadingCtrl.create({
         spinner: 'ios',
         content: content
       });
-      this.nav.present(this.loading);
+      this.loading.present();
     });
     this.isDisabled = true;
     let content = this.getRealContent();
@@ -294,7 +296,7 @@ class SelectReadLimitTypePage {
   private selectedUsers: any = [];
   private sendDataToSelectReadLimitTypePage: any;
   private isFirstTimeEnterPage: boolean = true;
-  constructor(private nav: NavController, private params: NavParams, private translate: TranslateService, private util: Util) {
+  constructor(private nav: NavController, private params: NavParams, private modalCtrl: ModalController, private translate: TranslateService, private util: Util) {
     this.sendDataToSelectReadLimitTypePage = this.params.get('sendDataToSelectReadLimitTypePage');
     this.readLimitType = this.sendDataToSelectReadLimitTypePage.readLimit.readLimitType;
     this.selectedUsers = this.sendDataToSelectReadLimitTypePage.selectedUsers;
@@ -334,11 +336,11 @@ class SelectReadLimitTypePage {
         'title': message,
         'selectedUsers': this.selectedUsers
       };
-      let selectUsersModal = Modal.create(SelectUsersPage, { 'sendDataToSelectUsers': sendDataToSelectUsers });
-      selectUsersModal.onDismiss(data => {
+      let selectUsersModal = this.modalCtrl.create(SelectUsersPage, { 'sendDataToSelectUsers': sendDataToSelectUsers });
+      selectUsersModal.onDidDismiss(data => {
         this.selectedUsers = data;
       });
-      this.nav.present(selectUsersModal);
+      selectUsersModal.present();
     });
   }
 
