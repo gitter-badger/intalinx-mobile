@@ -211,7 +211,9 @@ export class AddBlogPage {
       if (data === 'true') {
         this.sendData.isRefreshFlag = true;
         this.loading.dismiss();
-        this.nav.pop();
+        setTimeout(() => {
+            this.nav.pop();
+        }, 500);
       }
     });
   }
