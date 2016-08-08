@@ -37,6 +37,7 @@
                 "selectUsers" : "部分用户"
             },
             "selectedUserNames": "可见用户",
+            "selectReaders": "选择可阅读的人",
             "uploadPicture": "上传图片",
             "setReadLimitType": "设置阅读权限",
             "person": "人",
@@ -101,8 +102,8 @@
         "blog": {
             "title": "博客",
             "detail": "博客内容",
+            "addBlog": "写博客",
             "add": "新建博客",
-            "AddBlog": "发博客",
             "blogTitile": "标题",
             "blogContent": "内容",
             "newBlog": "新",

@@ -37,6 +37,7 @@
                 "selectUsers" : "select users"
             },
             "selectedUserNames": "Selected Users",
+            "selectReaders": "Select Readers",
             "uploadPicture": "upload picture",
             "setReadLimitType": "set read limit",
             "person": "person",
@@ -101,10 +102,10 @@
         "blog": {
             "title": "Blog",
             "detail": "Detail Info",
-            "add": "Add Blog",
             "addBlog": "Add",
-            "blogTitile": "Title",
-            "blogContent": "Content",
+            "add": "Add Blog",
+            "blogTitile": "title",
+            "blogContent": "content",
             "newBlog": "new",
             "newReturn": "new",
             "comment": {
@@ -167,7 +168,7 @@
                 "invisible": "[Invisible]"
             },
             "time": "Time",
-            "colon": "：",
+            "colon": "Ａ�,
             "selectDevices": "Select Devices",
             "selectParticipants": "Select Participants",
             "selectUser": {

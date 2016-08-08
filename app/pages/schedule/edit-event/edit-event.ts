@@ -71,7 +71,7 @@ export class EditEventPage {
         private scheduleService: ScheduleService,
         private util: Util,
         private appConfig: AppConfig,
-        private userService: UserService, 
+        private userService: UserService,
         private share: ShareService) {
         this.initTranslation();
         this.initData();
@@ -233,7 +233,7 @@ export class EditEventPage {
             this.event.oldStartTime = moment(this.startTime).unix();
             this.event.oldEndTime = moment(this.endTime).unix();
         }
-        
+
         // set rule-index to 1, when the repeat rule is everyday.
         if (this.selectedRepeatRules.index === 0) {
             this.selectedRepeatRules.index = 1;
@@ -366,15 +366,17 @@ export class EditEventPage {
 
     // Calling the sub-page to select the paticipants.
     chooseParticipants() {
-        let sendDataToSelectUsers = {
-            'title': '参加者を選択',
-            'selectedUsers': this.participants
+        this.translate.get('app.schedule.selectParticipants').subscribe(message => {
+            let sendDataToSelectUsers = {
+                'title': message,
+                'selectedUsers': this.participants
             };
-        let participantsModal = Modal.create(SelectUsersPage, { 'sendDataToSelectUsers': sendDataToSelectUsers });
-        participantsModal.onDismiss(data => {
-            this.participants = data;
+            let participantsModal = Modal.create(SelectUsersPage, { 'sendDataToSelectUsers': sendDataToSelectUsers });
+            participantsModal.onDismiss(data => {
+                this.participants = data;
+            });
+            this.nav.present(participantsModal);
         });
-        this.nav.present(participantsModal);
     }
 
     // Calling the sub-page to select the devices.
@@ -429,12 +431,12 @@ export class EditEventPage {
                             }, 500);
                         }
                     },
-                    {
-                        text: this.actionNo
-                    }]
+                        {
+                            text: this.actionNo
+                        }]
+                });
+                this.nav.present(alert);
             });
-            this.nav.present(alert);
-        });
     }
 
     saveEvent() {
@@ -563,7 +565,7 @@ export class EditEventPage {
                 this.isSavedOrChecked = true;
                 this.sendDataToAddEvent.isRefreshFlag = true;
                 this.nav.pop();
-                GoogleAnalytics.trackEvent("Schedule","add","event");
+                GoogleAnalytics.trackEvent('Schedule', 'add', 'event');
             } else {
                 this.showError(data);
             }
@@ -585,7 +587,7 @@ export class EditEventPage {
                 this.isSavedOrChecked = true;
                 this.sendDataToEditEvent.isRefreshFlag = true;
                 this.nav.pop();
-                GoogleAnalytics.trackEvent("Schedule","update","event");
+                GoogleAnalytics.trackEvent('Schedule', 'update', 'event');
             } else {
                 this.showError(data);
             }
@@ -648,9 +650,9 @@ export class EditEventPage {
                     }
                 }
             },
-            {
-                'text': no
-            }]
+                {
+                    'text': no
+                }]
         });
         this.nav.present(alert);
     }

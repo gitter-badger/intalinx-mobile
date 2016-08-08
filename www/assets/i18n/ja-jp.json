@@ -37,6 +37,7 @@
                 "selectUsers" : "指定"
             },
             "selectedUserNames": "指定対象",
+            "selectReaders": "閲覧対象を選択",
             "uploadPicture": "画像アップロード",
             "setReadLimitType": "公開設定",
             "person": "人",
@@ -101,8 +102,8 @@
         "blog": {
             "title": "ブログ",
             "detail": "ブログ詳細",
-            "add": "ブログ追加",
             "addBlog": "追加",
+            "add": "ブログ追加",
             "blogTitile": "タイトル",
             "blogContent": "内容",
             "newBlog": "新",

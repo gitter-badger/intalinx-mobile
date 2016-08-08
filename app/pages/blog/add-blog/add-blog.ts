@@ -331,7 +331,7 @@ class SelectReadLimitTypePage {
   }
 
   chooseUsers(): void {
-    this.translate.get('app.common.readLimitType.selectUsers').subscribe(message => {
+    this.translate.get('app.common.selectReaders').subscribe(message => {
       let sendDataToSelectUsers = {
         'title': message,
         'selectedUsers': this.selectedUsers
