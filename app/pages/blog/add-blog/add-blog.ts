@@ -15,7 +15,7 @@ import {UserService} from '../../../providers/user-service';
 // Pages.
 import {BlogIndexPage} from '../index/index';
 import {PreviewBlogPage} from '../preview-blog/preview-blog';
-import {SelectParticipantsPage} from '../../schedule/select-participants/select-participants';
+import {SelectUsersPage} from '../../common/select-users/select-users';
 
 @Component({
   templateUrl: 'build/pages/blog/add-blog/add-blog.html',
@@ -23,7 +23,7 @@ import {SelectParticipantsPage} from '../../schedule/select-participants/select-
     BlogService,
     UserService,
     Util,
-    SelectParticipantsPage
+    SelectUsersPage
   ]
 })
 export class AddBlogPage {
@@ -331,11 +331,17 @@ class SelectReadLimitTypePage {
   }
 
   chooseUsers(): void {
-    let participantsModal = Modal.create(SelectParticipantsPage, { 'participants': this.selectedUsers });
-    participantsModal.onDismiss(data => {
-      this.selectedUsers = data;
+    this.translate.get('app.common.readLimitType.selectUsers').subscribe(message => {
+      let sendDataToSelectUsers = {
+        'title': message,
+        'selectedUsers': this.selectedUsers
+      };
+      let selectUsersModal = Modal.create(SelectUsersPage, { 'sendDataToSelectUsers': sendDataToSelectUsers });
+      selectUsersModal.onDismiss(data => {
+        this.selectedUsers = data;
+      });
+      this.nav.present(selectUsersModal);
     });
-    this.nav.present(participantsModal);
   }
 
   getMultiMessageOfReadLimitTypeName() {

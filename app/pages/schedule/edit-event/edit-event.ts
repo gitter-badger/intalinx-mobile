@@ -16,7 +16,7 @@ import {UserService} from '../../../providers/user-service';
 import {ShareService} from '../../../providers/share-service';
 
 // Pages.
-import {SelectParticipantsPage} from '../select-participants/select-participants';
+import {SelectUsersPage} from '../../common/select-users/select-users';
 import {SelectDevicesPage} from '../select-devices/select-devices';
 
 import * as moment from 'moment';
@@ -26,7 +26,7 @@ import * as moment from 'moment';
     providers: [ScheduleService,
         UserService,
         Util,
-        SelectParticipantsPage,
+        SelectUsersPage,
         SelectDevicesPage]
 })
 
@@ -366,7 +366,11 @@ export class EditEventPage {
 
     // Calling the sub-page to select the paticipants.
     chooseParticipants() {
-        let participantsModal = Modal.create(SelectParticipantsPage, { 'participants': this.participants });
+        let sendDataToSelectUsers = {
+            'title': '参加者を選択',
+            'selectedUsers': this.participants
+            };
+        let participantsModal = Modal.create(SelectUsersPage, { 'sendDataToSelectUsers': sendDataToSelectUsers });
         participantsModal.onDismiss(data => {
             this.participants = data;
         });
