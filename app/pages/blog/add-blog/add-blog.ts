@@ -39,7 +39,7 @@ export class AddBlogPage {
     'selectedUsers': [],
     'allMemberFlag': 'TRUE',
     'content': ''
-  }
+  };
   private picture: any;
   private pictures: any = new Array();
   private readLimit = {
@@ -265,7 +265,7 @@ export class AddBlogPage {
     <ion-navbar>
       <ion-title>{{"app.common.setReadLimitType" | translate}}</ion-title>
       <ion-buttons end>
-          <button (click)="setReadLimitType()">{{ "app.action.select" | translate }}</button>
+          <button (click)="setReadLimitType()">{{ "app.action.finish" | translate }}</button>
       </ion-buttons>
       </ion-navbar>
   </ion-header>

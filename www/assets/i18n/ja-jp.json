@@ -28,7 +28,8 @@
             "no": "いいえ", 
             "done": "選択",
             "search": "検索",
-            "preview": "プレビュー"
+            "preview": "プレビュー",
+            "finish": "完了"
         },
         "common": {
             "readLimitType": {
@@ -100,6 +101,10 @@
         "blog": {
             "title": "ブログ",
             "detail": "ブログ詳細",
+            "add": "ブログ追加",
+            "addBlog": "追加",
+            "blogTitile": "タイトル",
+            "blogContent": "内容",
             "newBlog": "新",
             "newReturn": "新",
             "comment": {

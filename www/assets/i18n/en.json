@@ -28,7 +28,8 @@
             "no": "no", 
             "done": "select",
             "search": "search",
-            "preview": "preview"
+            "preview": "preview",
+            "finish": "finish"
         },
         "common": {
             "readLimitType": {
@@ -100,7 +101,8 @@
         "blog": {
             "title": "Blog",
             "detail": "Detail Info",
-            "add": "ADD Blog",
+            "add": "Add Blog",
+            "addBlog": "Add",
             "blogTitile": "Title",
             "blogContent": "Content",
             "newBlog": "new",
