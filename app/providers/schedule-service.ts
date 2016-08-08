@@ -259,8 +259,9 @@ export class ScheduleService {
                             let endHourMinute = moment(ouputEndTime, 'X').format('HH:mm');
                             let isAllDay = eventOutput.isAllDay;
                             let currentDay = currentDate.format('YYYY/MM/D');
-                            let currentDayStartTime = currentDate.unix() + moment().utcOffset() * 60;
-                            let currentDayEndTime = (currentDate.add(1, 'days').subtract(1, 'seconds')).unix() + moment().utcOffset() * 60;
+                            let currentDayStartTime = currentDate.unix();
+                            let currentDayEndTime = (currentDate.add(1, 'days').subtract(1, 'seconds')).unix();
+
                             if (currentDayStartTime >= Number(ouputStartTime) && currentDayEndTime <= Number(ouputEndTime)) {
                                 isAllDay = 'true';
                             } else if (currentDayStartTime < Number(ouputStartTime) && currentDayEndTime < Number(ouputEndTime)) {
