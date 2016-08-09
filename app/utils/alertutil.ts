@@ -12,9 +12,8 @@ export class AlertUtil {
     }
 
     presentConfirmModal(content, level = 'error', okHandler?, noHandler?): void {
-        this.translate.get(['app.message.' + level + '.title', 'app.action.ok']).subscribe(message => {
+        this.translate.get(['app.message.' + level + '.title', 'app.action.yes', 'app.action.no']).subscribe(message => {
             let title = message['app.message.' + level + '.title'];
-            let ok = message['app.action.ok'];
 
             let alert = this.alertCtrl.create({
                 title: title,

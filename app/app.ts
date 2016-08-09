@@ -143,12 +143,14 @@ class IntaLinx {
             'app.action.yes',
             'app.action.no']).subscribe(message => {
                 let content = message['app.message.warning.logout'];
-                let okHandler = function() {
-                    this.util.logout().then(() => {
-                        this.share.nav.setRoot(LoginPage);
-                    });
+                let okHandler = function(that) {
+                    return function() {
+                        that.util.logout().then(() => {
+                            that.share.nav.setRoot(LoginPage);
+                        });
+                    };
                 };
-                let alert = this.util.presentConfirmModal(content, 'warning', okHandler);
+                let alert = this.util.presentConfirmModal(content, 'warning', okHandler(this));
         });
     }
 }
