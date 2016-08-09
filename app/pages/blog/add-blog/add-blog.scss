@@ -1,4 +1,4 @@
-.add-Blog-footer {
+.add-Blog-toolbar {
     .upload-input {
         opacity:0; 
         position: absolute;
@@ -6,11 +6,9 @@
         width: 134px;
         height: 32px;
     }
-    .button-left {
-        float: left;
-    }
-    .button-right {
-        float: right;
+    .toolbar-content {
+        display: flex;
+        justify-content: space-between;
     }
 }
 .add-blog {

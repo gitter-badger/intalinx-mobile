@@ -17,10 +17,10 @@
         height: 32px;
         bottom: 0;
     }
-    .button-left {
-        float: left;
-    }
-    .button-right {
-        float: right;
+}
+.change-avatar-toolbar {
+    .toolbar-content {
+        display: flex;
+        justify-content: space-between;
     }
 }
