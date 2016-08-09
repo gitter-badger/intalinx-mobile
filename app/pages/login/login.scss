@@ -1,17 +1,19 @@
-.login-navbar {
-    .toolbar-background {
-        border: 0px;
-        background-color: #FFFFFF;
+.login-header {
+    &::after {
+        background-image: initial;
     }
-    .logo {
-        padding-left: 2rem;
-        cursor: pointer;
+    .login-navbar {
+        .toolbar-background {
+            border: 0px;
+            background-color: #FFFFFF;
+        }
+        .logo {
+            padding-left: 2rem;
+            cursor: pointer;
+        }
     }
 }
 .login {
-    .item-input.ng-valid.input-has-value::after {
-        border-bottom-color: $primary-color; 
-    }
     .remember-loginID {
         height: 73px;
     }
