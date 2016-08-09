@@ -15,7 +15,7 @@ import {UserService} from '../../../providers/user-service';
 // Pages.
 import {BlogIndexPage} from '../index/index';
 import {PreviewBlogPage} from '../preview-blog/preview-blog';
-import {SelectUsersPage} from '../../common/select-users/select-users';
+import {SelectUsersPage} from '../../../shared/components/select-users/select-users';
 
 @Component({
   templateUrl: 'build/pages/blog/add-blog/add-blog.html',

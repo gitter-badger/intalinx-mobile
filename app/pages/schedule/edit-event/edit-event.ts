@@ -16,7 +16,7 @@ import {UserService} from '../../../providers/user-service';
 import {ShareService} from '../../../providers/share-service';
 
 // Pages.
-import {SelectUsersPage} from '../../common/select-users/select-users';
+import {SelectUsersPage} from '../../../shared/components/select-users/select-users';
 import {SelectDevicesPage} from '../select-devices/select-devices';
 
 import * as moment from 'moment';
@@ -572,6 +572,7 @@ export class EditEventPage {
                 this.showError(data);
             }
         }, err => {
+            debugger
             let errMsg = err.faultstring;
             let faultCode = err.faultcode;
             if ((faultCode.indexOf('WARN002') > -1) || (faultCode.indexOf('WARN001') > -1)) {
