@@ -55,10 +55,6 @@ export class EditEventPage {
     private repeatStartTime: any;
     private repeatEndTime: any;
     private devices: any;
-    private warningTitle: string;
-    private actionOk: string;
-    private actionYes: string;
-    private actionNo: string;
     private minDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MIN');
     private maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
     private minuteValues: string = this.appConfig.get('DATETIME_MINUTE_VALUES');
@@ -397,7 +393,7 @@ export class EditEventPage {
         devicesModal.present();
     }
 
-    ionViewWillLeave(): void {
+    ionViewWillLeave() {
         let isAnyChange = false;
         for (let key in this.initEvent) {
             if (this.initEvent[key] !== this.event[key]) {
@@ -411,38 +407,20 @@ export class EditEventPage {
     }
 
     confirmSaveWarn() {
-        this.translate.get([
-            'app.message.warning.title',
-            'app.schedule.editEvent.message.undoChanged',
-            'app.action.yes',
-            'app.action.no']).subscribe(message => {
-                this.warningTitle = message['app.message.warning.title'];
-                this.actionYes = message['app.action.yes'];
-                this.actionNo = message['app.action.no'];
-                let content = message['app.schedule.editEvent.message.undoChanged'];
-
-                let alert = this.alertCtrl.create({
-                    title: this.warningTitle,
-                    subTitle: content,
-                    buttons: [{
-                        text: this.actionYes,
-                        handler: () => {
-                            setTimeout(() => {
-                                this.isSavedOrChecked = true;
-                                this.nav.pop();
-                            }, 500);
-                        }
-                    },
-                        {
-                            text: this.actionNo
-                        }]
-                });
-                alert.present();
-            });
+        this.translate.get('app.schedule.editEvent.message.undoChanged').subscribe(message => {
+            let content = message;
+            let that = this;
+            let okHandler = function () {
+                setTimeout(() => {
+                    that.isSavedOrChecked = true;
+                    that.nav.pop();
+                }, 500);
+            };
+            this.util.presentConfirmModal(content, 'warning', okHandler);
+        });
     }
 
     saveEvent() {
-        this.getTransInfoForDisplayAlert();
         this.createSaveData().then(completed => {
             if (completed) {
                 let isOk = this.checkBeforeSave();
@@ -455,17 +433,6 @@ export class EditEventPage {
                 }
             }
         });
-    }
-
-    getTransInfoForDisplayAlert() {
-        this.translate.get([
-            'app.message.warning.title',
-            'app.action.yes',
-            'app.action.no']).subscribe(message => {
-                this.warningTitle = message['app.message.warning.title'];
-                this.actionYes = message['app.action.yes'];
-                this.actionNo = message['app.action.no'];
-            });
     }
 
     createSaveData() {
@@ -516,12 +483,10 @@ export class EditEventPage {
         return true;
     }
 
-
     checkTitle() {
         if (!this.event.title && this.util.deleteEmSpaceEnSpaceNewLineInCharacter(this.event.title) === '') {
-            this.translate.get(['app.schedule.editEvent.message.eventTitleNecessary']).subscribe(message => {
-                let errMsg = message['app.schedule.editEvent.message.eventTitleNecessary'];
-
+            this.translate.get('app.schedule.editEvent.message.eventTitleNecessary').subscribe(message => {
+                let errMsg = message;
                 this.showError(errMsg);
             });
             return false;
@@ -534,8 +499,8 @@ export class EditEventPage {
             let repeatStartTime = moment(this.startTime).format('HHmm');
             let repeatEndTime = moment(this.endTime).format('HHmm');
             if (repeatStartTime >= repeatEndTime) {
-                this.translate.get(['app.schedule.editEvent.message.repeatEndTimeShouldBeLater']).subscribe(message => {
-                    let errMsg = message['app.schedule.editEvent.message.repeatEndTimeShouldBeLater'];
+                this.translate.get('app.schedule.editEvent.message.repeatEndTimeShouldBeLater').subscribe(message => {
+                    let errMsg = message;
 
                     this.showError(errMsg);
                 });
@@ -543,8 +508,8 @@ export class EditEventPage {
             }
         }
         if (this.event.startTime >= this.event.endTime) {
-            this.translate.get(['app.schedule.editEvent.message.endTimeShouldBeLater']).subscribe(message => {
-                let errMsg = message['app.schedule.editEvent.message.endTimeShouldBeLater'];
+            this.translate.get('app.schedule.editEvent.message.endTimeShouldBeLater').subscribe(message => {
+                let errMsg = message;
 
                 this.showError(errMsg);
             });
@@ -572,12 +537,11 @@ export class EditEventPage {
                 this.showError(data);
             }
         }, err => {
-            debugger
             let errMsg = err.faultstring;
             let faultCode = err.faultcode;
             if ((faultCode.indexOf('WARN002') > -1) || (faultCode.indexOf('WARN001') > -1)) {
                 errMsg = this.convertWarningMessage(errMsg);
-                this.confirmRepeatWarn(this.warningTitle, errMsg, this.actionYes, this.actionNo, faultCode, 'addEvent');
+                this.confirmRepeatWarn(errMsg, faultCode, 'addEvent');
             } else {
                 this.showError(errMsg);
             }
@@ -599,7 +563,7 @@ export class EditEventPage {
             let faultCode = err.faultcode;
             if ((faultCode.indexOf('WARN002') > -1) || (faultCode.indexOf('WARN001') > -1)) {
                 errMsg = this.convertWarningMessage(errMsg);
-                this.confirmRepeatWarn(this.warningTitle, errMsg, this.actionYes, this.actionNo, faultCode, 'updateEvent');
+                this.confirmRepeatWarn(errMsg, faultCode, 'updateEvent');
             } else {
                 this.showError(errMsg);
             }
@@ -626,38 +590,29 @@ export class EditEventPage {
         return newMessage;
     }
 
-    confirmRepeatWarn(title, content, yes, no, faultCode, type) {
-        let alert = this.alertCtrl.create({
-            'title': title,
-            'subTitle': content,
-            'buttons': [{
-                'text': yes,
-                'handler': () => {
-                    if (faultCode.indexOf('WARN002') > -1) {
-                        // The same people had have scheduling at selected peroid.
-                        this.event.isDeviceRepeatWarned = false;
-                        this.event.isEventRepeatWarned = true;
-                    } else if (faultCode.indexOf('WARN001') > -1) {
-                        // The same device had been used at selected peroid.
-                        this.event.isDeviceRepeatWarned = true;
-                        this.event.isEventRepeatWarned = true;
-                    }
-                    if (type === 'addEvent') {
-                        setTimeout(() => {
-                            this.addEvent();
-                        }, 500);
-                    } else {
-                        setTimeout(() => {
-                            this.updateEvent();
-                        }, 500);
-                    }
-                }
-            },
-                {
-                    'text': no
-                }]
-        });
-        alert.present();
+    confirmRepeatWarn(content, faultCode, type) {
+        let that = this;
+        let okHandler = function () {
+            if (faultCode.indexOf('WARN002') > -1) {
+                // The same people had have scheduling at selected peroid.
+                that.event.isDeviceRepeatWarned = false;
+                that.event.isEventRepeatWarned = true;
+            } else if (faultCode.indexOf('WARN001') > -1) {
+                // The same device had been used at selected peroid.
+                that.event.isDeviceRepeatWarned = true;
+                that.event.isEventRepeatWarned = true;
+            }
+            if (type === 'addEvent') {
+                setTimeout(() => {
+                    that.addEvent();
+                }, 500);
+            } else {
+                setTimeout(() => {
+                    that.updateEvent();
+                }, 500);
+            }
+        };
+        this.util.presentConfirmModal(content, 'warning', okHandler);
     }
 
     showError(errorMessage) {

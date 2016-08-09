@@ -44,7 +44,7 @@ class IntaLinx {
             this.initializeApp();
         });
     }
-    
+
     initializeApp() {
         // initialize translate library
         let userLang = navigator.language.toLowerCase();
@@ -59,7 +59,7 @@ class IntaLinx {
             this.appConfig.set('BASE_URL', this.appConfig.get('BASE_URL_JAPAN'));
             this.appConfig.set('GOOGLE_ANALYTICS_TRACK_ID', this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID_JAPAN'));
         }
-        
+
         if (this.platform.is('cordova')) {
             // Okay, so the platform is ready and our plugins are available.
             // Here you can do any higher level native things you might need.
@@ -137,18 +137,15 @@ class IntaLinx {
 
     logout() {
         this.menu.close();
-        this.translate.get([
-            'app.message.warning.title',
-            'app.message.warning.logout',
-            'app.action.yes',
-            'app.action.no']).subscribe(message => {
-                let content = message['app.message.warning.logout'];
-                let okHandler = function() {
-                    this.util.logout().then(() => {
-                        this.share.nav.setRoot(LoginPage);
-                    });
-                };
-                let alert = this.util.presentConfirmModal(content, 'warning', okHandler);
+        this.translate.get('app.message.warning.logout').subscribe(message => {
+            let content = message;
+            let that = this;
+            let okHandler = function () {
+                that.util.logout().then(() => {
+                    that.share.nav.setRoot(LoginPage);
+                });
+            };
+            let alert = this.util.presentConfirmModal(content, 'warning', okHandler);
         });
     }
 }
