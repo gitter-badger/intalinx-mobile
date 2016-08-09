@@ -196,7 +196,20 @@ export class ScheduleIndexPage {
 
     getEventsAndSpecialDaysBySelectedDay(selectedDay) {
         this.selectedDay = selectedDay;
-        this.events = this.eventsByDays.get(this.selectedDay);
+        let events = this.eventsByDays.get(this.selectedDay);
+        if (events && events.length > 2) {
+            let tempStartTime;
+            for (let i = 0; i < events.length - 1; i++) {
+                for (let j = 0; j < events.length - 1 - i; j++) {
+                    if (events[j].startTime > events[j + 1].startTime) {
+                        tempStartTime = events[j].startTime;
+                        events[j].startTime = events[j + 1].startTime;
+                        events[j + 1].startTime = tempStartTime;
+                    }
+                }
+            }
+        }
+        this.events = events;
         this.specialDays = this.specialDaysByDays.get(this.selectedDay);
         this.isEventLoadCompleted = true;
     }
@@ -273,7 +286,7 @@ export class ScheduleIndexPage {
     }
 
     selectUser() {
-        let selectUserModal = this.modalCtrl.create(SelectUserPage, {'userID': this.myUserID});
+        let selectUserModal = this.modalCtrl.create(SelectUserPage, { 'userID': this.myUserID });
         selectUserModal.onDidDismiss(data => {
             if (data) {
                 this.userID = data.userID;
