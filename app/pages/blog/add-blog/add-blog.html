@@ -15,7 +15,7 @@
   </ion-item>
   <ion-item class="selected-pictures" no-lines>
     <ion-thumbnail *ngFor="let picture of pictures">
-      <ion-icon class="delete-picture" name="close" (click)="deletePicture(picture)"></ion-icon>
+      <ion-icon name="close" (click)="deletePicture(picture)"></ion-icon>
       <img src="{{picture.pictureSrc}}" />
     </ion-thumbnail>
   </ion-item>

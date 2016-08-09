@@ -1,6 +1,6 @@
 // Third party library.
 import {ViewChild, Component, NgZone, ElementRef} from '@angular/core';
-import {NavController, ModalController, LoadingController, ToastController, NavParams, ViewController, Platform} from 'ionic-angular';
+import {NavController, ModalController, LoadingController, NavParams} from 'ionic-angular';
 import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
 /// <reference path="./exif-ts/exif.d.ts" />
 import * as EXIF from 'exif-ts/exif';
@@ -15,7 +15,7 @@ import {UserService} from '../../../providers/user-service';
 // Pages.
 import {BlogIndexPage} from '../index/index';
 import {PreviewBlogPage} from '../preview-blog/preview-blog';
-import {SelectParticipantsPage} from '../../schedule/select-participants/select-participants';
+import {SelectUsersPage} from '../../common/select-users/select-users';
 
 @Component({
   templateUrl: 'build/pages/blog/add-blog/add-blog.html',
@@ -23,7 +23,7 @@ import {SelectParticipantsPage} from '../../schedule/select-participants/select-
     BlogService,
     UserService,
     Util,
-    SelectParticipantsPage
+    SelectUsersPage
   ]
 })
 export class AddBlogPage {
@@ -39,7 +39,7 @@ export class AddBlogPage {
     'selectedUsers': [],
     'allMemberFlag': 'TRUE',
     'content': ''
-  }
+  };
   private picture: any;
   private pictures: any = new Array();
   private readLimit = {
@@ -54,12 +54,9 @@ export class AddBlogPage {
 
   constructor(private nav: NavController,
     private params: NavParams,
-    private view: ViewController,
     private loadingCtrl: LoadingController,
-    private toastCtrl: ToastController,
     private modalCtrl: ModalController,
     private zone: NgZone,
-    private platform: Platform,
     private blogService: BlogService,
     private translate: TranslateService,
     private userService: UserService,
@@ -214,7 +211,9 @@ export class AddBlogPage {
       if (data === 'true') {
         this.sendData.isRefreshFlag = true;
         this.loading.dismiss();
-        this.nav.pop();
+        setTimeout(() => {
+            this.nav.pop();
+        }, 500);
       }
     });
   }
@@ -268,7 +267,7 @@ export class AddBlogPage {
     <ion-navbar>
       <ion-title>{{"app.common.setReadLimitType" | translate}}</ion-title>
       <ion-buttons end>
-          <button (click)="setReadLimitType()">{{ "app.action.select" | translate }}</button>
+          <button (click)="setReadLimitType()">{{ "app.action.finish" | translate }}</button>
       </ion-buttons>
       </ion-navbar>
   </ion-header>
@@ -334,11 +333,17 @@ class SelectReadLimitTypePage {
   }
 
   chooseUsers(): void {
-    let participantsModal = this.modalCtrl.create(SelectParticipantsPage, { 'participants': this.selectedUsers });
-    participantsModal.onDidDismiss(data => {
-      this.selectedUsers = data;
+    this.translate.get('app.common.selectReaders').subscribe(message => {
+      let sendDataToSelectUsers = {
+        'title': message,
+        'selectedUsers': this.selectedUsers
+      };
+      let selectUsersModal = this.modalCtrl.create(SelectUsersPage, { 'sendDataToSelectUsers': sendDataToSelectUsers });
+      selectUsersModal.onDidDismiss(data => {
+        this.selectedUsers = data;
+      });
+      selectUsersModal.present();
     });
-    participantsModal.present();
   }
 
   getMultiMessageOfReadLimitTypeName() {

@@ -13,17 +13,14 @@ import {Util} from '../../../utils/util';
 import {ScheduleService} from '../../../providers/schedule-service';
 import {UserService} from '../../../providers/user-service';
 
-// Pages.
-import {EventDetailPage} from '../event-detail/event-detail';
-import {EditEventPage} from '../edit-event/edit-event';
-
 @Component({
-    templateUrl: 'build/pages/schedule/select-participants/select-participants.html',
-    providers: [Util,
-        ScheduleService]
+    templateUrl: 'build/pages/common/select-users/select-users.html',
+    providers: [
+        UserService,
+        ScheduleService
+    ]
 })
-
-export class SelectParticipantsPage {
+export class SelectUsersPage {
     private originUsers: any;
     private selectedUsers: any = new Array();
     private selectedUsersCount: number;
@@ -31,13 +28,17 @@ export class SelectParticipantsPage {
     private orgsWithUsers: any = new Array();
     private isSearching: boolean;
     private foundUserMembers: any;
+    private title: string;
 
     constructor(private nav: NavController,
         private viewCtrl: ViewController,
         private util: Util,
         private params: NavParams,
-        private scheduleService: ScheduleService) {
-        this.originUsers = this.params.get('participants');
+        private scheduleService: ScheduleService,
+        private userService: UserService) {
+        let sendDataToSelectUsers = this.params.get('sendDataToSelectUsers');
+        this.title = sendDataToSelectUsers.title;
+        this.originUsers = sendDataToSelectUsers.selectedUsers;
         this.getOrganizationAndUsers().then(data => {
             this.selectedUsersCount = 0;
             this.setOriginSelectedUsers();
@@ -46,8 +47,8 @@ export class SelectParticipantsPage {
 
     getOrganizationAndUsers(): any {
         return new Promise(resolve => {
-            this.scheduleService.getOrganizationList().then((orgs: any[]) => {
-                this.scheduleService.getHumanResourceUserInfoList().then((users: any[]) => {
+            this.userService.getOrganizationList().then((orgs: any[]) => {
+                this.userService.getHumanResourceUserInfoList().then((users: any[]) => {
                     // all users
                     this.allUsers = users;
                     for (let i = 0; i < orgs.length; i++) {

@@ -16,6 +16,7 @@
 .add-blog {
     .selected-pictures {
         ion-thumbnail {
+            text-align: end;
             img {
                 width: 6.5rem;
                 height: 6.5rem;
@@ -24,4 +25,19 @@
             float: left;
         }
     }
+}
+ion-list {
+    margin-bottom: 0;
+}
+.item h2 {
+    line-height: 1.6;
+    font-size: 1.6rem;
+    color: #222;
+    font-weight: bold;
+    white-space: pre-wrap;
+}
+.selected-users {
+    float: left;
+    width: 50%;
+    text-align: left;
 }

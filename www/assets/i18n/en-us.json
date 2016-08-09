@@ -28,7 +28,8 @@
             "no": "no", 
             "done": "select",
             "search": "search",
-            "preview": "preview"
+            "preview": "preview",
+            "finish": "finish"
         },
         "common": {
             "readLimitType": {
@@ -36,6 +37,7 @@
                 "selectUsers" : "select users"
             },
             "selectedUserNames": "Selected Users",
+            "selectReaders": "Select Readers",
             "uploadPicture": "upload picture",
             "setReadLimitType": "set read limit",
             "person": "person",
@@ -100,9 +102,10 @@
         "blog": {
             "title": "Blog",
             "detail": "Detail Info",
-            "add": "ADD Blog",
-            "blogTitile": "Title",
-            "blogContent": "Content",
+            "addBlog": "Add",
+            "add": "Add Blog",
+            "blogTitile": "title",
+            "blogContent": "content",
             "newBlog": "new",
             "newReturn": "new",
             "comment": {
@@ -164,7 +167,7 @@
                 "private": "Private",
                 "invisible": "[Invisible]"
             },
-            "time": "Time",
+           "time": "Time",
             "colon": "：",
             "selectDevices": "Select Devices",
             "selectParticipants": "Select Participants",
