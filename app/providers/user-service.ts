@@ -142,16 +142,12 @@ export class UserService {
         });
     }
     
-    getUserID(): Promise<any> {
-        return new Promise(resolve => {
-            resolve(this.shareService.user.userID);
-        });
+    getUserID(): string {
+        return this.shareService.user.userID
     }
 
-    getUser(): Promise<any> {
-        return new Promise(resolve => {
-            resolve(this.shareService.user);
-        });
+    getUser(): any[] {
+        return this.shareService.user;
     }
 
     getOrganizationList(): any {
