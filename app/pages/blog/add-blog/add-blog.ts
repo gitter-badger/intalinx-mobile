@@ -15,7 +15,7 @@ import {UserService} from '../../../providers/user-service';
 // Pages.
 import {BlogIndexPage} from '../index/index';
 import {PreviewBlogPage} from '../preview-blog/preview-blog';
-import {SelectUsersPage} from '../../common/select-users/select-users';
+import {SelectUsersPage} from '../../../shared/components/select-users/select-users';
 
 @Component({
   templateUrl: 'build/pages/blog/add-blog/add-blog.html',
@@ -63,10 +63,7 @@ export class AddBlogPage {
     private util: Util) {
 
     this.sendData = this.params.get('sendData');
-    this.userService.getUser().then(data => {
-      this.sendDataToSelectReadLimitTypePage.selectedUsers.push(data);
-    });
-
+    this.sendDataToSelectReadLimitTypePage.selectedUsers.push(this.userService.getUser());
     this.getMultiMessageOfReadLimitTypeName();
   }
 
@@ -212,7 +209,7 @@ export class AddBlogPage {
         this.sendData.isRefreshFlag = true;
         this.loading.dismiss();
         setTimeout(() => {
-            this.nav.pop();
+          this.nav.pop();
         }, 500);
       }
     });
@@ -271,7 +268,7 @@ export class AddBlogPage {
       </ion-buttons>
       </ion-navbar>
   </ion-header>
-  <ion-content>
+  <ion-content class="select-read-limit-type">
       <ion-list radio-group [(ngModel)]="readLimitType" (ionChange)="changeReadLimit()">
         <ion-item>
           <ion-label>{{"app.common.readLimitType.allUsers" | translate}}</ion-label>

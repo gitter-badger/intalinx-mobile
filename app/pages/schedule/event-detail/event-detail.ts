@@ -188,13 +188,12 @@ export class EventDetailPage {
     }
 
     isParticiPantMember(participants) {
-        this.userService.getUserID().then((userID: string) => {
-            for (let i = 0; i < participants.length; i++) {
-                if (participants[i].userID === userID) {
-                    this.isParticiPant = true;
-                }
+        let userID = this.userService.getUserID();
+        for (let i = 0; i < participants.length; i++) {
+            if (participants[i].userID === userID) {
+                this.isParticiPant = true;
             }
-        });
+        }
     }
 
     deleteEvent() {

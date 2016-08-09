@@ -53,7 +53,7 @@ export class ScheduleIndexPage {
     private cachedSlidesOnOneSide: number = 1;
 
     private calendarSlideOptions: any;
-    // private numbers: any;
+    private numbers: any;
     private isFirstDayMonday: boolean;
     private today: any;
     private yearMonth: any;
@@ -80,7 +80,7 @@ export class ScheduleIndexPage {
             direction: 'vertical',
             initialSlide: this.cachedSlidesOnOneSide
         };
-        // this.numbers = this.initNumbers(this.defaultNumber, this.cachedSlidesOnOneSide);
+        this.numbers = this.initNumbers(this.defaultNumber, this.cachedSlidesOnOneSide);
         this.weekdays = moment.weekdaysMin(false);
         // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
         if (this.userLang === 'ja' || this.userLang === 'ja-jp') {
@@ -98,13 +98,12 @@ export class ScheduleIndexPage {
         this.selectedDay = this.today;
 
         // let userID =this.app.user.userID;
-        this.userService.getUserID().then((userID: string) => {
-            this.myUserID = userID;
-            this.userID = userID;
-            this.selectedOtherUserName = '';
-            this.getLocalsFromSetting().then(local => {
-                this.showCalendar(firstDateWeek);
-            });
+        let userID = this.userService.getUserID();
+        this.myUserID = userID;
+        this.userID = userID;
+        this.selectedOtherUserName = '';
+        this.getLocalsFromSetting().then(local => {
+            this.showCalendar(firstDateWeek);
         });
 
         this.scheduleService.getIsAdmin().then((data: boolean) => {
@@ -196,7 +195,20 @@ export class ScheduleIndexPage {
 
     getEventsAndSpecialDaysBySelectedDay(selectedDay) {
         this.selectedDay = selectedDay;
-        this.events = this.eventsByDays.get(this.selectedDay);
+        let events = this.eventsByDays.get(this.selectedDay);
+        if (events && events.length > 2) {
+            let tempStartTime;
+            for (let i = 0; i < events.length - 1; i++) {
+                for (let j = 0; j < events.length - 1 - i; j++) {
+                    if (events[j].startTime > events[j + 1].startTime) {
+                        tempStartTime = events[j].startTime;
+                        events[j].startTime = events[j + 1].startTime;
+                        events[j + 1].startTime = tempStartTime;
+                    }
+                }
+            }
+        }
+        this.events = events;
         this.specialDays = this.specialDaysByDays.get(this.selectedDay);
         this.isEventLoadCompleted = true;
     }
@@ -213,47 +225,47 @@ export class ScheduleIndexPage {
     /**
        * Makes an initial array of numbers to slide, based on the cache size specified
        */
-    // initNumbers(defaultNumber: number, cachedSlidesOnOneSide: number): any {
-    //     let length = 2 * cachedSlidesOnOneSide + 1;
-    //     let numbers = new Array(length);
-    //     numbers[cachedSlidesOnOneSide] = defaultNumber;
-    //     let pushedNumber = defaultNumber;
-    //     for (let i = cachedSlidesOnOneSide - 1; i >= 0; i--) {
-    //         pushedNumber--;
-    //         numbers[i] = pushedNumber;
-    //     }
-    //     pushedNumber = defaultNumber;
-    //     for (let i = cachedSlidesOnOneSide + 1; i < length; i++) {
-    //         pushedNumber++;
-    //         numbers[i] = pushedNumber;
-    //     }
-    //     return numbers;
-    // }
+    initNumbers(defaultNumber: number, cachedSlidesOnOneSide: number): any {
+        let length = 2 * cachedSlidesOnOneSide + 1;
+        let numbers = new Array(length);
+        numbers[cachedSlidesOnOneSide] = defaultNumber;
+        let pushedNumber = defaultNumber;
+        for (let i = cachedSlidesOnOneSide - 1; i >= 0; i--) {
+            pushedNumber--;
+            numbers[i] = pushedNumber;
+        }
+        pushedNumber = defaultNumber;
+        for (let i = cachedSlidesOnOneSide + 1; i < length; i++) {
+            pushedNumber++;
+            numbers[i] = pushedNumber;
+        }
+        return numbers;
+    }
 
     // Dont use slide because there is a bug of Slides in ionic version beta10 
-    // changeMonth(swiper) {
-    //     let swipeDirection = swiper.swipeDirection;
-    //     if (swipeDirection) {
-    //         let newIndex = this.slider.getActiveIndex();
-    //         if (swipeDirection === 'prev') {
-    //             while (newIndex < this.cachedSlidesOnOneSide) {
-    //                 newIndex++;
-    //                 this.numbers.unshift(this.numbers[0] - 1);
-    //                 this.numbers.pop();
-    //                 this.lastMonth();
-    //             }
-    //         } else {
-    //             while (newIndex > this.cachedSlidesOnOneSide) {
-    //                 newIndex--;
-    //                 this.numbers.push(this.numbers[this.numbers.length - 1] + 1);
-    //                 this.numbers.shift();
-    //                 this.nextMonth();
-    //             }
-    //         }
-    //         // Workaround to make it work: breaks the animation
-    //         this.slider.slideTo(newIndex, 0, false);
-    //     }
-    // }
+    changeMonth(swiper) {
+        let swipeDirection = swiper.swipeDirection;
+        if (swipeDirection) {
+            let newIndex = this.slider.getActiveIndex();
+            if (swipeDirection === 'prev') {
+                while (newIndex < this.cachedSlidesOnOneSide) {
+                    newIndex++;
+                    this.numbers.unshift(this.numbers[0] - 1);
+                    this.numbers.pop();
+                    this.lastMonth();
+                }
+            } else {
+                while (newIndex > this.cachedSlidesOnOneSide) {
+                    newIndex--;
+                    this.numbers.push(this.numbers[this.numbers.length - 1] + 1);
+                    this.numbers.shift();
+                    this.nextMonth();
+                }
+            }
+            // Workaround to make it work: breaks the animation
+            this.slider.slideTo(newIndex, 0, false);
+        }
+    }
 
     openEventDetail(event) {
         this.sendDataToShowOrDeleteEvent.selectedDay = this.selectedDay;
@@ -273,7 +285,7 @@ export class ScheduleIndexPage {
     }
 
     selectUser() {
-        let selectUserModal = this.modalCtrl.create(SelectUserPage, {'userID': this.myUserID});
+        let selectUserModal = this.modalCtrl.create(SelectUserPage, { 'userID': this.myUserID });
         selectUserModal.onDidDismiss(data => {
             if (data) {
                 this.userID = data.userID;

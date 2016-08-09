@@ -114,11 +114,9 @@ export class DevicesPage {
         
         // to get user's settings.
         // Regardless the size of words, just to get the settings about locale. 
-        this.userService.getUserID().then((userID: string) => {
-            return userID;
-        }).then((userID: string) => {
-            return this.scheduleService.getUserLocaleSettings(userID);
-        }).then((locale: string) => {
+        debugger
+        let userID = this.userService.getUserID();
+        this.scheduleService.getUserLocaleSettings(userID).then((locale: string) => {
             this.getSpecialDays(locale);
         }); 
         

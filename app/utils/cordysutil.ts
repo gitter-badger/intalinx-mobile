@@ -125,9 +125,9 @@ export class CordysUtil {
                                     this.alertUtil.presentModal(this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'faultstring\']'));
                                     // TODO
                                     reject(error);
+                                } else {
+                                    reject(error);
                                 }
-                            } else {
-                                reject(error);
                             }
                         });
                 });
@@ -142,7 +142,7 @@ export class CordysUtil {
                 .subscribe(data => {
                     resolve(data);
                 }, error => {
-                    
+
                 });
         });
     }
@@ -154,7 +154,7 @@ export class CordysUtil {
                 url = url + '?' + this.appConfig.get('SAMLART_NAME') + '=' + samlart;
                 url = url + '&language=' + this.appConfig.get('USER_LANG');
                 return url;
-            }) ;    
+            });
         } else {
             url = url + '?language=' + this.appConfig.get('USER_LANG');
             return Promise.resolve(url);
@@ -177,7 +177,7 @@ export class CordysUtil {
                         'saml': this.constants.SAML_NAMESPACE
                     });
 
-                    let createRequestID = function() {
+                    let createRequestID = function () {
                         // wdk XXX: use guid generator?
                         let gid = 'a'; // XML validation requires that the request ID does not start with a number
                         for (let i = 0; i < 32; i++) {
@@ -223,7 +223,7 @@ export class CordysUtil {
                                 let notOnOrAfterString = this.xmlUtil.getNodeText(samlResponse, './/saml:Conditions/@NotOnOrAfter', null);
                                 if (notOnOrAfterString) {
                                     notOnOrAfterDate = this.dateUtil.transferCordysDateStringToUTC(notOnOrAfterString);
-                                    authenticationResult = true;    
+                                    authenticationResult = true;
                                 }
                                 /*
                                 if (sso.useSamlUrlArtifact){
@@ -371,12 +371,12 @@ export class CordysUtil {
 
     hasSAMLart(): Promise<boolean> {
         return this.getSAMLartExpireDate().then((expireDate: any) => {
-                if (!expireDate || new Date(expireDate) < new Date()) {
-                    this.removeSAMLart();
-                    return false;
-                } else {
-                    return true;
-                }
-            });
+            if (!expireDate || new Date(expireDate) < new Date()) {
+                this.removeSAMLart();
+                return false;
+            } else {
+                return true;
+            }
+        });
     }
 }
