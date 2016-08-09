@@ -139,13 +139,14 @@ class IntaLinx {
         this.menu.close();
         this.translate.get('app.message.warning.logout').subscribe(message => {
             let content = message;
-            let that = this;
-            let okHandler = function () {
-                that.util.logout().then(() => {
-                    that.share.nav.setRoot(LoginPage);
-                });
+            let okHandler = function (that) {
+                return function () {
+                    that.util.logout().then(() => {
+                        that.share.nav.setRoot(LoginPage);
+                    });
+                };
             };
-            let alert = this.util.presentConfirmModal(content, 'warning', okHandler);
+            this.util.presentConfirmModal(content, 'warning', okHandler(this));
         });
     }
 }

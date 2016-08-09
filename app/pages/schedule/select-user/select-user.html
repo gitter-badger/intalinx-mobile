@@ -61,14 +61,16 @@
     </div>
 </ion-content>
 <ion-footer>
-    <ion-segment class="select-user-bottom-toolbar"
-        [(ngModel)]="groupingApproach" 
-        (ionChange)="onSegmentChanged($event)">
-        <ion-segment-button  class="segment-without-border" value="group">
-            {{ "app.schedule.selectUser.group" | translate }}
-        </ion-segment-button>
-        <ion-segment-button  class="segment-without-border" value="organization">
-            {{ "app.schedule.selectUser.organization" | translate }}
-        </ion-segment-button>
-    </ion-segment>
+    <ion-toolbar class="calendar-bottom-toolbar">
+        <ion-segment class="select-user-bottom-toolbar"
+            [(ngModel)]="groupingApproach" 
+            (ionChange)="onSegmentChanged($event)">
+            <ion-segment-button  class="segment-without-border" value="group">
+                {{ "app.schedule.selectUser.group" | translate }}
+            </ion-segment-button>
+            <ion-segment-button  class="segment-without-border" value="organization">
+                {{ "app.schedule.selectUser.organization" | translate }}
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
 </ion-footer>
