@@ -27,6 +27,7 @@ import {SelectUsersPage} from '../../../shared/components/select-users/select-us
   ]
 })
 export class AddBlogPage {
+  @ViewChild('fileInput') fileInput: ElementRef;
   private loading: any;
   private sendData: any;
   private isDisabled: boolean = true;
@@ -67,7 +68,7 @@ export class AddBlogPage {
     this.getMultiMessageOfReadLimitTypeName();
   }
 
-  getMultiMessageOfReadLimitTypeName() {
+  getMultiMessageOfReadLimitTypeName(): void {
     this.translate.get(['app.common.readLimitType.allUsers', 'app.common.readLimitType.selectUsers']).subscribe(message => {
       this.allUsersType = message['app.common.readLimitType.allUsers'];
       this.selectUsersType = message['app.common.readLimitType.selectUsers'];
@@ -75,7 +76,7 @@ export class AddBlogPage {
     });
   }
 
-  addPicture() {
+  addPicture(): any {
     let a = event.bubbles;
     // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
     let fileInput = (<any>event.currentTarget);
@@ -94,11 +95,13 @@ export class AddBlogPage {
         reader.readAsDataURL(file);
       }
     }
+    // clear fileinput after uploading picture
+    this.fileInput.nativeElement.value = '';
   }
 
-  render(file, src, other) {
+  render(file, src, other): void {
     EXIF.getData(file, function () {
-      // get the Orientation of avatar.
+      // get the Orientation of picture.
       let orientation = EXIF.getTag(this, 'Orientation');
 
       let image = new Image();
@@ -151,11 +154,9 @@ export class AddBlogPage {
         } else if (file.size > 2 * 1024 * 1024 && file.size <= 5 * 1024 * 1024) {
           quality = 0.01;
         } else {
-          other.loading.dismiss();
-          other.translate.get('app.profile.message.error.avatarTooLarge').subscribe(message => {
+          other.translate.get('app.blog.message.error.pictureTooLarge').subscribe(message => {
             other.util.presentModal(message);
           });
-          other.isSelectChange = false;
           return false;
         }
         other.zone.run(() => {
@@ -166,15 +167,13 @@ export class AddBlogPage {
             'pictureSrc': base64
           };
           other.pictures.push(other.picture);
-          other.isSelectChange = true;
-          other.isLoadCompleted = true;
         });
       };
       image.src = src;
     });
   }
 
-  previewBlog() {
+  previewBlog(): void {
     let content = this.getRealContent();
     let previewBlog: any = {
       'title': this.blog.title,
@@ -185,9 +184,9 @@ export class AddBlogPage {
     previewModal.present();
   }
 
-  saveBlog() {
-    this.translate.get(['app.profile.message.loading.avatarLoading']).subscribe(message => {
-      let content = message['app.profile.message.loading.avatarLoading'];
+  saveBlog(): void {
+    this.translate.get(['app.blog.isSaving']).subscribe(message => {
+      let content = message['app.blog.isSaving'];
       this.loading = this.loadingCtrl.create({
         spinner: 'ios',
         content: content
@@ -223,12 +222,12 @@ export class AddBlogPage {
     return content;
   }
 
-  selectReadLimitType() {
+  selectReadLimitType(): void {
     this.sendDataToSelectReadLimitTypePage.readLimit = this.readLimit;
     this.nav.push(SelectReadLimitTypePage, { 'sendDataToSelectReadLimitTypePage': this.sendDataToSelectReadLimitTypePage });
   }
 
-  changeBlog() {
+  changeBlog(): void {
     if (this.blog.title && this.blog.content && (this.blog.allMemberFlag === 'TRUE' || this.sendDataToSelectReadLimitTypePage.selectedUsers.length > 0)) {
       this.isDisabled = null;
     } else {
@@ -236,7 +235,7 @@ export class AddBlogPage {
     }
   }
 
-  deletePicture(picture) {
+  deletePicture(picture): void {
     let index = this.pictures.indexOf(picture, 0);
     if (index > -1) {
       this.pictures.splice(index, 1);
@@ -343,7 +342,7 @@ class SelectReadLimitTypePage {
     });
   }
 
-  getMultiMessageOfReadLimitTypeName() {
+  getMultiMessageOfReadLimitTypeName(): void {
     this.translate.get(['app.common.readLimitType.allUsers', 'app.common.readLimitType.selectUsers']).subscribe(message => {
       this.allUsersType = message['app.common.readLimitType.allUsers'];
       this.selectUsersType = message['app.common.readLimitType.selectUsers'];

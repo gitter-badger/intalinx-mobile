@@ -107,6 +107,7 @@
             "blogContent": "内容",
             "newBlog": "新",
             "newReturn": "新",
+            "isSaving": "上传中......",
             "comment": {
                 "add": "发评论",
                 "content": "写评论...",
@@ -115,7 +116,8 @@
             "message": {
                 "error": {
                     "title": "错误",
-                    "noContent": "请输入内容！"
+                    "noContent": "请输入内容！",
+                    "pictureTooLarge": "您上传的图片太大！"
                 }
             }
         },
