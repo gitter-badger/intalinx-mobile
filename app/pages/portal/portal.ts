@@ -49,9 +49,9 @@ export class PortalPage {
     };
 
     constructor(private translate: TranslateService, private platform: Platform, private nav: NavController, private util: Util, private share: ShareService, private appsService: AppsService, private aboutService: AboutService, private userService: UserService) {
-        this.loadApplications().then(() => {
+        this.initializeUser().then(() => {
+            this.loadApplications();
             this.checkUpdate();
-            this.initializeUser();
         });        
         if (!this.share.showMenu) {
             this.share.showMenu = this.showMenu(this);
@@ -121,8 +121,11 @@ export class PortalPage {
     }
 
     initializeUser() {
-        this.userService.getUserDetails().then(data => {
-            this.share.initializeUser(data);
+        return new Promise(resolve => {
+            this.userService.getUserDetails().then(data => {
+                this.share.initializeUser(data);
+                resolve();
+            });
         });
     }
   
