@@ -128,6 +128,8 @@ export class CordysUtil {
                                 } else {
                                     reject(error);
                                 }
+                            } else {
+                                reject(error);
                             }
                         });
                 });
