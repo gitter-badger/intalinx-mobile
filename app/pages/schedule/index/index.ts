@@ -56,17 +56,26 @@ export class ScheduleIndexPage {
     private numbers: any;
     private isFirstDayMonday: boolean;
     private today: any;
-    private yearMonth: any;
+    private perviousYearMonthText: any;
+    private currentYearMonthText: any;
+    private nextYearMonthText: any;
+    private perviousMonthDaysArray: any;
+    private currentMonthDaysArray: any;
+    private nextMonthDaysArray: any;
+    private perviousMonth: any;
+    private currentMonth: any;
+    private nextMonth: any;
+
     private selectedDay: any;
     private myUserID: string;
     private userID: string;
+
     private selectedOtherUserName: string;
     private isAdmin: boolean;
 
     private calendar: any;
-    private timeline: any;
+    
     private moment: any;
-    private calendarHeight: number;
 
     private isHtmlLoadCompleted: boolean;
     private isEventLoadCompleted: boolean;
@@ -77,7 +86,7 @@ export class ScheduleIndexPage {
 
     constructor(private nav: NavController, private modalCtrl: ModalController, private translate: TranslateService, private scheduleService: ScheduleService, private userService: UserService, private appConfig: AppConfig) {
         this.calendarSlideOptions = {
-            direction: 'vertical',
+            direction: 'horizontal',
             initialSlide: this.cachedSlidesOnOneSide
         };
         this.numbers = this.initNumbers(this.defaultNumber, this.cachedSlidesOnOneSide);
@@ -92,9 +101,13 @@ export class ScheduleIndexPage {
             this.isFirstDayMonday = false;
         }
         this.today = moment().format('YYYY/MM/D');
-        this.yearMonth = moment().format('YYYY-MM');
+        this.currentMonth = moment(moment().format('YYYY-MM'));
+        this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
+        this.nextMonth = moment(this.currentMonth).add(1, 'months');
+        this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
+        this.perviousYearMonthText  = moment(this.perviousMonth).format('YYYY-MM');
+        this.nextYearMonthText = moment(this.nextMonth).format('YYYY-MM');
         // this month
-        let firstDateWeek = moment(this.yearMonth);
         this.selectedDay = this.today;
 
         // let userID =this.app.user.userID;
@@ -103,7 +116,7 @@ export class ScheduleIndexPage {
         this.userID = userID;
         this.selectedOtherUserName = '';
         this.getLocalsFromSetting().then(local => {
-            this.showCalendar(firstDateWeek);
+            this.showCalendar();
         });
 
         this.scheduleService.getIsAdmin().then((data: boolean) => {
@@ -117,32 +130,50 @@ export class ScheduleIndexPage {
             M: event.month.value - 1
         });
         // selected month
-        let firstDateWeek = moment(yearMonth);
-        this.selectedDay = firstDateWeek.format('YYYY/MM/D');
-        this.showCalendar(firstDateWeek);
+        this.currentMonth = moment(yearMonth);
+        this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
+        this.nextMonth = moment(this.currentMonth).add(1, 'months');
+        this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
+        this.perviousYearMonthText  = moment(this.perviousMonth).format('YYYY-MM');
+        this.nextYearMonthText = moment(this.nextMonth).format('YYYY-MM');
+        this.selectedDay = this.currentMonth.format('YYYY/MM/D');
+        this.showCalendar();
     }
 
-    lastMonth() {
-        this.yearMonth = moment(this.yearMonth).subtract(1, 'months').format('YYYY-MM');
-        // last month
-        let firstDateWeek = moment(this.yearMonth);
-        this.selectedDay = firstDateWeek.format('YYYY/MM/D');
-        this.showCalendar(firstDateWeek);
+    showPreviousMonth() {
+        this.currentMonth = moment(this.currentMonth).subtract(1, 'months');
+        this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
+        this.nextMonth = moment(this.currentMonth).add(1, 'months');
+        this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
+        this.perviousYearMonthText  = moment(this.perviousMonth).format('YYYY-MM');
+        this.nextYearMonthText = moment(this.nextMonth).format('YYYY-MM');
+        // selected month
+        this.selectedDay = this.currentMonth.format('YYYY/MM/D');
+        this.showCalendar();
     }
 
-    nextMonth() {
-        this.yearMonth = moment(this.yearMonth).add(1, 'months').format('YYYY-MM');
-        // next month
-        let firstDateWeek = moment(this.yearMonth);
-        this.selectedDay = firstDateWeek.format('YYYY/MM/D');
-        this.showCalendar(firstDateWeek);
+    showNextMonth() {
+        this.currentMonth = moment(this.currentMonth).add(1, 'months');
+        this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
+        this.nextMonth = moment(this.currentMonth).add(1, 'months');
+        this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
+        this.perviousYearMonthText  = moment(this.perviousMonth).format('YYYY-MM');
+        this.nextYearMonthText = moment(this.nextMonth).format('YYYY-MM');
+        // selected month
+        this.selectedDay = this.currentMonth.format('YYYY/MM/D');
+        this.showCalendar();
     }
 
-    showCalendar(firstDateWeek) {
+    showCalendar() {
+        this.perviousMonthDaysArray = new Array();
+        this.currentMonthDaysArray = new Array();
+        this.nextMonthDaysArray = new Array();
+
         // the quantity of days in selected month
-        let daysInMonth = firstDateWeek.daysInMonth();
-        // the weekday of the first day on this month
-        let firstDayWeek = firstDateWeek.format('d');
+        let daysInPerviousMonth = this.perviousMonth.daysInMonth();
+        let daysInCurrentMonth = this.currentMonth.daysInMonth();
+        let daysInNextMonth = this.nextMonth.daysInMonth();
+        
 
         // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
         let indexOfFirstDayInWeek = 0;
@@ -151,39 +182,94 @@ export class ScheduleIndexPage {
             indexOfFirstDayInWeek = 1;
             indexOfLastDayInWeek = 0;
         }
-        this.timeline = new Array();
-        // when the first day of the week is Sunday.
-        if (indexOfFirstDayInWeek === 1 && firstDayWeek === '0') {
+
+        // the weekday of the first day on this month
+        let firstDayInWeek = this.currentMonth.format('d');
+        // 
+        if (indexOfFirstDayInWeek === 1 && firstDayInWeek === '0') {
             for (let i = indexOfFirstDayInWeek; i < 7; i++) {
-                this.timeline.push(moment(firstDateWeek).subtract(7 - i, 'days'));
+                this.currentMonthDaysArray.push(moment(this.currentMonth).subtract(7 - i, 'days'));
             }
         } else {
-            for (let i = indexOfFirstDayInWeek; i < firstDayWeek; i++) {
-                this.timeline.push(moment(firstDateWeek).subtract(firstDayWeek - i, 'days'));
+            for (let i = indexOfFirstDayInWeek; i < firstDayInWeek; i++) {
+                this.currentMonthDaysArray.push(moment(this.currentMonth).subtract(firstDayInWeek - i, 'days'));
             }
         }
-        for (let i = 0; i < daysInMonth; i++) {
-            this.timeline.push(moment(firstDateWeek).add(i, 'days'));
+
+        // the weekday of the first day on this month
+        firstDayInWeek = this.perviousMonth.format('d');
+        // 
+        if (indexOfFirstDayInWeek === 1 && firstDayInWeek === '0') {
+            for (let i = indexOfFirstDayInWeek; i < 7; i++) {
+                this.perviousMonthDaysArray.push(moment(this.perviousMonth).subtract(7 - i, 'days'));
+            }
+        } else {
+            for (let i = indexOfFirstDayInWeek; i < firstDayInWeek; i++) {
+                this.perviousMonthDaysArray.push(moment(this.perviousMonth).subtract(firstDayInWeek - i, 'days'));
+            }
         }
-        let lastDayWeek = moment(firstDateWeek).endOf('month').format('d');
-        let lastDateInMonth = moment(firstDateWeek).endOf('month');
+
+        // the weekday of the first day on this month
+        firstDayInWeek = this.nextMonth.format('d');
+        // 
+        if (indexOfFirstDayInWeek === 1 && firstDayInWeek === '0') {
+            for (let i = indexOfFirstDayInWeek; i < 7; i++) {
+                this.nextMonthDaysArray.push(moment(this.nextMonth).subtract(7 - i, 'days'));
+            }
+        } else {
+            for (let i = indexOfFirstDayInWeek; i < firstDayInWeek; i++) {
+                this.nextMonthDaysArray.push(moment(this.nextMonth).subtract(firstDayInWeek - i, 'days'));
+            }
+        }
+
+        for (let i = 0; i < daysInPerviousMonth; i++) {
+            this.perviousMonthDaysArray.push(moment(this.perviousMonth).add(i, 'days'));
+        }
+
+        for (let i = 0; i < daysInCurrentMonth; i++) {
+            this.currentMonthDaysArray.push(moment(this.currentMonth).add(i, 'days'));
+        }
+
+        for (let i = 0; i < daysInNextMonth; i++) {
+            this.nextMonthDaysArray.push(moment(this.nextMonth).add(i, 'days'));
+        }
+
+        let lastDayWeek = moment(this.currentMonth).endOf('month').format('d');
+        let lastDayInMonth = moment(this.currentMonth).endOf('month');
         if (Number(lastDayWeek) !== indexOfLastDayInWeek) {
             for (let i = 0; i < 6 - Number(lastDayWeek) + indexOfFirstDayInWeek; i++) {
-                this.timeline.push(moment(lastDateInMonth).add(i + 1, 'days'));
+                this.currentMonthDaysArray.push(moment(lastDayInMonth).add(i + 1, 'days'));
             }
         }
-        let rowCount = Math.ceil(this.timeline.length / 7);
-        this.calendarHeight = rowCount * 46;
 
+        lastDayWeek = moment(this.perviousMonth).endOf('month').format('d');
+        lastDayInMonth = moment(this.perviousMonth).endOf('month');
+        if (Number(lastDayWeek) !== indexOfLastDayInWeek) {
+            for (let i = 0; i < 6 - Number(lastDayWeek) + indexOfFirstDayInWeek; i++) {
+                this.perviousMonthDaysArray.push(moment(lastDayInMonth).add(i + 1, 'days'));
+            }
+        }
+
+        lastDayWeek = moment(this.nextMonth).endOf('month').format('d');
+        lastDayInMonth = moment(this.nextMonth).endOf('month');
+        if (Number(lastDayWeek) !== indexOfLastDayInWeek) {
+            for (let i = 0; i < 6 - Number(lastDayWeek) + indexOfFirstDayInWeek; i++) {
+                this.nextMonthDaysArray.push(moment(lastDayInMonth).add(i + 1, 'days'));
+            }
+        }
+        
         this.moment = moment().format('HH:mm');
         this.isHtmlLoadCompleted = true;
-        this.searchEventsAndSpecialDaysByDisplayedMonth(this.yearMonth);
+        this.searchEventsAndSpecialDaysByDisplayedMonth();
+
+        // Workaround to make it work: no animation
+        this.slider.slideTo(1, 0);
     }
 
-    searchEventsAndSpecialDaysByDisplayedMonth(yearMonth) {
+    searchEventsAndSpecialDaysByDisplayedMonth() {
         this.isEventLoadCompleted = false;
-        let startTimeOfMonth = moment(yearMonth).unix() + moment().utcOffset() * 60;
-        let endTimeOfMonth = moment(yearMonth).add(1, 'months').subtract(1, 'seconds').unix() + moment().utcOffset() * 60;
+        let startTimeOfMonth = moment(this.currentMonth).unix() + moment().utcOffset() * 60;
+        let endTimeOfMonth = moment(this.currentMonth).add(1, 'months').subtract(1, 'seconds').unix() + moment().utcOffset() * 60;
         this.scheduleService.getSpecialDaysForMonthByStartTimeAndEndTimeAndLocal(this.locale, startTimeOfMonth, endTimeOfMonth).then((specialDaysByDays: any) => {
             this.scheduleService.searchEventsForMonthByStartTimeAndEndTimeAndUserID(startTimeOfMonth, endTimeOfMonth, this.userID).then((eventsByDays: any) => {
                 this.eventsByDays = eventsByDays;
@@ -252,18 +338,16 @@ export class ScheduleIndexPage {
                     newIndex++;
                     this.numbers.unshift(this.numbers[0] - 1);
                     this.numbers.pop();
-                    this.lastMonth();
+                    this.showPreviousMonth();
                 }
             } else {
                 while (newIndex > this.cachedSlidesOnOneSide) {
                     newIndex--;
                     this.numbers.push(this.numbers[this.numbers.length - 1] + 1);
                     this.numbers.shift();
-                    this.nextMonth();
+                    this.showNextMonth();
                 }
             }
-            // Workaround to make it work: breaks the animation
-            this.slider.slideTo(newIndex, 0, false);
         }
     }
 
@@ -295,39 +379,44 @@ export class ScheduleIndexPage {
                 } else {
                     this.selectedOtherUserName = data.userName;
                 }
-                this.showCalendar(moment(this.yearMonth));
+                this.showCalendar();
             }
         });
         selectUserModal.present();
     }
 
     showToday() {
+        this.today = moment().format('YYYY/MM/D');
+        this.currentMonth = moment(this.today.format('YYYY-MM'));
+        this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
+        this.nextMonth = moment(this.currentMonth).add(1, 'months');
+        this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
+        this.perviousYearMonthText  = moment(this.perviousMonth).format('YYYY-MM');
+        this.nextYearMonthText = moment(this.nextMonth).format('YYYY-MM');
+        // selected month
         this.selectedDay = this.today;
-        this.yearMonth = moment().format('YYYY-MM');
-        // this month
-        let firstDateWeek = moment(this.yearMonth);
-        this.showCalendar(moment(this.yearMonth));
+        this.showCalendar();
     }
 
     showMySchedule() {
         this.userID = this.myUserID;
         this.selectedOtherUserName = '';
-        this.showCalendar(moment(this.yearMonth));
+        this.showCalendar();
     }
 
     ionViewWillEnter() {
         // enter page after deleting event
         let isRefreshFlag = this.sendDataToShowOrDeleteEvent.isRefreshFlag;
         if (isRefreshFlag === true) {
-            let yearMonth = moment(this.sendDataToShowOrDeleteEvent.selectedDay).format('YYYY-MM');
-            this.searchEventsAndSpecialDaysByDisplayedMonth(yearMonth);
+            this.currentMonth = moment(this.sendDataToShowOrDeleteEvent.selectedDay).format('YYYY-MM');
+            this.searchEventsAndSpecialDaysByDisplayedMonth();
             this.sendDataToShowOrDeleteEvent.isRefreshFlag = false;
         }
         // enter page after adding event
         let isRefreshFlagFromAddEvent = this.sendDataToAddEvent.isRefreshFlag;
         if (isRefreshFlagFromAddEvent === true) {
-            let yearMonth = moment(this.sendDataToAddEvent.selectedDay).format('YYYY-MM');
-            this.searchEventsAndSpecialDaysByDisplayedMonth(yearMonth);
+            this.currentMonth = moment(this.sendDataToAddEvent.selectedDay).format('YYYY-MM');
+            this.searchEventsAndSpecialDaysByDisplayedMonth();
             this.sendDataToAddEvent.isRefreshFlag = false;
         }
     }
