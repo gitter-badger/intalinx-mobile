@@ -2,7 +2,7 @@
     <ion-navbar>
         <ion-title>{{ "app.blog.add" | translate }}</ion-title>
         <ion-buttons end>
-            <button type="" class="button-left" (click)="saveBlog()" [disabled]="isDisabled">{{ "app.action.save" | translate }}</button>
+            <button class="button-left" (click)="saveBlog()" [disabled]="isDisabled">{{ "app.action.save" | translate }}</button>
         </ion-buttons>
     </ion-navbar>
 </ion-header>
@@ -23,7 +23,7 @@
         <button ion-item (click)="selectReadLimitType()">
                 <ion-icon name="md-globe" item-left></ion-icon>
                 <p>{{ "app.common.setReadLimitType" | translate }}</p>
-                <p item-right>{{readLimit.readLimitTypeName}}<span [hidden]="readLimit.readLimitType=='allUsers' || !sendDataToSelectReadLimitTypePage.selectedUsers">{{sendDataToSelectReadLimitTypePage.selectedUsers.length}}人</span></p>
+                <p item-right>{{readLimit.readLimitTypeName}}<span [hidden]="readLimit.readLimitType=='allUsers' || !sendDataToSelectReadLimitTypePage.selectedUsers">{{sendDataToSelectReadLimitTypePage.selectedUsers.length}}{{"app.common.person" | translate}}</span></p>
         </button>
     </ion-list>
     <ion-item [hidden]="readLimit.readLimitType=='allUsers'">
