@@ -2,6 +2,7 @@
 import {Injectable} from '@angular/core';
 import {NavController} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {DomSanitizationService} from '@angular/platform-browser';
 
 // Config.
 import {AppConfig} from '../appconfig';
@@ -13,9 +14,10 @@ import {Util} from '../utils/util';
 export class BlogService {
     private userDefaultAvatarImageUrl = this.appConfig.get('USER_DEFAULT_AVATAR_IMAGE_URL');
 
-    constructor(private translate: TranslateService, 
-        private nav: NavController, 
-        private util: Util, 
+    constructor(private translate: TranslateService,
+        private domSanitizationService: DomSanitizationService,
+        private nav: NavController,
+        private util: Util,
         private appConfig: AppConfig) {
     }
 
@@ -117,12 +119,25 @@ export class BlogService {
                     });
 
                     let attachFiles = [];
+                    community['attachImagesForDisplay'] = [];
+                    community['attachFilesForDownload'] = [];
                     let attachFileList = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'attachFileList\']');
+                    let attachFileSrc;
                     for (let i = 0; i < attachFileList.length; i++) {
                         let attachFile = this.util.xml2json(attachFileList[i]).attachFileList;
-                        this.getRequestOfDownloadAttachmentByAttachmentId(attachFile.attachmentID).then((req) => {
-                            attachFile['soapMessage'] = req;
-                        });
+                        if ((attachFile.attachmentName.toLowerCase().indexOf('.png')
+                        || attachFile.attachmentName.toLowerCase().indexOf('.jpg')
+                        || attachFile.attachmentName.toLowerCase().indexOf('.jpeg')
+                        || attachFile.attachmentName.toLowerCase().indexOf('.bmp'))
+                        && attachFile.attachmentSize <= 500 * 1024) {
+                            this.getRequestOfDownloadAttachmentByAttachmentId(attachFile.attachmentID).then((data) => {
+                                let attachImageSrc = this.domSanitizationService.bypassSecurityTrustUrl('data:image/jpeg;base64,' + data.downloadAttachmentByAttachmentId);
+                                community['attachImagesForDisplay'].push(attachImageSrc);
+                            });
+                        } else {
+                            attachFile.attachmentSize = this.util.getFileSize(attachFile.attachmentSize);
+                             community['attachFilesForDownload'].push(attachFile);
+                        }
                         attachFiles.push(attachFile);
                     }
                     community.attachFileList = attachFiles;
@@ -231,7 +246,12 @@ export class BlogService {
 
                 this.util.setNodeText(objRequest, './/*[local-name()=\'attachmentID\']', attachmentID);
                 req = this.util.xml2string(objRequest);
-                resolve(req);
+                this.util.callCordysWebservice(req).then((data: string) => {
+                    let objResponse = this.util.parseXml(data);
+                    let returnOutPut = this.util.selectXMLNode(objResponse, './/*[local-name()=\'downloadAttachmentByAttachmentId\']');
+                    let returnData = this.util.xml2json(returnOutPut).downloadAttachmentByAttachmentId;
+                    resolve(returnData);
+                });
             });
         });
     }
@@ -259,7 +279,7 @@ export class BlogService {
                         this.util.appendXMLNode(replyListNode, communityInput);
                     }
                 }
-                
+
                 req = this.util.xml2string(objRequest);
 
                 this.util.callCordysWebservice(req).then(data => {
@@ -268,5 +288,4 @@ export class BlogService {
             });
         });
     }
-
 }

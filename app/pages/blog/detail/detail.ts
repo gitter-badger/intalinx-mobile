@@ -39,7 +39,8 @@ export class BlogDetailPage {
 
     private comments: any;
     private commentCount: string;
-    private attachFiles: any;
+    private attachFilesForDownload: any;
+    private attachImagesForDisplay: any;
 
     private pageLoadTime: number;
 
@@ -66,13 +67,14 @@ export class BlogDetailPage {
     getCommunityDetailByCommunityID(): void {
         this.blogService.getCommunityDetailByCommunityID(this.id).then((data: any) => {
             this.title = data.title;
-            this.content = data.content;
             this.createDate = data.createDate;
             this.createUserName = data.createUserName;
             this.createUserAvatar = data.createUserAvatar;
             this.status = data.status;
             this.readCount = data.readCount;
-            this.attachFiles = data.attachFileList;
+            this.attachImagesForDisplay = data.attachImagesForDisplay;
+            this.attachFilesForDownload = data.attachFilesForDownload;
+            this.content = data.content;
             this.isLoadCompleted = true;
             this.isScrollToTopButtonVisible = false;
             if (this.status === 'PUBLISH' && this.newReplyFlag === 'TRUE') {
@@ -176,5 +178,25 @@ export class BlogDetailPage {
                 that.isScrollToTopButtonVisible = false;
             }
         };
+    }
+
+    getFileSize(fileSize) {
+        fileSize = Number(fileSize);
+        if (Math.round(fileSize / 1024 / 1024 / 1024) > 0) {
+            fileSize = Math.round(fileSize / 1024 / 1024) + ' ' + 'GB';
+        } else if (Math.round(fileSize / 1024 / 1024) > 0) {
+            fileSize = Math.round(fileSize / 1024 / 1024) + ' ' + 'MB';
+        } else if (Math.round(fileSize / 1024) > 0) {
+            fileSize = Math.round(fileSize / 1024) + ' ' + 'KB';
+        } else if (fileSize > 0) {
+            fileSize = fileSize + ' ' + 'Byte';
+        } else {
+            fileSize = '';
+        }
+        return fileSize;
+    }
+
+    downloadAttachFile() {
+        alert('cant download');
     }
 }
