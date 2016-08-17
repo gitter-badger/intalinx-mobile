@@ -18,111 +18,108 @@
     }
 }
 
-.week-names {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    font-weight: 600;
-    padding-top: 8px;
-    padding-bottom: 8px;
-    .weekends {
-        color: $primary-color-dark;
-    }
-}
-
 .month-calendar {
     ion-slides {
         width: 100%;
-        height: auto;
-        .swiper-container {
-            height: auto;
+        .swiper-slide {
+            align-items: flex-start;
         }
-        .swiper-wrapper {
-            height: auto;
+    }
+    .week-names {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        font-weight: 600;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        .weekends {
+            color: $primary-color-dark;
         }
     }
     .calendar {
-        padding-top: 16px;
-        padding-bottom: 16px;
-        border: 0px;
-        border-top-width: 0.55px;
-        border-bottom-width: 1.55px;
-        border-style: solid;
-        border-color: $divider-color;
-        .day {
+        .days{
             padding-top: 4px;
             padding-bottom: 4px;
-            width: percentage(1 / 7);
-            height: 32px;
-            display: inline-block;
-            text-align: center;
-            cursor: pointer;
-            span {
-                padding: 4px;
-                border-radius: 30px;
-                width: 30px;
-                display:inline-block;
-            }
-            .hover {
-                span{
-                    background-color: $primary-text-color;
-                    color: $primary-color-text;
+            border: 0px;
+            border-top-width: 0.55px;
+            border-bottom-width: 0.55px;
+            border-style: solid;
+            border-color: $divider-color;
+            .day {
+                padding-top: 4px;
+                width: percentage(1 / 7);
+                height: 42px;
+                display: inline-block;
+                text-align: center;
+                cursor: pointer;
+                span {
+                    padding: 4px;
+                    border-radius: 28px;
+                    width: 28px;
+                    display:inline-block;
+                    font-size: 16px;
                 }
-                &.today {
+                .hover {
                     span{
-                        background-color: $primary-color-dark;
+                        background-color: $primary-text-color;
                         color: $primary-color-text;
                     }
+                    &.today {
+                        span{
+                            background-color: $primary-color-dark;
+                            color: $primary-color-text;
+                        }
+                    }
                 }
+                .today {
+                    color: $primary-color-dark;
+                }
+                .weekends {
+                    color: $primary-color-dark;
+                }
+                .not-this-month {
+                    visibility: hidden;
+                }
+                ion-badge {
+                    min-width: 0px;
+                    padding: 3px;
+                    position: relative;
+                    top: -6px;
+                    background-color: $secondary-text-color;
+                }
+                
             }
-            .today {
-                color: $primary-color-dark;
+        }
+        .events{
+            .border-right-solid {
+                border-right-style: solid;
+                border-right-width: thin;
             }
-            .weekends {
-                color: $primary-color-dark;
+            .border-right-default {
+                border-right-color: $secondary-text-color;
             }
-            .not-this-month {
-                visibility: hidden;
+            .border-right-green {
+                border-right-color: green;
             }
-            ion-badge {
-                min-width: 0px;
-                padding: 3px;
-                background-color: $secondary-text-color;
+            .border-right-primary {
+                border-right-color: $primary-color-dark;
             }
-            
+            .border-right-red {
+                border-right-color: $accent-color;
+            }
+            ion-label {
+                margin: 5px;
+            }
+            .event-in-past-time {
+                color: $secondary-text-color;
+            }
+            .event-title {
+                white-space: normal;
+            }
         }
     }
     
-    .events{
-        ion-list > .item:first-child {
-            border-top: 0;
-        }
-        .border-right-solid {
-            border-right-style: solid;
-            border-right-width: thin;
-        }
-        .border-right-default {
-            border-right-color: $secondary-text-color;
-        }
-        .border-right-green {
-            border-right-color: green;
-        }
-        .border-right-primary {
-            border-right-color: $primary-color-dark;
-        }
-        .border-right-red {
-            border-right-color: $accent-color;
-        }
-        ion-label {
-            margin: 5px;
-        }
-        .event-in-past-time {
-            color: $secondary-text-color;
-        }
-        .event-title {
-            white-space: normal;
-        }
-    }
+    
 }
 
 .calendar-bottom-toolbar {
