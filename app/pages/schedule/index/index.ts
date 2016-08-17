@@ -282,14 +282,14 @@ export class ScheduleIndexPage {
     getEventsAndSpecialDaysBySelectedDay(selectedDay) {
         this.selectedDay = selectedDay;
         let events = this.eventsByDays.get(this.selectedDay);
-        if (events && events.length > 2) {
-            let tempStartTime;
+        if (events && events.length >= 2) {
+            let tempEvent;
             for (let i = 0; i < events.length - 1; i++) {
                 for (let j = 0; j < events.length - 1 - i; j++) {
                     if (events[j].startTime > events[j + 1].startTime) {
-                        tempStartTime = events[j].startTime;
-                        events[j].startTime = events[j + 1].startTime;
-                        events[j + 1].startTime = tempStartTime;
+                        tempEvent = events[j];
+                        events[j] = events[j + 1];
+                        events[j + 1] = tempEvent;
                     }
                 }
             }

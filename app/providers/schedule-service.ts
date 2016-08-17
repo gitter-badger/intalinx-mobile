@@ -264,6 +264,8 @@ export class ScheduleService {
 
                             if (currentDayStartTime >= Number(ouputStartTime) && currentDayEndTime <= Number(ouputEndTime)) {
                                 isAllDay = 'true';
+                                startHourMinute = '00:00';
+                                endHourMinute = '24:00';
                             } else if (currentDayStartTime < Number(ouputStartTime) && currentDayEndTime < Number(ouputEndTime)) {
                                 endHourMinute = '24:00';
                             } else if (currentDayEndTime > Number(ouputEndTime) && currentDayStartTime > Number(ouputStartTime)) {
