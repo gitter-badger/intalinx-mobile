@@ -15,15 +15,17 @@
     </ion-item>
     <ion-item class="selected-pictures" no-lines>
         <ion-thumbnail *ngFor="let picture of pictures">
-            <ion-icon name="close" (click)="deletePicture(picture)"></ion-icon>
+            <button fab (click)="deletePicture(picture)">
+                <ion-icon name="close"></ion-icon>
+            </button>
             <img src="{{picture.pictureSrc}}" />
         </ion-thumbnail>
     </ion-item>
     <ion-list>
         <button ion-item (click)="selectReadLimitType()">
-                <ion-icon name="md-globe" item-left></ion-icon>
-                <p>{{ "app.common.setReadLimitType" | translate }}</p>
-                <p item-right>{{readLimit.readLimitTypeName}}<span [hidden]="readLimit.readLimitType=='allUsers' || !sendDataToSelectReadLimitTypePage.selectedUsers">{{sendDataToSelectReadLimitTypePage.selectedUsers.length}}{{"app.common.person" | translate}}</span></p>
+            <ion-icon name="md-globe" item-left></ion-icon>
+            <p>{{ "app.common.setReadLimitType" | translate }}</p>
+            <p item-right>{{readLimit.readLimitTypeName}}<span [hidden]="readLimit.readLimitType=='allUsers' || !sendDataToSelectReadLimitTypePage.selectedUsers">{{sendDataToSelectReadLimitTypePage.selectedUsers.length}}{{"app.common.person" | translate}}</span></p>
         </button>
     </ion-list>
     <ion-item [hidden]="readLimit.readLimitType=='allUsers'">

@@ -1,13 +1,19 @@
 .add-blog {
     .selected-pictures {
         ion-thumbnail {
-            text-align: end;
+            float: left;
+            button {
+                max-width: 25px;
+                font-size: 1rem;
+                position:relative;
+                box-shadow: 0 0 0 0;
+                top: 1.5rem;
+                left: 5rem;
+            }
             img {
                 width: 6.5rem;
                 height: 6.5rem;
             }
-            padding: 0.5rem;
-            float: left;
         }
     }
     ion-list {
