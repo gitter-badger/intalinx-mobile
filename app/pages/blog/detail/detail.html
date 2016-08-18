@@ -28,12 +28,10 @@
                 <div>{{commentCount}}</div>
             </button>
         </ion-item>
-        <div class="contents" padding [innerHTML]="content"></div>
-        <ul>
-            <li *ngFor="let attachImage of attachImagesForDisplay">
-                <img [src]="attachImage" />
-            </li>
-        </ul>
+        <div class="contents" padding>
+            <div [innerHTML]="content"></div>
+            <img *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage" (click)="clickToShowImageSlidesthat()" />
+        </div>
         <div class="file-download" flex-sm="100" *ngFor="let attachFile of attachFilesForDownload">
             <a (click)="downloadAttachFile()">{{attachFile.attachmentName}}</a>{{attachFile.attachmentSize}}
         </div>

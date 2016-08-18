@@ -1,6 +1,6 @@
 // Third party library.
-import {Component, ViewChild, Directive} from '@angular/core';
-import {NavController, NavParams, Content} from 'ionic-angular';
+import {Component, ViewChild, ViewChildren, Directive, ElementRef, Renderer, QueryList} from '@angular/core';
+import {NavController, NavParams, Content, Img, Slides} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 
 // Utils.
@@ -21,6 +21,7 @@ import {DownloadDirective} from '../../../shared/components/download/download';
 })
 export class BlogDetailPage {
     @ViewChild(Content) pageContent: Content;
+    // @ViewChildren(Img) images: QueryList<Img>;
 
     private community: any;
     private id: string;
@@ -43,8 +44,10 @@ export class BlogDetailPage {
     private attachImagesForDisplay: any;
 
     private pageLoadTime: number;
+    private images: any;
+    private sendDataToImageSlidesPage: any;
 
-    constructor(private nav: NavController, private params: NavParams, private blogService: BlogService, private share: ShareService, private downloadDirective: DownloadDirective) {
+    constructor(private nav: NavController, private params: NavParams, private elementRef: ElementRef, private renderer: Renderer, private blogService: BlogService, private share: ShareService, private downloadDirective: DownloadDirective) {
         this.community = this.params.get('community');
         this.id = this.community.communityID;
         this.readStatus = this.community.readStatus;
@@ -106,6 +109,13 @@ export class BlogDetailPage {
                 this.comments = this.comments.concat(data.replyContents);
             }
             infiniteScroll.complete();
+        });
+    }
+
+    ngAfterViewChecked(): void {
+        this.images = document.querySelectorAll('.contents img');
+        this.images.forEach(image => {
+            image.addEventListener('click', this.showImageSlides(this));
         });
     }
 
@@ -180,23 +190,49 @@ export class BlogDetailPage {
         };
     }
 
-    getFileSize(fileSize) {
-        fileSize = Number(fileSize);
-        if (Math.round(fileSize / 1024 / 1024 / 1024) > 0) {
-            fileSize = Math.round(fileSize / 1024 / 1024) + ' ' + 'GB';
-        } else if (Math.round(fileSize / 1024 / 1024) > 0) {
-            fileSize = Math.round(fileSize / 1024 / 1024) + ' ' + 'MB';
-        } else if (Math.round(fileSize / 1024) > 0) {
-            fileSize = Math.round(fileSize / 1024) + ' ' + 'KB';
-        } else if (fileSize > 0) {
-            fileSize = fileSize + ' ' + 'Byte';
-        } else {
-            fileSize = '';
-        }
-        return fileSize;
+    showImageSlides(that): any {
+        return function () {
+            that.images = document.querySelectorAll('.contents img');
+            that.nav.push(ImageSlidesPage, { 'images': that.images });
+        };
+    }
+
+    clickToShowImageSlidesthat(): any {
+        this.images = document.querySelectorAll('.contents img');
+        this.nav.push(ImageSlidesPage, { 'images': this.images });
     }
 
     downloadAttachFile() {
         alert('cant download');
+    }
+}
+
+@Component({
+    template: `
+    <ion-content>
+        <ion-slides [options]="imageSlideOptions">
+            <ion-slide *ngFor="let image of images" (click)="backToBlogDetail()">
+                <img src="{{image.src}}" />
+            </ion-slide>
+        </ion-slides>
+    </ion-content>
+  `
+})
+class ImageSlidesPage {
+    private images: any;
+    private imageSlideOptions: any;
+    constructor(private nav: NavController, private params: NavParams) {
+        this.images = this.params.get('images');
+        this.imageSlideOptions = {
+            initialSlide: 1,
+            loop: false,
+            direction: 'horizontal'
+        }
+    }
+
+    backToBlogDetail() {
+        setTimeout(() => {
+            this.nav.pop();
+        }, 500);
     }
 }
