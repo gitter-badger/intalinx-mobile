@@ -1,6 +1,7 @@
 // Third party library.
 import {Component, ViewChild, ViewChildren, Directive, ElementRef, Renderer, QueryList} from '@angular/core';
-import {NavController, NavParams, Content, Img, Slides} from 'ionic-angular';
+import {NavController, NavParams, Content, Slides} from 'ionic-angular';
+import {Transfer} from 'ionic-native';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 
 // Utils.
@@ -14,14 +15,29 @@ import {ShareService} from '../../../providers/share-service';
 import {AddCommentPage} from '../add-comment/add-comment';
 import {DownloadDirective} from '../../../shared/components/download/download';
 
+@Directive({
+    selector: 'img',
+    host: {
+        '(click)': 'onClick()'
+    }
+})
+export class Img {
+    constructor() {
+
+    }
+    onClick() {
+        console.log("img init")
+    }
+}
+
 @Component({
     templateUrl: 'build/pages/blog/detail/detail.html',
     providers: [BlogService, Util, DownloadDirective],
-    directives: [DownloadDirective]
+    directives: [DownloadDirective, Img]
 })
 export class BlogDetailPage {
     @ViewChild(Content) pageContent: Content;
-    // @ViewChildren(Img) images: QueryList<Img>;
+    @ViewChildren(Img) images: QueryList<Img>;
 
     private community: any;
     private id: string;
@@ -44,8 +60,9 @@ export class BlogDetailPage {
     private attachImagesForDisplay: any;
 
     private pageLoadTime: number;
-    private images: any;
+    // private images: any;
     private sendDataToImageSlidesPage: any;
+    private isShowImageSlides: boolean = false;
 
     constructor(private nav: NavController, private params: NavParams, private elementRef: ElementRef, private renderer: Renderer, private blogService: BlogService, private share: ShareService, private downloadDirective: DownloadDirective) {
         this.community = this.params.get('community');
@@ -78,6 +95,7 @@ export class BlogDetailPage {
             this.attachImagesForDisplay = data.attachImagesForDisplay;
             this.attachFilesForDownload = data.attachFilesForDownload;
             this.content = data.content;
+            // this.content = data.content.replace('<img', '<img (click)=\'clickToShowImageSlidesthat()\'');
             this.isLoadCompleted = true;
             this.isScrollToTopButtonVisible = false;
             if (this.status === 'PUBLISH' && this.newReplyFlag === 'TRUE') {
@@ -112,12 +130,12 @@ export class BlogDetailPage {
         });
     }
 
-    ngAfterViewChecked(): void {
-        this.images = document.querySelectorAll('.contents img');
-        this.images.forEach(image => {
-            image.addEventListener('click', this.showImageSlides(this));
-        });
-    }
+    // afterContentLoaded(): void {
+    //     this.images = document.querySelectorAll('.contents img');
+    //     this.images.forEach(image => {
+    //         image.addEventListener('click', this.showImageSlides(this));
+    //     });
+    // }
 
     ionViewLoaded(): void {
         this.pageLoadTime = new Date().getTime();
@@ -174,6 +192,18 @@ export class BlogDetailPage {
 
     ngAfterViewInit(): void {
         this.pageContent.addScrollListener(this.onPageScroll(this));
+
+    }
+
+    ngAfterContentInit(): void {
+        //  this.images.forEach(image => {
+        //     debugger
+        //     // image.addElementLi('click', this.showImageSlides(this));
+        // });
+        //     this.images = document.querySelectorAll('.contents img');
+        //     this.images.forEach(image => {
+        //         image.addEventListener('click', this.showImageSlides(this));
+        //     });
     }
 
     scrollToDetailPageTop(): void {
@@ -193,17 +223,23 @@ export class BlogDetailPage {
     showImageSlides(that): any {
         return function () {
             that.images = document.querySelectorAll('.contents img');
-            that.nav.push(ImageSlidesPage, { 'images': that.images });
+            // that.nav.push(ImageSlidesPage, { 'images': that.images });
+            that.isShowImageSlides = true;
         };
     }
 
-    clickToShowImageSlidesthat(): any {
-        this.images = document.querySelectorAll('.contents img');
-        this.nav.push(ImageSlidesPage, { 'images': this.images });
-    }
+    // clickToShowImageSlidesthat(): any {
+    //     this.images = document.querySelectorAll('.contents img');
+    //     // this.nav.push(ImageSlidesPage, { 'images': this.images });
+    //     this.isShowImageSlides = true;
+    // }
 
     downloadAttachFile() {
         alert('cant download');
+    }
+
+    backToBlogDetail() {
+        this.isShowImageSlides = false;
     }
 }
 

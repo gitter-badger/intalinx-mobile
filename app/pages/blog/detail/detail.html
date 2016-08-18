@@ -1,9 +1,16 @@
-<ion-header>
+<ion-header [hidden]="isShowImageSlides">
     <ion-navbar>
         <ion-title>{{"app.blog.detail" | translate}}</ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content class="blog-detail">
+<ion-content class="image-slides" [hidden]="!isShowImageSlides">
+    <ion-slides [options]="imageSlideOptions">
+        <ion-slide *ngFor="let image of images" (click)="backToBlogDetail()">
+            <img src="{{image.src}}" />
+        </ion-slide>
+    </ion-slides>
+</ion-content>
+<ion-content class="blog-detail" [hidden]="isShowImageSlides">
     <div class="loading" [hidden]="isLoadCompleted">
         <ion-spinner name="dots"></ion-spinner>
     </div>
@@ -29,8 +36,8 @@
             </button>
         </ion-item>
         <div class="contents" padding>
-            <div [innerHTML]="content"></div>
-            <img *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage" (click)="clickToShowImageSlidesthat()" />
+            <div [innerHTML]="content" (load)="afterContentLoaded()"></div>
+            <img *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage"/>
         </div>
         <div class="file-download" flex-sm="100" *ngFor="let attachFile of attachFilesForDownload">
             <a (click)="downloadAttachFile()">{{attachFile.attachmentName}}</a>{{attachFile.attachmentSize}}
@@ -57,9 +64,9 @@
         </ion-infinite-scroll>
     </div>
 </ion-content>
-<button fab fab-right fab-bottom accent [hidden]="!isLoadCompleted" (click)="addComment()">
+<button fab fab-right fab-bottom accent [hidden]="!isLoadCompleted || isShowImageSlides" (click)="addComment()">
     <ion-icon name="add"></ion-icon>
 </button>
-<button class="blog-detail scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">
+<button class="blog-detail scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible || isShowImageSlides" (click)="scrollToDetailPageTop()">
     <ion-icon name="arrow-up"></ion-icon>
 </button>
