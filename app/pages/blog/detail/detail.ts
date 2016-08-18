@@ -1,10 +1,12 @@
 // Third party library.
-import {Component, ViewChild, Directive} from '@angular/core';
+import {Component, ViewChild, Directive, HostListener, ViewContainerRef, ElementRef, DynamicComponentLoader} from '@angular/core';
 import {NavController, NavParams, Content} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 
 // Utils.
 import {Util} from '../../../utils/util';
+
+import {InnerContent} from '../../../shared/components/innercontent/innercontent';
 
 // Services.
 import {BlogService} from '../../../providers/blog-service';
@@ -15,9 +17,25 @@ import {AddCommentPage} from '../add-comment/add-comment';
 import {DownloadDirective} from '../../../shared/components/download/download';
 
 @Component({
+    selector: 'img',
+    template: '<div>test</div>'
+})
+export class Img {
+    constructor(private elementRef: ViewContainerRef) {
+        console.log(111);
+        
+    }
+    @HostListener('click', [])
+    onClick() {
+        console.log(222);
+    }
+}
+
+
+@Component({
     templateUrl: 'build/pages/blog/detail/detail.html',
     providers: [BlogService, Util, DownloadDirective],
-    directives: [DownloadDirective]
+    directives: [DownloadDirective, Img, InnerContent]
 })
 export class BlogDetailPage {
     @ViewChild(Content) pageContent: Content;
@@ -28,7 +46,7 @@ export class BlogDetailPage {
     private newReplyFlag: string;
     private sendData: any;
     private title: string;
-    private content: string;
+    private content: any;
     private createDate: string;
     private createUserName: string;
     private createUserAvatar: string;
@@ -43,7 +61,7 @@ export class BlogDetailPage {
 
     private pageLoadTime: number;
 
-    constructor(private nav: NavController, private params: NavParams, private blogService: BlogService, private share: ShareService, private downloadDirective: DownloadDirective) {
+    constructor(private loader: DynamicComponentLoader, private nav: NavController, private params: NavParams, private blogService: BlogService, private share: ShareService, private downloadDirective: DownloadDirective) {
         this.community = this.params.get('community');
         this.id = this.community.communityID;
         this.readStatus = this.community.readStatus;
@@ -66,7 +84,7 @@ export class BlogDetailPage {
     getCommunityDetailByCommunityID(): void {
         this.blogService.getCommunityDetailByCommunityID(this.id).then((data: any) => {
             this.title = data.title;
-            this.content = data.content;
+            this.content = [data.content, [Img]];
             this.createDate = data.createDate;
             this.createUserName = data.createUserName;
             this.createUserAvatar = data.createUserAvatar;

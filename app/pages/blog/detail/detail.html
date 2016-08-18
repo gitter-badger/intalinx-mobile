@@ -28,7 +28,7 @@
                 <div>{{commentCount}}</div>
             </button>
         </ion-item>
-        <div class="contents" padding [innerHTML]="content"></div>
+        <div class="contents" padding [innerContent]="content"></div>
         <div class="file-download" flex-sm="100" *ngFor="let attachFile of attachFiles">
             <im-download file-name="{{attachFile.attachmentName}}"
                             file-size="{{attachFile.attachmentSize}}"
