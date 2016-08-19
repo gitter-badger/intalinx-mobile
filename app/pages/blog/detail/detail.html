@@ -36,7 +36,7 @@
             </button>
         </ion-item>
         <div class="contents" padding>
-            <div [innerHTML]="content" (load)="afterContentLoaded()"></div>
+            <div [innerContent]="content"></div>
             <img *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage"/>
         </div>
         <div class="file-download" flex-sm="100" *ngFor="let attachFile of attachFilesForDownload">
