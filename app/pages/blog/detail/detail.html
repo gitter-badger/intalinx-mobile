@@ -1,16 +1,16 @@
-<ion-header [hidden]="isShowImageSlides">
+<ion-header>
     <ion-navbar>
         <ion-title>{{"app.blog.detail" | translate}}</ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content class="image-slides" [hidden]="!isShowImageSlides">
+<!--<ion-content class="image-slides" [hidden]="!isShowImageSlides">
     <ion-slides [options]="imageSlideOptions">
         <ion-slide *ngFor="let image of images" (click)="backToBlogDetail()">
             <img src="{{image.src}}" />
         </ion-slide>
     </ion-slides>
-</ion-content>
-<ion-content class="blog-detail" [hidden]="isShowImageSlides">
+</ion-content>-->
+<ion-content class="blog-detail">
     <div class="loading" [hidden]="isLoadCompleted">
         <ion-spinner name="dots"></ion-spinner>
     </div>
@@ -37,9 +37,9 @@
         </ion-item>
         <div class="contents" padding>
             <div [innerContent]="content"></div>
-            <img *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage"/>
+            <img (click)="showImageSlides($event)" *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage"/>
         </div>
-        <div class="file-download" flex-sm="100" *ngFor="let attachFile of attachFilesForDownload">
+        <div padding class="file-download" flex-sm="100" *ngFor="let attachFile of attachFilesForDownload">
             <a (click)="downloadAttachFile()">{{attachFile.attachmentName}}</a>{{attachFile.attachmentSize}}
         </div>
         <ion-list>

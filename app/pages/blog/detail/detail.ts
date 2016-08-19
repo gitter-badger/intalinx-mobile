@@ -1,5 +1,5 @@
 // Third party library.
-import {Component, ViewChild, ViewChildren, Directive, HostListener, ViewContainerRef, ElementRef, Renderer, QueryList, DynamicComponentLoader} from '@angular/core';
+import {Component, ViewChild, ViewChildren, ContentChildren, EventEmitter, Injectable, Directive, HostListener, ViewContainerRef, ElementRef, Renderer, Input, QueryList, DynamicComponentLoader} from '@angular/core';
 import {NavController, NavParams, Content, Slides} from 'ionic-angular';
 import {Transfer} from 'ionic-native';
 import {TranslateService} from 'ng2-translate/ng2-translate';
@@ -16,26 +16,31 @@ import {AddCommentPage} from '../add-comment/add-comment';
 import {DownloadDirective} from '../../../shared/components/download/download';
 import {InnerContent} from '../../../shared/components/innercontent/innercontent';
 
-@Component({
-    selector: 'img',
-    template: '<div>test</div>'
+@Directive({
+    selector: 'img'
 })
 export class Img {
-    constructor(private elementRef: ViewContainerRef) {
-        console.log(111);
-        
+    // @ContentChildren(Img) images: QueryList<Img>;
+    private images: any;
+    constructor(private nav: NavController, private elementRef: ViewContainerRef) {
     }
     @HostListener('click', [])
     onClick() {
-        console.log(222);
+        let currentImage = this.elementRef.element.nativeElement;
+        let images = this.elementRef.element.nativeElement.ownerDocument.querySelectorAll('.contents img');
+        // this.images = this.elementRef.element.nativeElement.ownerDocument.getElementsByClassName('contents')[0].getElementsByTagName('img')
+        let sendData = {
+            'currentImage': currentImage,
+            'images': images
+        };
+        this.nav.push(ImageSlidesPage, { 'sendData': sendData });
     }
 }
-
 
 @Component({
     templateUrl: 'build/pages/blog/detail/detail.html',
     providers: [BlogService, Util, DownloadDirective],
-    directives: [DownloadDirective, Img, InnerContent]
+    directives: [DownloadDirective, InnerContent]
 })
 export class BlogDetailPage {
     @ViewChild(Content) pageContent: Content;
@@ -64,10 +69,9 @@ export class BlogDetailPage {
     private pageLoadTime: number;
     // private images: any;
     private sendDataToImageSlidesPage: any;
-    private isShowImageSlides: boolean = false;
+    // isShowImageSlides: boolean = false;
 
-
-    constructor(private loader: DynamicComponentLoader, private nav: NavController, private params: NavParams, private blogService: BlogService, private share: ShareService, private downloadDirective: DownloadDirective) {
+    constructor(private nav: NavController, private params: NavParams, private blogService: BlogService, private share: ShareService, private downloadDirective: DownloadDirective) {
         this.community = this.params.get('community');
         this.id = this.community.communityID;
         this.readStatus = this.community.readStatus;
@@ -78,7 +82,6 @@ export class BlogDetailPage {
             'isRefreshFlag': false,
             'unrepliedCommentcontent': ''
         };
-
         this.getCommunityDetailByCommunityID();
         this.getReplyContentListByCommunityID();
     }
@@ -98,8 +101,6 @@ export class BlogDetailPage {
             this.readCount = data.readCount;
             this.attachImagesForDisplay = data.attachImagesForDisplay;
             this.attachFilesForDownload = data.attachFilesForDownload;
-            this.content = data.content;
-            // this.content = data.content.replace('<img', '<img (click)=\'clickToShowImageSlidesthat()\'');
             this.isLoadCompleted = true;
             this.isScrollToTopButtonVisible = false;
             if (this.status === 'PUBLISH' && this.newReplyFlag === 'TRUE') {
@@ -133,13 +134,6 @@ export class BlogDetailPage {
             infiniteScroll.complete();
         });
     }
-
-    // afterContentLoaded(): void {
-    //     this.images = document.querySelectorAll('.contents img');
-    //     this.images.forEach(image => {
-    //         image.addEventListener('click', this.showImageSlides(this));
-    //     });
-    // }
 
     ionViewLoaded(): void {
         this.pageLoadTime = new Date().getTime();
@@ -196,18 +190,6 @@ export class BlogDetailPage {
 
     ngAfterViewInit(): void {
         this.pageContent.addScrollListener(this.onPageScroll(this));
-
-    }
-
-    ngAfterContentInit(): void {
-        //  this.images.forEach(image => {
-        //     debugger
-        //     // image.addElementLi('click', this.showImageSlides(this));
-        // });
-        //     this.images = document.querySelectorAll('.contents img');
-        //     this.images.forEach(image => {
-        //         image.addEventListener('click', this.showImageSlides(this));
-        //     });
     }
 
     scrollToDetailPageTop(): void {
@@ -224,32 +206,24 @@ export class BlogDetailPage {
         };
     }
 
-    showImageSlides(that): any {
-        return function () {
-            that.images = document.querySelectorAll('.contents img');
-            // that.nav.push(ImageSlidesPage, { 'images': that.images });
-            that.isShowImageSlides = true;
+    showImageSlides(event): any {
+        let currentImage = event.currentTarget;
+        let images = document.querySelectorAll('.contents img');
+        let sendData = {
+            'currentImage': currentImage,
+            'images': images
         };
+        this.nav.push(ImageSlidesPage, { 'sendData': sendData });
     }
-
-    // clickToShowImageSlidesthat(): any {
-    //     this.images = document.querySelectorAll('.contents img');
-    //     // this.nav.push(ImageSlidesPage, { 'images': this.images });
-    //     this.isShowImageSlides = true;
-    // }
 
     downloadAttachFile() {
         alert('cant download');
-    }
-
-    backToBlogDetail() {
-        this.isShowImageSlides = false;
     }
 }
 
 @Component({
     template: `
-    <ion-content>
+    <ion-content class="image-slides">
         <ion-slides [options]="imageSlideOptions">
             <ion-slide *ngFor="let image of images" (click)="backToBlogDetail()">
                 <img src="{{image.src}}" />
@@ -259,20 +233,27 @@ export class BlogDetailPage {
   `
 })
 class ImageSlidesPage {
+    private sendData: any;
     private images: any;
     private imageSlideOptions: any;
     constructor(private nav: NavController, private params: NavParams) {
-        this.images = this.params.get('images');
+        this.sendData = this.params.get('sendData');
+        this.images = this.sendData.images;
+        let currentImage = this.sendData.currentImage;
+        let index = 0;
+        for (let i = 0; i < this.images.length; i++) {
+            if (this.images[i].src === currentImage.src) {
+                index = i;
+            }
+        }
         this.imageSlideOptions = {
-            initialSlide: 1,
+            initialSlide: index,
             loop: false,
             direction: 'horizontal'
         }
     }
 
     backToBlogDetail() {
-        setTimeout(() => {
-            this.nav.pop();
-        }, 500);
+        this.nav.pop();
     }
 }
