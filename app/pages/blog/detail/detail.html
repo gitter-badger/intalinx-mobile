@@ -3,13 +3,6 @@
         <ion-title>{{"app.blog.detail" | translate}}</ion-title>
     </ion-navbar>
 </ion-header>
-<!--<ion-content class="image-slides" [hidden]="!isShowImageSlides">
-    <ion-slides [options]="imageSlideOptions">
-        <ion-slide *ngFor="let image of images" (click)="backToBlogDetail()">
-            <img src="{{image.src}}" />
-        </ion-slide>
-    </ion-slides>
-</ion-content>-->
 <ion-content class="blog-detail">
     <div class="loading" [hidden]="isLoadCompleted">
         <ion-spinner name="dots"></ion-spinner>
@@ -64,9 +57,9 @@
         </ion-infinite-scroll>
     </div>
 </ion-content>
-<button fab fab-right fab-bottom accent [hidden]="!isLoadCompleted || isShowImageSlides" (click)="addComment()">
+<button fab fab-right fab-bottom accent [hidden]="!isLoadCompleted" (click)="addComment()">
     <ion-icon name="add"></ion-icon>
 </button>
-<button class="blog-detail scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible || isShowImageSlides" (click)="scrollToDetailPageTop()">
+<button class="blog-detail scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">
     <ion-icon name="arrow-up"></ion-icon>
 </button>

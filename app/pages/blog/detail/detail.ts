@@ -13,14 +13,12 @@ import {ShareService} from '../../../providers/share-service';
 
 // Pages.
 import {AddCommentPage} from '../add-comment/add-comment';
-import {DownloadDirective} from '../../../shared/components/download/download';
 import {InnerContent} from '../../../shared/components/innercontent/innercontent';
 
 @Directive({
     selector: 'img'
 })
 export class Img {
-    // @ContentChildren(Img) images: QueryList<Img>;
     private images: any;
     constructor(private nav: NavController, private elementRef: ViewContainerRef) {
     }
@@ -28,7 +26,6 @@ export class Img {
     onClick() {
         let currentImage = this.elementRef.element.nativeElement;
         let images = this.elementRef.element.nativeElement.ownerDocument.querySelectorAll('.contents img');
-        // this.images = this.elementRef.element.nativeElement.ownerDocument.getElementsByClassName('contents')[0].getElementsByTagName('img')
         let sendData = {
             'currentImage': currentImage,
             'images': images
@@ -39,13 +36,11 @@ export class Img {
 
 @Component({
     templateUrl: 'build/pages/blog/detail/detail.html',
-    providers: [BlogService, Util, DownloadDirective],
-    directives: [DownloadDirective, InnerContent]
+    providers: [BlogService, Util],
+    directives: [InnerContent]
 })
 export class BlogDetailPage {
     @ViewChild(Content) pageContent: Content;
-    @ViewChildren(Img) images: QueryList<Img>;
-
     private community: any;
     private id: string;
     private readStatus: string;
@@ -67,11 +62,10 @@ export class BlogDetailPage {
     private attachImagesForDisplay: any;
 
     private pageLoadTime: number;
-    // private images: any;
+    private images: any;
     private sendDataToImageSlidesPage: any;
-    // isShowImageSlides: boolean = false;
 
-    constructor(private nav: NavController, private params: NavParams, private blogService: BlogService, private share: ShareService, private downloadDirective: DownloadDirective) {
+    constructor(private nav: NavController, private params: NavParams, private util: Util, private translate: TranslateService, private blogService: BlogService, private share: ShareService) {
         this.community = this.params.get('community');
         this.id = this.community.communityID;
         this.readStatus = this.community.readStatus;
@@ -217,7 +211,9 @@ export class BlogDetailPage {
     }
 
     downloadAttachFile() {
-        alert('cant download');
+        this.translate.get('app.blog.message.error.attachmentTooLargeTodownload').subscribe(message => {
+            this.util.presentModal(message);
+        });
     }
 }
 
@@ -238,7 +234,7 @@ class ImageSlidesPage {
     private imageSlideOptions: any;
     constructor(private nav: NavController, private params: NavParams) {
         this.sendData = this.params.get('sendData');
-        this.images = this.sendData.images;
+        this.images = Array.prototype.slice.call(this.sendData.images);
         let currentImage = this.sendData.currentImage;
         let index = 0;
         for (let i = 0; i < this.images.length; i++) {

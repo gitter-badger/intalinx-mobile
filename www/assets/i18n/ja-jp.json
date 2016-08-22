@@ -117,7 +117,8 @@
                 "error": {
                     "title": "エラー",
                     "noContent": "コメントを入力してください。",
-                    "pictureTooLarge": "画像サイズが大きいですが、変更してください。"
+                    "pictureTooLarge": "画像サイズが大きいですが、変更してください。",
+                    "attachmentTooLargeTodownload": "添付ファイルが大きすぎますが、パソコンでダウンロードしてください。"
                 }
             }
         },
