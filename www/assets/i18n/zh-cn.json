@@ -88,8 +88,7 @@
                     "emptyPassword": "密码不能为空。",
                     "mismatchPassword": "两次输入的密码不一致！",
                     "mismatchCurrentPassword": "输入的密码与当前密码不一致！",
-                    "avatarTooLarge": "您上传的头像图片太大！",
-                    "attachmentTooLargeTodownload": "该附件太大，请通过电脑网页版下载！"
+                    "avatarTooLarge": "您上传的头像图片太大！"
                 },
                 "success": {
                     "changeAvatar": "头像上传成功！"
@@ -120,6 +119,7 @@
                     "title": "错误",
                     "noContent": "请输入内容！",
                     "pictureTooLarge": "您上传的图片太大！",
+                    "attachmentTooLargeTodownload": "该附件太大，请通过电脑网页版下载！",
                     "savePicture": "图片保存失败。"
                 },
                 "success": {
