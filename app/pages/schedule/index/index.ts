@@ -53,7 +53,6 @@ export class ScheduleIndexPage {
     private cachedSlidesOnOneSide: number = 1;
 
     private calendarSlideOptions: any;
-    private numbers: any;
     private isFirstDayMonday: boolean;
     private today: any;
     private perviousYearMonthText: any;
@@ -89,7 +88,6 @@ export class ScheduleIndexPage {
             direction: 'horizontal',
             initialSlide: this.cachedSlidesOnOneSide
         };
-        this.numbers = this.initNumbers(this.defaultNumber, this.cachedSlidesOnOneSide);
         this.weekdays = moment.weekdaysMin(false);
         // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
         if (this.userLang === 'ja' || this.userLang === 'ja-jp') {
@@ -101,7 +99,7 @@ export class ScheduleIndexPage {
             this.isFirstDayMonday = false;
         }
         this.today = moment().format('YYYY/MM/D');
-        this.currentMonth = moment(moment().format('YYYY-MM'));
+        this.currentMonth = moment().date(1);
         this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
         this.nextMonth = moment(this.currentMonth).add(1, 'months');
         this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
@@ -308,45 +306,14 @@ export class ScheduleIndexPage {
         });
     }
 
-    /**
-       * Makes an initial array of numbers to slide, based on the cache size specified
-       */
-    initNumbers(defaultNumber: number, cachedSlidesOnOneSide: number): any {
-        let length = 2 * cachedSlidesOnOneSide + 1;
-        let numbers = new Array(length);
-        numbers[cachedSlidesOnOneSide] = defaultNumber;
-        let pushedNumber = defaultNumber;
-        for (let i = cachedSlidesOnOneSide - 1; i >= 0; i--) {
-            pushedNumber--;
-            numbers[i] = pushedNumber;
-        }
-        pushedNumber = defaultNumber;
-        for (let i = cachedSlidesOnOneSide + 1; i < length; i++) {
-            pushedNumber++;
-            numbers[i] = pushedNumber;
-        }
-        return numbers;
-    }
-
     // Dont use slide because there is a bug of Slides in ionic version beta10 
     changeMonth(swiper) {
         let swipeDirection = swiper.swipeDirection;
         if (swipeDirection) {
-            let newIndex = this.slider.getActiveIndex();
             if (swipeDirection === 'prev') {
-                while (newIndex < this.cachedSlidesOnOneSide) {
-                    newIndex++;
-                    this.numbers.unshift(this.numbers[0] - 1);
-                    this.numbers.pop();
-                    this.showPreviousMonth();
-                }
+                this.showPreviousMonth();
             } else {
-                while (newIndex > this.cachedSlidesOnOneSide) {
-                    newIndex--;
-                    this.numbers.push(this.numbers[this.numbers.length - 1] + 1);
-                    this.numbers.shift();
-                    this.showNextMonth();
-                }
+                this.showNextMonth();
             }
         }
     }
@@ -387,7 +354,7 @@ export class ScheduleIndexPage {
 
     showToday() {
         this.today = moment().format('YYYY/MM/D');
-        this.currentMonth = moment(this.today.format('YYYY-MM'));
+        this.currentMonth = moment().date(1);
         this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
         this.nextMonth = moment(this.currentMonth).add(1, 'months');
         this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
@@ -408,14 +375,12 @@ export class ScheduleIndexPage {
         // enter page after deleting event
         let isRefreshFlag = this.sendDataToShowOrDeleteEvent.isRefreshFlag;
         if (isRefreshFlag === true) {
-            this.currentMonth = moment(this.sendDataToShowOrDeleteEvent.selectedDay).format('YYYY-MM');
             this.searchEventsAndSpecialDaysByDisplayedMonth();
             this.sendDataToShowOrDeleteEvent.isRefreshFlag = false;
         }
         // enter page after adding event
         let isRefreshFlagFromAddEvent = this.sendDataToAddEvent.isRefreshFlag;
         if (isRefreshFlagFromAddEvent === true) {
-            this.currentMonth = moment(this.sendDataToAddEvent.selectedDay).format('YYYY-MM');
             this.searchEventsAndSpecialDaysByDisplayedMonth();
             this.sendDataToAddEvent.isRefreshFlag = false;
         }
