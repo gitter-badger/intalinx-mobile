@@ -29,7 +29,8 @@
             "done": "選択",
             "search": "検索",
             "preview": "プレビュー",
-            "finish": "完了"
+            "finish": "完了",
+            "savePicture": "画像を保存"
         },
         "common": {
             "readLimitType": {
@@ -118,7 +119,11 @@
                     "title": "エラー",
                     "noContent": "コメントを入力してください。",
                     "pictureTooLarge": "画像サイズが大きいですが、変更してください。",
-                    "attachmentTooLargeTodownload": "添付ファイルが大きすぎますが、パソコンでダウンロードしてください。"
+                    "attachmentTooLargeTodownload": "添付ファイルが大きすぎますが、パソコンでダウンロードしてください。",
+                    "savePicture": "画像の保存ができませんでした。"
+                },
+                "success": {
+                    "savePicture": "画像が正常に保存されました。"
                 }
             }
         },

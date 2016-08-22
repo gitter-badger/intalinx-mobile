@@ -29,7 +29,8 @@
             "done": "select",
             "search": "search",
             "preview": "preview",
-            "finish": "finish"
+            "finish": "finish",
+            "savePicture": "save the picture"
         },
         "common": {
             "readLimitType": {
@@ -118,7 +119,11 @@
                     "title": "error",
                     "noContent": "The content is required.",
                     "pictureTooLarge": "Your avatar's file size is too large.",
-                    "attachmentTooLargeTodownload": "This attachment is too large to download on mobile. You can download it on computer."
+                    "attachmentTooLargeTodownload": "This attachment is too large to download on mobile. You can download it on computer.",
+                    "savePicture": "Failed to save the picture. "
+                },
+                "success": {
+                    "savePicture": "The picture has been saved successfully."
                 }
             }
         },

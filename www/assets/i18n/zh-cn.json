@@ -29,7 +29,8 @@
             "done": "选择",
             "search": "搜索",
             "preview": "预览",
-            "finish": "完成"
+            "finish": "完成",
+            "savePicture": "保存至相册"
         },
         "common": {
             "readLimitType": {
@@ -118,7 +119,11 @@
                 "error": {
                     "title": "错误",
                     "noContent": "请输入内容！",
-                    "pictureTooLarge": "您上传的图片太大！"
+                    "pictureTooLarge": "您上传的图片太大！",
+                    "savePicture": "图片保存失败。"
+                },
+                "success": {
+                    "savePicture": "图片保存成功。"
                 }
             }
         },
