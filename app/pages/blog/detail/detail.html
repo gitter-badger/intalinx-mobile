@@ -28,14 +28,12 @@
                 <div>{{commentCount}}</div>
             </button>
         </ion-item>
-        <div class="contents" padding [innerContent]="content"></div>
-        <div class="file-download" flex-sm="100" *ngFor="let attachFile of attachFiles">
-            <im-download file-name="{{attachFile.attachmentName}}"
-                            file-size="{{attachFile.attachmentSize}}"
-                            soap-message="{{attachFile.soapMessage}}"
-                            search-path="<tuple><old><downloadAttachmentByAttachmentId><downloadAttachmentByAttachmentId>">
-                <a>{{attachFile.attachmentName}}</a>
-            </im-download>
+        <div class="contents" padding>
+            <div [innerContent]="content"></div>
+            <img (click)="showImageSlides($event)" *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage"/>
+        </div>
+        <div padding class="file-download" flex-sm="100" *ngFor="let attachFile of attachFilesForDownload">
+            <a (click)="downloadAttachFile()">{{attachFile.attachmentName}}</a>{{attachFile.attachmentSize}}
         </div>
         <ion-list>
             <ion-item class="comment" *ngFor="let comment of comments">

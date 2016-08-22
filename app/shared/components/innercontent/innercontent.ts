@@ -30,7 +30,6 @@ export class InnerContent {
     @Input()
     set innerContent(content) {
         if (content) {
-            debugger;
             this.renderTemplate(
                 content[0],
                 content[1]

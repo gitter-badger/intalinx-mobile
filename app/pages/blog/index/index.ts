@@ -45,6 +45,7 @@ export class BlogIndexPage {
 
     ionViewWillEnter(): void {
         if (this.sendData.isRefreshFlag) {
+            this.isLoadCompleted = false;
             this.getCommunityListForTop();
             this.getBlogNewInformationCount();
         }

@@ -160,6 +160,22 @@ export class Util {
         return uuid;
     }
 
+    getFileSize(fileSize) {
+        fileSize = Number(fileSize);
+        if (Math.round(fileSize / 1024 / 1024 / 1024) > 0) {
+            fileSize = Math.round(fileSize / 1024 / 1024) + ' ' + 'GB';
+        } else if (Math.round(fileSize / 1024 / 1024) > 0) {
+            fileSize = Math.round(fileSize / 1024 / 1024) + ' ' + 'MB';
+        } else if (Math.round(fileSize / 1024) > 0) {
+            fileSize = Math.round(fileSize / 1024) + ' ' + 'KB';
+        } else if (fileSize > 0) {
+            fileSize = fileSize + ' ' + 'Byte';
+        } else {
+            fileSize = '';
+        }
+        return fileSize;
+    }
+
     presentConfirmModal(content, level?: string, okHandler?, noHandler?) {
         return this.alertUtil.presentConfirmModal(content, level, okHandler, noHandler);
     }

@@ -1,12 +1,11 @@
 // Third party library.
-import {Component, ViewChild, Directive, HostListener, ViewContainerRef, ElementRef, DynamicComponentLoader} from '@angular/core';
-import {NavController, NavParams, Content} from 'ionic-angular';
+import {Component, ViewChild, ViewChildren, ContentChildren, EventEmitter, Injectable, Directive, HostListener, ViewContainerRef, ElementRef, Renderer, Input, QueryList, DynamicComponentLoader} from '@angular/core';
+import {NavController, NavParams, Content, Slides} from 'ionic-angular';
+import {Transfer} from 'ionic-native';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 
 // Utils.
 import {Util} from '../../../utils/util';
-
-import {InnerContent} from '../../../shared/components/innercontent/innercontent';
 
 // Services.
 import {BlogService} from '../../../providers/blog-service';
@@ -14,32 +13,34 @@ import {ShareService} from '../../../providers/share-service';
 
 // Pages.
 import {AddCommentPage} from '../add-comment/add-comment';
-import {DownloadDirective} from '../../../shared/components/download/download';
+import {InnerContent} from '../../../shared/components/innercontent/innercontent';
 
-@Component({
-    selector: 'img',
-    template: '<div>test</div>'
+@Directive({
+    selector: 'img'
 })
 export class Img {
-    constructor(private elementRef: ViewContainerRef) {
-        console.log(111);
-        
+    private images: any;
+    constructor(private nav: NavController, private elementRef: ViewContainerRef) {
     }
     @HostListener('click', [])
     onClick() {
-        console.log(222);
+        let currentImage = this.elementRef.element.nativeElement;
+        let images = this.elementRef.element.nativeElement.ownerDocument.querySelectorAll('.contents img');
+        let sendData = {
+            'currentImage': currentImage,
+            'images': images
+        };
+        this.nav.push(ImageSlidesPage, { 'sendData': sendData });
     }
 }
 
-
 @Component({
     templateUrl: 'build/pages/blog/detail/detail.html',
-    providers: [BlogService, Util, DownloadDirective],
-    directives: [DownloadDirective, Img, InnerContent]
+    providers: [BlogService, Util],
+    directives: [InnerContent]
 })
 export class BlogDetailPage {
     @ViewChild(Content) pageContent: Content;
-
     private community: any;
     private id: string;
     private readStatus: string;
@@ -57,11 +58,14 @@ export class BlogDetailPage {
 
     private comments: any;
     private commentCount: string;
-    private attachFiles: any;
+    private attachFilesForDownload: any;
+    private attachImagesForDisplay: any;
 
     private pageLoadTime: number;
+    private images: any;
+    private sendDataToImageSlidesPage: any;
 
-    constructor(private loader: DynamicComponentLoader, private nav: NavController, private params: NavParams, private blogService: BlogService, private share: ShareService, private downloadDirective: DownloadDirective) {
+    constructor(private nav: NavController, private params: NavParams, private util: Util, private translate: TranslateService, private blogService: BlogService, private share: ShareService) {
         this.community = this.params.get('community');
         this.id = this.community.communityID;
         this.readStatus = this.community.readStatus;
@@ -72,7 +76,6 @@ export class BlogDetailPage {
             'isRefreshFlag': false,
             'unrepliedCommentcontent': ''
         };
-
         this.getCommunityDetailByCommunityID();
         this.getReplyContentListByCommunityID();
     }
@@ -90,7 +93,8 @@ export class BlogDetailPage {
             this.createUserAvatar = data.createUserAvatar;
             this.status = data.status;
             this.readCount = data.readCount;
-            this.attachFiles = data.attachFileList;
+            this.attachImagesForDisplay = data.attachImagesForDisplay;
+            this.attachFilesForDownload = data.attachFilesForDownload;
             this.isLoadCompleted = true;
             this.isScrollToTopButtonVisible = false;
             if (this.status === 'PUBLISH' && this.newReplyFlag === 'TRUE') {
@@ -194,5 +198,58 @@ export class BlogDetailPage {
                 that.isScrollToTopButtonVisible = false;
             }
         };
+    }
+
+    showImageSlides(event): any {
+        let currentImage = event.currentTarget;
+        let images = document.querySelectorAll('.contents img');
+        let sendData = {
+            'currentImage': currentImage,
+            'images': images
+        };
+        this.nav.push(ImageSlidesPage, { 'sendData': sendData });
+    }
+
+    downloadAttachFile() {
+        this.translate.get('app.blog.message.error.attachmentTooLargeTodownload').subscribe(message => {
+            this.util.presentModal(message);
+        });
+    }
+}
+
+@Component({
+    template: `
+    <ion-content class="image-slides">
+        <ion-slides [options]="imageSlideOptions">
+            <ion-slide *ngFor="let image of images" (click)="backToBlogDetail()">
+                <img src="{{image.src}}" />
+            </ion-slide>
+        </ion-slides>
+    </ion-content>
+  `
+})
+class ImageSlidesPage {
+    private sendData: any;
+    private images: any;
+    private imageSlideOptions: any;
+    constructor(private nav: NavController, private params: NavParams) {
+        this.sendData = this.params.get('sendData');
+        this.images = Array.prototype.slice.call(this.sendData.images);
+        let currentImage = this.sendData.currentImage;
+        let index = 0;
+        for (let i = 0; i < this.images.length; i++) {
+            if (this.images[i].src === currentImage.src) {
+                index = i;
+            }
+        }
+        this.imageSlideOptions = {
+            initialSlide: index,
+            loop: false,
+            direction: 'horizontal'
+        }
+    }
+
+    backToBlogDetail() {
+        this.nav.pop();
     }
 }

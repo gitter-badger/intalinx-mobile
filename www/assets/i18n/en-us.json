@@ -117,7 +117,8 @@
                 "error": {
                     "title": "error",
                     "noContent": "The content is required.",
-                    "pictureTooLarge": "Your avatar's file size is too large."
+                    "pictureTooLarge": "Your avatar's file size is too large.",
+                    "attachmentTooLargeTodownload": "This attachment is too large to download on mobile. You can download it on computer."
                 }
             }
         },

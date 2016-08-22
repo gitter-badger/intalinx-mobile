@@ -217,7 +217,7 @@ export class AddBlogPage {
   getRealContent(): string {
     let content = this.util.replaceHtmlTagCharacter(this.blog.content);
     for (let i = 0; i < this.pictures.length; i++) {
-      content = content + '<img src=' + this.pictures[i].pictureSrc + ' />';
+      content = content + '<img src=\"' + this.pictures[i].pictureSrc + '\" />';
     }
     return content;
   }
