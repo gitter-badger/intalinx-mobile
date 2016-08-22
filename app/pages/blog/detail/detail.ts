@@ -280,7 +280,10 @@ class ImageSlidesPage {
     }
 
     savePicture(base64Data) {
-        Base64ToGallery.base64ToGallery(base64Data, 'img_').then(
+        Base64ToGallery.base64ToGallery(base64Data, {
+            prefix: 'img_',
+            mediaScanner: true
+        }).then(
             res => (setTimeout(() => {this.showSuccessToast()}, 500)),
             err => this.showErrorPresent()
         );
