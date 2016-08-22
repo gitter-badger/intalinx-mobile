@@ -1,6 +1,6 @@
 // Third party library.
 import {Component, ViewChild, ViewChildren, ContentChildren, EventEmitter, Injectable, Directive, HostListener, ViewContainerRef, ElementRef, Renderer, Input, QueryList, DynamicComponentLoader} from '@angular/core';
-import {NavController, NavParams, Content, Slides, ActionSheetController, ToastController} from 'ionic-angular';
+import {NavController, NavParams, Content, Slides, ActionSheetController, ToastController, Platform} from 'ionic-angular';
 import {Base64ToGallery} from 'ionic-native';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 
@@ -232,7 +232,7 @@ class ImageSlidesPage {
     private sendData: any;
     private images: any;
     private imageSlideOptions: any;
-    constructor(private nav: NavController, private actionSheetCtrl: ActionSheetController, private toastCtrl: ToastController, private params: NavParams, private util: Util, private translate: TranslateService) {
+    constructor(private nav: NavController, private actionSheetCtrl: ActionSheetController, private toastCtrl: ToastController, private params: NavParams, private util: Util, private translate: TranslateService, private platform: Platform) {
         this.sendData = this.params.get('sendData');
         this.images = Array.prototype.slice.call(this.sendData.images);
         let currentImage = this.sendData.currentImage;
@@ -253,29 +253,30 @@ class ImageSlidesPage {
         this.nav.pop();
     }
 
-    showPictureOperations(base64Data) {
-        this.translate.get(['app.action.savePicture',
-            'app.action.cancel']).subscribe(message => {
-                let deleteEventOfSelectedDay = message['app.action.savePicture'];
-                let cancelButton = message['app.action.cancel'];
-                let actionSheet = this.actionSheetCtrl.create({
-                    buttons: [
-                        {
-                            text: deleteEventOfSelectedDay,
-                            handler: () => {
-                                this.savePicture(base64Data);
-                            }
-                        }, {
-                            text: cancelButton,
-                            handler: () => {
+    showPictureOperations(src) {
+        if (this.platform.is('cordova')) {
+            this.translate.get(['app.action.savePicture',
+                'app.action.cancel']).subscribe(message => {
+                    let deleteEventOfSelectedDay = message['app.action.savePicture'];
+                    let cancelButton = message['app.action.cancel'];
+                    let actionSheet = this.actionSheetCtrl.create({
+                        buttons: [
+                            {
+                                text: deleteEventOfSelectedDay,
+                                handler: () => {
+                                    this.savePicture(src.replace('data:image/jpeg;base64,', ''));
+                                }
+                            }, {
+                                text: cancelButton,
+                                handler: () => {
 
+                                }
                             }
-                        }
-                    ]
+                        ]
+                    });
+                    actionSheet.present();
                 });
-                actionSheet.present();
-            });
-
+        }
     }
 
     savePicture(base64Data) {
