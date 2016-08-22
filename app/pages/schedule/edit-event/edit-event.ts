@@ -393,32 +393,33 @@ export class EditEventPage {
         devicesModal.present();
     }
 
-    ionViewWillLeave() {
-        let isAnyChange = false;
-        for (let key in this.initEvent) {
-            if (this.initEvent[key] !== this.event[key]) {
-                isAnyChange = true;
-                break;
-            }
-        }
-        if (!this.isSavedOrChecked && isAnyChange) {
-            this.confirmSaveWarn();
-        }
-    }
+    // Remove the source temporarily because the bug of ionic2 beta.11.  Will add on beta.12.
+    // ionViewWillLeave() {
+    //     let isAnyChange = false;
+    //     for (let key in this.initEvent) {
+    //         if (this.initEvent[key] !== this.event[key]) {
+    //             isAnyChange = true;
+    //             break;
+    //         }
+    //     }
+    //     if (!this.isSavedOrChecked && isAnyChange) {
+    //         this.confirmSaveWarn();
+    //     }
+    // }
 
-    confirmSaveWarn() {
-        this.translate.get('app.schedule.editEvent.message.undoChanged').subscribe(message => {
-            let content = message;
-            let that = this;
-            let okHandler = function () {
-                setTimeout(() => {
-                    that.isSavedOrChecked = true;
-                    that.nav.pop();
-                }, 500);
-            };
-            this.util.presentConfirmModal(content, 'warning', okHandler);
-        });
-    }
+    // confirmSaveWarn() {
+    //     this.translate.get('app.schedule.editEvent.message.undoChanged').subscribe(message => {
+    //         let content = message;
+    //         let that = this;
+    //         let okHandler = function () {
+    //             setTimeout(() => {
+    //                 that.isSavedOrChecked = true;
+    //                 that.nav.pop();
+    //             }, 500);
+    //         };
+    //         this.util.presentConfirmModal(content, 'warning', okHandler);
+    //     });
+    // }
 
     saveEvent() {
         this.createSaveData().then(completed => {
