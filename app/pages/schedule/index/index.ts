@@ -261,7 +261,9 @@ export class ScheduleIndexPage {
         this.searchEventsAndSpecialDaysByDisplayedMonth();
 
         // Workaround to make it work: no animation
-        this.slider.slideTo(1, 0);
+        if (this.slider && this.slider.getSlider()) {
+            this.slider.slideTo(1, 0);
+        }
     }
 
     searchEventsAndSpecialDaysByDisplayedMonth() {
