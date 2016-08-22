@@ -266,8 +266,8 @@ export class ScheduleIndexPage {
 
     searchEventsAndSpecialDaysByDisplayedMonth() {
         this.isEventLoadCompleted = false;
-        let startTimeOfMonth = moment(this.currentMonth).unix() + moment().utcOffset() * 60;
-        let endTimeOfMonth = moment(this.currentMonth).add(1, 'months').subtract(1, 'seconds').unix() + moment().utcOffset() * 60;
+        let startTimeOfMonth = moment(this.currentMonth).unix();
+        let endTimeOfMonth = moment(this.currentMonth).add(1, 'months').subtract(1, 'seconds').unix();
         this.scheduleService.getSpecialDaysForMonthByStartTimeAndEndTimeAndLocal(this.locale, startTimeOfMonth, endTimeOfMonth).then((specialDaysByDays: any) => {
             this.scheduleService.searchEventsForMonthByStartTimeAndEndTimeAndUserID(startTimeOfMonth, endTimeOfMonth, this.userID).then((eventsByDays: any) => {
                 this.eventsByDays = eventsByDays;
