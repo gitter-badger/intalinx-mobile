@@ -99,7 +99,7 @@ export class ScheduleIndexPage {
             this.isFirstDayMonday = false;
         }
         this.today = moment().format('YYYY/MM/D');
-        this.currentMonth = moment().date(1);
+        this.currentMonth = moment(this.today).date(1);
         this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
         this.nextMonth = moment(this.currentMonth).add(1, 'months');
         this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
@@ -125,7 +125,8 @@ export class ScheduleIndexPage {
     changeCalendar(event) {
         let yearMonth = moment({
             y: event.year.value,
-            M: event.month.value - 1
+            M: event.month.value - 1,
+
         });
         // selected month
         this.currentMonth = moment(yearMonth);
@@ -360,7 +361,7 @@ export class ScheduleIndexPage {
 
     showToday() {
         this.today = moment().format('YYYY/MM/D');
-        this.currentMonth = moment().date(1);
+        this.currentMonth = moment(this.today).date(1);
         this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
         this.nextMonth = moment(this.currentMonth).add(1, 'months');
         this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
