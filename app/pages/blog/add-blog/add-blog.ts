@@ -332,7 +332,8 @@ class SelectReadLimitTypePage {
     this.translate.get('app.common.selectReaders').subscribe(message => {
       let sendDataToSelectUsers = {
         'title': message,
-        'selectedUsers': this.selectedUsers
+        'selectedUsers': this.selectedUsers,
+        'systemName': 'blog'
       };
       let selectUsersModal = this.modalCtrl.create(SelectUsersPage, { 'sendDataToSelectUsers': sendDataToSelectUsers });
       selectUsersModal.onDidDismiss(data => {

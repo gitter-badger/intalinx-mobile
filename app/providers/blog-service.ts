@@ -288,4 +288,61 @@ export class BlogService {
             });
         });
     }
+
+    getOrganizationList(): any {
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/blog/get_organization_list.xml').then((req: string) => {
+                let objRequest = this.util.parseXml(req);
+                req = this.util.xml2string(objRequest);
+
+                this.util.callCordysWebservice(req).then((data: string) => {
+                    let objResponse = this.util.parseXml(data);
+                    let organizationOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'OrganizationOutput\']');
+                    let orgs = new Array();
+                    for (let i = 0; i < organizationOutputs.length; i++) {
+                        orgs.push(this.util.xml2json(organizationOutputs[i]).OrganizationOutput);
+                    }
+
+                    orgs.forEach(function (element) {
+                        if (element.parentOrganizationCode && element.parentOrganizationCode !== '') {
+                            let curParentOrganizationCode = element.parentOrganizationCode;
+                            for (let index = 0; index < orgs.length; index++) {
+                                if (orgs[index].organizationCode === curParentOrganizationCode) {
+                                    let parentOrganizationName = orgs[index].organizationName;
+                                    let curOrganizationName = element.organizationName;
+                                    element.organizationName = parentOrganizationName
+                                        + '・' + curOrganizationName;
+                                    break;
+                                }
+                            }
+                        }
+                    }, this);
+                    resolve(orgs);
+                });
+            });
+        });
+    }
+
+    getUserList(): any {
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/blog/get_user_list.xml').then((req: string) => {
+                let objRequest = this.util.parseXml(req);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'selType\']', 'ALL');
+                req = this.util.xml2string(objRequest);
+                this.util.callCordysWebservice(req).then((data: string) => {
+                    let objResponse = this.util.parseXml(data);
+                    let userOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'UserOutput\']');
+                    let usrs = new Array();
+                    for (let i = 0; i < userOutputs.length; i++) {
+                        let userOutput = this.util.xml2json(userOutputs[i]).UserOutput;
+                        let user = userOutput;
+                        user['isSelected'] = false;
+                        user['assignOrgCd'] = userOutput.organization;
+                        usrs.push(user);
+                    }
+                    resolve(usrs);
+                });
+            });
+        });
+    }
 }

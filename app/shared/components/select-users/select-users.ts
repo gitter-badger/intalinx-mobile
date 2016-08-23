@@ -11,13 +11,15 @@ import {Util} from '../../../utils/util';
 
 // Services.
 import {ScheduleService} from '../../../providers/schedule-service';
+import {BlogService} from '../../../providers/blog-service';
 import {UserService} from '../../../providers/user-service';
 
 @Component({
     templateUrl: 'build/shared/components//select-users/select-users.html',
     providers: [
         UserService,
-        ScheduleService
+        ScheduleService,
+        BlogService
     ]
 })
 export class SelectUsersPage {
@@ -35,20 +37,22 @@ export class SelectUsersPage {
         private util: Util,
         private params: NavParams,
         private scheduleService: ScheduleService,
+        private blogService: BlogService,
         private userService: UserService) {
         let sendDataToSelectUsers = this.params.get('sendDataToSelectUsers');
         this.title = sendDataToSelectUsers.title;
         this.originUsers = sendDataToSelectUsers.selectedUsers;
-        this.getOrganizationAndUsers().then(data => {
+        let systemName = sendDataToSelectUsers.systemName;
+        this.getOrganizationAndUsers(systemName).then(data => {
             this.selectedUsersCount = 0;
             this.setOriginSelectedUsers();
         });
     }
 
-    getOrganizationAndUsers(): any {
+    getOrganizationAndUsers(systemName): any {
         return new Promise(resolve => {
-            this.userService.getOrganizationList().then((orgs: any[]) => {
-                this.userService.getHumanResourceUserInfoList().then((users: any[]) => {
+            this.getOrganizationList(systemName).then((orgs: any[]) => {
+                this.getUserList(systemName).then((users: any[]) => {
                     // all users
                     this.allUsers = users;
                     for (let i = 0; i < orgs.length; i++) {
@@ -124,5 +128,33 @@ export class SelectUsersPage {
             sendUsers.push(user);
         });
         this.viewCtrl.dismiss(sendUsers);
+    }
+
+    getOrganizationList(systemName): any {
+        return new Promise(resolve => {
+            if (systemName === 'schedule') {
+                this.scheduleService.getOrganizationList().then(orgs => {
+                    resolve(orgs);
+                });
+            } else if (systemName === 'blog') {
+                this.blogService.getOrganizationList().then(orgs => {
+                    resolve(orgs);
+                });
+            }
+        });
+    }
+
+    getUserList(systemName): any {
+        return new Promise(resolve => {
+            if (systemName === 'schedule') {
+                this.scheduleService.getHumanResourceUserInfoList().then(usrs => {
+                    resolve(usrs);
+                });
+            } else if (systemName === 'blog') {
+                this.blogService.getUserList().then(usrs => {
+                    resolve(usrs);
+                });
+            }
+        });
     }
 }

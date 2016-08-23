@@ -59,8 +59,8 @@ export class SelectUserPage {
 
     getOrganizationAndUsers(): any {
         return new Promise(resolve => {
-            this.userService.getOrganizationList().then((orgs: any[]) => {
-                this.userService.getHumanResourceUserInfoList().then((users: any[]) => {
+            this.scheduleService.getOrganizationList().then((orgs: any[]) => {
+                this.scheduleService.getHumanResourceUserInfoList().then((users: any[]) => {
                     // all users
                     this.allUsers = users;
                     for (let i = 0; i < orgs.length; i++) {

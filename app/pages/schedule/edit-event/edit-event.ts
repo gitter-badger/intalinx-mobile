@@ -367,7 +367,8 @@ export class EditEventPage {
         this.translate.get('app.schedule.selectParticipants').subscribe(message => {
             let sendDataToSelectUsers = {
                 'title': message,
-                'selectedUsers': this.participants
+                'selectedUsers': this.participants,
+                'systemName': 'schedule'
             };
             let participantsModal = this.modalCtrl.create(SelectUsersPage, { 'sendDataToSelectUsers': sendDataToSelectUsers });
             participantsModal.onDidDismiss(data => {
