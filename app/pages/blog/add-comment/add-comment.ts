@@ -38,7 +38,7 @@ export class AddCommentPage {
             if (data === 'true') {
                 this.sendData.isRefreshFlag = true;
                 this.nav.pop();
-                GoogleAnalytics.trackEvent("Blog","add","comment");
+                GoogleAnalytics.trackEvent('Blog', 'add', 'comment');
             } else {
                 this.isDisabled = null;
             }
@@ -54,7 +54,7 @@ export class AddCommentPage {
     }
 
     changeContent(): void {
-        if (this.comment.content && this.util.deleteEmSpaceEnSpaceNewLineInCharacter(this.comment.content) != "") {
+        if (this.comment.content && this.util.deleteEmSpaceEnSpaceNewLineInCharacter(this.comment.content) !== '') {
             this.isDisabled = null;
         } else {
             this.isDisabled = true;
