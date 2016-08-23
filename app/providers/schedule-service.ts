@@ -167,7 +167,7 @@ export class ScheduleService {
                 holidays.forEach(function (holiday) {
                     let holidaysByDay: any = new Array();
                     let startDay = moment(holiday.startDay, 'X').format('YYYY/MM/D');
-                    if (Number(holiday.startDay) > startTime && Number(holiday.startDay) < endTime) {
+                    if (Number(holiday.startDay) >= startTime && Number(holiday.startDay) <= endTime) {
                         if (!holidaysByDays.has(startDay)) {
                             holidaysByDay.push(holiday);
                             holidaysByDays.set(startDay, holidaysByDay);
