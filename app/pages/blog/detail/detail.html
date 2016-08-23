@@ -9,7 +9,7 @@
     </div>
     <div [hidden]="!isLoadCompleted">
         <ion-item no-lines>
-            <h2 class="title">{{title}}</h2>
+            <h2 class="title selectable">{{title}}</h2>
         </ion-item>
         <ion-item class="status">
             <ion-avatar item-left class="avatar">
@@ -28,7 +28,7 @@
                 <div>{{commentCount}}</div>
             </button>
         </ion-item>
-        <div class="contents" padding>
+        <div class="contents selectable" padding>
             <div [innerContent]="content"></div>
             <img (click)="showImageSlides($event)" *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage"/>
         </div>
@@ -47,7 +47,7 @@
                             <div class="time">{{comment.createDate}}</div>
                         </ion-item>
                     </ion-card-header>
-                    <ion-card-content [innerHTML]="comment.content">
+                    <ion-card-content class="selectable" [innerHTML]="comment.content">
                     </ion-card-content>
                 </ion-card>
             </ion-item>

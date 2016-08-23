@@ -1,5 +1,12 @@
 .add-comment {
-    textarea {
-        min-height: 85vh;
+    ion-item {
+        padding-left: 0;
+        .item-inner {
+            padding-right: 0;
+        }
+        textarea {
+            min-height: 85vh;
+            margin: 0;
+        }
     }
 }

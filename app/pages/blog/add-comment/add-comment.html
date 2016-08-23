@@ -9,5 +9,7 @@
     </ion-navbar>
 </ion-header>
 <ion-content padding class="add-comment">
-    <ion-textarea placeholder='{{ "app.blog.comment.content" | translate }}' [(ngModel)]="comment.content" (ngModelChange)="changeContent($event)"></ion-textarea>
+    <ion-item>
+        <ion-textarea placeholder='{{ "app.blog.comment.content" | translate }}' [(ngModel)]="comment.content" (ngModelChange)="changeContent($event)"></ion-textarea>
+    </ion-item>
 </ion-content>
