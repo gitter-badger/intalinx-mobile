@@ -312,10 +312,14 @@ export class ScheduleIndexPage {
     changeMonth(swiper) {
         let swipeDirection = swiper.swipeDirection;
         if (swipeDirection) {
-            if (swipeDirection === 'prev') {
-                this.showPreviousMonth();
-            } else {
-                this.showNextMonth();
+            let activeIndex = this.slider.getActiveIndex();
+            // because in our case, the active index will always be 1. 
+            if (activeIndex !== 1) {
+                if (swipeDirection === 'prev') {
+                    this.showPreviousMonth();
+                } else {
+                    this.showNextMonth();
+                }
             }
         }
     }
