@@ -240,12 +240,13 @@ class ImageSlidesPage {
                 index = i;
             }
         }
+        let hasPluralPages = this.images.length > 1 ? true : false;
         this.imageSlideOptions = {
             initialSlide: index,
             loop: false,
             direction: 'horizontal',
-            pager: true
-        }
+            pager: hasPluralPages
+        };
     }
 
     backToBlogDetail() {
