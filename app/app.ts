@@ -69,7 +69,7 @@ class IntaLinx {
             if (typeof GoogleAnalytics !== undefined && this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')) {
                 GoogleAnalytics.startTrackerWithId(this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID'));
             }
-            if (this.platform.is('tablet')) {
+            if (this.appConfig.get('IS_TABLET')) {
                 if (typeof ScreenOrientation !== undefined) {
                     ScreenOrientation.lockOrientation('landscape');
                 }

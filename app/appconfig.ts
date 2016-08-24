@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 @Injectable()
 export class AppConfig {
     private config: any = {
+        'IS_TABLET': false,
         'BASE_URL': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
         'BASE_URL_JAPAN': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
         'BASE_URL_CHINA': 'http://www.intalinx.cn/home/intalinxcloud/',
@@ -19,7 +20,7 @@ export class AppConfig {
         'SERVER_STORAGE_NAME': 'server',
         'USER_DEFAULT_AVATAR_IMAGE_URL': 'img/default',
         'PGYER_ANDROID_URL' : 'https://www.pgyer.com/MMHC',
-        'PGYER_IOS_URL' : 'https://www.pgyer.com/MMHB',
+        'PGYER_IOS_URL' : 'https://www.pgyer.com/za4x',
         'USER_LANG': 'en-US',
         'GOOGLE_ANALYTICS_TRACK_ID': 'UA-81438804-1',
         'GOOGLE_ANALYTICS_TRACK_ID_JAPAN': 'UA-81438804-1',

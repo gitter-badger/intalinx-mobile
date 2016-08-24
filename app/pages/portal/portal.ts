@@ -6,6 +6,9 @@ import {Platform, NavController, MenuController} from 'ionic-angular';
 // Utils.
 import {Util} from '../../utils/util';
 
+// Config.
+import {AppConfig} from '../../appconfig';
+
 // Services.
 import {ShareService} from '../../providers/share-service';
 import {AppsService} from '../../providers/apps-service'; 
@@ -48,7 +51,7 @@ export class PortalPage {
         'devices': DevicesPage
     };
 
-    constructor(private translate: TranslateService, private platform: Platform, private nav: NavController, private util: Util, private share: ShareService, private appsService: AppsService, private aboutService: AboutService, private userService: UserService) {
+    constructor(private translate: TranslateService, private platform: Platform, private nav: NavController, private appConfig: AppConfig, private util: Util, private share: ShareService, private appsService: AppsService, private aboutService: AboutService, private userService: UserService) {
         this.initializeUser().then(() => {
             this.loadApplications();
             this.checkUpdate();
@@ -60,7 +63,7 @@ export class PortalPage {
 
     checkUpdate(): void {
         // check latest version from http://pgyer.com/.
-        if (this.platform.is('cordova') && !this.platform.is('tablet')) {
+        if (this.platform.is('cordova') && !this.appConfig.get('IS_TABLET')) {
             this.aboutService.getVersion().then(data => {
                 this.version = data;
                 this.aboutService.getLatestVersion().then(data => {
@@ -84,7 +87,7 @@ export class PortalPage {
                 menuIdNeedToRemove.push('about');
             }
             // remove notification, calendar, profile for real device.
-            if (this.platform.is('tablet')) {
+            if (this.appConfig.get('IS_TABLET')) {
                 menuIdNeedToRemove.push('blog');
                 menuIdNeedToRemove.push('notification');
                 menuIdNeedToRemove.push('schedule');
@@ -110,7 +113,7 @@ export class PortalPage {
             this.share.initializeMenu(data);
 
             // set root page.
-            if (!this.platform.is('tablet')) {
+            if (!this.appConfig.get('IS_TABLET')) {
                 // set root to blog.
                 this.nav.setRoot(BlogIndexPage);
             } else {
