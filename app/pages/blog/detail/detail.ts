@@ -219,7 +219,7 @@ export class BlogDetailPage {
     template: `
     <ion-content class="image-slides">
         <ion-slides [options]="imageSlideOptions">
-            <ion-slide *ngFor="let image of images" (click)="backToBlogDetail()" (press)="showPictureOperations(image.src)">
+            <ion-slide *ngFor="let image of images" (click)="backToBlogDetail()" (press)="showPictureOperations(image)">
                 <img src="{{image.src}}" />
             </ion-slide>
         </ion-slides>
@@ -252,7 +252,7 @@ class ImageSlidesPage {
         this.nav.pop();
     }
 
-    showPictureOperations(src) {
+    showPictureOperations(image) {
         if (this.platform.is('cordova')) {
             this.translate.get(['app.action.savePicture',
                 'app.action.cancel']).subscribe(message => {
@@ -263,7 +263,7 @@ class ImageSlidesPage {
                             {
                                 text: deleteEventOfSelectedDay,
                                 handler: () => {
-                                    this.savePicture(src.replace('data:image/jpeg;base64,', ''));
+                                    this.savePicture(image);
                                 }
                             }, {
                                 text: cancelButton,
@@ -278,7 +278,18 @@ class ImageSlidesPage {
         }
     }
 
-    savePicture(base64Data) {
+    savePicture(image) {
+        let base64Data;
+        if (image.src.indexOf('data:image/jpeg;base64,') < 0) {
+             let canvas = document.createElement('canvas');
+                canvas.height = image.height;
+                canvas.width = image.width;
+                let ctx = canvas.getContext('2d');
+                ctx.drawImage(image, 0, 0);
+                base64Data = canvas.toDataURL();
+        } else {
+            base64Data = image.src.replace('data:image/jpeg;base64,', '')
+        }
         Base64ToGallery.base64ToGallery(base64Data, {
             prefix: 'img_',
             mediaScanner: true
