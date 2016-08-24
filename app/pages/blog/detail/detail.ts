@@ -282,8 +282,8 @@ class ImageSlidesPage {
         let base64Data;
         if (image.src.indexOf('data:image/jpeg;base64,') < 0) {
             let canvas = document.createElement('canvas');
-            canvas.height = image.height;
-            canvas.width = image.width;
+            canvas.height = image.naturalHeight;
+            canvas.width = image.naturalWidth;
             let ctx = canvas.getContext('2d');
             ctx.drawImage(image, 0, 0);
             base64Data = canvas.toDataURL();
