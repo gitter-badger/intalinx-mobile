@@ -213,10 +213,6 @@ export class BlogDetailPage {
         };
         this.nav.push(ImageSlidesPage, { 'sendData': sendData });
     }
-
-    downloadAttachFile() {
-        
-    }
 }
 
 @Component({
@@ -247,7 +243,8 @@ class ImageSlidesPage {
         this.imageSlideOptions = {
             initialSlide: index,
             loop: false,
-            direction: 'horizontal'
+            direction: 'horizontal',
+            pager: true
         }
     }
 

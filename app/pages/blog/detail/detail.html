@@ -32,8 +32,8 @@
             <div [innerContent]="content"></div>
             <img (click)="showImageSlides($event)" *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage" />
         </div>
-        <div padding-left class="file-download" flex-sm="100" *ngFor="let attachFile of attachFilesForDownload">
-            <a disabled (click)="downloadAttachFile()">{{attachFile.attachmentName}}</a><span class="file-size">{{attachFile.attachmentSize}}</span>
+        <div padding-left class="attachment" flex-sm="100" *ngFor="let attachFile of attachFilesForDownload">
+            <span>{{attachFile.attachmentName}}</span><span class="file-size">{{attachFile.attachmentSize}}</span>
         </div>
         <div padding-left padding-bottom class="download-message" [hidden]="!hasAttachFilesForDownload">{{"app.blog.message.error.attachmentTooLargeTodownload" | translate}}</div>
         <ion-list>
