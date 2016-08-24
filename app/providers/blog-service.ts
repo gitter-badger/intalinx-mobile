@@ -129,7 +129,7 @@ export class BlogService {
                             || attachFile.attachmentName.toLowerCase().indexOf('.jpg') > 0
                             || attachFile.attachmentName.toLowerCase().indexOf('.jpeg') > 0
                             || attachFile.attachmentName.toLowerCase().indexOf('.bmp') > 0)
-                            && attachFile.attachmentSize <= 500 * 1024) {
+                            && attachFile.attachmentSize <= 10 * 1024 * 1024) {
                             this.getRequestOfDownloadAttachmentByAttachmentId(attachFile.attachmentID).then((data) => {
                                 let attachImageSrc = this.domSanitizationService.bypassSecurityTrustUrl('data:image/jpeg;base64,' + data.downloadAttachmentByAttachmentId);
                                 community['attachImagesForDisplay'].push(attachImageSrc);
