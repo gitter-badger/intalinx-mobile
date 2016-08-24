@@ -125,18 +125,18 @@ export class BlogService {
                     let attachFileSrc;
                     for (let i = 0; i < attachFileList.length; i++) {
                         let attachFile = this.util.xml2json(attachFileList[i]).attachFileList;
-                        if ((attachFile.attachmentName.toLowerCase().indexOf('.png')
-                        || attachFile.attachmentName.toLowerCase().indexOf('.jpg')
-                        || attachFile.attachmentName.toLowerCase().indexOf('.jpeg')
-                        || attachFile.attachmentName.toLowerCase().indexOf('.bmp'))
-                        && attachFile.attachmentSize <= 500 * 1024) {
+                        if ((attachFile.attachmentName.toLowerCase().indexOf('.png') > 0
+                            || attachFile.attachmentName.toLowerCase().indexOf('.jpg') > 0
+                            || attachFile.attachmentName.toLowerCase().indexOf('.jpeg') > 0
+                            || attachFile.attachmentName.toLowerCase().indexOf('.bmp') > 0)
+                            && attachFile.attachmentSize <= 500 * 1024) {
                             this.getRequestOfDownloadAttachmentByAttachmentId(attachFile.attachmentID).then((data) => {
                                 let attachImageSrc = this.domSanitizationService.bypassSecurityTrustUrl('data:image/jpeg;base64,' + data.downloadAttachmentByAttachmentId);
                                 community['attachImagesForDisplay'].push(attachImageSrc);
                             });
                         } else {
-                            attachFile.attachmentSize = this.util.getFileSize(attachFile.attachmentSize);
-                             community['attachFilesForDownload'].push(attachFile);
+                            attachFile.attachmentSize = '(' + this.util.getFileSize(attachFile.attachmentSize) + ')';
+                            community['attachFilesForDownload'].push(attachFile);
                         }
                         attachFiles.push(attachFile);
                     }

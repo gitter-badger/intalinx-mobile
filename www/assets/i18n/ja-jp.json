@@ -119,7 +119,7 @@
                     "title": "エラー",
                     "noContent": "コメントを入力してください。",
                     "pictureTooLarge": "画像サイズが大きいですが、変更してください。",
-                    "attachmentTooLargeTodownload": "添付ファイルが大きすぎますが、パソコンでダウンロードしてください。",
+                    "attachmentTooLargeTodownload": "以上の添付ファイルをパソコンでダウンロードしてください。",
                     "savePicture": "画像の保存ができませんでした。"
                 },
                 "success": {

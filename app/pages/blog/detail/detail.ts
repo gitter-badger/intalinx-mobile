@@ -60,6 +60,7 @@ export class BlogDetailPage {
     private commentCount: string;
     private attachFilesForDownload: any;
     private attachImagesForDisplay: any;
+    private hasAttachFilesForDownload: boolean = false;
 
     private pageLoadTime: number;
     private images: any;
@@ -95,6 +96,9 @@ export class BlogDetailPage {
             this.readCount = data.readCount;
             this.attachImagesForDisplay = data.attachImagesForDisplay;
             this.attachFilesForDownload = data.attachFilesForDownload;
+            if (data.attachFilesForDownload.length > 0) {
+                this.hasAttachFilesForDownload = true;
+            }
             this.isLoadCompleted = true;
             this.isScrollToTopButtonVisible = false;
             if (this.status === 'PUBLISH' && this.newReplyFlag === 'TRUE') {
@@ -211,9 +215,7 @@ export class BlogDetailPage {
     }
 
     downloadAttachFile() {
-        this.translate.get('app.blog.message.error.attachmentTooLargeTodownload').subscribe(message => {
-            this.util.presentModal(message);
-        });
+        
     }
 }
 
@@ -284,10 +286,11 @@ class ImageSlidesPage {
             prefix: 'img_',
             mediaScanner: true
         }).then(
-            res => (setTimeout(() => {this.showSuccessToast()}, 500)),
+            res => (setTimeout(() => {
+                this.showSuccessToast();
+            }, 500)),
             err => this.showErrorPresent()
-        );
-
+            );
     }
 
     showSuccessToast() {

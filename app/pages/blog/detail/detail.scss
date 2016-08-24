@@ -57,6 +57,14 @@
     &.scroll-to-top {
         bottom: 88px;
     }
+    .file-size {
+        color: #666;
+        padding-left: 4px;
+    }
+    .download-message {
+        font-size: 1.2rem;
+        color: #666;
+    }
 }
 .image-slides {
     background-color: $primary-text-color;

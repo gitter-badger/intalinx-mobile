@@ -119,7 +119,7 @@
                     "title": "error",
                     "noContent": "The content is required.",
                     "pictureTooLarge": "Your avatar's file size is too large.",
-                    "attachmentTooLargeTodownload": "This attachment is too large to download on mobile. You can download it on computer.",
+                    "attachmentTooLargeTodownload": "Please download these attachments on computer.",
                     "savePicture": "Failed to save the picture. "
                 },
                 "success": {
