@@ -32,6 +32,10 @@
         font-weight: 600;
         padding-top: 8px;
         padding-bottom: 8px;
+        border-width:0;
+        border-bottom-width: 0.55px;
+        border-style: solid;
+        border-color: $divider-color;
         .weekends {
             color: $primary-color-dark;
         }
@@ -40,11 +44,6 @@
         .days{
             padding-top: 4px;
             padding-bottom: 4px;
-            border: 0px;
-            border-top-width: 0.55px;
-            border-bottom-width: 0.55px;
-            border-style: solid;
-            border-color: $divider-color;
             .day {
                 padding-top: 4px;
                 width: percentage(1 / 7);
