@@ -25,12 +25,21 @@ export class Img {
     @HostListener('click', [])
     onClick() {
         let currentImage = this.elementRef.element.nativeElement;
-        let images = this.elementRef.element.nativeElement.ownerDocument.querySelectorAll('.contents img');
-        let sendData = {
-            'currentImage': currentImage,
-            'images': images
-        };
-        this.nav.push(ImageSlidesPage, { 'sendData': sendData });
+        if (currentImage.parentElement.parentElement.className === 'contents selectable') {
+            let images = currentImage.ownerDocument.querySelectorAll('.contents img');
+            let sendData = {
+                'currentImage': currentImage,
+                'images': images
+            };
+            this.nav.push(ImageSlidesPage, { 'sendData': sendData });
+        } else if (currentImage.parentElement.parentElement.className === 'comment-content') {
+            let images = currentImage.parentElement.querySelectorAll('img');
+            let sendData = {
+                'currentImage': currentImage,
+                'images': images
+            };
+            this.nav.push(ImageSlidesPage, { 'sendData': sendData });
+        }
     }
 }
 
@@ -112,6 +121,9 @@ export class BlogDetailPage {
         this.blogService.getReplyContentListByCommunityID(this.id, position).then((data: any) => {
             if (data) {
                 this.comments = data.replyContents;
+                for (let i = 0; i < data.replyContents.length; i++) {
+                    data.replyContents[i].content = [data.replyContents[i].content, [Img]];
+                }
                 this.commentCount = data.cursor.maxRows;
             }
         });
@@ -127,6 +139,9 @@ export class BlogDetailPage {
 
         this.blogService.getReplyContentListByCommunityID(this.id, position).then((data: any) => {
             if (data && data.replyContents[0]) {
+                for (let i = 0; i < data.replyContents.length; i++) {
+                    data.replyContents[i].content = [data.replyContents[i].content, [Img]];
+                }
                 this.comments = this.comments.concat(data.replyContents);
             }
             infiniteScroll.complete();
