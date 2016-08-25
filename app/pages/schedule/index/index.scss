@@ -32,16 +32,17 @@
         font-weight: 600;
         padding-top: 8px;
         padding-bottom: 8px;
-        border-width:0;
-        border-bottom-width: 0.55px;
-        border-style: solid;
-        border-color: $divider-color;
         .weekends {
             color: $primary-color-dark;
         }
     }
     .calendar {
         .days{
+            border: 0;
+            border-bottom-width: 0.55px;
+            border-top-width: 0.55px;
+            border-style: solid;
+            border-color: #B6B6B6;
             padding-top: 4px;
             padding-bottom: 4px;
             .day {
@@ -90,6 +91,9 @@
             }
         }
         .events{
+            ion-list > .item:first-child {
+                border-top: 0;
+            }
             .border-right-solid {
                 border-right-style: solid;
                 border-right-width: thin;

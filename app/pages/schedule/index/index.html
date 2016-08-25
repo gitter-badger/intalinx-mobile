@@ -24,9 +24,6 @@
     <div no-border-top class="week-names">
         <div class="week-days" *ngFor="let weekday of weekdays" [ngClass]="{'weekends': (isFirstDayMonday==false && (weekday==weekdays[0] || weekday==weekdays[6])) || (isFirstDayMonday==true && (weekday==weekdays[5] || weekday==weekdays[6]))}">{{weekday}}</div>
     </div>
-    <div class="loading" [hidden]="isHtmlLoadCompleted==true">
-        <ion-spinner name="dots"></ion-spinner>
-    </div>
     <ion-slides #calendarSlides (ionDidChange)="changeMonth($event)" [options]="calendarSlideOptions">
         <ion-slide class="calendar">
             <div class="days">
@@ -55,10 +52,10 @@
                     </ion-badge>
                 </div>
             </div>
-            <div class="loading" [hidden]="isEventLoadCompleted!=false">
-                <ion-spinner name="dots"></ion-spinner>
-            </div>
             <div class="events">
+                <div class="loading" [hidden]="isEventLoadCompleted!=false">
+                    <ion-spinner name="dots"></ion-spinner>
+                </div>
                 <ion-list [hidden]="isEventLoadCompleted==false">
                     <ion-item *ngFor="let specialDay of specialDays">
                         <ion-row>
