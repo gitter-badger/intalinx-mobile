@@ -2,6 +2,7 @@
 import {ViewChild, Component, NgZone, ElementRef} from '@angular/core';
 import {NavController, ModalController, LoadingController, NavParams} from 'ionic-angular';
 import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
+import {GoogleAnalytics} from 'ionic-native';
 /// <reference path="./exif-ts/exif.d.ts" />
 import * as EXIF from 'exif-ts/exif';
 
@@ -210,6 +211,7 @@ export class AddBlogPage {
         setTimeout(() => {
           this.nav.pop();
         }, 500);
+        GoogleAnalytics.trackEvent('Blog', 'add', 'blog');
       }
     });
   }
