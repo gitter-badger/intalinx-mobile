@@ -1,8 +1,10 @@
 // Third party library.
-import {Component} from '@angular/core';
-import {NavController, NavParams} from 'ionic-angular';
+import {Component, ViewChild, NgZone, ElementRef} from '@angular/core';
+import {NavController, NavParams, LoadingController} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {GoogleAnalytics} from 'ionic-native';
+/// <reference path="./exif-ts/exif.d.ts" />
+import * as EXIF from 'exif-ts/exif';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -18,12 +20,15 @@ import {BlogService} from '../../../providers/blog-service';
     ]
 })
 export class AddCommentPage {
+    @ViewChild('fileInput') fileInput: ElementRef;
+    private pictures: any = new Array();
+    private loading: any;
     private sendData: any;
     private id: string;
     private comment: any;
     private isDisabled: boolean;
 
-    constructor(private nav: NavController, private params: NavParams, private blogService: BlogService, private util: Util) {
+    constructor(private nav: NavController, private params: NavParams, private zone: NgZone, private loadingCtrl: LoadingController, private translate: TranslateService, private blogService: BlogService, private util: Util) {
         this.sendData = this.params.get('sendData');
         this.id = this.sendData.id;
         this.comment = {
@@ -34,10 +39,26 @@ export class AddCommentPage {
 
     saveComment(): void {
         this.isDisabled = true;
-        this.blogService.saveComment(this.comment).then(data => {
+        this.translate.get(['app.blog.isSaving']).subscribe(message => {
+            let content = message['app.blog.isSaving'];
+            this.loading = this.loadingCtrl.create({
+                spinner: 'ios',
+                content: content
+            });
+            this.loading.present();
+        });
+        this.isDisabled = true;
+        let comment = {
+            communityID: this.id,
+            content: this.getRealContent()
+        };
+        this.blogService.saveComment(comment).then(data => {
             if (data === 'true') {
                 this.sendData.isRefreshFlag = true;
-                this.nav.pop();
+                this.loading.dismiss();
+                setTimeout(() => {
+                    this.nav.pop();
+                }, 500);
                 GoogleAnalytics.trackEvent('Blog', 'add', 'comment');
             } else {
                 this.isDisabled = null;
@@ -66,6 +87,118 @@ export class AddCommentPage {
         let textarea = document.querySelector('.add-comment textarea');
         if (textarea.scrollHeight > 0) {
             // textarea.style.height = textarea.scrollHeight + 'px';
+        }
+    }
+
+    addPicture(): any {
+        let a = event.bubbles;
+        // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
+        let fileInput = (<any>event.currentTarget);
+        for (let i = 0; i < fileInput.files.length; i++) {
+            let file = fileInput.files[i];
+            if (file) {
+                if (file.type && !/image/i.test(file.type)) {
+                    return false;
+                }
+                let reader = new FileReader();
+                let wholeThis = this;
+                reader.onload = function (e) {
+                    // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
+                    wholeThis.render(file, (<any>e.target).result, wholeThis);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        // clear fileinput after uploading picture
+        this.fileInput.nativeElement.value = '';
+    }
+
+    render(file, src, other): void {
+        EXIF.getData(file, function () {
+            // get the Orientation of picture.
+            let orientation = EXIF.getTag(this, 'Orientation');
+
+            let image = new Image();
+            image.onload = function () {
+                var degree = 0, drawWidth, drawHeight, width, height;
+                drawWidth = image.naturalWidth;
+                drawHeight = image.naturalHeight;
+                let quality = 0;
+                let canvas = document.createElement('canvas');
+
+                canvas.width = width = drawWidth;
+                canvas.height = height = drawHeight;
+                let context = canvas.getContext('2d');
+
+                switch (orientation) {
+                    // take photo when home key is on the left of iphone
+                    case 3:
+                        degree = 180;
+                        drawWidth = -width;
+                        drawHeight = -height;
+                        break;
+                    // take photo when home key is on the bottom of iphone
+                    case 6:
+                        canvas.width = height;
+                        canvas.height = width;
+                        degree = 90;
+                        drawWidth = width;
+                        drawHeight = -height;
+                        break;
+                    // take photo when home key is on the top of iphone
+                    case 8:
+                        canvas.width = height;
+                        canvas.height = width;
+                        degree = 270;
+                        drawWidth = -width;
+                        drawHeight = height;
+                        break;
+                }
+                // //user canvas to rotate the picture
+                context.rotate(degree * Math.PI / 180);
+                context.drawImage(image, 0, 0, drawWidth, drawHeight);
+                if (file.size <= 200 * 1024) {
+                    quality = 1;
+                } else if (file.size > 200 * 1024 && file.size <= 500 * 1024) {
+                    quality = 0.5;
+                } else if (file.size > 500 * 1024 && file.size <= 1 * 1024 * 1024) {
+                    quality = 0.3;
+                } else if (file.size > 1 * 1024 * 1024 && file.size <= 2 * 1024 * 1024) {
+                    quality = 0.1;
+                } else if (file.size > 2 * 1024 * 1024 && file.size <= 5 * 1024 * 1024) {
+                    quality = 0.01;
+                } else {
+                    other.translate.get('app.blog.message.error.pictureTooLarge').subscribe(message => {
+                        other.util.presentModal(message);
+                    });
+                    return false;
+                }
+                other.zone.run(() => {
+                    let base64 = canvas.toDataURL('image/jpeg', quality);
+                    other.pictureCount = other.pictureCount + 1;
+                    other.picture = {
+                        'pictureName': other.pictureName + other.pictureCount.toString(),
+                        'pictureSrc': base64
+                    };
+                    other.pictures.push(other.picture);
+                });
+            };
+            image.src = src;
+        });
+    }
+
+    getRealContent(): string {
+        let content = this.util.replaceHtmlTagCharacter(this.comment.content);
+        for (let i = 0; i < this.pictures.length; i++) {
+            content = content + '<img src=\"' + this.pictures[i].pictureSrc + '\" />';
+        }
+        return content;
+    }
+
+    deletePicture(picture): void {
+        let index = this.pictures.indexOf(picture, 0);
+        if (index > -1) {
+            this.pictures.splice(index, 1);
         }
     }
 }

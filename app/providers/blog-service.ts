@@ -59,12 +59,11 @@ export class BlogService {
     }
 
     insertReplyContent(comment: any): any {
-        let content = this.util.replaceHtmlTagCharacter(comment.content);
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/blog/insert_reply_content_request.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
                 this.util.setNodeText(objRequest, './/*[local-name()=\'communityID\']', comment.communityID);
-                this.util.setNodeText(objRequest, './/*[local-name()=\'content\']', content);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'content\']', comment.content);
                 req = this.util.xml2string(objRequest);
 
                 this.util.callCordysWebservice(req).then((data: string) => {

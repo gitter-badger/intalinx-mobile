@@ -12,4 +12,18 @@
     <ion-item>
         <ion-textarea placeholder='{{ "app.blog.comment.content" | translate }}' [(ngModel)]="comment.content" (ngModelChange)="changeContent($event)"></ion-textarea>
     </ion-item>
+    <ion-item class="selected-pictures" no-lines>
+        <ion-thumbnail *ngFor="let picture of pictures">
+            <button fab (click)="deletePicture(picture)">
+                <ion-icon name="close"></ion-icon>
+            </button>
+            <img src="{{picture.pictureSrc}}" />
+        </ion-thumbnail>
+    </ion-item>
 </ion-content>
+<ion-footer>
+    <ion-toolbar class="add-comment-toolbar">
+        <button right clear ><ion-icon name="camera"></ion-icon></button>
+        <input #fileInput type=file accept="image/*" multiple="multiple" (change)="addPicture($event)" class="upload-input" />
+    </ion-toolbar>
+</ion-footer>

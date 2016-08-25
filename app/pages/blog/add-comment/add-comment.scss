@@ -5,8 +5,38 @@
             padding-right: 0;
         }
         textarea {
-            min-height: 85vh;
+            min-height: 25vh;
             margin: 0;
         }
+    }
+    .selected-pictures {
+        ion-thumbnail {
+            float: left;
+            button {
+                max-width: 25px;
+                font-size: 1rem;
+                position:relative;
+                box-shadow: 0 0 0 0;
+                top: 1.5rem;
+                left: 5rem;
+            }
+            img {
+                width: 6.5rem;
+                height: 6.5rem;
+            }
+        }
+    }
+}
+.add-comment-toolbar {
+    .upload-input {
+        opacity:0; 
+        position: absolute;
+        right: 0;
+        width: 60px;
+        height: 50px;
+    }
+    .toolbar-content {
+        display: flex;
+        justify-content: flex-end;
     }
 }
