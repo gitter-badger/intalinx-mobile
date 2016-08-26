@@ -168,7 +168,7 @@ export class Util {
             fileSize = Math.round(fileSize / 1024 / 1024) + ' ' + 'MB';
         } else if (Math.round(fileSize / 1024) > 0) {
             fileSize = Math.round(fileSize / 1024) + ' ' + 'KB';
-        } else if (fileSize > 0) {
+        } else if (fileSize >= 0) {
             fileSize = fileSize + ' ' + 'Byte';
         } else {
             fileSize = '';

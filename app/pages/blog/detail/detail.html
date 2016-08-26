@@ -38,7 +38,7 @@
         <div padding-left padding-bottom class="download-message" [hidden]="!hasAttachFilesForDownload">{{"app.blog.message.error.attachmentTooLargeTodownload" | translate}}</div>
         <ion-list>
             <ion-item class="comment" *ngFor="let comment of comments">
-                <ion-card class="comment-content">
+                <ion-card>
                     <ion-card-header>
                         <ion-item class="status">
                             <ion-avatar item-left class="avatar">
@@ -48,8 +48,14 @@
                             <div class="time">{{comment.createDate}}</div>
                         </ion-item>
                     </ion-card-header>
-                    <ion-card-content class="selectable" [innerContent]="comment.content">
+                    <ion-card-content class="comment-content selectable">
+                        <div [innerContent]="comment.content"></div>
+                        <img (click)="showCommentImageSlides($event)" *ngFor="let attachImage of comment.attachImagesForDisplay" [src]="attachImage" />
                     </ion-card-content>
+                    <div padding-left class="attachment" flex-sm="100" *ngFor="let attachFile of comment.attachFilesForDownload">
+                        <span>{{attachFile.replyContentAttachmentName}}</span><span class="file-size">{{attachFile.replyContentAttachmentSize}}</span>
+                    </div>
+                    <div padding-left padding-bottom class="download-message" [hidden]="comment.attachFilesForDownload.length <= 0">{{"app.blog.message.error.attachmentTooLargeTodownload" | translate}}</div>
                 </ion-card>
             </ion-item>
         </ion-list>

@@ -129,7 +129,7 @@ export class BlogService {
                             || attachFile.attachmentName.toLowerCase().indexOf('.jpeg') > 0
                             || attachFile.attachmentName.toLowerCase().indexOf('.bmp') > 0)
                             && attachFile.attachmentSize <= 10 * 1024 * 1024) {
-                            this.getRequestOfDownloadAttachmentByAttachmentId(attachFile.attachmentID).then((data) => {
+                            this.getRequestOfDownloadAttachmentByAttachmentID(attachFile.attachmentID).then((data) => {
                                 let attachImageSrc = this.domSanitizationService.bypassSecurityTrustUrl('data:image/jpeg;base64,' + data.downloadAttachmentByAttachmentId);
                                 community['attachImagesForDisplay'].push(attachImageSrc);
                             });
@@ -173,6 +173,33 @@ export class BlogService {
                         this.util.fromNow(replyContent.createDate).then(data => {
                             replyContent.createDate = data;
                         });
+
+                        let attachFiles = [];
+                        replyContent['attachImagesForDisplay'] = [];
+                        replyContent['attachFilesForDownload'] = [];
+                        let replyContentAttachFileList = replyContent.replyContentAttachFileList;
+                        let attachFileSrc;
+                        if (replyContentAttachFileList) {
+                            for (let j = 0; j < replyContentAttachFileList.length; j++) {
+                                let attachFile = replyContentAttachFileList[j];
+                                if ((attachFile.replyContentAttachmentName.toLowerCase().indexOf('.png') > 0
+                                    || attachFile.replyContentAttachmentName.toLowerCase().indexOf('.jpg') > 0
+                                    || attachFile.replyContentAttachmentName.toLowerCase().indexOf('.jpeg') > 0
+                                    || attachFile.replyContentAttachmentName.toLowerCase().indexOf('.bmp') > 0)
+                                    && attachFile.replyContentAttachmentSize <= 10 * 1024 * 1024) {
+                                    this.getRequestOfDownloadReplyContentAttachmentByreplyContentAttachmentID(attachFile.replyContentAttachmentID).then((data) => {
+                                        let attachImageSrc = this.domSanitizationService.bypassSecurityTrustUrl('data:image/jpeg;base64,' + data.downloadReplyContentAttachmentByreplyContentAttachmentID);
+                                        replyContent['attachImagesForDisplay'].push(attachImageSrc);
+                                    });
+                                } else {
+                                    attachFile.replyContentAttachmentSize = '(' + this.util.getFileSize(attachFile.replyContentAttachmentSize) + ')';
+                                    replyContent['attachFilesForDownload'].push(attachFile);
+                                }
+                                attachFiles.push(attachFile);
+                            }
+                        }
+                        replyContent.replyContentAttachFileList = attachFiles;
+
                         replyContents.push(replyContent);
                     }
 
@@ -238,7 +265,7 @@ export class BlogService {
         });
     }
 
-    getRequestOfDownloadAttachmentByAttachmentId(attachmentID: string): any {
+    getRequestOfDownloadAttachmentByAttachmentID(attachmentID: string): any {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/blog/download_attachment_by_attachment_id.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
@@ -249,6 +276,23 @@ export class BlogService {
                     let objResponse = this.util.parseXml(data);
                     let returnOutPut = this.util.selectXMLNode(objResponse, './/*[local-name()=\'downloadAttachmentByAttachmentId\']');
                     let returnData = this.util.xml2json(returnOutPut).downloadAttachmentByAttachmentId;
+                    resolve(returnData);
+                });
+            });
+        });
+    }
+
+    getRequestOfDownloadReplyContentAttachmentByreplyContentAttachmentID(replyContentAttachmentID: string): any {
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/blog/download_reply_content_attachment_by_reply_content_attachment_id.xml').then((req: string) => {
+                let objRequest = this.util.parseXml(req);
+
+                this.util.setNodeText(objRequest, './/*[local-name()=\'replyContentAttachmentID\']', replyContentAttachmentID);
+                req = this.util.xml2string(objRequest);
+                this.util.callCordysWebservice(req).then((data: string) => {
+                    let objResponse = this.util.parseXml(data);
+                    let returnOutPut = this.util.selectXMLNode(objResponse, './/*[local-name()=\'downloadReplyContentAttachmentByreplyContentAttachmentID\']');
+                    let returnData = this.util.xml2json(returnOutPut).downloadReplyContentAttachmentByreplyContentAttachmentID;
                     resolve(returnData);
                 });
             });

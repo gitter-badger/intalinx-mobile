@@ -32,7 +32,7 @@ export class Img {
                 'images': images
             };
             this.nav.push(ImageSlidesPage, { 'sendData': sendData });
-        } else if (currentImage.parentElement.parentElement.className === 'comment-content') {
+        } else if (currentImage.parentElement.parentElement.className === 'comment-content selectable') {
             let images = currentImage.parentElement.querySelectorAll('img');
             let sendData = {
                 'currentImage': currentImage,
@@ -222,6 +222,16 @@ export class BlogDetailPage {
     showImageSlides(event): any {
         let currentImage = event.currentTarget;
         let images = document.querySelectorAll('.contents img');
+        let sendData = {
+            'currentImage': currentImage,
+            'images': images
+        };
+        this.nav.push(ImageSlidesPage, { 'sendData': sendData });
+    }
+
+    showCommentImageSlides(event): any {
+        let currentImage = event.currentTarget;
+        let images = currentImage.parentElement.querySelectorAll('img');
         let sendData = {
             'currentImage': currentImage,
             'images': images
