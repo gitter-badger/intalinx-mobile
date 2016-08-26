@@ -24,7 +24,14 @@
                 <div>{{readCount}}</div>
             </button>
         </ion-item>
-        <div class="contents selectable" padding [innerHTML]="content"></div>
+        <div class="contents selectable" padding>
+            <div [innerContent]="content"></div>
+            <img (click)="showImageSlides($event)" *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage" />
+        </div>
+        <div padding-left class="attachment" flex-sm="100" *ngFor="let attachFile of attachFilesForDownload">
+            <span>{{attachFile.attachmentName}}</span><span class="file-size">{{attachFile.attachmentSize}}</span>
+        </div>
+        <div padding-left padding-bottom class="download-message" [hidden]="!hasAttachFilesForDownload">{{"app.blog.message.error.attachmentTooLargeTodownload" | translate}}</div>
     </div>
 </ion-content>
 <button class="detail scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">

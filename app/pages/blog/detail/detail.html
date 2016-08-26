@@ -55,7 +55,7 @@
                     <div padding-left class="attachment" flex-sm="100" *ngFor="let attachFile of comment.attachFilesForDownload">
                         <span>{{attachFile.replyContentAttachmentName}}</span><span class="file-size">{{attachFile.replyContentAttachmentSize}}</span>
                     </div>
-                    <div padding-left padding-bottom class="download-message" [hidden]="comment.attachFilesForDownload.length <= 0">{{"app.blog.message.error.attachmentTooLargeTodownload" | translate}}</div>
+                    <div padding-left padding-bottom class="download-message" [hidden]="comment.attachFilesForDownload.length<=0">{{"app.blog.message.error.attachmentTooLargeTodownload" | translate}}</div>
                 </ion-card>
             </ion-item>
         </ion-list>

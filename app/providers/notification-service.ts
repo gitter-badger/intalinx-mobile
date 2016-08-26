@@ -2,6 +2,7 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import {NavController} from 'ionic-angular';
+import {DomSanitizationService} from '@angular/platform-browser';
 
 // Config.
 import {AppConfig} from '../appconfig';
@@ -15,6 +16,7 @@ export class NotificationService {
 
     constructor(private http: Http,
         private nav: NavController,
+        private domSanitizationService: DomSanitizationService,
         private appConfig: AppConfig,
         private util: Util) {
         this.userDefaultAvatarImageUrl = this.appConfig.get('USER_DEFAULT_AVATAR_IMAGE_URL');
@@ -92,6 +94,31 @@ export class NotificationService {
                     this.util.fromNowForNotification(notification.publishStartDate).then((data: any) => {
                         notification.publishStartDate = data;
                     });
+
+                    let attachFiles = [];
+                    notification['attachImagesForDisplay'] = [];
+                    notification['attachFilesForDownload'] = [];
+                    let attachFileList = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'attachFileList\']');
+                    let attachFileSrc;
+                    for (let i = 0; i < attachFileList.length; i++) {
+                        let attachFile = this.util.xml2json(attachFileList[i]).attachFileList;
+                        if ((attachFile.attachmentName.toLowerCase().indexOf('.png') > 0
+                            || attachFile.attachmentName.toLowerCase().indexOf('.jpg') > 0
+                            || attachFile.attachmentName.toLowerCase().indexOf('.jpeg') > 0
+                            || attachFile.attachmentName.toLowerCase().indexOf('.bmp') > 0)
+                            && attachFile.attachmentSize <= 10 * 1024 * 1024) {
+                            this.getRequestOfDownloadAttachmentByAttachmentID(attachFile.attachmentId).then((data) => {
+                                let attachImageSrc = this.domSanitizationService.bypassSecurityTrustUrl('data:image/jpeg;base64,' + data.downloadAttachmentByAttachmentId);
+                                notification['attachImagesForDisplay'].push(attachImageSrc);
+                            });
+                        } else {
+                            attachFile.attachmentSize = '(' + this.util.getFileSize(attachFile.attachmentSize) + ')';
+                            notification['attachFilesForDownload'].push(attachFile);
+                        }
+                        attachFiles.push(attachFile);
+                    }
+                    notification.attachFileList = attachFiles;
+                    
                     resolve(notification);
                 });
             });
@@ -109,6 +136,23 @@ export class NotificationService {
 
                 this.util.callCordysWebservice(req).then((data: string) => {
                     resolve('true');
+                });
+            });
+        });
+    }
+
+    getRequestOfDownloadAttachmentByAttachmentID(attachmentID: string): any {
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/notification/download_attachment_by_attachment_id.xml').then((req: string) => {
+                let objRequest = this.util.parseXml(req);
+
+                this.util.setNodeText(objRequest, './/*[local-name()=\'attachmentId\']', attachmentID);
+                req = this.util.xml2string(objRequest);
+                this.util.callCordysWebservice(req).then((data: string) => {
+                    let objResponse = this.util.parseXml(data);
+                    let returnOutPut = this.util.selectXMLNode(objResponse, './/*[local-name()=\'downloadAttachmentByAttachmentId\']');
+                    let returnData = this.util.xml2json(returnOutPut).downloadAttachmentByAttachmentId;
+                    resolve(returnData);
                 });
             });
         });

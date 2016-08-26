@@ -25,4 +25,14 @@
     &.scroll-to-top {
         bottom: 88px;
     }
+    .attachment {
+        color: #666;
+        .file-size {
+            padding-left: 4px;
+        }
+    }
+    .download-message {
+        font-size: 1.2rem;
+        color: #666;
+    }
 }
