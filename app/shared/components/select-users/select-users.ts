@@ -15,7 +15,7 @@ import {BlogService} from '../../../providers/blog-service';
 import {UserService} from '../../../providers/user-service';
 
 @Component({
-    templateUrl: 'build/shared/components//select-users/select-users.html',
+    templateUrl: 'build/shared/components/select-users/select-users.html',
     providers: [
         UserService,
         ScheduleService,
