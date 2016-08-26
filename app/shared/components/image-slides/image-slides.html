@@ -1,7 +1,7 @@
 <ion-content class="image-slides">
     <ion-slides [options]="imageSlideOptions">
-        <ion-slide *ngFor="let image of images" (click)="backToBlogDetail()" (press)="showPictureOperations(image)">
-            <img src="{{image.src}}" />
+        <ion-slide *ngFor="let image of images">
+            <img src="{{image.src}}" (click)="backToBlogDetail()" (press)="showPictureOperations(image)" />
         </ion-slide>
     </ion-slides>
 </ion-content>

@@ -227,6 +227,7 @@ export class EventDetailPage {
                             }
                         }, {
                             text: cancelButton,
+                            role: 'cancel',
                             handler: () => {
 
                             }
@@ -250,6 +251,7 @@ export class EventDetailPage {
                         }
                     }, {
                         text: cancelButton,
+                        role: 'cancel',
                         handler: () => {
 
                         }
@@ -315,7 +317,8 @@ export class EventDetailPage {
                                 }, 500);
                             }
                         }, {
-                            text: cancelButton
+                            text: cancelButton,
+                            role: 'cancel'
                         }
                     ]
                 });

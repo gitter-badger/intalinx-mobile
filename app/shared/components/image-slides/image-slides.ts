@@ -52,6 +52,7 @@ export class ImageSlidesPage {
                                 }
                             }, {
                                 text: cancelButton,
+                                role: 'cancel',
                                 handler: () => {
 
                                 }
