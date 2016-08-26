@@ -5,8 +5,11 @@ export class AppConfig {
     private config: any = {
         'IS_TABLET': false,
         'BASE_URL': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
-        'BASE_URL_JAPAN': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
+        'BASE_URL_JAPAN': 'http://192.168.11.29/home/intalinxcloud/',
         'BASE_URL_CHINA': 'http://www.intalinx.cn/home/intalinxcloud/',
+        'BIZNAVI_URL': 'https://iscsys.intasect.co.jp/biznavi/#/login?SAMLart=',
+        'BIZNAVI_URL_JAPAN': 'https://iscsys.intasect.co.jp/biznavi/#/login?SAMLart=',
+        'BIZNAVI_URL_CHINA': 'http://www.intalinx.cn/biznavi/#/login?SAMLart=',
         'ORGANIZATION_CONTEXT': 'o=fc,cn=cordys,cn=defaultInst,o=cordys.com',
         'DOWNLOAD_GATEWAY_URL': 'com.eibus.web.tools.download.Download.wcp',
         'GATEWAY_URL': 'com.eibus.web.soap.Gateway.wcp',

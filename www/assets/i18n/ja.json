@@ -220,6 +220,9 @@
                 "deleteEventOfSelectedDay": "当該日付の予定のみを削除",
                 "deleteAllEvents": "全ての予定を削除"
             }
+        },
+        "biznavi": {
+            "title": "業務Navi"
         }
     }
 }

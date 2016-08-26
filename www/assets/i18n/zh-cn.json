@@ -220,6 +220,9 @@
                 "deleteEventOfSelectedDay": "仅删除当天的活动",
                 "deleteAllEvents": "删除所有的活动"
             }
+        },
+        "biznavi": {
+            "title": "业务Navi"
         }
     }
 }

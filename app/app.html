@@ -10,9 +10,10 @@
         </ion-item>
       </ion-card>
       <button ion-item *ngFor="let item of menus" (click)="openPage(item)">
-        <ion-icon name={{item.titleIcon}} item-left primary></ion-icon>{{item.title | translate}}
-        <ion-badge item-right *ngIf="item.componentsId=='blog' && share.blogNewInformationCount>0">{{share.blogNewInformationCount}}</ion-badge>
-        <ion-badge item-right *ngIf="item.componentsId=='notification' && share.notificationNewInformationCount>0">{{share.notificationNewInformationCount}}</ion-badge>
+        <ion-icon *ngIf="item.componentsId !== 'biznavi'" name={{item.titleIcon}} item-left primary></ion-icon>
+        <ion-icon *ngIf="item.componentsId === 'biznavi'" class="icon-navi" item-left primary></ion-icon>{{item.title | translate}}
+        <ion-badge item-right *ngIf="item.componentsId === 'blog' && share.blogNewInformationCount>0">{{share.blogNewInformationCount}}</ion-badge>
+        <ion-badge item-right *ngIf="item.componentsId === 'notification' && share.notificationNewInformationCount>0">{{share.notificationNewInformationCount}}</ion-badge>
       </button>
       <button ion-item (click)="logout()">
         <ion-icon name="log-out" item-left primary></ion-icon>{{"app.action.logout" | translate}}

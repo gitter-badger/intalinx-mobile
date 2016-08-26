@@ -20,6 +20,11 @@
         "componentsId": "schedule"
     },
     {
+        "titleIcon": "icon-navi",
+        "title": "app.biznavi.title",
+        "componentsId": "biznavi"
+    },
+    {
         "titleIcon": "desktop",
         "title": "app.schedule.devices.title",
         "componentsId": "devices"
