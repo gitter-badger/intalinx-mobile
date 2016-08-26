@@ -38,13 +38,13 @@
     }
     .calendar {
         .days{
+            border: 0;
+            border-bottom-width: 0.55px;
+            border-top-width: 0.55px;
+            border-style: solid;
+            border-color: #B6B6B6;
             padding-top: 4px;
             padding-bottom: 4px;
-            border: 0px;
-            border-top-width: 0.55px;
-            border-bottom-width: 0.55px;
-            border-style: solid;
-            border-color: $divider-color;
             .day {
                 padding-top: 4px;
                 width: percentage(1 / 7);
@@ -87,7 +87,6 @@
                     top: -6px;
                     background-color: $secondary-text-color;
                 }
-                
             }
         }
         .events{

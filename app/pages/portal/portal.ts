@@ -2,6 +2,7 @@
 import {Component} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {Platform, NavController, MenuController} from 'ionic-angular';
+import {InAppBrowser} from 'ionic-native';
 
 // Utils.
 import {Util} from '../../utils/util';
@@ -96,7 +97,6 @@ export class PortalPage {
             } else if (this.platform.is('mobile')) {
                 menuIdNeedToRemove.push('devices');
             }
-
             // remove unnecessary menu.
             for (let index = 0; index < data.length; index ++) {
                 let currentValue = data[index];
@@ -134,8 +134,21 @@ export class PortalPage {
   
     showMenu(that) {
         return function(menu) {
-            if (menu.isPush) {
-                that.nav.push(that.components[menu.componentsId]);
+            if (menu.componentsId === 'biznavi') {
+                that.util.getSAMLart().then((samlart: string) => {
+                    // sso for biznavi.
+                    let baseURL = that.appConfig.get('BASE_URL');
+                    let baseURLChina = that.appConfig.get('BASE_URL_CHINA');
+                    let url = that.appConfig.get('BIZNAVI_URL_JAPAN') + samlart;
+                    if (baseURL === baseURLChina) {
+                        url = that.appConfig.get('BIZNAVI_URL_CHINA') + samlart;
+                    }
+                    if (that.platform.is('cordova')) {
+                        InAppBrowser.open(url, '_system');
+                    } else {
+                        window.open(url, '_blank');
+                    }
+                });
             } else {
                 that.nav.setRoot(that.components[menu.componentsId]);
             }

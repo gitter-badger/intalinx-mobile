@@ -37,30 +37,23 @@ export class AppsService {
                     // we've got back the raw data, now generate the core schedule data
                     // and save the data for later reference
                     let items = Array.from(data);
-                    items.forEach(function(element) {
-                       this.getNewInformationCount(element);
-                    }, this);
-                    
+                    this.getNewInformationCount();
                     resolve(items);
                 });
         });
     }
 
-    getNewInformationCount(item) {
-        if (item.componentsId === 'blog') {
-            this.blogService.getNotReadCommunityCountBySelf().then((data: string) => {
-                if (data) {
-                    this.share.blogNewInformationCount = Number(data);
-                }
-            });
-        }
-        if (item.componentsId === 'notification') {
-            this.notificationService.getNotReadNotificationCountBySelf().then((data: string) => {
-                if (data) {
-                    this.share.notificationNewInformationCount = Number(data);
-                }
-            });
-        }
+    getNewInformationCount() {
+        this.blogService.getNotReadCommunityCountBySelf().then((data: string) => {
+            if (data) {
+                this.share.blogNewInformationCount = Number(data);
+            }
+        });
+        this.notificationService.getNotReadNotificationCountBySelf().then((data: string) => {
+            if (data) {
+                this.share.notificationNewInformationCount = Number(data);
+            }
+        });
     }
 }
 
