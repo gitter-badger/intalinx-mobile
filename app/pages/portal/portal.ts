@@ -137,7 +137,12 @@ export class PortalPage {
             if (menu.componentsId === 'biznavi') {
                 that.util.getSAMLart().then((samlart: string) => {
                     // sso for biznavi.
-                    let url = that.appConfig.get('BIZNAVI_URL') + samlart;
+                    let baseURL = that.appConfig.get('BASE_URL');
+                    let baseURLChina = that.appConfig.get('BASE_URL_CHINA');
+                    let url = that.appConfig.get('BIZNAVI_URL_JAPAN') + samlart;
+                    if (baseURL === baseURLChina) {
+                        url = that.appConfig.get('BIZNAVI_URL_CHINA') + samlart;
+                    }
                     if (that.platform.is('cordova')) {
                         InAppBrowser.open(url, '_system');
                     } else {
