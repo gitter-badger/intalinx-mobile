@@ -26,6 +26,9 @@
         color: #666;
         padding: 0px;
     }
+    .contents {
+        font-size: 1.6rem;
+    }
     .comment {
         .item-inner {
             border: 0px;
@@ -45,6 +48,7 @@
                 margin: 2px;
                 ion-card-content {
                     white-space: normal;
+                    font-size: 1.5rem;
                 }
             }
         }
