@@ -36,10 +36,7 @@
                 margin-top: 8px;
                 margin-bottom: 8px;
                 img {
-                    width: 8.5rem;
-                    height: 8.5rem;
-                    display: block;
-                    float: left;
+                    padding-top: 4px;
                 }
             }
             .avatar {
@@ -48,6 +45,7 @@
             }
             ion-card {
                 margin: 2px;
+                width: auto;
                 ion-card-content {
                     white-space: normal;
                     font-size: 1.5rem;
