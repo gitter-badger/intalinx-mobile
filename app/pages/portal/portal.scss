@@ -2,6 +2,18 @@
 @import "../pages/notification/index/index";
 @import "../pages/profile/index/index";
 @import "../pages/about/about";
+@import "../pages/schedule/index/index";
+@import "../pages/schedule/devices/devices";
+@font-face {
+  font-family: 'biznavi';
+  src:  url('../../assets/fonts/biznavi.eot?agf1ss');
+  src:  url('../../assets/fonts/biznavi.eot?agf1ss#iefix') format('embedded-opentype'),
+    url('../../assets/fonts/biznavi.ttf?agf1ss') format('truetype'),
+    url('../../assets/fonts/biznavi.woff?agf1ss') format('woff'),
+    url('../../assets/fonts/biznavi.svg?agf1ss#biznavi') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
 
 ion-navbar {
     .bar-button-default {
@@ -24,12 +36,31 @@ ion-navbar {
     }
 }
 
-.nav-menu {
-    order: 1;
-}
-
 .menu {
-    width: 80%;
+    [class^="icon-"], [class*=" icon-"] {
+        /* use !important to prevent issues with browser extensions that change fonts */
+        font-family: 'biznavi' !important;
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+
+        /* Better Font Rendering =========== */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    .icon-navi {
+        &:before {
+            content: "\e900";
+            min-height: 2.4rem;
+            font-size: 1.3rem;
+            line-height: 1;
+        }
+        margin-top: 8px;
+    }
     ion-card {
         margin-left: 0px;
         margin-right: 0px;
@@ -39,9 +70,6 @@ ion-navbar {
         * {
             color: $primary-color-text;
             background-color: $primary-color;
-        }
-        ion-item {
-            height: 10rem;
         }
     }
     ion-avatar{
@@ -53,20 +81,18 @@ ion-navbar {
             min-height: 8rem;
         }    
     } 
-    button {
+    ion-badge {
+        background-color: $accent-color;
+    }
+    button.item {
         ion-label{
             color: $primary-text-color;
         }
         .item-inner {
-            background-image: none !important;
-            padding-right: 0px !important;
+            background-image: none;
+            padding-right: 16px ;
         }
     } 
-}
-.portal {
-    ion-buttons[start] {
-        order: 1;
-    }
 }
 .biznavi-badge {
     background-color: $accent-color;
@@ -78,21 +104,21 @@ ion-navbar {
     z-index: 1;
     opacity: 0.9; 
 }
-
 .scroll-to-top {
     background-color: $secondary-text-color;
 }
-
 .loading {
     text-align: center;
 }
-
-.new-information-count {
-    background-color: $accent-color;
-    position: absolute;
-    left: 60%;
-}
-
 button :disabled {
     color: $divider-color;
+}
+input[type], textarea, .selectable {
+    -webkit-user-select: auto;
+}
+textarea {
+    resize: none;
+}
+.item-input.ng-valid.input-has-value::after {
+    border-bottom-color: $primary-color; 
 }

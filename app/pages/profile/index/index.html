@@ -1,12 +1,17 @@
-<ion-navbar *navbar>
-  <ion-title>{{ "app.profile.title" | translate }}</ion-title>
-</ion-navbar>
+<ion-header>
+    <ion-navbar>
+        <button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>{{ "app.profile.title" | translate }}</ion-title>
+    </ion-navbar>
+</ion-header>
 
-<ion-content padding class="index">
-    <div class="loading" [style.display]="isLoadCompleted ? 'none' : 'block'">
+<ion-content padding class="profile-index">
+    <div class="loading" [hidden]="isLoadCompleted">
         <ion-spinner name="dots"></ion-spinner>
     </div>
-    <ion-list [style.display]="isLoadCompleted ? 'block' : 'none'">
+    <ion-list [hidden]="!isLoadCompleted">
         <button  ion-item (click)="openChangeAvatar(user)">
             <ion-thumbnail item-left class="avatar">
                 <img src="{{user.userAvatar}}" />

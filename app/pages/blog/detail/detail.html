@@ -1,19 +1,15 @@
-<!--
-  Generated template for the DetailPage page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
--->
-<ion-navbar *navbar>
-    <ion-title>{{"app.blog.detail" | translate}}</ion-title>
-</ion-navbar>
+<ion-header>
+    <ion-navbar>
+        <ion-title>{{"app.blog.detail" | translate}}</ion-title>
+    </ion-navbar>
+</ion-header>
 <ion-content class="blog-detail">
-    <div class="loading" [style.display]="isLoadCompleted ? 'none' : 'block'">
+    <div class="loading" [hidden]="isLoadCompleted">
         <ion-spinner name="dots"></ion-spinner>
     </div>
-    <div [style.display]="isLoadCompleted ? 'block' : 'none'">
+    <div [hidden]="!isLoadCompleted">
         <ion-item no-lines>
-            <h2 class="title">{{title}}</h2>
+            <h2 class="title selectable">{{title}}</h2>
         </ion-item>
         <ion-item class="status">
             <ion-avatar item-left class="avatar">
@@ -32,31 +28,45 @@
                 <div>{{commentCount}}</div>
             </button>
         </ion-item>
-        <div class="contents" [innerHTML]="content"></div>
-
+        <div class="contents selectable" padding>
+            <div [innerContent]="content"></div>
+            <img (click)="showImageSlides($event)" *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage" />
+        </div>
+        <div padding-left class="attachment" flex-sm="100" *ngFor="let attachFile of attachFilesForDownload">
+            <span>{{attachFile.attachmentName}}</span><span class="file-size">{{attachFile.attachmentSize}}</span>
+        </div>
+        <div padding-left padding-bottom class="download-message" [hidden]="!hasAttachFilesForDownload">{{"app.blog.message.error.attachmentTooLargeTodownload" | translate}}</div>
         <ion-list>
             <ion-item class="comment" *ngFor="let comment of comments">
-                <ion-item class="status">
-                    <ion-avatar item-left class="avatar">
-                        <img src="{{comment.userAvatar}}" />
-                    </ion-avatar>
-                    <div class="name">{{comment.userName}}</div>
-                    <div class="time">{{comment.createDate}}</div>
-                </ion-item>
                 <ion-card>
-                    <ion-card-content [innerHTML]="comment.content">
+                    <ion-card-header>
+                        <ion-item class="status">
+                            <ion-avatar item-left class="avatar">
+                                <img src="{{comment.userAvatar}}" />
+                            </ion-avatar>
+                            <div class="name">{{comment.userName}}</div>
+                            <div class="time">{{comment.createDate}}</div>
+                        </ion-item>
+                    </ion-card-header>
+                    <ion-card-content class="comment-content selectable">
+                        <div [innerContent]="comment.content"></div>
+                        <img (click)="showCommentImageSlides($event)" *ngFor="let attachImage of comment.attachImagesForDisplay" [src]="attachImage" />
                     </ion-card-content>
+                    <div padding-left class="attachment" flex-sm="100" *ngFor="let attachFile of comment.attachFilesForDownload">
+                        <span>{{attachFile.replyContentAttachmentName}}</span><span class="file-size">{{attachFile.replyContentAttachmentSize}}</span>
+                    </div>
+                    <div padding-left padding-bottom class="download-message" [hidden]="comment.attachFilesForDownload.length<=0">{{"app.blog.message.error.attachmentTooLargeTodownload" | translate}}</div>
                 </ion-card>
             </ion-item>
         </ion-list>
-        <ion-infinite-scroll (infinite)="doInfinite($event)">
+        <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
             <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
         </ion-infinite-scroll>
     </div>
 </ion-content>
-<button fab fab-right fab-bottom secondary [style.display]="isLoadCompleted ? 'block' : 'none'" (click)="addComment()">
+<button fab fab-right fab-bottom accent [hidden]="!isLoadCompleted" (click)="addComment()">
     <ion-icon name="add"></ion-icon>
 </button>
-<button class="detail scroll-to-top" fab fab-right fab-bottom [style.display]="isScrollToTopButtonVisible ? 'block' : 'none'" (click)="scrollToDetailPageTop()">
+<button class="blog-detail scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">
     <ion-icon name="arrow-up"></ion-icon>
 </button>

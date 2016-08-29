@@ -1,24 +1,23 @@
 @import "../pages/notification/detail/detail";
+@import "../shared/components/image-slides/image-slides";
 
 .notification-index {
-    -webkit-user-select: auto;
-    .avatar {
-        height: 4em;
+    ion-avatar {
         img {
-            width: 4.5rem;
-            height: 4.5rem;
+            width: 3.6rem;
+            height: 3.6rem;
+            max-width: 3.6rem;
+            max-height: 3.6rem;
             margin: 0 auto;
-        }
-        p {
-            margin-top: 2px;
-            margin-bottom: 2px;
-            text-align: center;
         }
     }
     .title {
         white-space: pre-wrap;
+        font-weight: normal;
     }
-    
+    .high-priority {
+        color: red;
+    }
     .status {
         text-align: center;
         width: 6rem;

@@ -1,38 +1,37 @@
-<ion-navbar *navbar>
-    <button menuToggle>
-        <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>
-        {{"app.notification.title" | translate}}
-    </ion-title>
-</ion-navbar>
+<ion-header>
+    <ion-navbar>
+        <button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>
+            {{"app.notification.title" | translate}}
+        </ion-title>
+    </ion-navbar>
+</ion-header>
 <ion-content class="notification-index">
-    <div class="loading" [style.display]="isLoadCompleted ? 'none' : 'block'">
+    <div class="loading" [hidden]="isLoadCompleted">
         <ion-spinner name="dots"></ion-spinner>
     </div>
-    <ion-refresher (refresh)="doRefresh($event)">
+    <ion-refresher (ionRefresh)="doRefresh($event)">
         <ion-refresher-content refreshingSpinner="circles"> </ion-refresher-content>
     </ion-refresher>
     <ion-list>
         <button ion-item detail-none (click)="openDetail(notification)" *ngFor="let notification of notificationListForTop">
-            <!-- こっちは四角 -->
-            <ion-thumbnail item-left class="avatar">
-                <!--<ion-icon name="person" class="avatar"></ion-icon>-->
-                <!-- こっちは丸形　<ion-avatar item-left class="avatar">-->
+            <ion-avatar item-left>
                 <img src="{{notification.createUserAvatar}}" />
-                <p>{{notification.createUserName}}</p>
-            </ion-thumbnail>
-            <h2 class="title">{{notification.title}}</h2>
+            </ion-avatar>
+            <p>{{notification.createUserName}}</p>
+            <h2 class="title {{(notification.priorityLevel == 'HIGH') ? 'high-priority' : ''}}">{{notification.title}}</h2>
             <div item-right class="status">
                 <ion-badge class="new" *ngIf="notification.readStatus=='NOT_READ'">{{"app.notification.newNotification" | translate}}</ion-badge>
                 <p>{{notification.publishStartDate}}</p>
             </div>
         </button>
     </ion-list>
-    <ion-infinite-scroll (infinite)="doInfinite($event)">
+    <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
     </ion-infinite-scroll>
 </ion-content>
-<button class="scroll-to-top" fab fab-right fab-bottom [style.display]="isScrollToTopButtonVisible ? 'block' : 'none'" (click)="scrollToIndexPageTop()">
+<button class="scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToIndexPageTop()">
     <ion-icon name="arrow-up"></ion-icon>
 </button>

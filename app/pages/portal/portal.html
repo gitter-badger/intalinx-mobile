@@ -1,20 +1,19 @@
-<ion-navbar *navbar>
-    <ion-buttons start class="nav-menu">
+<ion-header>
+    <ion-navbar>
         <button menuToggle>
             <ion-icon name='menu' menuToggle></ion-icon>
-        </button>
-    </ion-buttons>
-    
-    <ion-title>{{"app.portal.title" | translate}}</ion-title>
-    <!--<ion-buttons end>
-        <ion-buttons>
-        <button (click)="openModal()">
-            業務Navi
-        </button>
-        <ion-badge class="biznavi-badge">0</ion-badge>
-        </ion-buttons>
-    </ion-buttons>-->
-</ion-navbar>
+        </button>        
+        <ion-title>{{"app.portal.title" | translate}}</ion-title>
+        <!--<ion-buttons end>
+            <ion-buttons>
+            <button (click)="openModal()">
+                業務Navi
+            </button>
+            <ion-badge class="biznavi-badge">0</ion-badge>
+            </ion-buttons>
+        </ion-buttons>-->
+    </ion-navbar>
+</ion-header>
 <ion-content class="portal">
     <ion-card>
         <ion-card-content>

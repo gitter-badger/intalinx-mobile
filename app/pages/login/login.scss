@@ -1,14 +1,23 @@
-.login-navbar {
-    .toolbar-background {
-        background-color: #FFFFFF;
-        border: 0px;
+.login-header {
+    &::after {
+        background-image: initial;
     }
-    .logo {
-        padding-left: 2rem;
+    .login-navbar {
+        .toolbar-background {
+            border: 0px;
+            background-color: #FFFFFF;
+        }
+        .logo {
+            padding-left: 2rem;
+            cursor: pointer;
+        }
     }
 }
 .login {
-    .remember-loginId {
+    .remember-loginID {
         height: 73px;
     }
+}
+.popover-content {
+    width: auto;
 }

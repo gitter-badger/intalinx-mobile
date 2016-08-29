@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP:Envelope xmlns:SOAP="http://schemas.xmlsoap.org/soap/envelope/">
+   <SOAP:Header>
+      <header xmlns="http://schemas.cordys.com/General/1.0/">
+         <msg-id>00163e00-5d33-11e6-e84d-b3d45fe09792</msg-id>
+      </header>
+   </SOAP:Header>
+   <SOAP:Body>
+      <GetEventByEventIDResponse xmlns="http://schemas.intasect.co.jp/mycal/service/event" preserveSpace="no" qAccess="0">
+         <tuple>
+            <old>
+               <EventOutput>
+                  <eventID>d7186a4c-bdfa-4ee0-8cd9-4aba30d627a2</eventID>
+                  <isAllDay>false</isAllDay>
+                  <isRepeat>true</isRepeat>
+                  <repeatRule>DAILY;0;1500;1530</repeatRule>
+                  <startTime>1467709200</startTime>
+                  <endTime>1467716400</endTime>
+                  <deviceID>00008,00009,00019</deviceID>
+                  <visibility>public</visibility>
+                  <categoryID>100002</categoryID>
+                  <title>TOC研修</title>
+                  <location>東京本社　4F TV会議室</location>
+                  <summary>制約理論を教育に適用しているTOC</summary>
+                  <status />
+                  <isReminder />
+                  <reminderRule />
+                  <createUserID>wang</createUserID>
+                  <createUserName>王　甜甜</createUserName>
+                  <createDate>2016-07-01T11:03:39.0</createDate>
+                  <updateUserID>wang</updateUserID>
+                  <updateUserName>王　甜甜</updateUserName>
+                  <updateDate>2016-07-05T10:36:44.0</updateDate>
+                  <Participant xmlns="http://schemas.intasect.co.jp/mycal/service/event" xmlns:eve="http://schemas.intasect.co.jp/mycal/service/event" eve:seqId="119032">
+                        <userID>111147</userID>
+                        <userName>王　茜</userName>
+                        <responseStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" null="true" xsi:nil="true" />
+                    </Participant>
+                    <Participant xmlns="http://schemas.intasect.co.jp/mycal/service/event" xmlns:eve="http://schemas.intasect.co.jp/mycal/service/event" eve:seqId="119033">
+                        <userID>194</userID>
+                        <userName>陳　明財</userName>
+                        <responseStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" null="true" xsi:nil="true" />
+                    </Participant>
+                    <Participant xmlns="http://schemas.intasect.co.jp/mycal/service/event" xmlns:eve="http://schemas.intasect.co.jp/mycal/service/event" eve:seqId="119034">
+                        <userID>200002</userID>
+                        <userName>田　志輝</userName>
+                        <responseStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" null="true" xsi:nil="true" />
+                    </Participant>
+                    <Participant xmlns="http://schemas.intasect.co.jp/mycal/service/event" xmlns:eve="http://schemas.intasect.co.jp/mycal/service/event" eve:seqId="119035">
+                        <userID>200007</userID>
+                        <userName>蘇　潤涛</userName>
+                        <responseStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" null="true" xsi:nil="true" />
+                    </Participant>
+                    <Participant xmlns="http://schemas.intasect.co.jp/mycal/service/event" xmlns:eve="http://schemas.intasect.co.jp/mycal/service/event" eve:seqId="119036">
+                        <userID>200008</userID>
+                        <userName>馮　文韜</userName>
+                        <responseStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" null="true" xsi:nil="true" />
+                    </Participant>
+                    <Participant xmlns="http://schemas.intasect.co.jp/mycal/service/event" xmlns:eve="http://schemas.intasect.co.jp/mycal/service/event" eve:seqId="119037">
+                        <userID>224</userID>
+                        <userName>王　健成</userName>
+                        <responseStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" null="true" xsi:nil="true" />
+                    </Participant>
+                    <Participant xmlns="http://schemas.intasect.co.jp/mycal/service/event" xmlns:eve="http://schemas.intasect.co.jp/mycal/service/event" eve:seqId="119038">
+                        <userID>fc</userID>
+                        <userName>付　淳</userName>
+                        <responseStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" null="true" xsi:nil="true" />
+                    </Participant>
+                    <Participant xmlns="http://schemas.intasect.co.jp/mycal/service/event" xmlns:eve="http://schemas.intasect.co.jp/mycal/service/event" eve:seqId="119039">
+                        <userID>jin</userID>
+                        <userName>金　国泉</userName>
+                        <responseStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" null="true" xsi:nil="true" />
+                    </Participant>
+                    <Participant xmlns="http://schemas.intasect.co.jp/mycal/service/event" xmlns:eve="http://schemas.intasect.co.jp/mycal/service/event" eve:seqId="119040">
+                        <userID>wang</userID>
+                        <userName>王　甜甜</userName>
+                        <responseStatus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" null="true" xsi:nil="true" />
+                    </Participant>
+                </EventOutput>
+            </old>
+         </tuple>
+      </GetEventByEventIDResponse>
+   </SOAP:Body>
+</SOAP:Envelope>
