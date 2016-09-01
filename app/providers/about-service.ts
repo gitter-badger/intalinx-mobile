@@ -23,19 +23,27 @@ export class AboutService {
     getLatestVersion(): any {
         return new Promise<string>(resolve => {
             // Get app version from pgyer.
-            let url = 'http://www.pgyer.com/apiv1/app/viewGroup';
-            let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
-            var parameters = 'aId=3faa45a6bbc5cb46c195ba94b01ac85a';
-            parameters += '&_api_key=61b73e850a3cc863a5d34dfe6d8bed85';
+            // let url = 'http://www.pgyer.com/apiv1/app/viewGroup';
+            // let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+            // var parameters = 'aId=3faa45a6bbc5cb46c195ba94b01ac85a';
+            // parameters += '&_api_key=61b73e850a3cc863a5d34dfe6d8bed85';
 
-            this.http.post(url, parameters, {
-                headers: headers
-            })
+            // this.http.post(url, parameters, {
+            //     headers: headers
+            // })
+            //     .map(res => res.json())
+            //     .subscribe(data => {
+            //         if (data.data.length > 0) {
+            //             resolve(data.data[data.data.length - 1].appVersion);
+            //         }
+            //     }, error => {
+            //         this.util.presentSystemErrorModal();
+            //     });
+            let url = 'https://intasect.github.io/version.json';
+            this.http.get(url)
                 .map(res => res.json())
                 .subscribe(data => {
-                    if (data.data.length > 0) {
-                        resolve(data.data[data.data.length - 1].appVersion);
-                    }
+                    resolve(data.version);
                 }, error => {
                     this.util.presentSystemErrorModal();
                 });
