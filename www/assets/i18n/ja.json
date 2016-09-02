@@ -53,7 +53,9 @@
             "daily": "毎日",
             "weeekly": "毎週",
             "monthly": "毎月",
-            "day": "日"
+            "day": "日",
+            "days": "日",
+            "hours": "時間"
         },
         "portal": {
             "title": "ポータル",
@@ -131,6 +133,14 @@
             "title": "通知",
             "detail": "通知詳細",
             "newNotification": "新"
+        },
+        "survey": {
+            "title": "アンケート",
+            "newSurvey": "新",
+            "detail": "アンケート詳細",
+            "optionContent": "コメント",
+            "answerSurvey": "送信",
+            "result": "結果"
         },
         "about": {
             "title": "このアプリについて",

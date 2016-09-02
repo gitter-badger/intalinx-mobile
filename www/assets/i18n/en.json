@@ -53,7 +53,9 @@
             "daily": "Daily",
             "weeekly": "Weeekly",
             "monthly": "Monthly",
-            "day": ""
+            "day": "",
+            "days": "days",
+            "hours": "hours"
         },
         "portal": {
             "title": "Portal",
@@ -131,6 +133,14 @@
             "title": "Notification",
             "detail": "Details",
             "newNotification": "new"
+        },
+        "survey": {
+            "title": "Survey",
+            "newSurvey": "new",
+            "detail": "Detail",
+            "optionContent": "comment",
+            "answerSurvey": "answer",
+            "result": "Result"
         },
         "about": {
             "title": "About",

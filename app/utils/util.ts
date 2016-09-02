@@ -128,6 +128,15 @@ export class Util {
     fromNowForNotification(date) {
         return this.dateUtil.fromNowForNotification(date);
     }
+
+    getDateWithYMDOrMDType(cordysDate) {
+        return this.dateUtil.getDateWithYMDOrMDType(cordysDate);
+    }
+
+    getFromNow(cordysDate) {
+        return this.dateUtil.getFromNow(cordysDate);
+    }
+
     /**
      * Html Tag を転換する
      */

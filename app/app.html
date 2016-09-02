@@ -14,6 +14,7 @@
         <ion-icon *ngIf="item.componentsId === 'biznavi'" class="icon-navi" item-left primary></ion-icon>{{item.title | translate}}
         <ion-badge item-right *ngIf="item.componentsId === 'blog' && share.blogNewInformationCount>0">{{share.blogNewInformationCount}}</ion-badge>
         <ion-badge item-right *ngIf="item.componentsId === 'notification' && share.notificationNewInformationCount>0">{{share.notificationNewInformationCount}}</ion-badge>
+        <ion-badge item-right *ngIf="item.componentsId === 'survey' && share.surveyNewInformationCount>0">{{share.surveyNewInformationCount}}</ion-badge>
       </button>
       <button ion-item (click)="logout()">
         <ion-icon name="log-out" item-left primary></ion-icon>{{"app.action.logout" | translate}}

@@ -6,6 +6,7 @@ export class ShareService {
     public platform: Platform;
     private _notificationNewInformationCount: number = 0;
     private _blogNewInformationCount: number = 0;
+    private _surveyNewInformationCount: number = 0;
 
     public initializeMenu: any;
     public initializeUser: any;
@@ -41,5 +42,17 @@ export class ShareService {
 
     get blogNewInformationCount(): number {
         return this._blogNewInformationCount;
+    }
+
+    set surveyNewInformationCount(count: number) {
+        this._surveyNewInformationCount = count;
+        if (this.platform.is('cordova')) {
+            Badge.clear();
+            Badge.set(this._surveyNewInformationCount + this._surveyNewInformationCount);
+        }
+    }
+
+    get surveyNewInformationCount(): number {
+        return this._surveyNewInformationCount;
     }
 }

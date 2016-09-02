@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{"app.survey.detail" | translate}}</ion-title>
+    <ion-buttons end>
+        <button [hidden]="survey.status=='COMPLETION'" [disabled]="selectedOption==''" (click)="answerSurrvey()">{{ "app.survey.answerSurvey" | translate }}</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content class="survey-detail">
+  <div class="loading" [hidden]="isLoadCompleted">
+    <ion-spinner name="dots"></ion-spinner>
+  </div>
+  <div [hidden]="!isLoadCompleted">
+    <ion-item no-lines>
+      <h2 class="title selectable">{{title}}</h2>
+    </ion-item>
+    <ion-item class="status">
+      <ion-avatar item-left class="avatar">
+        <img src="{{createUserAvatar}}" />
+      </ion-avatar>
+      <div class="name">{{createUserName}}</div>
+      <div class="time">
+        {{createDate}}
+      </div>
+      <div class="collection-status" item-right>
+        <div class="process-status">
+          {{notProcessedCount}}人未回答/{{processedCount}}人回答
+        </div>
+        <div class="end-date" *ngIf="survey.status!='COMPLETION'">
+          {{"残り" | translate}}{{survey.endDateFromNow}}
+        </div>
+        <div class="completion-status" *ngIf="survey.status=='COMPLETION'">
+          [回収完了]
+        </div>
+      </div>
+    </ion-item>
+    <div class="contents selectable" padding>
+      <div [innerContent]="content"></div>
+    </div>
+    <div class="options">
+      <ion-item no-lines *ngFor="let option of options">
+        <ion-label>{{option.optionName}}</ion-label>
+        <ion-checkbox [disabled]="survey.status=='COMPLETION'" [(ngModel)]="option.isSelected" (ngModelChange)="changeSelectedOption(option)"></ion-checkbox>
+      </ion-item>
+      <ion-item [hidden]="hasTextArea==false">
+        <ion-textarea [disabled]="survey.status=='COMPLETION'" placeholder='{{ "app.survey.optionContent" | translate }}' rows=3 [(ngModel)]="optionContent"></ion-textarea>
+      </ion-item>
+    </div>
+  </div>
+</ion-content>
+<button class="survey-detail show-survey-result" fab fab-right fab-bottom accent [hidden]="!isLoadCompleted || survey.status=='COMPLETION'" (click)="showSurveyResult()">
+    <ion-icon name="stats"></ion-icon>
+</button>
+<button class="survey-detail scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">
+    <ion-icon name="arrow-up"></ion-icon>
+</button>

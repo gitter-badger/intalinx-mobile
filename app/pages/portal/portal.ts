@@ -22,6 +22,7 @@ import {AboutService} from '../../providers/about-service';
 import {BlogIndexPage} from '../blog/index/index';
 import {ProfileIndexPage} from '../profile/index/index';
 import {NotificationIndexPage} from '../notification/index/index';
+import {SurveyIndexPage} from '../survey/index/index';
 import {ScheduleIndexPage} from '../schedule/index/index';
 import {AboutPage} from '../about/about';
 import {DevicesPage} from '../schedule/devices/devices';
@@ -46,6 +47,7 @@ export class PortalPage {
         'portal': PortalPage,
         'notification' : NotificationIndexPage,
         'blog' : BlogIndexPage,
+        'survey': SurveyIndexPage,
         'profile' : ProfileIndexPage,
         'schedule': ScheduleIndexPage,
         'about': AboutPage,
@@ -91,6 +93,7 @@ export class PortalPage {
             if (this.appConfig.get('IS_TABLET')) {
                 menuIdNeedToRemove.push('blog');
                 menuIdNeedToRemove.push('notification');
+                menuIdNeedToRemove.push('survey');
                 menuIdNeedToRemove.push('schedule');
                 menuIdNeedToRemove.push('profile');
                 menuIdNeedToRemove.push('about');

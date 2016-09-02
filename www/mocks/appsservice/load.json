@@ -15,6 +15,11 @@
         "componentsId": "blog"
     },
     {
+        "titleIcon": "paper",
+        "title": "app.survey.title",
+        "componentsId": "survey"
+    },
+    {
         "titleIcon": "calendar",
         "title": "app.schedule.title",
         "componentsId": "schedule"
