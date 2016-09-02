@@ -2,7 +2,7 @@
   <ion-navbar>
     <ion-title>{{"app.survey.detail" | translate}}</ion-title>
     <ion-buttons end>
-        <button [hidden]="status=='COMPLETION'" [disabled]="selectedOption=='' || isDisabled==true" (click)="answerSurrvey()">{{initialSelectOption ? "再送信" :"app.survey.answerSurvey" | translate }}</button>
+        <button [hidden]="status=='COMPLETION'" [disabled]="selectedOption=='' || isDisabled==true" (click)="answerSurrvey()">{{initialSelectOption ? ("app.survey.answerSurveyAgain" | translate) : ("app.survey.answerSurvey" | translate) }}</button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
@@ -26,8 +26,8 @@
         <div class="end-date" *ngIf="status!='COMPLETION'">
           {{survey.collectionStatus}}
         </div>
-        <div class="completion-status" *ngIf="status=='COMPLETION'">
-          回収済
+        <div class="completed-status" *ngIf="status=='COMPLETION'">
+          {{"app.survey.completedStatus" | translate}}
         </div>
       </div>
     </ion-item>

@@ -53,23 +53,24 @@ export class SurveyService {
                         }
                         // is in this day
                         if (moment(date).startOf('day').isSame(moment().startOf('day'))) {
-                            this.translate.get('今日まで').subscribe(message => {
+                            this.translate.get('app.survey.untilToday').subscribe(message => {
                                 survey.collectionStatus = message;
                                 survey.isTodayCompleted = true;
                             });
                         } else {
-                            this.translate.get('app.date.days').subscribe(message => {
-                                survey.collectionStatus = '残り' + date.diff(moment(), 'days') + message;
+                            let parameter = {
+                                'days': date.diff(moment(), 'days'),
+                            };
+                            this.translate.get('app.survey.lastDays', parameter).subscribe(message => {
+                                survey.collectionStatus = message;
                                 survey.isTodayCompleted = false;
                             });
                         }
                         this.util.getDateWithYMDOrMDType(survey.endDate).then(data => {
                             survey.endDay = data;
                         });
-
                         surveys.push(survey);
                     }
-
                     resolve(surveys);
                 });
             });
@@ -85,7 +86,6 @@ export class SurveyService {
 
                 this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
-
                     let returnOutPut = this.util.selectXMLNode(objResponse, './/*[local-name()=\'return\']');
                     let returnData = this.util.xml2json(returnOutPut).return;
                     resolve(returnData);
@@ -98,11 +98,9 @@ export class SurveyService {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/survey/get_survey_detail_by_survey_id_request.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
-
                 this.util.setNodeText(objRequest, './/*[local-name()=\'surveyID\']', surveyID);
-
                 req = this.util.xml2string(objRequest);
-
+                
                 this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
 
@@ -124,13 +122,16 @@ export class SurveyService {
                     }
                     // is in this day
                     if (moment(date).startOf('day').isSame(moment().startOf('day'))) {
-                        this.translate.get('今日まで').subscribe(message => {
+                        this.translate.get('app.survey.untilToday').subscribe(message => {
                             survey.collectionStatus = message;
                             survey.isTodayCompleted = true;
                         });
                     } else {
-                        this.translate.get('app.date.days').subscribe(message => {
-                            survey.collectionStatus = '残り' + date.diff(moment(), 'days') + message;
+                        let parameter = {
+                            'days': date.diff(moment(), 'days'),
+                        };
+                        this.translate.get('app.survey.lastDays', parameter).subscribe(message => {
+                            survey.collectionStatus = message;
                             survey.isTodayCompleted = false;
                         });
                     }

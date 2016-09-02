@@ -53,16 +53,11 @@ export class SurveyDetailPage {
     private createUserAvatar: string;
     private endDate: string;
     private status: string;
-    private notProcessedCount: string;
-    private processedCount: string;
     private isLoadCompleted: boolean;
     private isScrollToTopButtonVisible: boolean;
 
     private options: any;
-    private attachImagesForDisplay: any;
-
     private images: any;
-    private sendDataToImageSlidesPage: any;
     private selectedOption: any = '';
     private initialSelectOption: any;
     private isFirstTimeAnswerSurvey: boolean = false;
@@ -88,8 +83,6 @@ export class SurveyDetailPage {
             this.createUserAvatar = data.createUserAvatar;
             this.endDate = data.endDate;
             this.status = data.status;
-            this.notProcessedCount = data.notProcessedCount;
-            this.processedCount = data.processedCount;
             this.options = data.options;
             this.selectedOption = data.selectedOption;
             let initialSelectOption: any = JSON.stringify(data.selectedOption);
@@ -156,10 +149,6 @@ export class SurveyDetailPage {
             this.getSurveyDetailBySurveyID();
             this.isDisabled = true;
         }
-    }
-
-    ionViewWillLeave(): void {
-        // this.sendData.isRefreshFlag = false;
     }
 
     ionViewWillUnload(): void {

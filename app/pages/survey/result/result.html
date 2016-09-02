@@ -10,7 +10,7 @@
   <div [hidden]="!isLoadCompleted">
     <a [hidden]="survey.status!='COMPLETION'" (click)="showSurveyDetail()">{{title}}</a>
     <div no-lines *ngFor="let surveyOptionResult of surveyOptionResults; let i=index;">
-      <p>{{surveyOptionResult.optionName}} ({{surveyOptionResult.participantResults.length}}人)</p>
+      <p>{{surveyOptionResult.optionName}} ({{surveyOptionResult.participantResults.length}}{{"app.common.person" | translate}})</p>
       <progress class="color{{i}}" max={{participantTotalCount}} value={{surveyOptionResult.participantResults.length}}></progress>
       <span item-right>{{surveyOptionResult.participantResults.length / participantTotalCount | percent:'1.0-2'}}</span>
     </div>

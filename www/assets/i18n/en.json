@@ -140,7 +140,12 @@
             "detail": "Detail",
             "optionContent": "comment",
             "answerSurvey": "answer",
-            "result": "Result"
+            "answerSurveyAgain": "modify",
+            "result": "Result",
+            "completedStatus": "completed",
+            "collectionPeriod": "collection period:",
+            "untilToday": "until today",
+            "lastDays": "last {{days}} days"
         },
         "about": {
             "title": "About",

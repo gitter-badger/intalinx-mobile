@@ -140,7 +140,12 @@
             "detail": "アンケート詳細",
             "optionContent": "コメント",
             "answerSurvey": "送信",
-            "result": "結果"
+            "answerSurveyAgain": "再送信",
+            "result": "結果",
+            "completedStatus": "回収済",
+            "collectionPeriod": "回収期間:",
+            "untilToday": "今日まで",
+            "lastDays": "残り{{days}}日"
         },
         "about": {
             "title": "このアプリについて",

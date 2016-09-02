@@ -119,8 +119,4 @@ export class SurveyIndexPage {
             }
         };
     }
-
-    // addSurvey(): void {
-    //     this.nav.push(AddSurveyPage, { 'sendData': this.sendData });
-    // }
 }

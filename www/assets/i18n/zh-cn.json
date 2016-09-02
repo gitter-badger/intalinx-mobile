@@ -140,7 +140,12 @@
             "detail": "问卷调查内容",
             "optionContent": "注释",
             "answerSurvey": "提交",
-            "result": "结果"
+            "answerSurveyAgain": "修改",
+            "result": "结果",
+            "completedStatus": "收集结束",
+            "collectionPeriod": "收集时间:",
+            "untilToday": "今天截止",
+            "lastDays": "剩余{{days}}天"
         },
         "about": {
             "title": "关于本应用",
