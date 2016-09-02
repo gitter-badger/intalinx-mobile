@@ -140,28 +140,4 @@ export class DateUtil {
 
         });
     }
-
-    getFromNow(cordysDate: string) {
-        return new Promise(resolve => {
-            let date = moment(cordysDate, 'YYYY/MM/DDTHH:mm:ss.SSS');
-            if (cordysDate.indexOf('T') < 0) {
-                date = moment(cordysDate, 'YYYY/MM/DD HH:mm:ss');
-            }
-
-            let now = moment();
-
-            // is in this year
-            if (moment(date).startOf('day').isSame(now.startOf('day'))) {
-                this.translate.get('app.date.hours').subscribe(message => {
-                    resolve(date.diff(now, 'hours') + message);
-                });
-                
-            } else {
-                this.translate.get('app.date.days').subscribe(message => {
-                    resolve(date.diff(now, 'days') + message);
-                });
-            }
-
-        });
-    }
 }

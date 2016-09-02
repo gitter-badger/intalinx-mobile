@@ -34,4 +34,10 @@
     .completed {
         color: #666;
     }
+    .today-completed {
+        color: red;
+        p {
+            color: red;
+        }
+    }
 }

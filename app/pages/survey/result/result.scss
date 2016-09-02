@@ -39,5 +39,12 @@
     progress[value]::-webkit-progress-value {
         color: white;
     }
+
+    a {
+        line-height: 1.2;
+        font-size: 2.0rem;
+        font-weight: bold;
+        white-space: pre-wrap;
+    }
     
 }

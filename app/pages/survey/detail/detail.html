@@ -2,7 +2,7 @@
   <ion-navbar>
     <ion-title>{{"app.survey.detail" | translate}}</ion-title>
     <ion-buttons end>
-        <button [hidden]="survey.status=='COMPLETION'" [disabled]="selectedOption==''" (click)="answerSurrvey()">{{ "app.survey.answerSurvey" | translate }}</button>
+        <button [hidden]="status=='COMPLETION'" [disabled]="selectedOption=='' || isDisabled==true" (click)="answerSurrvey()">{{initialSelectOption ? "再送信" :"app.survey.answerSurvey" | translate }}</button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
@@ -23,32 +23,29 @@
         {{createDate}}
       </div>
       <div class="collection-status" item-right>
-        <div class="process-status">
-          {{notProcessedCount}}人未回答/{{processedCount}}人回答
+        <div class="end-date" *ngIf="status!='COMPLETION'">
+          {{survey.collectionStatus}}
         </div>
-        <div class="end-date" *ngIf="survey.status!='COMPLETION'">
-          {{"残り" | translate}}{{survey.endDateFromNow}}
-        </div>
-        <div class="completion-status" *ngIf="survey.status=='COMPLETION'">
-          [回収完了]
+        <div class="completion-status" *ngIf="status=='COMPLETION'">
+          回収済
         </div>
       </div>
     </ion-item>
     <div class="contents selectable" padding>
       <div [innerContent]="content"></div>
     </div>
-    <div class="options">
-      <ion-item no-lines *ngFor="let option of options">
+    <div class="options" *ngFor="let option of options">
+      <ion-item no-lines>
         <ion-label>{{option.optionName}}</ion-label>
-        <ion-checkbox [disabled]="survey.status=='COMPLETION'" [(ngModel)]="option.isSelected" (ngModelChange)="changeSelectedOption(option)"></ion-checkbox>
+        <ion-checkbox [disabled]="status=='COMPLETION'" [(ngModel)]="option.isSelected" (ngModelChange)="changeSelectedOption(option)"></ion-checkbox>
       </ion-item>
-      <ion-item [hidden]="hasTextArea==false">
-        <ion-textarea [disabled]="survey.status=='COMPLETION'" placeholder='{{ "app.survey.optionContent" | translate }}' rows=3 [(ngModel)]="optionContent"></ion-textarea>
+      <ion-item class="option-content" [hidden]="option.inputFlag=='FALSE'">
+        <ion-textarea [disabled]="status=='COMPLETION'" placeholder='{{ "app.survey.optionContent" | translate }}' rows=3 [(ngModel)]="option.optionContent" (ngModelChange)="changeOptionContent(option)"></ion-textarea>
       </ion-item>
     </div>
   </div>
 </ion-content>
-<button class="survey-detail show-survey-result" fab fab-right fab-bottom accent [hidden]="!isLoadCompleted || survey.status=='COMPLETION'" (click)="showSurveyResult()">
+<button class="survey-detail show-survey-result" fab fab-right fab-bottom accent [hidden]="!isLoadCompleted || status=='COMPLETION'" (click)="showSurveyResult()">
     <ion-icon name="stats"></ion-icon>
 </button>
 <button class="survey-detail scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">

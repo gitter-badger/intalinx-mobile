@@ -7,7 +7,7 @@
   <div class="loading" [hidden]="isLoadCompleted">
     <ion-spinner name="dots"></ion-spinner>
   </div>
-  <div class="results" [hidden]="!isLoadCompleted">
+  <div [hidden]="!isLoadCompleted">
     <a [hidden]="survey.status!='COMPLETION'" (click)="showSurveyDetail()">{{title}}</a>
     <div no-lines *ngFor="let surveyOptionResult of surveyOptionResults; let i=index;">
       <p>{{surveyOptionResult.optionName}} ({{surveyOptionResult.participantResults.length}}人)</p>

@@ -133,10 +133,6 @@ export class Util {
         return this.dateUtil.getDateWithYMDOrMDType(cordysDate);
     }
 
-    getFromNow(cordysDate) {
-        return this.dateUtil.getFromNow(cordysDate);
-    }
-
     /**
      * Html Tag を転換する
      */

@@ -45,13 +45,26 @@ export class SurveyService {
                             survey.createUserAvatar = this.userDefaultAvatarImageUrl;
                         }
                         this.util.getDateWithYMDOrMDType(survey.startDate).then(data => {
-                            survey.startDate = data;
+                            survey.startDay = data;
                         });
-                        this.util.getFromNow(survey.endDate).then(data => {
-                            survey['endDateFromNow'] = data;
-                        });
+                        let date = moment(survey.endDate, 'YYYY/MM/DDTHH:mm:ss.SSS');
+                        if (survey.endDate.indexOf('T') < 0) {
+                            date = moment(survey.endDate, 'YYYY/MM/DD HH:mm:ss');
+                        }
+                        // is in this day
+                        if (moment(date).startOf('day').isSame(moment().startOf('day'))) {
+                            this.translate.get('今日まで').subscribe(message => {
+                                survey.collectionStatus = message;
+                                survey.isTodayCompleted = true;
+                            });
+                        } else {
+                            this.translate.get('app.date.days').subscribe(message => {
+                                survey.collectionStatus = '残り' + date.diff(moment(), 'days') + message;
+                                survey.isTodayCompleted = false;
+                            });
+                        }
                         this.util.getDateWithYMDOrMDType(survey.endDate).then(data => {
-                            survey.endDate = data;
+                            survey.endDay = data;
                         });
 
                         surveys.push(survey);
@@ -102,30 +115,45 @@ export class SurveyService {
                         survey.createDate = data;
                     });
                     this.util.getDateWithYMDOrMDType(survey.startDate).then(data => {
-                        survey.startDate = data;
+                        survey.startDay = data;
                     });
-                    this.util.getFromNow(survey.endDate).then(data => {
-                        survey['endDateFromNow'] = data;
-                    });
+
+                    let date = moment(survey.endDate, 'YYYY/MM/DDTHH:mm:ss.SSS');
+                    if (survey.endDate.indexOf('T') < 0) {
+                        date = moment(survey.endDate, 'YYYY/MM/DD HH:mm:ss');
+                    }
+                    // is in this day
+                    if (moment(date).startOf('day').isSame(moment().startOf('day'))) {
+                        this.translate.get('今日まで').subscribe(message => {
+                            survey.collectionStatus = message;
+                            survey.isTodayCompleted = true;
+                        });
+                    } else {
+                        this.translate.get('app.date.days').subscribe(message => {
+                            survey.collectionStatus = '残り' + date.diff(moment(), 'days') + message;
+                            survey.isTodayCompleted = false;
+                        });
+                    }
+
                     this.util.getDateWithYMDOrMDType(survey.endDate).then(data => {
-                        survey.endDate = data;
+                        survey.endDay = data;
                     });
                     let optionsNodes = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'options\']');
                     let options = new Array();
-                    let selectedOption;
+                    let selectedOption = '';
                     for (let i = 0; i < optionsNodes.length; i++) {
                         let option = this.util.xml2json(optionsNodes[i]).options;
                         if (option.checkedFlag === 'TRUE') {
-                            option['isSelected'] = true;
+                            option.isSelected = true;
                             selectedOption = option;
                         } else {
-                            option['isSelected'] = false;
+                            option.isSelected = false;
                             option.optionContent = '';
                         }
                         options.push(option);
                     }
                     survey.options = options;
-                    survey['selectedOption'] = selectedOption;
+                    survey.selectedOption = selectedOption;
                     resolve(survey);
                 });
             });

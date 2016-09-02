@@ -22,10 +22,11 @@ export class SurveyResultPage {
   private status: string;
   private surveyOptionResults: any;
   private participantTotalCount: number;
-  private isLoadCompleted: boolean = false; 
+  private isLoadCompleted: boolean = false;
 
   constructor(private nav: NavController, private params: NavParams, private util: Util, private surveyService: SurveyService) {
-    this.survey = this.params.get('survey');
+    let sendData = this.params.get('sendData');
+    this.survey = sendData.survey;
     this.surveyID = this.survey.surveyID;
     this.title = this.survey.title;
     this.status = this.survey.status;

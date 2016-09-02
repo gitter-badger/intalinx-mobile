@@ -45,8 +45,6 @@ export class SurveyDetailPage {
     @ViewChild(Content) pageContent: Content;
     private survey: any;
     private id: string;
-    private readStatus: string;
-    private newReplyFlag: string;
     private sendData: any;
     private title: string;
     private content: any;
@@ -61,26 +59,22 @@ export class SurveyDetailPage {
     private isScrollToTopButtonVisible: boolean;
 
     private options: any;
-    private attachFilesForDownload: any;
     private attachImagesForDisplay: any;
 
     private images: any;
     private sendDataToImageSlidesPage: any;
     private selectedOption: any = '';
-    private hasTextArea: boolean;
-    private optionContent: any;
+    private initialSelectOption: any;
     private isFirstTimeAnswerSurvey: boolean = false;
+    private isDisabled: boolean = true;
 
     constructor(private nav: NavController, private params: NavParams, private util: Util, private surveyService: SurveyService, private share: ShareService) {
         this.survey = this.params.get('survey');
         this.id = this.survey.surveyID;
-        this.readStatus = this.survey.readStatus;
-        this.newReplyFlag = this.survey.newReplyFlag;
 
         this.sendData = {
-            'id': this.id,
-            'isRefreshFlag': false,
-            'unrepliedCommentcontent': ''
+            'survey': this.survey,
+            'isRefreshFlag': false
         };
         this.getSurveyDetailBySurveyID();
     }
@@ -98,9 +92,9 @@ export class SurveyDetailPage {
             this.processedCount = data.processedCount;
             this.options = data.options;
             this.selectedOption = data.selectedOption;
-            this.optionContent = data.selectedOption ? data.selectedOption.optionContent : this.optionContent;
-            this.hasTextArea = data.selectedOption && data.selectedOption.inputFlag === 'TRUE' ? true : false;
-
+            let initialSelectOption: any = JSON.stringify(data.selectedOption);
+            this.initialSelectOption = JSON.parse(initialSelectOption);
+            
             this.isLoadCompleted = true;
             this.isScrollToTopButtonVisible = false;
         });
@@ -114,43 +108,58 @@ export class SurveyDetailPage {
                 }
             });
             this.selectedOption = option;
-            if (option.inputFlag === 'TRUE') {
-                this.hasTextArea = true;
-            } else {
-                this.hasTextArea = false;
-            }
         } else {
             this.selectedOption = '';
-            this.hasTextArea = false;
         }
-        this.optionContent = this.selectedOption.optionContent;
+        if (this.selectedOption.optionID === this.initialSelectOption.optionID && this.selectedOption.optionContent === this.initialSelectOption.optionContent) {
+            this.isDisabled = true;
+        } else {
+            this.isDisabled = false;
+        }
+    }
+
+    changeOptionContent(option): void {
+        if (this.selectedOption.optionID === this.initialSelectOption.optionID && this.selectedOption.optionContent === this.initialSelectOption.optionContent) {
+            this.isDisabled = true;
+        } else {
+            this.isDisabled = false;
+        }
     }
 
     answerSurrvey(): void {
-        this.surveyService.saveSurveyParticipantResult(this.id, this.selectedOption.optionID, this.optionContent).then(data => {
+        this.surveyService.saveSurveyParticipantResult(this.id, this.selectedOption.optionID, this.selectedOption.optionContent).then(data => {
             if (data === 'true') {
-                this.isFirstTimeAnswerSurvey = true;
-                this.showSurveyResult();
+                if (this.survey.processStatus === 'NOT_PROCESSED') {
+                    this.isFirstTimeAnswerSurvey = true;
+                }
+                this.sendData.isRefreshFlag = true;
+                this.pushToSurveyResultPage();
             }
         });
     }
 
     showSurveyResult() {
+        this.sendData.isRefreshFlag = false;
+        this.pushToSurveyResultPage();
+    }
+
+    pushToSurveyResultPage() {
       this.nav.push(SurveyResultPage, {
-          'survey': this.survey
+          'sendData': this.sendData
       });
     }
 
-    ionViewDidEnter(): void {
+    ionViewWillEnter(): void {
         let isRefreshFlag = this.sendData.isRefreshFlag;
         if (isRefreshFlag === true) {
             this.pageContent.scrollToBottom();
-            this.sendData.unrepliedCommentcontent = '';
+            this.getSurveyDetailBySurveyID();
+            this.isDisabled = true;
         }
     }
 
     ionViewWillLeave(): void {
-        this.sendData.isRefreshFlag = false;
+        // this.sendData.isRefreshFlag = false;
     }
 
     ionViewWillUnload(): void {

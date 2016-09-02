@@ -32,6 +32,14 @@
     .contents {
         font-size: 1.6rem;
     }
+    .options {
+        .option-content {
+            width: 90%;
+            float: right;
+            border: 1px;
+            padding-right: 16px;
+        }
+    }
     ion-list {
         .item:last-child, ion-item-sliding:last-child .item {
             border-bottom: 0px;

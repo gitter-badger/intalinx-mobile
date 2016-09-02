@@ -14,7 +14,6 @@ import {ShareService} from '../../../providers/share-service';
 import {SurveyDetailPage} from '../detail/detail';
 import {SurveyResultPage} from '../result/result';
 
-
 @Component({
   templateUrl: 'build/pages/survey/index/index.html',
   providers: [
@@ -31,17 +30,17 @@ export class SurveyIndexPage {
 
     private isScrollToTopButtonVisible: boolean;
 
-  constructor(private nav: NavController, private surveyService: SurveyService, private share: ShareService) {
-      this.sendData = {
-          'isRefreshFlag': false
-      };
-      this.getSurveyListForTop();
-      this.getSurveyNewInformationCount();
-  }
+    constructor(private nav: NavController, private surveyService: SurveyService, private share: ShareService) {
+        this.sendData = {
+            'isRefreshFlag': false
+        };
+        this.getSurveyListForTop();
+        this.getSurveyNewInformationCount();
+    }
 
-  ionViewLoaded(): void {
-      this.isLoadCompleted = false;
-  }
+    ionViewLoaded(): void {
+        this.isLoadCompleted = false;
+    }
 
     ionViewWillEnter(): void {
         if (this.sendData.isRefreshFlag) {
@@ -53,15 +52,18 @@ export class SurveyIndexPage {
     }
 
     openDetail(survey): void {
-      if (survey.status === 'COMPLETION') {
-          this.nav.push(SurveyResultPage, {
-              'survey': survey
-          });
-      } else {
-          this.nav.push(SurveyDetailPage, {
-              'survey': survey
-          });
-      }
+        if (survey.status === 'COMPLETION') {
+            let sendData = {
+                'survey': survey
+            };
+            this.nav.push(SurveyResultPage, {
+                'sendData': sendData
+            });
+        } else {
+            this.nav.push(SurveyDetailPage, {
+                'survey': survey
+            });
+        }
     }
 
     doRefresh(refresher): void {
