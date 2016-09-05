@@ -21,8 +21,11 @@
 .month-calendar {
     ion-slides {
         width: 100%;
-        .swiper-slide {
-            align-items: flex-start;
+        .swiper-container {
+            height: auto;
+            .swiper-slide {
+                align-items: flex-start;
+            }
         }
     }
     .week-names {
