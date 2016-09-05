@@ -21,7 +21,7 @@
         .item-inner {
           border-bottom: 0px;
         }
-        .process-status, .end-date, .completed-status {
+        .collection-status {
             font-size: 12px;
         }
     }
@@ -38,6 +38,12 @@
             float: right;
             border: 1px;
             padding-right: 16px;
+            .item-inner {
+                padding-right: 0px;
+                .text-input {
+                    margin-right: 0px;
+                }
+            }
         }
     }
     ion-list {

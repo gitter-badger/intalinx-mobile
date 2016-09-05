@@ -1,5 +1,5 @@
 // Third party library.
-import {Component, ViewChild, Directive, HostListener, ViewContainerRef} from '@angular/core';
+import {Component, ViewChild, Directive, HostListener, ViewContainerRef, ComponentResolver} from '@angular/core';
 import {NavController, NavParams, Content} from 'ionic-angular';
 
 // Utils.
@@ -63,7 +63,7 @@ export class SurveyDetailPage {
     private isFirstTimeAnswerSurvey: boolean = false;
     private isDisabled: boolean = true;
 
-    constructor(private nav: NavController, private params: NavParams, private util: Util, private surveyService: SurveyService, private share: ShareService) {
+    constructor(private nav: NavController, private params: NavParams, private util: Util, private surveyService: SurveyService, private share: ShareService, private resolver: ComponentResolver) {
         this.survey = this.params.get('survey');
         this.id = this.survey.surveyID;
 
@@ -71,17 +71,19 @@ export class SurveyDetailPage {
             'survey': this.survey,
             'isRefreshFlag': false
         };
-        this.getSurveyDetailBySurveyID();
+        this.getSurveyDetailBySurveyID(true);
     }
 
-    getSurveyDetailBySurveyID(): void {
+    getSurveyDetailBySurveyID(isFristTimeRefresh?): void {
         this.surveyService.getSurveyDetailBySurveyID(this.id).then((data: any) => {
-            this.title = data.title;
-            this.content = [data.content, [Img]];
-            this.createDate = data.createDate;
-            this.createUserName = data.createUserName;
-            this.createUserAvatar = data.createUserAvatar;
-            this.endDate = data.endDate;
+            if (isFristTimeRefresh) {
+                this.title = data.title;
+                this.content = [data.content, [Img]];
+                this.createDate = data.createDate;
+                this.createUserName = data.createUserName;
+                this.createUserAvatar = data.createUserAvatar;
+                this.endDate = data.endDate;
+            }
             this.status = data.status;
             this.options = data.options;
             this.selectedOption = data.selectedOption;

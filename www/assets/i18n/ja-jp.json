@@ -142,7 +142,7 @@
             "answerSurvey": "送信",
             "answerSurveyAgain": "再送信",
             "result": "結果",
-            "completedStatus": "回収済",
+            "completedStatus": "回収完了",
             "collectionPeriod": "回収期間:",
             "untilToday": "今日まで",
             "lastDays": "残り{{days}}日"

@@ -23,10 +23,10 @@
         {{createDate}}
       </div>
       <div class="collection-status" item-right>
-        <div class="end-date" *ngIf="status!='COMPLETION'">
+        <div *ngIf="status!='COMPLETION'">
           {{survey.collectionStatus}}
         </div>
-        <div class="completed-status" *ngIf="status=='COMPLETION'">
+        <div *ngIf="status=='COMPLETION'">
           {{"app.survey.completedStatus" | translate}}
         </div>
       </div>
@@ -40,7 +40,8 @@
         <ion-checkbox [disabled]="status=='COMPLETION'" [(ngModel)]="option.isSelected" (ngModelChange)="changeSelectedOption(option)"></ion-checkbox>
       </ion-item>
       <ion-item class="option-content" [hidden]="option.inputFlag=='FALSE'">
-        <ion-textarea [disabled]="status=='COMPLETION'" placeholder='{{ "app.survey.optionContent" | translate }}' rows=3 [(ngModel)]="option.optionContent" (ngModelChange)="changeOptionContent(option)"></ion-textarea>
+        <ion-label stacked>{{ "app.survey.optionContent" | translate }}</ion-label>
+        <ion-textarea [disabled]="status=='COMPLETION'" rows=3 [(ngModel)]="option.optionContent" (ngModelChange)="changeOptionContent(option)"></ion-textarea>
       </ion-item>
     </div>
   </div>

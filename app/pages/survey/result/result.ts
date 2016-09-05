@@ -1,6 +1,9 @@
 // Third party library.
 import {Component, ViewChild} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
+import 'intl';
+import 'intl/locale-data/jsonp/ja';
+import 'intl/locale-data/jsonp/zh';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -10,6 +13,7 @@ import {SurveyService} from '../../../providers/survey-service';
 
 // Pages.
 import {SurveyDetailPage} from '../detail/detail';
+import {OptionResultDetailPage} from '../option-result-detail/option-result-detail';
 
 @Component({
     templateUrl: 'build/pages/survey/result/result.html',
@@ -45,5 +49,13 @@ export class SurveyResultPage {
         this.nav.push(SurveyDetailPage, {
             'survey': this.survey
         });
+    }
+
+    showOptionResultDetailOfOption(surveyOptionResult) {
+        if (surveyOptionResult.participantResults.length > 0) {
+            this.nav.push(OptionResultDetailPage, {
+                'surveyOptionResult': surveyOptionResult
+            });
+        }
     }
 }
