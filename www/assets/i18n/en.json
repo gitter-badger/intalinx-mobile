@@ -145,7 +145,8 @@
             "completedStatus": "completed",
             "collectionPeriod": "collection period:",
             "untilToday": "until today",
-            "lastDays": "last {{days}} days"
+            "lastDays": "last {{days}} days",
+            "optionResultDetail": "Option Result Detail"
         },
         "about": {
             "title": "About",

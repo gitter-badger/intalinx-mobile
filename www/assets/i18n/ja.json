@@ -145,7 +145,8 @@
             "completedStatus": "回収完了",
             "collectionPeriod": "回収期間:",
             "untilToday": "今日まで",
-            "lastDays": "残り{{days}}日"
+            "lastDays": "残り{{days}}日",
+            "optionResultDetail": "選択肢結果詳細"
         },
         "about": {
             "title": "このアプリについて",

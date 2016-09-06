@@ -145,7 +145,8 @@
             "completedStatus": "收集结束",
             "collectionPeriod": "收集时间:",
             "untilToday": "今天截止",
-            "lastDays": "剩余{{days}}天"
+            "lastDays": "剩余{{days}}天",
+            "optionResultDetail": "选项结果明细"
         },
         "about": {
             "title": "关于本应用",

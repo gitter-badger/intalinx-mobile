@@ -20,15 +20,13 @@
       </ion-avatar>
       <div class="name">{{createUserName}}</div>
       <div class="time">
-        {{createDate}}
-      </div>
-      <div class="collection-status" item-right>
-        <div *ngIf="status!='COMPLETION'">
+        <span>{{createDate}}</span>
+        <span class="collection-status" *ngIf="status!='COMPLETION'">
           {{survey.collectionStatus}}
-        </div>
-        <div *ngIf="status=='COMPLETION'">
+        </span>
+        <span item-right class="collection-status" *ngIf="status=='COMPLETION'">
           {{"app.survey.completedStatus" | translate}}
-        </div>
+        </span>
       </div>
     </ion-item>
     <div class="contents selectable" padding>
@@ -41,7 +39,7 @@
       </ion-item>
       <ion-item class="option-content" [hidden]="option.inputFlag=='FALSE'">
         <ion-label stacked>{{ "app.survey.optionContent" | translate }}</ion-label>
-        <ion-textarea [disabled]="status=='COMPLETION'" rows=3 [(ngModel)]="option.optionContent" (ngModelChange)="changeOptionContent(option)"></ion-textarea>
+        <ion-textarea [disabled]="status=='COMPLETION'" rows=2 [(ngModel)]="option.optionContent" (ngModelChange)="changeOptionContent(option)"></ion-textarea>
       </ion-item>
     </div>
   </div>

@@ -22,7 +22,8 @@
           border-bottom: 0px;
         }
         .collection-status {
-            font-size: 12px;
+            float: right;
+            padding-right: 16px;
         }
     }
     .item-button {
@@ -33,6 +34,9 @@
         font-size: 1.6rem;
     }
     .options {
+        .checkbox-disabled, .item-checkbox-disabled ion-label, .text-input[disabled] {
+            opacity: 0.8;
+        }
         .option-content {
             width: 90%;
             float: right;
