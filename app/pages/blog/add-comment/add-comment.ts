@@ -120,9 +120,12 @@ export class AddCommentPage {
 
             let image = new Image();
             image.onload = function () {
-                var degree = 0, drawWidth, drawHeight, width, height;
-                drawWidth = image.naturalWidth;
-                drawHeight = image.naturalHeight;
+                let degree = 0, drawWidth, drawHeight, width, height;
+                let scale = image.naturalWidth / image.naturalHeight;
+                image.width = 800;
+                image.height = image.width / scale;
+                drawWidth = image.width;
+                drawHeight = image.height;
                 let quality = 0;
                 let canvas = document.createElement('canvas');
 
@@ -161,11 +164,13 @@ export class AddCommentPage {
                     quality = 1;
                 } else if (file.size > 200 * 1024 && file.size <= 500 * 1024) {
                     quality = 0.5;
-                } else if (file.size > 500 * 1024 && file.size <= 1 * 1024 * 1024) {
+                } else if (file.size > 500 * 1024 && file.size <= 3 * 1024 * 1024) {
                     quality = 0.3;
-                } else if (file.size > 1 * 1024 * 1024 && file.size <= 2 * 1024 * 1024) {
+                } else if (file.size > 3 * 1024 * 1024 && file.size <= 5 * 1024 * 1024) {
+                    quality = 0.2;
+                } else if (file.size > 5 * 1024 * 1024 && file.size <= 6 * 1024 * 1024) {
                     quality = 0.1;
-                } else if (file.size > 2 * 1024 * 1024 && file.size <= 5 * 1024 * 1024) {
+                } else if (file.size > 6 * 1024 * 1024 && file.size <= 8 * 1024 * 1024) {
                     quality = 0.01;
                 } else {
                     other.translate.get('app.blog.message.error.pictureTooLarge').subscribe(message => {
