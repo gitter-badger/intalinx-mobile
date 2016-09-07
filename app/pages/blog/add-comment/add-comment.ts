@@ -122,7 +122,7 @@ export class AddCommentPage {
             image.onload = function () {
                 let degree = 0, drawWidth, drawHeight, width, height;
                 let scale = image.naturalWidth / image.naturalHeight;
-                image.width = 800;
+                image.width = 1024;
                 image.height = image.width / scale;
                 drawWidth = image.width;
                 drawHeight = image.height;
@@ -160,18 +160,12 @@ export class AddCommentPage {
                 // //user canvas to rotate the picture
                 context.rotate(degree * Math.PI / 180);
                 context.drawImage(image, 0, 0, drawWidth, drawHeight);
-                if (file.size <= 200 * 1024) {
-                    quality = 1;
-                } else if (file.size > 200 * 1024 && file.size <= 500 * 1024) {
-                    quality = 0.5;
-                } else if (file.size > 500 * 1024 && file.size <= 3 * 1024 * 1024) {
-                    quality = 0.3;
-                } else if (file.size > 3 * 1024 * 1024 && file.size <= 5 * 1024 * 1024) {
-                    quality = 0.2;
-                } else if (file.size > 5 * 1024 * 1024 && file.size <= 6 * 1024 * 1024) {
-                    quality = 0.1;
+                if (file.size <= 500 * 1024) {
+                    quality = 0.9;
+                } else if (file.size > 500 * 1024 && file.size <= 6 * 1024 * 1024) {
+                    quality = 0.8;
                 } else if (file.size > 6 * 1024 * 1024 && file.size <= 8 * 1024 * 1024) {
-                    quality = 0.01;
+                    quality = 0.7;
                 } else {
                     other.translate.get('app.blog.message.error.pictureTooLarge').subscribe(message => {
                         other.util.presentModal(message);
