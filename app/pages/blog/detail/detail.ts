@@ -1,7 +1,8 @@
 // Third party library.
 import {Component, ViewChild, Directive, HostListener, ViewContainerRef} from '@angular/core';
-import {NavController, NavParams, Content} from 'ionic-angular';
+import {NavController, ActionSheetController, NavParams, Content} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {GoogleAnalytics} from 'ionic-native';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -9,6 +10,7 @@ import {Util} from '../../../utils/util';
 // Services.
 import {BlogService} from '../../../providers/blog-service';
 import {ShareService} from '../../../providers/share-service';
+import {UserService} from '../../../providers/user-service';
 
 // Pages.
 import {AddCommentPage} from '../add-comment/add-comment';
@@ -27,25 +29,25 @@ export class Img {
         let currentImage = this.elementRef.element.nativeElement;
         if (currentImage.parentElement.parentElement.className === 'contents selectable') {
             let images = currentImage.ownerDocument.querySelectorAll('.contents img');
-            let sendData = {
+            let sendDataForAddComment = {
                 'currentImage': currentImage,
                 'images': images
             };
-            this.nav.push(ImageSlidesPage, { 'sendData': sendData });
+            this.nav.push(ImageSlidesPage, { 'sendData': sendDataForAddComment });
         } else if (currentImage.parentElement.parentElement.className === 'comment-content selectable') {
             let images = currentImage.parentElement.querySelectorAll('img');
-            let sendData = {
+            let sendDataForAddComment = {
                 'currentImage': currentImage,
                 'images': images
             };
-            this.nav.push(ImageSlidesPage, { 'sendData': sendData });
+            this.nav.push(ImageSlidesPage, { 'sendData': sendDataForAddComment });
         }
     }
 }
 
 @Component({
     templateUrl: 'build/pages/blog/detail/detail.html',
-    providers: [BlogService, Util],
+    providers: [BlogService, UserService, Util],
     directives: [InnerContent]
 })
 export class BlogDetailPage {
@@ -54,7 +56,7 @@ export class BlogDetailPage {
     private id: string;
     private readStatus: string;
     private newReplyFlag: string;
-    private sendData: any;
+    private sendDataForAddComment: any;
     private title: string;
     private content: any;
     private createDate: string;
@@ -74,14 +76,20 @@ export class BlogDetailPage {
     private pageLoadTime: number;
     private images: any;
     private sendDataToImageSlidesPage: any;
+    private sendData: any;
+    private loginID: string;
+    private createUserID: string;
 
-    constructor(private nav: NavController, private params: NavParams, private util: Util, private translate: TranslateService, private blogService: BlogService, private share: ShareService) {
-        this.community = this.params.get('community');
+    constructor(private nav: NavController, private params: NavParams, private actionSheetCtrl: ActionSheetController, private userService: UserService, private util: Util, private translate: TranslateService, private blogService: BlogService, private share: ShareService) {
+        this.loginID = this.userService.getUserID();
+        
+        this.sendData = this.params.get('sendData');
+        this.community = this.sendData.community;
         this.id = this.community.communityID;
         this.readStatus = this.community.readStatus;
         this.newReplyFlag = this.community.newReplyFlag;
 
-        this.sendData = {
+        this.sendDataForAddComment = {
             'id': this.id,
             'isRefreshFlag': false,
             'unrepliedCommentcontent': ''
@@ -91,7 +99,7 @@ export class BlogDetailPage {
     }
 
     addComment(): void {
-        this.nav.push(AddCommentPage, { 'sendData': this.sendData });
+        this.nav.push(AddCommentPage, { 'sendDataForAddComment': this.sendDataForAddComment });
     }
 
     getCommunityDetailByCommunityID(): void {
@@ -99,6 +107,7 @@ export class BlogDetailPage {
             this.title = data.title;
             this.content = [data.content, [Img]];
             this.createDate = data.createDate;
+            this.createUserID = data.createUser;
             this.createUserName = data.createUserName;
             this.createUserAvatar = data.createUserAvatar;
             this.status = data.status;
@@ -153,22 +162,22 @@ export class BlogDetailPage {
     }
 
     ionViewWillEnter(): void {
-        let isRefreshFlag = this.sendData.isRefreshFlag;
+        let isRefreshFlag = this.sendDataForAddComment.isRefreshFlag;
         if (isRefreshFlag === true) {
             this.getReplyContentListByCommunityID();
         }
     }
 
     ionViewDidEnter(): void {
-        let isRefreshFlag = this.sendData.isRefreshFlag;
+        let isRefreshFlag = this.sendDataForAddComment.isRefreshFlag;
         if (isRefreshFlag === true) {
             this.pageContent.scrollToBottom();
-            this.sendData.unrepliedCommentcontent = '';
+            this.sendDataForAddComment.unrepliedCommentcontent = '';
         }
     }
 
     ionViewWillLeave(): void {
-        this.sendData.isRefreshFlag = false;
+        this.sendDataForAddComment.isRefreshFlag = false;
     }
 
     ionViewWillUnload(): void {
@@ -222,20 +231,104 @@ export class BlogDetailPage {
     showImageSlides(event): any {
         let currentImage = event.currentTarget;
         let images = document.querySelectorAll('.contents img');
-        let sendData = {
+        let sendDataForAddComment = {
             'currentImage': currentImage,
             'images': images
         };
-        this.nav.push(ImageSlidesPage, { 'sendData': sendData });
+        this.nav.push(ImageSlidesPage, { 'sendDataForAddComment': sendDataForAddComment });
     }
 
     showCommentImageSlides(event): any {
         let currentImage = event.currentTarget;
         let images = currentImage.parentElement.querySelectorAll('img');
-        let sendData = {
+        let sendDataForAddComment = {
             'currentImage': currentImage,
             'images': images
         };
-        this.nav.push(ImageSlidesPage, { 'sendData': sendData });
+        this.nav.push(ImageSlidesPage, { 'sendDataForAddComment': sendDataForAddComment });
+    }
+
+    showDeleteReplyContentConfirmMessage(comment) {
+        this.translate.get('app.blog.message.warning.deleteReplyContent').subscribe(message => {
+            let content = message;
+            let okHandler = function (that) {
+                return function () {
+                    that.deleteReplyContent(comment)
+                };
+            };
+            this.util.presentConfirmModal(content, 'warning', okHandler(this));
+        });
+    }
+
+    deleteReplyContent(comment) {
+        this.blogService.deleteReplyContent(comment).then(data => {
+            if (data) {
+                GoogleAnalytics.trackEvent('Schedule', 'delete', 'comment');
+                this.getReplyContentListByCommunityID();
+            }
+        });
+    }
+
+    showBlogOperations() {
+        if (this.loginID === this.createUserID) {
+            this.translate.get(['app.action.edit', 'app.action.delete',
+                'app.action.cancel']).subscribe(message => {
+                    // let editBlog = message['app.action.edit'];
+                    let deleteBlog = message['app.action.delete'];
+                    let cancelButton = message['app.action.cancel'];
+                    let actionSheet = this.actionSheetCtrl.create({
+                        buttons: [
+                            // edit blog
+                            // {
+                            //     text: editBlog,
+                            //     handler: () => {
+                            //         this.showEditBlogPage();
+                            //     }
+                            // }, 
+                            {
+                                text: deleteBlog,
+                                handler: () => {
+                                    setTimeout(() => {
+                                        this.showDeleteBlogConfirmMessage();
+                                    }, 500);
+                                }
+                            }, {
+                                text: cancelButton,
+                                role: 'cancel',
+                                handler: () => {
+
+                                }
+                            }
+                        ]
+                    });
+                    actionSheet.present();
+                });
+        }
+    }
+
+    showDeleteBlogConfirmMessage() {
+        this.translate.get('app.blog.message.warning.deleteBlog').subscribe(message => {
+            let content = message;
+            let okHandler = function (that) {
+                return function () {
+                    that.deleteCommunity();
+                };
+            };
+            this.util.presentConfirmModal(content, 'warning', okHandler(this));
+        });
+    }
+
+    deleteCommunity() {
+        this.blogService.deleteCommunity(this.id).then(data => {
+            if (data) {
+                GoogleAnalytics.trackEvent('Blog', 'delete', 'blog');
+                this.sendData.isRefreshFlag = true;
+                this.nav.pop();
+            }
+        });
+    }
+
+    showEditBlogPage() {
+        
     }
 }

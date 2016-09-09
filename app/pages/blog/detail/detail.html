@@ -1,6 +1,9 @@
 <ion-header>
     <ion-navbar>
         <ion-title>{{"app.blog.detail" | translate}}</ion-title>
+        <ion-buttons end [hidden]="createUserID!=loginID">
+        <button (click)="showBlogOperations()"><ion-icon name="more"></ion-icon></button>
+    </ion-buttons>
     </ion-navbar>
 </ion-header>
 <ion-content class="blog-detail">
@@ -17,16 +20,16 @@
             </ion-avatar>
             <div class="name">{{createUserName}}</div>
             <div class="time">
-                {{createDate}}
+                <span>{{createDate}}</span>
+                <button class="comment-count" disabled primary clear>
+                    <ion-icon name="text"></ion-icon>
+                    <div>{{commentCount}}</div>
+                </button>
+                <button class="read-count" disabled primary clear>
+                    <ion-icon name="eye"></ion-icon>
+                    <div>{{readCount}}</div>
+                </button>
             </div>
-            <button disabled primary clear item-right>
-                <ion-icon name="eye"></ion-icon>
-                <div>{{readCount}}</div>
-            </button>
-            <button disabled primary clear item-right>
-                <ion-icon name="text"></ion-icon>
-                <div>{{commentCount}}</div>
-            </button>
         </ion-item>
         <div class="contents selectable" padding>
             <div [innerContent]="content"></div>
@@ -45,12 +48,12 @@
                                 <img src="{{comment.userAvatar}}" />
                             </ion-avatar>
                             <div class="name">{{comment.userName}}</div>
-                            <div class="time">{{comment.createDate}}</div>
+                            <div class="time">{{comment.createDate}} <a class="delete-comment" [hidden]="loginID!=comment.userID" (click)="showDeleteReplyContentConfirmMessage(comment)"><ion-icon name="trash"></ion-icon></a></div>
                         </ion-item>
                     </ion-card-header>
                     <ion-card-content class="comment-content selectable">
                         <div [innerContent]="comment.content"></div>
-                        <img (click)="showCommentImageSlides($event)" *ngFor="let attachImage of comment.attachImagesForDisplay" [src]="attachImage" />
+                        <img class="comment-image" (click)="showCommentImageSlides($event)" *ngFor="let attachImage of comment.attachImagesForDisplay" [src]="attachImage" />
                     </ion-card-content>
                     <div padding-left class="attachment" flex-sm="100" *ngFor="let attachFile of comment.attachFilesForDownload">
                         <span>{{attachFile.replyContentAttachmentName}}</span><span class="file-size">{{attachFile.replyContentAttachmentSize}}</span>

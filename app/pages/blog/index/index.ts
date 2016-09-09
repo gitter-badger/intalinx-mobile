@@ -53,8 +53,12 @@ export class BlogIndexPage {
     }
 
     openDetail(community): void {
+        this.sendData = {
+            'community': community,
+            'isRefreshFlag': false
+        };
         this.nav.push(BlogDetailPage, {
-            'community': community
+            'sendData': this.sendData
         });
     }
 

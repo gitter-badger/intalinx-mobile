@@ -126,6 +126,10 @@
                 },
                 "success": {
                     "savePicture": "The picture has been saved successfully."
+                },
+                "warning": {
+                    "deleteBlog": "Are you sure to delete this blog?",
+                    "deleteReplyContent": "Are you sure to this comment?"
                 }
             }
         },

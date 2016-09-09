@@ -143,7 +143,7 @@ export class UserService {
     }
     
     getUserID(): string {
-        return this.shareService.user.userID
+        return this.shareService.user.userID;
     }
 
     getUser(): any[] {

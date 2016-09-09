@@ -126,6 +126,10 @@
                 },
                 "success": {
                     "savePicture": "画像が正常に保存されました。"
+                },
+                "warning": {
+                    "deleteBlog": "ブログを削除します。よろしいですか？",
+                    "deleteReplyContent": "返信を削除します。よろしいですか？"
                 }
             }
         },

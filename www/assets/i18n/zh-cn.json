@@ -110,7 +110,7 @@
             "blogContent": "内容",
             "newBlog": "新",
             "newReturn": "新",
-            "isSaving": "上传中......",
+            "isSaving": "保存中......",
             "comment": {
                 "add": "发评论",
                 "content": "写评论...",
@@ -126,6 +126,10 @@
                 },
                 "success": {
                     "savePicture": "图片保存成功。"
+                },
+                "warning": {
+                    "deleteBlog": "您确定要删除这篇博客吗？",
+                    "deleteReplyContent": "您确定要删除这条评论吗？"
                 }
             }
         },

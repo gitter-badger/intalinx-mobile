@@ -23,17 +23,17 @@ export class AddCommentPage {
     @ViewChild('fileInput') fileInput: ElementRef;
     private pictures: any = new Array();
     private loading: any;
-    private sendData: any;
+    private sendDataForAddComment: any;
     private id: string;
     private comment: any;
     private isDisabled: boolean;
 
     constructor(private nav: NavController, private params: NavParams, private zone: NgZone, private loadingCtrl: LoadingController, private translate: TranslateService, private blogService: BlogService, private util: Util) {
-        this.sendData = this.params.get('sendData');
-        this.id = this.sendData.id;
+        this.sendDataForAddComment = this.params.get('sendDataForAddComment');
+        this.id = this.sendDataForAddComment.id;
         this.comment = {
             communityID: this.id,
-            content: this.sendData.unrepliedCommentcontent
+            content: this.sendDataForAddComment.unrepliedCommentcontent
         };
     }
 
@@ -54,7 +54,7 @@ export class AddCommentPage {
         };
         this.blogService.saveComment(comment).then(data => {
             if (data === 'true') {
-                this.sendData.isRefreshFlag = true;
+                this.sendDataForAddComment.isRefreshFlag = true;
                 this.loading.dismiss();
                 setTimeout(() => {
                     this.nav.pop();
@@ -67,7 +67,7 @@ export class AddCommentPage {
     }
 
     ionViewWillLeave(): void {
-        this.sendData.unrepliedCommentcontent = this.comment.content;
+        this.sendDataForAddComment.unrepliedCommentcontent = this.comment.content;
     }
 
     ionViewWillEnter(): void {

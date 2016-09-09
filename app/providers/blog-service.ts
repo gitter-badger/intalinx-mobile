@@ -388,4 +388,63 @@ export class BlogService {
             });
         });
     }
+
+    deleteReplyContent(comment) {
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/blog/delete_reply_content.xml').then((req: string) => {
+                let objRequest = this.util.parseXml(req);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'replyContentID\']', comment.replyContentID);
+                req = this.util.xml2string(objRequest);
+                this.util.callCordysWebservice(req).then((data: string) => {
+                    resolve(true);
+                });
+            });
+        });
+    }
+
+    deleteCommunity(communityID) {
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/blog/delete_community.xml').then((req: string) => {
+                let objRequest = this.util.parseXml(req);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'communityID\']', communityID);
+                req = this.util.xml2string(objRequest);
+                this.util.callCordysWebservice(req).then((data: string) => {
+                    resolve(true);
+                });
+            });
+        });
+    }
+
+    updateCommunity(community: any): any {
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/blog/update_community.xml').then((req: string) => {
+                let objRequest = this.util.parseXml(req);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'title\']', community.title);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'content\']', community.content);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'allMemberFlag\']', community.allMemberFlag);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'status\']', community.actionFlag);
+                var communityInput = this.util.selectXMLNode(objRequest, './/*[local-name()=\'CommunityInput\']');
+                let communityNamespace = 'http://schemas.intasect.co.jp/generictools/service/Community';
+                let replyList = community.selectedUsers;
+                if (community.allMemberFlag === 'FALSE') {
+                    for (var i = 0; i < replyList.length; i++) {
+                        var replyListNode = this.util.createXMLElement(communityInput, communityNamespace, 'replyList');
+                        var userID = this.util.createXMLElement(replyListNode, communityNamespace, 'userID');
+                        var userName = this.util.createXMLElement(replyListNode, communityNamespace, 'userName');
+                        this.util.setTextContent(userID, replyList[i].userID);
+                        this.util.appendXMLNode(userID, replyListNode);
+                        this.util.setTextContent(userName, replyList[i].userName);
+                        this.util.appendXMLNode(userName, replyListNode);
+                        this.util.appendXMLNode(replyListNode, communityInput);
+                    }
+                }
+
+                req = this.util.xml2string(objRequest);
+
+                this.util.callCordysWebservice(req).then(data => {
+                    resolve('true');
+                });
+            });
+        });
+    }
 }
