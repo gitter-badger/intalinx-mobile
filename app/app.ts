@@ -5,7 +5,6 @@ import {ionicBootstrap, Platform, Config, MenuController, NavController, Alert} 
 import {HTTP_PROVIDERS, Http} from '@angular/http';
 import {TRANSLATE_PROVIDERS, TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
 import {StatusBar, GoogleAnalytics, ScreenOrientation} from 'ionic-native';
-import {TouchID} from 'ionic-native';
 
 // Config.
 import {AppConfig} from './appconfig';
@@ -42,19 +41,8 @@ class IntaLinx {
 
     constructor(private translate: TranslateService, private platform: Platform, private config: Config, private menu: MenuController, private appConfig: AppConfig, private util: Util, private share: ShareService) {
         this.platform.ready().then(() => {
-            TouchID.isAvailable().then(
-                res => this.startTouchID(),
-                err => this.initializeApp()
-            );
+            this.initializeApp();
         });
-    }
-
-    startTouchID() {
-        TouchID.verifyFingerprint('Scan your fingerprint please')
-            .then (
-            res => this.initializeApp(),
-            err => console.error('Error', err)
-            );
     }
 
     initializeApp() {
@@ -111,14 +99,6 @@ class IntaLinx {
             }
         });
     }
-
-    // startTouchID () {
-    //     TouchID.verifyFingerprint('Fingerprints are Awesome')
-    //         .then(
-    //         res => this._navCtrl.push(LoggedinPage),
-    //         err => console.error('Error', err)
-    //         );
-    //     } 
 
     getBackButtonText() {
         return new Promise(resolve => {
