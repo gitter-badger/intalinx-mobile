@@ -21,7 +21,7 @@ export class BlogService {
         private appConfig: AppConfig) {
     }
 
-    getCommunityListForTop(position: number, isNeedRegistNotExistsReply: boolean): any {
+    getCommunityListForTop(position: number, isNeedRegistNotExistsReply: boolean, keyWord?: string): any {
         let rowsPerpage = 10;
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/blog/get_community_list_for_top_request.xml').then((req: string) => {
@@ -33,6 +33,9 @@ export class BlogService {
                 this.util.setXMLAttribute(cursorNode, '', 'numRows', rowsPerpage);
 
                 this.util.setNodeText(objRequest, './/*[local-name()=\'isNeedRegistNotExistsReply\']', isNeedRegistNotExistsReply);
+                if (keyWord) {
+                    this.util.setNodeText(objRequest, './/*[local-name()=\'keyWord\']', keyWord);
+                }
 
                 req = this.util.xml2string(objRequest);
 

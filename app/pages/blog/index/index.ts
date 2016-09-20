@@ -28,6 +28,8 @@ export class BlogIndexPage {
     private sendData: any;
     private isLoadCompleted: boolean;
     private communityListForTop: any[] = [];
+    private keyWord: string;
+    private isFirstTimeLoad: boolean;
 
     private isScrollToTopButtonVisible: boolean;
 
@@ -35,8 +37,10 @@ export class BlogIndexPage {
         this.sendData = {
             'isRefreshFlag': false
         };
+        this.keyWord = null;
         this.getCommunityListForTop();
         this.getBlogNewInformationCount();
+        this.isFirstTimeLoad = true;
     }
 
     ionViewLoaded(): void {
@@ -46,8 +50,10 @@ export class BlogIndexPage {
     ionViewWillEnter(): void {
         if (this.sendData.isRefreshFlag) {
             this.isLoadCompleted = false;
+            this.keyWord = null;
             this.getCommunityListForTop();
             this.getBlogNewInformationCount();
+            this.isFirstTimeLoad = true;
         }
         this.sendData.isRefreshFlag = false;
     }
@@ -64,6 +70,8 @@ export class BlogIndexPage {
 
     doRefresh(refresher): void {
         let isRefresh = true;
+        this.keyWord = null;
+        this.isFirstTimeLoad = true;
         this.getCommunityListForTop(refresher, isRefresh);
         this.getBlogNewInformationCount();
     }
@@ -71,7 +79,7 @@ export class BlogIndexPage {
     doInfinite(infiniteScroll): void {
         let position = this.communityListForTop.length;
         let isNeedRegistNotExistsReply = false;
-        this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then((data: any) => {
+        this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply, this.keyWord).then((data: any) => {
             if (data && data.length > 0) {
                 this.communityListForTop = this.communityListForTop.concat(data);
             }
@@ -82,12 +90,16 @@ export class BlogIndexPage {
     getCommunityListForTop(refresher?: any, isRefresh?: boolean): void {
         let position = 0;
         let isNeedRegistNotExistsReply = true;
-        this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply).then((data: any) => {
+        this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply, this.keyWord).then((data: any) => {
             this.communityListForTop = data;
             this.isLoadCompleted = true;
             this.isScrollToTopButtonVisible = false;
             if (isRefresh) {
                 refresher.complete();
+            }
+            if (this.isFirstTimeLoad) {
+                this.pageContent.scrollTo(0, 46, 0);
+                this.isFirstTimeLoad = false;
             }
         });
     }
@@ -120,5 +132,10 @@ export class BlogIndexPage {
 
     addBlog(): void {
         this.nav.push(AddBlogPage, { 'sendData': this.sendData });
+    }
+
+    serachBlogs(event: any): void {
+        this.keyWord = event.target.value;
+        this.getCommunityListForTop();
     }
 }

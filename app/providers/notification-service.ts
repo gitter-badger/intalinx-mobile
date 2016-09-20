@@ -22,7 +22,7 @@ export class NotificationService {
         this.userDefaultAvatarImageUrl = this.appConfig.get('USER_DEFAULT_AVATAR_IMAGE_URL');
     }
 
-    getNotificationListForTop(position: number, isNeedRegistNotExistsReadStatus: boolean): any {
+    getNotificationListForTop(position: number, isNeedRegistNotExistsReadStatus: boolean, keyWord?: string): any {
         let rowsPerpage = 10;
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/notification/get_notification_list_for_top_request.xml').then((req: string) => {
@@ -33,7 +33,9 @@ export class NotificationService {
                 this.util.setXMLAttribute(cursorNode, '', 'numRows', rowsPerpage);
 
                 this.util.setNodeText(objRequest, './/*[local-name()=\'isNeedRegistNotExistsReadStatus\']', isNeedRegistNotExistsReadStatus);
-
+                if (keyWord) {
+                    this.util.setNodeText(objRequest, './/*[local-name()=\'keyWord\']', keyWord);
+                }
                 req = this.util.xml2string(objRequest);
 
                 this.util.callCordysWebservice(req).then((data: string) => {

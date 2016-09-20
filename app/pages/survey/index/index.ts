@@ -27,6 +27,8 @@ export class SurveyIndexPage {
     private sendData: any;
     private isLoadCompleted: boolean;
     private surveyListForTop: any[] = [];
+    private keyWord: string;
+    private isFirstTimeLoad: boolean;
 
     private isScrollToTopButtonVisible: boolean;
 
@@ -34,8 +36,10 @@ export class SurveyIndexPage {
         this.sendData = {
             'isRefreshFlag': false
         };
+        this.keyWord = null;
         this.getSurveyListForTop();
         this.getSurveyNewInformationCount();
+        this.isFirstTimeLoad = true;
     }
 
     ionViewLoaded(): void {
@@ -45,8 +49,10 @@ export class SurveyIndexPage {
     ionViewWillEnter(): void {
         if (this.sendData.isRefreshFlag) {
             this.isLoadCompleted = false;
+            this.keyWord = null;
             this.getSurveyListForTop();
             this.getSurveyNewInformationCount();
+            this.isFirstTimeLoad = true;
         }
         this.sendData.isRefreshFlag = false;
     }
@@ -68,13 +74,15 @@ export class SurveyIndexPage {
 
     doRefresh(refresher): void {
         let isRefresh = true;
+        this.keyWord = null;
+        this.isFirstTimeLoad = true;
         this.getSurveyListForTop(refresher, isRefresh);
         this.getSurveyNewInformationCount();
     }
 
     doInfinite(infiniteScroll): void {
         let position = this.surveyListForTop.length;
-        this.surveyService.getSurveyListForTop(position).then((data: any) => {
+        this.surveyService.getSurveyListForTop(position, this.keyWord).then((data: any) => {
             if (data && data.length > 0) {
                 this.surveyListForTop = this.surveyListForTop.concat(data);
             }
@@ -84,12 +92,16 @@ export class SurveyIndexPage {
 
     getSurveyListForTop(refresher?: any, isRefresh?: boolean): void {
         let position = 0;
-        this.surveyService.getSurveyListForTop(position).then((data: any) => {
+        this.surveyService.getSurveyListForTop(position, this.keyWord).then((data: any) => {
             this.surveyListForTop = data;
             this.isLoadCompleted = true;
             this.isScrollToTopButtonVisible = false;
             if (isRefresh) {
                 refresher.complete();
+            }
+            if (this.isFirstTimeLoad) {
+                this.pageContent.scrollTo(0, 46, 0);
+                this.isFirstTimeLoad = false;
             }
         });
     }
@@ -118,5 +130,10 @@ export class SurveyIndexPage {
                 that.isScrollToTopButtonVisible = false;
             }
         };
+    }
+
+    serachSurveys(event: any): void {
+        this.keyWord = event.target.value;
+        this.getSurveyListForTop();
     }
 }

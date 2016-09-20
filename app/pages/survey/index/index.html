@@ -12,6 +12,9 @@
     <div class="loading" [hidden]="isLoadCompleted">
         <ion-spinner name="dots"></ion-spinner>
     </div>
+    <ion-searchbar (input)="serachSurveys($event)" *ngIf="isLoadCompleted" [hideCancelButton]=true placeholder='{{"app.action.search" | translate}}'>
+        <ion-icon name="search"></ion-icon>
+    </ion-searchbar>
     <ion-refresher (ionRefresh)="doRefresh($event)">
         <ion-refresher-content refreshingSpinner="circles"> </ion-refresher-content>
     </ion-refresher>

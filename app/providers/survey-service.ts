@@ -22,7 +22,7 @@ export class SurveyService {
         private appConfig: AppConfig) {
     }
 
-    getSurveyListForTop(position: number): any {
+    getSurveyListForTop(position: number, keyWord?: string): any {
         let rowsPerpage = 10;
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/survey/get_survey_list_for_top.xml').then((req: string) => {
@@ -32,6 +32,10 @@ export class SurveyService {
                 let cursorNode = this.util.selectXMLNode(objRequest, './/*[local-name()=\'cursor\']');
                 this.util.setXMLAttribute(cursorNode, '', 'position', position);
                 this.util.setXMLAttribute(cursorNode, '', 'numRows', rowsPerpage);
+
+                if (keyWord) {
+                    this.util.setNodeText(objRequest, './/*[local-name()=\'keyWord\']', keyWord);
+                }
 
                 req = this.util.xml2string(objRequest);
 
@@ -71,6 +75,13 @@ export class SurveyService {
                         });
                         surveys.push(survey);
                     }
+
+                    // if (surveyOutputs.length < 10) {
+                    //     let surveyNull: any;
+                    //     for (let i = 0; i < 10 - surveyOutputs.length; i++) {
+                    //         surveys.push(surveyNull);
+                    //     }
+                    // }
                     resolve(surveys);
                 });
             });
