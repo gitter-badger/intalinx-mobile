@@ -25,7 +25,7 @@
             </ion-avatar>
             <p>{{survey.createUserName}}</p>
             <h2 class="title">{{survey.title}}</h2>
-            <p>{{"app.survey.collectionPeriod"|translate}}{{survey.startDay}}~{{survey.endDay}}</p>
+            <p class="collection-date">{{"app.survey.collectionPeriod"|translate}}{{survey.startDay}}~{{survey.endDay}}</p>
             <div item-right class="status">
                 <ion-badge class="new" *ngIf="survey.status=='ACTIVE'&&survey.processStatus=='NOT_PROCESSED'">{{"app.survey.newSurvey" | translate}}</ion-badge>
                 <p *ngIf="survey.status!='COMPLETION'">{{survey.collectionStatus}}</p>

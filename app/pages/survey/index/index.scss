@@ -36,8 +36,7 @@
         color: #666;
     }
     .today-completed {
-        color: red;
-        p {
+        .title, .collection-date, .status p{
             color: red;
         }
     }
