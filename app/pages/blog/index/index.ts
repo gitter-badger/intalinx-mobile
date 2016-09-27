@@ -30,6 +30,7 @@ export class BlogIndexPage {
     private communityListForTop: any[] = [];
     private keyWord: string;
     private isFirstTimeLoad: boolean;
+    private isShowSearchBar: boolean;
 
     private isScrollToTopButtonVisible: boolean;
 
@@ -41,6 +42,7 @@ export class BlogIndexPage {
         this.getCommunityListForTop();
         this.getBlogNewInformationCount();
         this.isFirstTimeLoad = true;
+        this.isShowSearchBar = false;
     }
 
     ionViewLoaded(): void {
@@ -72,6 +74,7 @@ export class BlogIndexPage {
         let isRefresh = true;
         this.keyWord = null;
         this.isFirstTimeLoad = true;
+        this.isShowSearchBar = false;
         this.getCommunityListForTop(refresher, isRefresh);
         this.getBlogNewInformationCount();
     }
@@ -97,8 +100,9 @@ export class BlogIndexPage {
             if (isRefresh) {
                 refresher.complete();
             }
-            if (this.isFirstTimeLoad) {
+            if (this.isFirstTimeLoad && data.length > 9) {
                 this.pageContent.scrollTo(0, 46, 0);
+                this.isShowSearchBar = true;
                 this.isFirstTimeLoad = false;
             }
         });

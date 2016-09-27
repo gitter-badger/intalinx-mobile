@@ -29,6 +29,7 @@ export class SurveyIndexPage {
     private surveyListForTop: any[] = [];
     private keyWord: string;
     private isFirstTimeLoad: boolean;
+    private isShowSearchBar: boolean;
 
     private isScrollToTopButtonVisible: boolean;
 
@@ -40,6 +41,7 @@ export class SurveyIndexPage {
         this.getSurveyListForTop();
         this.getSurveyNewInformationCount();
         this.isFirstTimeLoad = true;
+        this.isShowSearchBar = false;
     }
 
     ionViewLoaded(): void {
@@ -53,6 +55,7 @@ export class SurveyIndexPage {
             this.getSurveyListForTop();
             this.getSurveyNewInformationCount();
             this.isFirstTimeLoad = true;
+            this.isShowSearchBar = false;
         }
         this.sendData.isRefreshFlag = false;
     }
@@ -76,6 +79,7 @@ export class SurveyIndexPage {
         let isRefresh = true;
         this.keyWord = null;
         this.isFirstTimeLoad = true;
+        this.isShowSearchBar = false;
         this.getSurveyListForTop(refresher, isRefresh);
         this.getSurveyNewInformationCount();
     }
@@ -99,8 +103,9 @@ export class SurveyIndexPage {
             if (isRefresh) {
                 refresher.complete();
             }
-            if (this.isFirstTimeLoad) {
+            if (this.isFirstTimeLoad && data.length > 9) {
                 this.pageContent.scrollTo(0, 46, 0);
+                this.isShowSearchBar = true;
                 this.isFirstTimeLoad = false;
             }
         });

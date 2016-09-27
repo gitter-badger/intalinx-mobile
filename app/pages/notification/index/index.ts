@@ -28,6 +28,7 @@ export class NotificationIndexPage {
     private isScrollToTopButtonVisible: boolean;
     private keyWord: string;
     private isFirstTimeLoad: boolean;
+    private isShowSearchBar: boolean;
 
     constructor(private share: ShareService,
         private nav: NavController,
@@ -36,6 +37,7 @@ export class NotificationIndexPage {
         this.getNotificationListForTop();
         this.getNotReadNotificationCountBySelf();
         this.isFirstTimeLoad = true;
+        this.isShowSearchBar = false;
     }
 
     ionViewLoaded(): void {
@@ -52,6 +54,7 @@ export class NotificationIndexPage {
         let isRefresh = true;
         this.keyWord = null;
         this.isFirstTimeLoad = true;
+        this.isShowSearchBar = false;
         this.getNotificationListForTop(refresher, isRefresh);
         this.getNotReadNotificationCountBySelf();
     }
@@ -83,8 +86,9 @@ export class NotificationIndexPage {
             if (isRefresh) {
                 refresher.complete();
             }
-            if (this.isFirstTimeLoad) {
+            if (this.isFirstTimeLoad && data.length > 9) {
                 this.pageContent.scrollTo(0, 46, 0);
+                this.isShowSearchBar = true;
                 this.isFirstTimeLoad = false;
             }
         });
