@@ -112,7 +112,7 @@ export class SurveyIndexPage {
     }
 
     getSurveyNewInformationCount() {
-        this.surveyService.getNotProcessedSurveyCountBySelf().then((data: string) => {
+        this.surveyService.getNotReadSurveyCountBySelf().then((data: string) => {
             if (data) {
                 this.share.surveyNewInformationCount = Number(data);
             }

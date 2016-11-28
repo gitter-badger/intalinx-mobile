@@ -54,9 +54,11 @@ export class SurveyDetailPage {
     private createUserAvatar: string;
     private endDate: string;
     private status: string;
+    private processStatus: string;
     private isLoadCompleted: boolean;
     private isScrollToTopButtonVisible: boolean;
 
+    private pageLoadTime: number;
     private options: any;
     private images: any;
     private selectedOption: any = '';
@@ -67,6 +69,7 @@ export class SurveyDetailPage {
     constructor(private nav: NavController, private params: NavParams, private util: Util, private surveyService: SurveyService, private share: ShareService, private resolver: ComponentResolver) {
         this.survey = this.params.get('survey');
         this.id = this.survey.surveyID;
+        this.processStatus = this.survey.processStatus;
 
         this.sendData = {
             'survey': this.survey,
@@ -125,7 +128,7 @@ export class SurveyDetailPage {
     answerSurrvey(): void {
         this.surveyService.saveSurveyParticipantResult(this.id, this.selectedOption.optionID, this.selectedOption.optionContent).then(data => {
             if (data === 'true') {
-                if (this.survey.processStatus === 'NOT_PROCESSED') {
+                if (this.survey.processStatus !== 'PROCESSED') {
                     this.isFirstTimeAnswerSurvey = true;
                 }
                 this.sendData.isRefreshFlag = true;
@@ -146,6 +149,10 @@ export class SurveyDetailPage {
       });
     }
 
+    ionViewLoaded(): void {
+        this.pageLoadTime = new Date().getTime();
+    }
+
     ionViewWillEnter(): void {
         let isRefreshFlag = this.sendData.isRefreshFlag;
         if (isRefreshFlag === true) {
@@ -156,12 +163,27 @@ export class SurveyDetailPage {
     }
 
     ionViewWillUnload(): void {
+        let now = new Date().getTime();
+        let pageLoadingTime = now - this.pageLoadTime;
+        if (this.processStatus === 'NOT_READ' && pageLoadingTime >= 3000) {
+            this.updateParticipantStatus();
+        }
+
         if (this.isFirstTimeAnswerSurvey) {
             this.survey.processStatus = 'PROCESSED';
-            this.changeSurveyNewInformationCount();
         }
         this.isLoadCompleted = false;
         this.isScrollToTopButtonVisible = false;
+    }
+
+    updateParticipantStatus(): void {
+        let processStatus = 'NOT_PROCESSED';
+        this.surveyService.updateParticipantStatus(this.id, processStatus).then((data: string) => {
+            if (data === 'true') {
+                this.survey.processStatus = processStatus;
+                this.changeSurveyNewInformationCount();
+            }
+        });
     }
 
     changeSurveyNewInformationCount(): void {

@@ -87,11 +87,11 @@ export class SurveyService {
             });
         });
     }
-
-    // Getting the counting of unProcessed surveys. 
-    getNotProcessedSurveyCountBySelf(): any {
+    
+    // Getting the counting of not read surveys. 
+    getNotReadSurveyCountBySelf(): any {
         return new Promise(resolve => {
-            this.util.getRequestXml('./assets/requests/survey/get_not_processed_survey_count_by_self.xml').then((req: string) => {
+            this.util.getRequestXml('./assets/requests/survey/get_not_read_survey_count_by_self.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
                 req = this.util.xml2string(objRequest);
 
@@ -111,7 +111,7 @@ export class SurveyService {
                 let objRequest = this.util.parseXml(req);
                 this.util.setNodeText(objRequest, './/*[local-name()=\'surveyID\']', surveyID);
                 req = this.util.xml2string(objRequest);
-                
+
                 this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
 
@@ -222,6 +222,22 @@ export class SurveyService {
                         'participantTotalCount': participantTotalCount
                     };
                     resolve(returnData);
+                });
+            });
+        });
+    }
+
+    updateParticipantStatus(surveyID: string, participantStaus: string): any {
+        return new Promise(resolve => {
+            this.util.getRequestXml('./assets/requests/survey/update_uarticipant_status.xml').then((req: string) => {
+                let objRequest = this.util.parseXml(req);
+
+                this.util.setNodeText(objRequest, './/*[local-name()=\'surveyID\']', surveyID);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'participantStaus\']', participantStaus);
+                req = this.util.xml2string(objRequest);
+
+                this.util.callCordysWebservice(req).then(data => {
+                    resolve('true');
                 });
             });
         });

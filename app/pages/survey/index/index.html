@@ -27,7 +27,8 @@
             <h2 class="title">{{survey.title}}</h2>
             <p class="collection-date">{{"app.survey.collectionPeriod"|translate}}{{survey.startDay}}~{{survey.endDay}}</p>
             <div item-right class="status">
-                <ion-badge class="new" *ngIf="survey.status=='ACTIVE'&&survey.processStatus=='NOT_PROCESSED'">{{"app.survey.newSurvey" | translate}}</ion-badge>
+                <ion-badge class="not_read" *ngIf="survey.status=='ACTIVE'&&survey.processStatus=='NOT_READ'">{{"app.survey.newSurvey" | translate}}</ion-badge>
+                <ion-badge class="not_processed" *ngIf="survey.status=='ACTIVE'&&survey.processStatus=='NOT_PROCESSED'">{{"app.survey.newSurvey" | translate}}</ion-badge>
                 <p *ngIf="survey.status!='COMPLETION'">{{survey.collectionStatus}}</p>
                 <p *ngIf="survey.status=='COMPLETION'">{{"app.survey.completedStatus" | translate}}</p>
             </div>
