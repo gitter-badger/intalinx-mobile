@@ -1,0 +1,18 @@
+[
+    {
+        "titleIcon": "home",
+        "title": "ホーム",
+        "componentsId": "portal"
+    },
+    {
+        "titleIcon": "chatbubbles",
+        "title": "ブログ",
+        "componentsId": "blog"
+    },
+    {
+        "titleIcon": "settings",
+        "title": "プロファイル",
+        "componentsId": "profile",
+        "isPush": true
+    }
+]
