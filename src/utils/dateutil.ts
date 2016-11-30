@@ -40,11 +40,11 @@ export class DateUtil {
 
         return sValue;
     }
-    
+
     fromNow(cordysDate: string): Promise<string> {
         return this.fromNowCoreLogic(cordysDate);
     }
-    
+
     fromNowForNotification(cordysDate: string): Promise<string> {
         return this.fromNowCoreLogic(cordysDate, true);
     }
@@ -55,12 +55,12 @@ export class DateUtil {
             if (cordysDate.indexOf('T') < 0) {
                 date = moment(cordysDate, 'YYYY/MM/DD HH:mm:ss');
             }
-            
+
             // clone date and set 12:00 am
             let dateWithoutTime = moment(date).startOf('day');
             // today 12:00 am
             let nowWithoutTime = moment().startOf('day');
-            
+
             // after today 12:00 am
             if (nowWithoutTime.isSame(dateWithoutTime)) {
                 if (hideTime) {
@@ -88,15 +88,15 @@ export class DateUtil {
             // X曜日 / 星期X / Mon.
             if (moment(nowWithoutTime).subtract(1, 'days').isAfter(dateWithoutTime) &&
                 (moment(nowWithoutTime).subtract(7, 'days').isSame(dateWithoutTime) ||
-                moment(nowWithoutTime).subtract(7, 'days').isBefore(dateWithoutTime))) {
+                    moment(nowWithoutTime).subtract(7, 'days').isBefore(dateWithoutTime))) {
                 resolve(moment.weekdays(date.day()));
             }
 
             // 182days(half of a year) before 12:00am ~ last week 12:00 am
             // M月d日 / M月d日 / Mnd/d
             if (moment(nowWithoutTime).subtract(7, 'days').isAfter(dateWithoutTime) &&
-                (moment(nowWithoutTime).subtract(182, 'days').isSame(dateWithoutTime) || 
-                moment(nowWithoutTime).subtract(182, 'days').isBefore(dateWithoutTime))) {
+                (moment(nowWithoutTime).subtract(182, 'days').isSame(dateWithoutTime) ||
+                    moment(nowWithoutTime).subtract(182, 'days').isBefore(dateWithoutTime))) {
                 let parameter = {
                     'MM': (date.month() + 1),
                     'DD': date.date()
@@ -109,7 +109,7 @@ export class DateUtil {
             // 183days before 12:00am
             if (moment(nowWithoutTime).subtract(182, 'days').isAfter(dateWithoutTime)) {
                 let parameter = {
-                    'YYYY' : date.year(),
+                    'YYYY': date.year(),
                     'MM': (date.month() + 1)
                 };
                 this.translate.get('app.date.YYYYMM', parameter).subscribe(message => {

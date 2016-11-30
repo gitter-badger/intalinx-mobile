@@ -1,6 +1,6 @@
 // Third party library.
 import {Component} from '@angular/core';
-import {NavController, NavParams, Slides, ActionSheetController, ToastController, Platform} from 'ionic-angular';
+import {NavController, NavParams, ActionSheetController, ToastController, Platform} from 'ionic-angular';
 import {Base64ToGallery} from 'ionic-native';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 

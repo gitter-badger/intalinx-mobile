@@ -1,22 +1,12 @@
 // Third party library.
 import {Component} from '@angular/core';
-import {NavController, NavParams, Content, Slides, Modal, ViewController} from 'ionic-angular';
-import {TranslateService} from 'ng2-translate/ng2-translate';
-
-// Config.
-import {AppConfig} from '../../../app/app.config';
+import {NavController, NavParams, ViewController} from 'ionic-angular';
 
 // Utils.
 import {Util} from '../../../utils/util';
 
 // Services.
 import {ScheduleService} from '../../../providers/schedule-service';
-import {UserService} from '../../../providers/user-service';
-
-// Pages.
-import {EventDetailPage} from '../event-detail/event-detail';
-import {EditEventPage} from '../edit-event/edit-event';
-import {SelectUserPage} from '../select-user/select-user';
 
 @Component({
     selector: 'page-schedule-select-devices',
@@ -43,7 +33,7 @@ export class SelectDevicesPage {
         });
     }
 
-    getDevices(): any  {
+    getDevices(): any {
         return new Promise(resolve => {
             this.scheduleService.getDeviceListForSelect().then(devices => {
                 this.devices = devices;
@@ -53,7 +43,7 @@ export class SelectDevicesPage {
         });
     }
 
-    findDevices(event: any): void  {
+    findDevices(event: any): void {
         this.isSearching = true;
         let deviceName = event.target.value;
 
@@ -67,7 +57,7 @@ export class SelectDevicesPage {
         }
     }
 
-    changeSelectedDevice(device: any): void  {
+    changeSelectedDevice(device: any): void {
         if (device.isSelected === true) {
             this.selectedDevices.push(device);
             this.selectedDeviceCount++;
@@ -80,7 +70,7 @@ export class SelectDevicesPage {
         }
     }
 
-    setOriginSelectedDevices(): void  {
+    setOriginSelectedDevices(): void {
         for (let i = 0; i < this.originDevices.length; i++) {
             for (let j = 0; j < this.devices.length; j++) {
                 if (this.originDevices[i].deviceID === this.devices[j].deviceID) {
@@ -92,11 +82,11 @@ export class SelectDevicesPage {
         }
     }
 
-    close(): void  {
+    close(): void {
         this.viewCtrl.dismiss(this.originDevices);
     }
 
-    selectDevices(): void  {
+    selectDevices(): void {
         let sendDevices = new Array();
         this.selectedDevices.forEach(function (selectedDevice) {
             let device = {

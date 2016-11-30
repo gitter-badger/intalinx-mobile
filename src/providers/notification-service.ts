@@ -33,7 +33,7 @@ export class NotificationService {
                 this.util.setXMLAttribute(cursorNode, '', 'numRows', rowsPerpage);
 
                 this.util.setNodeText(objRequest, './/*[local-name()=\'isNeedRegistNotExistsReadStatus\']', isNeedRegistNotExistsReadStatus);
-		if (keyWord) {
+                if (keyWord) {
                     this.util.setNodeText(objRequest, './/*[local-name()=\'keyWord\']', keyWord);
                 }
                 req = this.util.xml2string(objRequest);
@@ -120,7 +120,7 @@ export class NotificationService {
                         attachFiles.push(attachFile);
                     }
                     notification.attachFileList = attachFiles;
-                    
+
                     resolve(notification);
                 });
             });

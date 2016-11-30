@@ -4,7 +4,7 @@
     </ion-navbar>
 </ion-header>
 <ion-content class="notification-detail">
-    <div class="loading" [hidden]="isLoadCompleted">
+    <div class="loading" text-center [hidden]="isLoadCompleted">
         <ion-spinner name="dots"></ion-spinner>
     </div>
     <div [hidden]="!isLoadCompleted">
@@ -34,9 +34,9 @@
         </div>
         <div padding-left padding-bottom class="download-message" [hidden]="!hasAttachFilesForDownload">{{"app.blog.message.error.attachmentTooLargeTodownload" | translate}}</div>
     </div>
+    <ion-fab bottom right #fab>
+        <button ion-fab color="top" class="detail scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">
+            <ion-icon name="arrow-up"></ion-icon>
+        </button>
+    </ion-fab>
 </ion-content>
-<ion-fab bottom right #fab>
-    <button ion-fab color="top" class="detail scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">
-        <ion-icon name="arrow-up"></ion-icon>
-    </button>
-</ion-fab>

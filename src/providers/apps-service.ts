@@ -8,15 +8,17 @@ import {Platform} from 'ionic-angular';
 import {ShareService} from './share-service';
 import {BlogService} from './blog-service';
 import {NotificationService} from './notification-service';
+import {SurveyService} from './survey-service';
 
 @Injectable()
 export class AppsService {
 
-    constructor(private http: Http, 
+    constructor(private http: Http,
         private platform: Platform,
-        private share: ShareService, 
-        private blogService: BlogService, 
-        private notificationService: NotificationService) {
+        private share: ShareService,
+        private blogService: BlogService,
+        private notificationService: NotificationService,
+        private surveyService: SurveyService) {
 
     }
 
@@ -52,6 +54,11 @@ export class AppsService {
         this.notificationService.getNotReadNotificationCountBySelf().then((data: string) => {
             if (data) {
                 this.share.notificationNewInformationCount = Number(data);
+            }
+        });
+        this.surveyService.getNotReadSurveyCountBySelf().then((data: string) => {
+            if (data) {
+                this.share.surveyNewInformationCount = Number(data);
             }
         });
     }

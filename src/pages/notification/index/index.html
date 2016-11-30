@@ -9,7 +9,7 @@
     </ion-navbar>
 </ion-header>
 <ion-content class="notification-index">
-    <div class="loading" [hidden]="isLoadCompleted">
+    <div class="loading" text-center [hidden]="isLoadCompleted">
         <ion-spinner name="dots"></ion-spinner>
     </div>
 	<ion-searchbar (search)="serachNotifications($event)" *ngIf="isLoadCompleted&&isShowSearchBar" showCancelButton=false placeholder='{{"app.action.search" | translate}}'>

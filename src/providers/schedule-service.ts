@@ -233,18 +233,18 @@ export class ScheduleService {
                 req = this.util.xml2string(objRequest);
                 this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
-                    let eventOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'EventOutput\']');                   
+                    let eventOutputs = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'EventOutput\']');
                     let eventsByDays = new Map(Array<any>());
                     let startDate;
                     let endDate;
                     for (let i = 0; i < eventOutputs.length; i++) {
                         let eventOutput = this.util.xml2json(eventOutputs[i]).EventOutput;
                         let ouputStartTime = eventOutput.startTime;
-                        let ouputEndTime = eventOutput.endTime;            
+                        let ouputEndTime = eventOutput.endTime;
                         // the start time is before the month
                         if (Number(ouputStartTime) < startTime) {
                             startDate = moment(moment(startTime.toString(), 'X').format('YYYY/MM/D'));
-                        }  else {
+                        } else {
                             startDate = moment(moment(ouputStartTime, 'X').format('YYYY/MM/D'));
                         }
                         // the end time is after the month
@@ -606,7 +606,7 @@ export class ScheduleService {
                     for (let i = 0; i < groupNodeList.length; i++) {
                         let groupID = this.util.getNodeText(groupNodeList[i], './/*[local-name()=\'groupID\']');
                         let groupName = this.util.getNodeText(groupNodeList[i], './/*[local-name()=\'groupName\']');
-                        
+
                         userList = [];
                         let groupUserList = this.util.selectXMLNodes(groupNodeList[i], './/*[local-name()=\'GroupUserList\']');
                         for (let j = 0; j < groupUserList.length; j++) {

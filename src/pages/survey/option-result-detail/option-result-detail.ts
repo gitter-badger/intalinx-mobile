@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 
 @Component({
-  selector : 'page-survey-option-result-detail',
+  selector: 'page-survey-option-result-detail',
   templateUrl: 'option-result-detail.html',
 })
 export class OptionResultDetailPage {

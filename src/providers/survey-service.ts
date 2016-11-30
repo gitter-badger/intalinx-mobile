@@ -111,7 +111,7 @@ export class SurveyService {
                 let objRequest = this.util.parseXml(req);
                 this.util.setNodeText(objRequest, './/*[local-name()=\'surveyID\']', surveyID);
                 req = this.util.xml2string(objRequest);
-                
+
                 this.util.callCordysWebservice(req).then((data: string) => {
                     let objResponse = this.util.parseXml(data);
 
@@ -231,10 +231,10 @@ export class SurveyService {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/survey/update_uarticipant_status.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);
-                  this.util.setNodeText(objRequest, './/*[local-name()=\'surveyID\']', surveyID);
+                this.util.setNodeText(objRequest, './/*[local-name()=\'surveyID\']', surveyID);
                 this.util.setNodeText(objRequest, './/*[local-name()=\'participantStaus\']', participantStaus);
                 req = this.util.xml2string(objRequest);
-                 this.util.callCordysWebservice(req).then(data => {
+                this.util.callCordysWebservice(req).then(data => {
                     resolve('true');
                 });
             });

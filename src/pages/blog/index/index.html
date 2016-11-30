@@ -11,11 +11,11 @@
         </ion-buttons>
     </ion-navbar>
 </ion-header>
-<ion-content class="blog-index" >
-    <div class="loading" [hidden]="isLoadCompleted">
+<ion-content class="blog-index">
+    <div class="loading" text-center [hidden]="isLoadCompleted">
         <ion-spinner name="dots"></ion-spinner>
     </div>
-	<ion-searchbar (search)="serachBlogs($event)" *ngIf="isLoadCompleted&&isShowSearchBar" showCancelButton=false placeholder='{{"app.action.search" | translate}}'>
+    <ion-searchbar (search)="serachBlogs($event)" *ngIf="isLoadCompleted&&isShowSearchBar" showCancelButton=false placeholder='{{"app.action.search" | translate}}'>
         <ion-icon name="search"></ion-icon>
     </ion-searchbar>
     <ion-refresher (ionRefresh)="doRefresh($event)">
@@ -38,10 +38,9 @@
     <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
     </ion-infinite-scroll>
-    
+    <ion-fab bottom right #fab>
+        <button ion-fab color="top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToIndexPageTop()">
+            <ion-icon name="arrow-up"></ion-icon>
+        </button>
+    </ion-fab>
 </ion-content>
-<ion-fab bottom right #fab>
-    <button ion-fab color="top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToIndexPageTop()">
-        <ion-icon name="arrow-up"></ion-icon>
-    </button>
-</ion-fab>

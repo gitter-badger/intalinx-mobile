@@ -1,6 +1,6 @@
 // Third party library.
 import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions} from '@angular/http';
+import {Http} from '@angular/http';
 import {Platform} from 'ionic-angular';
 import {AppVersion} from 'ionic-native';
 
@@ -31,7 +31,7 @@ export class AboutService {
             //this.http.post(url, parameters, {
             //    headers: headers
             // })
-	  let url = 'https://intasect.github.io/version.json';
+            let url = 'https://intasect.github.io/version.json';
             this.http.get(url)
                 .map(res => res.json())
                 .subscribe(data => {
