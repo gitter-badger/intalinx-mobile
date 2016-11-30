@@ -1,7 +1,7 @@
 // Third party library.
 import {Component} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
-import {Platform, NavController, MenuController} from 'ionic-angular';
+import {Platform, NavController} from 'ionic-angular';
 import {InAppBrowser} from 'ionic-native';
 
 // Utils.
@@ -12,18 +12,15 @@ import {AppConfig} from '../../app/app.config';
 
 // Services.
 import {ShareService} from '../../providers/share-service';
-import {AppsService} from '../../providers/apps-service'; 
+import {AppsService} from '../../providers/apps-service';
 import {UserService} from '../../providers/user-service';
-import {BlogService} from '../../providers/blog-service'; 
+import {BlogService} from '../../providers/blog-service';
 import {NotificationService} from '../../providers/notification-service';
 import {ScheduleService} from '../../providers/schedule-service';
 import {AboutService} from '../../providers/about-service';
 
 import {InfoPage} from '../info/info';
-import {BlogIndexPage} from '../blog/index/index';
 import {ProfileIndexPage} from '../profile/index/index';
-import {NotificationIndexPage} from '../notification/index/index';
-import {SurveyIndexPage} from '../survey/index/index';
 import {ScheduleIndexPage} from '../schedule/index/index';
 import {AboutPage} from '../about/about';
 import {DevicesPage} from '../schedule/devices/devices';
@@ -47,8 +44,8 @@ export class PortalPage {
 
     components = {
         'portal': PortalPage,
-        'info' : InfoPage,
-        'profile' : ProfileIndexPage,
+        'info': InfoPage,
+        'profile': ProfileIndexPage,
         'schedule': ScheduleIndexPage,
         'about': AboutPage,
         'devices': DevicesPage
@@ -58,7 +55,7 @@ export class PortalPage {
         this.initializeUser().then(() => {
             this.loadApplications();
             this.checkUpdate();
-        });        
+        });
         if (!this.share.showMenu) {
             this.share.showMenu = this.showMenu(this);
         }
@@ -84,7 +81,7 @@ export class PortalPage {
     loadApplications() {
         return this.appsService.load().then((data: any) => {
             let menuIdNeedToRemove = [];
-            
+
             // remove about page for web browser.
             if (!this.platform.is('cordova')) {
                 menuIdNeedToRemove.push('about');
@@ -93,7 +90,7 @@ export class PortalPage {
             if (this.appConfig.get('IS_TABLET')) {
                 menuIdNeedToRemove.push('blog');
                 menuIdNeedToRemove.push('notification');
-		menuIdNeedToRemove.push('survey');
+                menuIdNeedToRemove.push('survey');
                 menuIdNeedToRemove.push('schedule');
                 menuIdNeedToRemove.push('profile');
                 menuIdNeedToRemove.push('about');
@@ -101,7 +98,7 @@ export class PortalPage {
                 menuIdNeedToRemove.push('devices');
             }
             // remove unnecessary menu.
-            for (let index = 0; index < data.length; index ++) {
+            for (let index = 0; index < data.length; index++) {
                 let currentValue = data[index];
                 for (let i = 0; i < menuIdNeedToRemove.length; i++) {
                     if (currentValue.componentsId === menuIdNeedToRemove[i]) {
@@ -134,9 +131,9 @@ export class PortalPage {
             });
         });
     }
-  
+
     showMenu(that) {
-        return function(menu) {
+        return function (menu) {
             if (menu.componentsId === 'biznavi') {
                 that.util.getSAMLart().then((samlart: string) => {
                     // sso for biznavi.

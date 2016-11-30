@@ -1,5 +1,5 @@
 // Third party library.
-import {Component, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
 import 'intl';
 import 'intl/locale-data/jsonp/ja';
@@ -16,7 +16,7 @@ import {SurveyDetailPage} from '../detail/detail';
 import {OptionResultDetailPage} from '../option-result-detail/option-result-detail';
 
 @Component({
-    selector : 'page-survey-result',
+    selector: 'page-survey-result',
     templateUrl: 'result.html',
     providers: [SurveyService, Util],
 })

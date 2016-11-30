@@ -1,5 +1,5 @@
 // Third party library.
-import {Component, ViewChild,  Directive, HostListener, ViewContainerRef} from '@angular/core';
+import {Component, ViewChild, Directive, HostListener, ViewContainerRef} from '@angular/core';
 import {NavController, NavParams, ViewController, Content} from 'ionic-angular';
 import {NotificationService} from '../../../providers/notification-service';
 

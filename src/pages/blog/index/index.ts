@@ -1,7 +1,6 @@
 // Third party library.
 import {Component, ViewChild} from '@angular/core';
-import {NavController, NavParams, Content} from 'ionic-angular';
-import {TranslateService} from 'ng2-translate/ng2-translate';
+import {NavController, Content} from 'ionic-angular';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -38,10 +37,10 @@ export class BlogIndexPage {
         this.sendData = {
             'isRefreshFlag': false
         };
-	this.keyWord = null;
+        this.keyWord = null;
         this.getCommunityListForTop();
         this.getBlogNewInformationCount();
-	this.isFirstTimeLoad = true;
+        this.isFirstTimeLoad = true;
         this.isShowSearchBar = false;
     }
 
@@ -52,27 +51,27 @@ export class BlogIndexPage {
     ionViewWillEnter(): void {
         if (this.sendData.isRefreshFlag) {
             this.isLoadCompleted = false;
-	    this.keyWord = null;
+            this.keyWord = null;
             this.getCommunityListForTop();
             this.getBlogNewInformationCount();
-	    this.isFirstTimeLoad = true;
+            this.isFirstTimeLoad = true;
         }
         this.sendData.isRefreshFlag = false;
     }
 
     openDetail(community): void {
-	this.sendData = {
+        this.sendData = {
             'community': community,
             'isRefreshFlag': false
         };
-       this.nav.push(BlogDetailPage, {
+        this.nav.push(BlogDetailPage, {
             'sendData': this.sendData
         });
     }
 
     doRefresh(refresher): void {
         let isRefresh = true;
-	this.keyWord = null;
+        this.keyWord = null;
         this.isFirstTimeLoad = true;
         this.isShowSearchBar = false;
         this.getCommunityListForTop(refresher, isRefresh);
@@ -82,7 +81,7 @@ export class BlogIndexPage {
     doInfinite(infiniteScroll): void {
         let position = this.communityListForTop.length;
         let isNeedRegistNotExistsReply = false;
-         this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply, this.keyWord).then((data: any) => {
+        this.blogService.getCommunityListForTop(position, isNeedRegistNotExistsReply, this.keyWord).then((data: any) => {
             if (data && data.length > 0) {
                 this.communityListForTop = this.communityListForTop.concat(data);
             }
@@ -99,7 +98,7 @@ export class BlogIndexPage {
             this.isScrollToTopButtonVisible = false;
             if (isRefresh) {
                 refresher.complete();
-	    }
+            }
             if (this.isFirstTimeLoad && data.length > 9) {
                 this.pageContent.scrollTo(0, 46, 0);
                 this.isShowSearchBar = true;

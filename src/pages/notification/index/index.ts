@@ -34,10 +34,10 @@ export class NotificationIndexPage {
     constructor(private share: ShareService,
         private nav: NavController,
         private notificationService: NotificationService) {
-	this.keyWord = null;
+        this.keyWord = null;
         this.getNotificationListForTop();
         this.getNotReadNotificationCountBySelf();
-	this.isFirstTimeLoad = true;
+        this.isFirstTimeLoad = true;
         this.isShowSearchBar = false;
     }
 
@@ -53,7 +53,7 @@ export class NotificationIndexPage {
 
     doRefresh(refresher): void {
         let isRefresh = true;
-	this.keyWord = null;
+        this.keyWord = null;
         this.isFirstTimeLoad = true;
         this.isShowSearchBar = false;
         this.getNotificationListForTop(refresher, isRefresh);
@@ -86,7 +86,7 @@ export class NotificationIndexPage {
             this.isScrollToTopButtonVisible = false;
             if (isRefresh) {
                 refresher.complete();
-	    }
+            }
             if (this.isFirstTimeLoad && data.length > 9) {
                 this.pageContent.scrollTo(0, 46, 0);
                 this.isShowSearchBar = true;

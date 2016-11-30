@@ -1,7 +1,7 @@
 // Third party library.
 import {Injectable} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
-import {NavController, AlertController} from 'ionic-angular';
+import {AlertController} from 'ionic-angular';
 
 // Services.
 import {ShareService} from '../providers/share-service';
@@ -24,16 +24,16 @@ export class AlertUtil {
                     text: yes,
                     handler: okHandler
                 },
-                {
-                    text: no,
-                    handler: noHandler
-                }]
+                    {
+                        text: no,
+                        handler: noHandler
+                    }]
             });
             alert.present();
         });
     }
 
-    
+
 
     presentModal(content, level = 'error'): void {
         this.translate.get(['app.message.' + level + '.title', 'app.action.ok']).subscribe(message => {

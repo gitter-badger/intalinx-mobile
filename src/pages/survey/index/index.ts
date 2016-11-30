@@ -14,9 +14,9 @@ import {SurveyDetailPage} from '../detail/detail';
 import {SurveyResultPage} from '../result/result';
 
 @Component({
-  selector : 'page-survey-index',
-  templateUrl: 'index.html',
-  providers: [
+    selector: 'page-survey-index',
+    templateUrl: 'index.html',
+    providers: [
         SurveyService,
         Util
     ]

@@ -1,7 +1,6 @@
 // Third party library.
-import {Component, ViewChild, Directive} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {NavController, NavParams, Content, ViewController} from 'ionic-angular';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 
 // Utils.
 import {Util} from '../../../utils/util';

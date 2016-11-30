@@ -1,6 +1,6 @@
 // Third party library.
 import {Component, ViewChild} from '@angular/core';
-import {NavController, NavParams, ModalController, Content, Slides, Modal} from 'ionic-angular';
+import {NavController, ModalController, Slides} from 'ionic-angular';
 import {NgClass} from '@angular/common';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import * as moment from 'moment';
@@ -74,7 +74,7 @@ export class ScheduleIndexPage {
     private isAdmin: boolean;
 
     private calendar: any;
-    
+
     private moment: any;
 
     private isHtmlLoadCompleted: boolean;
@@ -104,7 +104,7 @@ export class ScheduleIndexPage {
         this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
         this.nextMonth = moment(this.currentMonth).add(1, 'months');
         this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
-        this.perviousYearMonthText  = moment(this.perviousMonth).format('YYYY-MM');
+        this.perviousYearMonthText = moment(this.perviousMonth).format('YYYY-MM');
         this.nextYearMonthText = moment(this.nextMonth).format('YYYY-MM');
         // this month
         this.selectedDay = this.today;
@@ -134,7 +134,7 @@ export class ScheduleIndexPage {
         this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
         this.nextMonth = moment(this.currentMonth).add(1, 'months');
         this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
-        this.perviousYearMonthText  = moment(this.perviousMonth).format('YYYY-MM');
+        this.perviousYearMonthText = moment(this.perviousMonth).format('YYYY-MM');
         this.nextYearMonthText = moment(this.nextMonth).format('YYYY-MM');
         this.selectedDay = this.currentMonth.format('YYYY/MM/D');
         this.showCalendar();
@@ -145,7 +145,7 @@ export class ScheduleIndexPage {
         this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
         this.nextMonth = moment(this.currentMonth).add(1, 'months');
         this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
-        this.perviousYearMonthText  = moment(this.perviousMonth).format('YYYY-MM');
+        this.perviousYearMonthText = moment(this.perviousMonth).format('YYYY-MM');
         this.nextYearMonthText = moment(this.nextMonth).format('YYYY-MM');
         // selected month
         this.selectedDay = this.currentMonth.format('YYYY/MM/D');
@@ -157,7 +157,7 @@ export class ScheduleIndexPage {
         this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
         this.nextMonth = moment(this.currentMonth).add(1, 'months');
         this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
-        this.perviousYearMonthText  = moment(this.perviousMonth).format('YYYY-MM');
+        this.perviousYearMonthText = moment(this.perviousMonth).format('YYYY-MM');
         this.nextYearMonthText = moment(this.nextMonth).format('YYYY-MM');
         // selected month
         this.selectedDay = this.currentMonth.format('YYYY/MM/D');
@@ -173,7 +173,7 @@ export class ScheduleIndexPage {
         let daysInPerviousMonth = this.perviousMonth.daysInMonth();
         let daysInCurrentMonth = this.currentMonth.daysInMonth();
         let daysInNextMonth = this.nextMonth.daysInMonth();
-        
+
 
         // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
         let indexOfFirstDayInWeek = 0;
@@ -257,7 +257,7 @@ export class ScheduleIndexPage {
                 this.nextMonthDaysArray.push(moment(lastDayInMonth).add(i + 1, 'days'));
             }
         }
-        
+
         this.moment = moment().format('HH:mm');
         this.isHtmlLoadCompleted = true;
         this.searchEventsAndSpecialDaysByDisplayedMonth();
@@ -366,7 +366,7 @@ export class ScheduleIndexPage {
         this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
         this.nextMonth = moment(this.currentMonth).add(1, 'months');
         this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
-        this.perviousYearMonthText  = moment(this.perviousMonth).format('YYYY-MM');
+        this.perviousYearMonthText = moment(this.perviousMonth).format('YYYY-MM');
         this.nextYearMonthText = moment(this.nextMonth).format('YYYY-MM');
         // selected month
         this.selectedDay = this.today;

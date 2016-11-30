@@ -1,11 +1,10 @@
 // Third party library.
 import {Injectable} from '@angular/core';
-import {Http, Headers, RequestOptions, RequestMethod} from '@angular/http';
+import {Http} from '@angular/http';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import * as moment from 'moment';
 import 'moment/locale/ja';
 import 'moment/locale/zh-cn';
-import {Config, Alert} from 'ionic-angular';
 
 // Config.
 import {AppConfig} from '../app/app.config';
@@ -43,7 +42,7 @@ export class Util {
     setNodeText(node: any, xpath: string, value: any, namespaces?: string) {
         return this.xmlUtil.setNodeText(node, xpath, value, namespaces);
     }
-    
+
     setTextContent(node: any, textContent: string) {
         return this.xmlUtil.setTextContent(node, textContent);
     }
@@ -75,11 +74,11 @@ export class Util {
     setXMLAttribute(elementNode: any, attributeNamespace: string, attributeName: string, attributeValue: any) {
         return this.xmlUtil.setXMLAttribute(elementNode, attributeNamespace, attributeName, attributeValue);
     }
-    
+
     createXMLElementNS(xmlDocument: any, namespaceURI: string, qualifiedName: string) {
         return this.xmlUtil.createElementNS(xmlDocument, namespaceURI, qualifiedName);
     }
-    
+
     createXMLElement(xmlDocument: any, namespaceURI: string, qualifiedName: string) {
         return this.xmlUtil.createElementWithNS(namespaceURI, qualifiedName);
     }
@@ -233,7 +232,7 @@ export class Util {
 
     getPassword() {
         return this.cordysUtil.getPassword();
-     }
+    }
 
     getServer() {
         return this.cordysUtil.getServer();

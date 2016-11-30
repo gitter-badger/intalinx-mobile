@@ -14,9 +14,9 @@ import {Util} from '../utils/util';
 @Injectable()
 export class UserService {
 
-    constructor(private translate: TranslateService, 
-        private nav: NavController, 
-        private appConfig: AppConfig, 
+    constructor(private translate: TranslateService,
+        private nav: NavController,
+        private appConfig: AppConfig,
         private util: Util,
         private shareService: ShareService) {
     }
@@ -141,7 +141,7 @@ export class UserService {
             });
         });
     }
-    
+
     getUserID(): string {
         return this.shareService.user.userID;
     }

@@ -19,7 +19,6 @@ import {SurveyResultPage} from '../result/result';
     selector: 'img'
 })
 export class Img {
-    private images: any;
     constructor(private nav: NavController, private elementRef: ViewContainerRef) {
     }
     @HostListener('click', [])

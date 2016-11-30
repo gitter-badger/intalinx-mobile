@@ -2,7 +2,7 @@ import {Badge} from 'ionic-native';
 import {Platform} from 'ionic-angular';
 
 export class ShareService {
-    
+
     public platform: Platform;
     private _notificationNewInformationCount: number = 0;
     private _blogNewInformationCount: number = 0;
@@ -15,7 +15,7 @@ export class ShareService {
     public alertForSystemError: any;
     public nav: any;
     public user: any;
-    
+
     constructor() {
 
     }
@@ -43,7 +43,7 @@ export class ShareService {
     get blogNewInformationCount(): number {
         return this._blogNewInformationCount;
     }
-    
+
     set surveyNewInformationCount(count: number) {
         this._surveyNewInformationCount = count;
         if (this.platform.is('cordova')) {

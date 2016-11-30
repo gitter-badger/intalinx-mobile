@@ -33,7 +33,7 @@ export class BlogService {
                 this.util.setXMLAttribute(cursorNode, '', 'numRows', rowsPerpage);
 
                 this.util.setNodeText(objRequest, './/*[local-name()=\'isNeedRegistNotExistsReply\']', isNeedRegistNotExistsReply);
-		 if (keyWord) {
+                if (keyWord) {
                     this.util.setNodeText(objRequest, './/*[local-name()=\'keyWord\']', keyWord);
                 }
 
@@ -391,7 +391,7 @@ export class BlogService {
             });
         });
     }
-	deleteReplyContent(comment) {
+    deleteReplyContent(comment) {
         return new Promise(resolve => {
             this.util.getRequestXml('./assets/requests/blog/delete_reply_content.xml').then((req: string) => {
                 let objRequest = this.util.parseXml(req);

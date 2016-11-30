@@ -21,7 +21,6 @@ import {ImageSlidesPage} from '../../../shared/components/image-slides/image-sli
     selector: 'img'
 })
 export class Img {
-    private images: any;
     constructor(private nav: NavController, private elementRef: ViewContainerRef) {
     }
     @HostListener('click', [])

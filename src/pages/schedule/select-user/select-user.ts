@@ -1,10 +1,6 @@
 // Third party library.
 import {Component} from '@angular/core';
-import {NavController, NavParams, Content, Slides, Modal, ViewController} from 'ionic-angular';
-import {TranslateService} from 'ng2-translate/ng2-translate';
-
-// Config.
-import {AppConfig} from '../../../app/app.config';
+import {NavController, NavParams, ViewController} from 'ionic-angular';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -33,13 +29,12 @@ export class SelectUserPage {
     private groupingApproach: string = 'group';
     private isFirstLoadOrganizationInfo: boolean = true;
     private searchUserName: string;
-    private userID: string;
 
-    constructor(private nav: NavController, 
-        private viewCtrl: ViewController, 
-        private util: Util, 
-        private params: NavParams, 
-        private scheduleService: ScheduleService, 
+    constructor(private nav: NavController,
+        private viewCtrl: ViewController,
+        private util: Util,
+        private params: NavParams,
+        private scheduleService: ScheduleService,
         private userService: UserService) {
         this.getGroupListForCurrentUser();
     }
@@ -49,7 +44,7 @@ export class SelectUserPage {
             this.groupsWithUsers = data;
             let allUsersInGroup = new Array();
             this.groupsWithUsers.forEach(function (groupWithUsers) {
-                groupWithUsers.users.forEach(function(groupUser) {
+                groupWithUsers.users.forEach(function (groupUser) {
                     groupUser.isSelected = false;
                     allUsersInGroup.push(groupUser);
                 });
@@ -111,7 +106,7 @@ export class SelectUserPage {
         }
     }
 
-    solveTheSelectedUser(user: any): void  {
+    solveTheSelectedUser(user: any): void {
         if (this.groupingApproach === 'group') {
             for (let i = 0; i < this.allUsers.length; i++) {
                 let everyUser = this.allUsers[i];
@@ -168,7 +163,7 @@ export class SelectUserPage {
             this.isSearching = false;
         }
     }
-    
+
     findUserByUserName(userName) {
         if (this.groupingApproach === 'group') {
             this.foundUserMembers = this.allGroupUsers;
@@ -181,11 +176,11 @@ export class SelectUserPage {
         });
     }
 
-    changeSelectedUser(user: any): void  {
+    changeSelectedUser(user: any): void {
         if (user.isSelected === true) {
             if (this.groupingApproach === 'group') {
                 this.groupsWithUsers.forEach(function (groupWithUsers) {
-                    groupWithUsers.users.forEach(function(groupUser) {
+                    groupWithUsers.users.forEach(function (groupUser) {
                         if (groupUser.isSelected === true && user.userID !== groupUser.userID) {
                             groupUser.isSelected = false;
                         }
@@ -206,23 +201,23 @@ export class SelectUserPage {
         } else {
             if (this.groupingApproach === 'group') {
                 this.groupsWithUsers.forEach(function (groupWithUsers) {
-                    groupWithUsers.users.forEach(function(groupUser) {
+                    groupWithUsers.users.forEach(function (groupUser) {
                         if (groupUser.isSelected === true) {
                             groupUser.isSelected = false;
                         }
                     });
                 });
-            } 
+            }
             this.selectedUser = '';
             this.selectedUserCount = 0;
         }
     }
 
-    close(): void  {
+    close(): void {
         this.viewCtrl.dismiss();
     }
 
-    selectUsers(): void  {
+    selectUsers(): void {
         this.viewCtrl.dismiss(this.selectedUser);
     }
 }

@@ -1,6 +1,6 @@
 // Third party library.
 import {Component} from '@angular/core';
-import {NavController, ViewController, Alert} from 'ionic-angular';
+import {NavController} from 'ionic-angular';
 
 // Utils.
 import {Util} from '../../utils/util';
@@ -24,8 +24,8 @@ import {PortalPage} from '../portal/portal';
 })
 export class LoginPage {
     public user: any = {
-        loginID: '', 
-        password: '', 
+        loginID: '',
+        password: '',
         autoLogin: false,
         server: this.appConfig.get('BASE_URL')
     };
@@ -33,12 +33,12 @@ export class LoginPage {
     servers: any = [
         {
             id: 'iscsys',
-            url : this.appConfig.get('BASE_URL_JAPAN'),
+            url: this.appConfig.get('BASE_URL_JAPAN'),
             name: ''
         },
         {
             id: 'intalinx_cn',
-            url : this.appConfig.get('BASE_URL_CHINA'),
+            url: this.appConfig.get('BASE_URL_CHINA'),
             name: ''
         }
     ];
@@ -101,16 +101,16 @@ export class LoginPage {
     redirectToPortal() {
         this.nav.setRoot(PortalPage);
     }
-    
+
     ionViewWillEnter() {
         this.isDisabled = true;
     }
-    
+
     ionViewDidEnter() {
         // If use already logged on, then redirect to portal page.
         this.loggedOn();
     }
-    
+
     changeUser(): void {
         if (this.user.loginID && this.user.password && this.user.server) {
             this.isDisabled = null;

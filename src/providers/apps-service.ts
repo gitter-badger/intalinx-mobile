@@ -12,10 +12,10 @@ import {NotificationService} from './notification-service';
 @Injectable()
 export class AppsService {
 
-    constructor(private http: Http, 
+    constructor(private http: Http,
         private platform: Platform,
-        private share: ShareService, 
-        private blogService: BlogService, 
+        private share: ShareService,
+        private blogService: BlogService,
         private notificationService: NotificationService) {
 
     }

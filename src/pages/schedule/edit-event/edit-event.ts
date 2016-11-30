@@ -1,6 +1,6 @@
 // Third party library.
 import {Component} from '@angular/core';
-import {NavController, Content, AlertController, ModalController, ViewController, NavParams} from 'ionic-angular';
+import {NavController, AlertController, ModalController, NavParams} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {GoogleAnalytics} from 'ionic-native';
 
