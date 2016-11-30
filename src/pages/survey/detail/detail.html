@@ -43,12 +43,12 @@
       </ion-item>
     </div>
   </div>
+  <ion-fab bottom right #fab>
+    <button ion-fab color="warn" fab fab-right fab-bottom accent [hidden]="!isLoadCompleted || status=='COMPLETION'" (click)="showSurveyResult()">
+        <ion-icon name="stats"></ion-icon>
+    </button>
+    <button ion-fab color="top" class="scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">
+        <ion-icon name="arrow-up"></ion-icon>
+    </button>
+  </ion-fab>
 </ion-content>
-<ion-fab bottom right #fab>
-  <button ion-fab class="survey-detail show-survey-result" fab fab-right fab-bottom accent [hidden]="!isLoadCompleted || status=='COMPLETION'" (click)="showSurveyResult()">
-      <ion-icon name="stats"></ion-icon>
-  </button>
-  <button ion-fab class="survey-detail scroll-to-top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">
-      <ion-icon name="arrow-up"></ion-icon>
-  </button>
-</ion-fab>
