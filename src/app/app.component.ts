@@ -1,6 +1,6 @@
 import {Component, ViewChild} from '@angular/core';
-import {Platform, Config, MenuController, NavController, Alert, Nav} from 'ionic-angular';
-import {TranslateService, TranslateLoader, TranslateStaticLoader, TranslatePipe} from 'ng2-translate/ng2-translate';
+import {Platform, Config, MenuController, Nav} from 'ionic-angular';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 import {StatusBar, GoogleAnalytics, ScreenOrientation} from 'ionic-native';
 
 // Config.
@@ -24,7 +24,6 @@ export class MyApp {
 
     // make HelloIonicPage the root (or first) page
     private rootPage: any;
-    private menus: any[] = [];
     private user: any = {
         'userAvatar': null
     };

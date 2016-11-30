@@ -1,7 +1,7 @@
 // Third party library.
 import {ViewChild, Component, NgZone, ElementRef} from '@angular/core';
 import {NavController, ModalController, LoadingController, NavParams} from 'ionic-angular';
-import {TranslateService, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
+import {TranslateService} from 'ng2-translate/ng2-translate';
 import {GoogleAnalytics} from 'ionic-native';
 /// <reference path="./exif-ts/exif.d.ts" />
 import * as EXIF from 'exif-ts/exif';
@@ -14,7 +14,6 @@ import {BlogService} from '../../../providers/blog-service';
 import {UserService} from '../../../providers/user-service';
 
 // Pages.
-import {BlogIndexPage} from '../index/index';
 import {PreviewBlogPage} from '../preview-blog/preview-blog';
 import {SelectUsersPage} from '../../../shared/components/select-users/select-users';
 
