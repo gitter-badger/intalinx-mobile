@@ -1,9 +1,9 @@
 <ion-header>
     <ion-navbar>
         <ion-title>{{"app.blog.detail" | translate}}</ion-title>
-		 <ion-buttons end [hidden]="createUserID!=loginID">
-        <button ion-button icon-only (click)="showBlogOperations()"><ion-icon name="more"></ion-icon></button>
-    </ion-buttons>
+        <ion-buttons end [hidden]="createUserID!=loginID">
+            <button ion-button icon-only (click)="showBlogOperations()"><ion-icon name="more"></ion-icon></button>
+        </ion-buttons>
     </ion-navbar>
 </ion-header>
 <ion-content class="blog-detail">
@@ -20,7 +20,7 @@
             </ion-avatar>
             <div class="name">{{createUserName}}</div>
             <div class="time">
-                 <span>{{createDate}}</span>
+                <span>{{createDate}}</span>
                 <button ion-button icon-only class="comment-count" disabled color="primary" clear>
                     <ion-icon name="text"></ion-icon>
                     <div>{{commentCount}}</div>
@@ -30,10 +30,10 @@
                     <div>{{readCount}}</div>
                 </button>
             </div>
-           
+
         </ion-item>
         <div class="contents selectable" padding>
-            <dynamic-content [innerContent]="content"></dynamic-content>
+            <template dynamic-component (dynamicComponentReady)="dynamicCallback($event)" [componentContext]="outerDynamicContext" [componentModules]="outerDynamicModules" [componentTemplate]="outerDynamicTemplate"></template>
             <img (click)="showImageSlides($event)" *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage" />
         </div>
         <div padding-left class="attachment" flex-sm="100" *ngFor="let attachFile of attachFilesForDownload">
@@ -54,7 +54,7 @@
                     </ion-card-header>
                     <ion-card-content class="comment-content selectable">
                         <!--<div [innerContent]="comment.content"></div>-->
-                        <dynamic-content [innerContent]="comment.content"></dynamic-content>
+                        <template dynamic-component [componentContext]="comment.outerDynamicContext" [componentModules]="comment.outerDynamicModules" [componentTemplate]="comment.outerDynamicTemplate"></template>
                         <img class="comment-image" (click)="showCommentImageSlides($event)" *ngFor="let attachImage of comment.attachImagesForDisplay" [src]="attachImage" />
                     </ion-card-content>
                     <div padding-left class="attachment" flex-sm="100" *ngFor="let attachFile of comment.attachFilesForDownload">
@@ -68,16 +68,12 @@
             <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
         </ion-infinite-scroll>
     </div>
-     <ion-fab bottom right #fab>
+    <ion-fab bottom right #fab>
         <button ion-fab color="accent" [hidden]="!isLoadCompleted" (click)="addComment()">
             <ion-icon name="add"></ion-icon>
         </button>
-        <button ion-fab color="top" class="blog-detail scroll-to-top"  [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">
+        <button ion-fab color="top" class="blog-detail scroll-to-top" [hidden]="!isScrollToTopButtonVisible" (click)="scrollToDetailPageTop()">
             <ion-icon name="arrow-up"></ion-icon>
         </button>
     </ion-fab>
 </ion-content>
-
-   
-    
-

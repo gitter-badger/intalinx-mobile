@@ -1,7 +1,9 @@
 // Third party library.
-import {Component, ViewChild, Directive, HostListener, ViewContainerRef} from '@angular/core';
+import {Component, ViewChild, Directive, HostListener, ViewContainerRef, ElementRef, Renderer, OnDestroy} from '@angular/core';
 import {NavController, NavParams, Content} from 'ionic-angular';
 import {GoogleAnalytics} from 'ionic-native';
+import {FormsModule} from '@angular/forms';
+import {DynamicComponentModule} from 'angular2-dynamic-component/index';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -15,27 +17,6 @@ import {ShareService} from '../../../providers/share-service';
 import {ImageSlidesPage} from '../../../shared/components/image-slides/image-slides';
 import {SurveyResultPage} from '../result/result';
 
-@Directive({
-    selector: 'img'
-})
-export class Img {
-    private images: any;
-    constructor(private nav: NavController, private elementRef: ViewContainerRef) {
-    }
-    @HostListener('click', [])
-    onClick() {
-        let currentImage = this.elementRef.element.nativeElement;
-        if (currentImage.parentElement.parentElement.className === 'contents selectable') {
-            let images = currentImage.ownerDocument.querySelectorAll('.contents img');
-            let sendData = {
-                'currentImage': currentImage,
-                'images': images
-            };
-            this.nav.push(ImageSlidesPage, { 'sendData': sendData });
-        }
-    }
-}
-
 @Component({
     selector: 'page-survey-detail',
     templateUrl: 'detail.html',
@@ -43,7 +24,7 @@ export class Img {
     //,
     //directives: [InnerContent]
 })
-export class SurveyDetailPage {
+export class SurveyDetailPage implements OnDestroy {
 
     @ViewChild(Content) pageContent: Content;
     private survey: any;
@@ -68,7 +49,42 @@ export class SurveyDetailPage {
     private isFirstTimeAnswerSurvey: boolean = false;
     private isDisabled: boolean = true;
 
-    constructor(private nav: NavController, private params: NavParams, private util: Util, private surveyService: SurveyService, private share: ShareService) {
+    clickListener: Function;
+
+    outerDynamicModules = [DynamicComponentModule];
+    outerDynamicContext = {
+        innerDynamicContext: {},
+        innerDynamicTemplate: ``,
+        innerDynamicModules: [
+            FormsModule
+        ]
+    };
+    outerDynamicTemplate = `
+        <DynamicComponent [componentContext]='innerDynamicContext' 
+                          [componentModules]='innerDynamicModules'
+                          [componentTemplate]='innerDynamicTemplate'>         
+        </DynamicComponent>
+   `;
+
+    dynamicCallback() {
+        this.clickListener = this.renderer.listen(this.elementRef.nativeElement, 'click', (event) => {
+            let currentImage = event.target;
+            if (currentImage.parentElement.parentElement.parentElement.className === 'contents selectable') {
+                let images = currentImage.ownerDocument.querySelectorAll('.contents img');
+                let sendData = {
+                    'currentImage': currentImage,
+                    'images': images
+                };
+                this.nav.push(ImageSlidesPage, { 'sendData': sendData });
+            }
+        })
+    }
+
+    ngOnDestroy() {
+        this.clickListener();
+    }
+
+    constructor(private elementRef: ElementRef, private renderer: Renderer, private nav: NavController, private params: NavParams, private util: Util, private surveyService: SurveyService, private share: ShareService) {
         this.survey = this.params.get('survey');
         this.id = this.survey.surveyID;
         this.processStatus = this.survey.processStatus;
@@ -84,7 +100,8 @@ export class SurveyDetailPage {
         this.surveyService.getSurveyDetailBySurveyID(this.id).then((data: any) => {
             if (isFristTimeRefresh) {
                 this.title = data.title;
-                this.content = [data.content, [Img]];
+                // this.content = [data.content, [Img]];
+                this.outerDynamicContext.innerDynamicTemplate = data.content;
                 this.createDate = data.createDate;
                 this.createUserName = data.createUserName;
                 this.createUserAvatar = data.createUserAvatar;

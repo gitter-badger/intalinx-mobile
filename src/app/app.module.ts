@@ -42,7 +42,6 @@ import { OptionResultDetailPage } from '../pages/survey/option-result-detail/opt
 import { SurveyResultPage } from '../pages/survey/result/result';
 import { SelectReadLimitTypePage } from '../pages/blog/add-blog/add-blog';
 
-import { DynamicContent } from '../shared/components/innercontent/innercontent';
 import { TranslateModule, TranslateLoader, TranslateStaticLoader } from 'ng2-translate/ng2-translate';
 import { Http } from '@angular/http';
 
@@ -71,7 +70,6 @@ import { Http } from '@angular/http';
     EditEventPage,
     EventDetailPage,
     SelectUserPage,
-    DynamicContent,
     SurveyDetailPage,
     SurveyIndexPage,
     OptionResultDetailPage,

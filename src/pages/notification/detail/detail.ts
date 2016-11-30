@@ -1,7 +1,9 @@
 // Third party library.
-import {Component, ViewChild,  Directive, HostListener, ViewContainerRef} from '@angular/core';
+import {Component, ViewChild,  Directive, HostListener, ViewContainerRef, ElementRef, Renderer, OnDestroy} from '@angular/core';
 import {NavController, NavParams, ViewController, Content} from 'ionic-angular';
 import {NotificationService} from '../../../providers/notification-service';
+import {FormsModule} from '@angular/forms';
+import {DynamicComponentModule} from 'angular2-dynamic-component/index';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -12,27 +14,6 @@ import {ShareService} from '../../../providers/share-service';
 // Pages.
 // import {InnerContent} from '../../../shared/components/innercontent/innercontent';
 import {ImageSlidesPage} from '../../../shared/components/image-slides/image-slides';
-
-@Directive({
-    selector: 'img'
-})
-export class Img {
-    private images: any;
-    constructor(private nav: NavController, private elementRef: ViewContainerRef) {
-    }
-    @HostListener('click', [])
-    onClick() {
-        let currentImage = this.elementRef.element.nativeElement;
-        if (currentImage.parentElement.parentElement.className === 'contents selectable') {
-            let images = currentImage.ownerDocument.querySelectorAll('.contents img');
-            let sendData = {
-                'currentImage': currentImage,
-                'images': images
-            };
-            this.nav.push(ImageSlidesPage, { 'sendData': sendData });
-        }
-    }
-}
 
 @Component({
     selector: 'page-notification-detail',
@@ -45,7 +26,7 @@ export class Img {
     // directives: [InnerContent]
 })
 
-export class NotificationDetailPage {
+export class NotificationDetailPage implements OnDestroy {
     @ViewChild(Content) pageContent: Content;
 
     private notification: any;
@@ -68,7 +49,44 @@ export class NotificationDetailPage {
     private attachImagesForDisplay: any;
     private hasAttachFilesForDownload: boolean = false;
 
-    constructor(private nav: NavController,
+    clickListener: Function;
+
+    outerDynamicModules = [DynamicComponentModule];
+    outerDynamicContext = {
+        innerDynamicContext: {},
+        innerDynamicTemplate: ``,
+        innerDynamicModules: [
+            FormsModule
+        ]
+    };
+    outerDynamicTemplate = `
+        <DynamicComponent [componentContext]='innerDynamicContext' 
+                          [componentModules]='innerDynamicModules'
+                          [componentTemplate]='innerDynamicTemplate'>         
+        </DynamicComponent>
+   `;
+
+    dynamicCallback() {
+        this.clickListener = this.renderer.listen(this.elementRef.nativeElement, 'click', (event) => {
+            let currentImage = event.target;
+            if (currentImage.parentElement.parentElement.parentElement.className === 'contents selectable') {
+                let images = currentImage.ownerDocument.querySelectorAll('.contents img');
+                let sendData = {
+                    'currentImage': currentImage,
+                    'images': images
+                };
+                this.nav.push(ImageSlidesPage, { 'sendData': sendData });
+            }
+        })
+    }
+
+    ngOnDestroy() {
+        this.clickListener();
+    }
+
+    constructor(private elementRef: ElementRef, 
+        private renderer: Renderer,
+        private nav: NavController,
         private params: NavParams,
         private notificationService: NotificationService,
         private view: ViewController,
@@ -83,7 +101,8 @@ export class NotificationDetailPage {
     getNotificationDetailByNotificationID(): void {
         this.notificationService.getNotificationDetailByNotificationID(this.id).then((data: any) => {
             this.title = data.title;
-            this.content = [data.content, [Img]];
+            // this.content = [data.content, [Img]];
+            this.outerDynamicContext.innerDynamicTemplate = data.content;
             this.createUserId = data.createUser;
             this.publishStartDate = data.publishStartDate;
             this.createUserAvatar = data.createUserAvatar;

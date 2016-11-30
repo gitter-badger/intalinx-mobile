@@ -1,8 +1,10 @@
 // Third party library.
-import {Component, ViewChild, Directive, HostListener, ViewContainerRef} from '@angular/core';
+import {Component, ViewChild, Directive, HostListener, ViewContainerRef, ElementRef, Renderer, OnDestroy} from '@angular/core';
 import {NavController,ActionSheetController, NavParams, Content} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {GoogleAnalytics} from 'ionic-native';
+import {FormsModule} from '@angular/forms';
+import {DynamicComponentModule} from 'angular2-dynamic-component/index';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -17,40 +19,12 @@ import {AddCommentPage} from '../add-comment/add-comment';
 // import {InnerContent} from '../../../shared/components/innercontent/innercontent';
 import {ImageSlidesPage} from '../../../shared/components/image-slides/image-slides';
 
-@Directive({
-    selector: 'img'
-})
-export class Img {
-    private images: any;
-    constructor(private nav: NavController, private elementRef: ViewContainerRef) {
-    }
-    @HostListener('click', [])
-    onClick() {
-        let currentImage = this.elementRef.element.nativeElement;
-        if (currentImage.parentElement.parentElement.className === 'contents selectable') {
-            let images = currentImage.ownerDocument.querySelectorAll('.contents img');
-            let sendDataForAddComment = {
-                'currentImage': currentImage,
-                'images': images
-            };
-            this.nav.push(ImageSlidesPage, { 'sendData': sendDataForAddComment });
-        } else if (currentImage.parentElement.parentElement.className === 'comment-content selectable') {
-            let images = currentImage.parentElement.querySelectorAll('img');
-            let sendDataForAddComment = {
-                'currentImage': currentImage,
-                'images': images
-            };
-            this.nav.push(ImageSlidesPage, { 'sendData': sendDataForAddComment });
-        }
-    }
-}
-
 @Component({
     selector: 'page-blog-detail',
     templateUrl: 'detail.html',
     providers: [UserService,BlogService, Util]
 })
-export class BlogDetailPage {
+export class BlogDetailPage implements OnDestroy {
     @ViewChild(Content) pageContent: Content;
     private community: any;
     private id: string;
@@ -80,7 +54,50 @@ export class BlogDetailPage {
     private loginID: string;
     private createUserID: string;
 
-    constructor(private nav: NavController, private params: NavParams, private actionSheetCtrl: ActionSheetController, private userService: UserService, private util: Util, private translate: TranslateService, private blogService: BlogService, private share: ShareService) {
+    clickListener: Function;
+
+    outerDynamicModules = [DynamicComponentModule];
+    outerDynamicContext = {
+        innerDynamicContext: {},
+        innerDynamicTemplate: ``,
+        innerDynamicModules: [
+            FormsModule
+        ]
+    };
+    outerDynamicTemplate = `
+        <DynamicComponent [componentContext]='innerDynamicContext' 
+                          [componentModules]='innerDynamicModules'
+                          [componentTemplate]='innerDynamicTemplate'>         
+        </DynamicComponent>
+   `;
+
+    dynamicCallback() {
+        debugger
+        this.clickListener = this.renderer.listen(this.elementRef.nativeElement, 'click', (event) => {
+            let currentImage = event.target;
+            if (currentImage.parentElement.parentElement.parentElement.className === 'contents selectable') {
+                let images = currentImage.ownerDocument.querySelectorAll('.contents img');
+                let sendData = {
+                    'currentImage': currentImage,
+                    'images': images
+                };
+                this.nav.push(ImageSlidesPage, { 'sendData': sendData });
+            } else if (currentImage.parentElement.parentElement.parentElement.className === 'comment-content selectable card-content card-content-md') {
+                let images = currentImage.parentElement.parentElement.parentElement.querySelectorAll('img');
+                let sendData = {
+                    'currentImage': currentImage,
+                    'images': images
+                };
+                this.nav.push(ImageSlidesPage, { 'sendData': sendData });
+            }
+        })
+    }
+
+    ngOnDestroy() {
+        this.clickListener();
+    }
+
+    constructor(private elementRef: ElementRef, private renderer: Renderer, private nav: NavController, private params: NavParams, private actionSheetCtrl: ActionSheetController, private userService: UserService, private util: Util, private translate: TranslateService, private blogService: BlogService, private share: ShareService) {
         this.loginID = this.userService.getUserID();
         
         this.sendData = this.params.get('sendData');
@@ -105,7 +122,8 @@ export class BlogDetailPage {
     getCommunityDetailByCommunityID(): void {
         this.blogService.getCommunityDetailByCommunityID(this.id).then((data: any) => {
             this.title = data.title;
-            this.content = [data.content, [Img]];
+            // this.content = [data.content, [Img]];
+            this.outerDynamicContext.innerDynamicTemplate = data.content;
             this.createDate = data.createDate;
             this.createUserID = data.createUser;
             this.createUserName = data.createUserName;
@@ -131,7 +149,16 @@ export class BlogDetailPage {
             if (data) {
                 this.comments = data.replyContents;
                 for (let i = 0; i < data.replyContents.length; i++) {
-                    data.replyContents[i].content = [data.replyContents[i].content, [Img]];
+                    // data.replyContents[i].content = [data.replyContents[i].content, [Img]];
+                    data.replyContents[i]['outerDynamicModules'] = this.outerDynamicModules;
+                    data.replyContents[i]['outerDynamicTemplate'] = this.outerDynamicTemplate;
+                    data.replyContents[i]['outerDynamicContext'] = {
+                        innerDynamicContext: {},
+                        innerDynamicTemplate: data.replyContents[i].content,
+                        innerDynamicModules: [
+                            FormsModule
+                        ]
+                    }; 
                 }
                 this.commentCount = data.cursor.maxRows;
             }
@@ -149,7 +176,16 @@ export class BlogDetailPage {
         this.blogService.getReplyContentListByCommunityID(this.id, position).then((data: any) => {
             if (data && data.replyContents[0]) {
                 for (let i = 0; i < data.replyContents.length; i++) {
-                    data.replyContents[i].content = [data.replyContents[i].content, [Img]];
+                    // data.replyContents[i].content = [data.replyContents[i].content, [Img]];
+                    data.replyContents[i]['outerDynamicModules'] = this.outerDynamicModules;
+                    data.replyContents[i]['outerDynamicTemplate'] = this.outerDynamicTemplate;
+                    data.replyContents[i]['outerDynamicContext'] = {
+                        innerDynamicContext: {},
+                        innerDynamicTemplate: data.replyContents[i].content,
+                        innerDynamicModules: [
+                            FormsModule
+                        ]
+                    };
                 }
                 this.comments = this.comments.concat(data.replyContents);
             }
@@ -235,7 +271,7 @@ export class BlogDetailPage {
             'currentImage': currentImage,
             'images': images
         };
-        this.nav.push(ImageSlidesPage, { 'sendDataForAddComment': sendDataForAddComment });
+        this.nav.push(ImageSlidesPage, { 'sendData': sendDataForAddComment });
     }
 
     showCommentImageSlides(event): any {
@@ -245,7 +281,7 @@ export class BlogDetailPage {
             'currentImage': currentImage,
             'images': images
         };
-        this.nav.push(ImageSlidesPage, { 'sendDataForAddComment': sendDataForAddComment });
+        this.nav.push(ImageSlidesPage, { 'sendData': sendDataForAddComment });
     }
 
     
