@@ -16,6 +16,7 @@ import {AppsService} from '../../providers/apps-service';
 import {UserService} from '../../providers/user-service';
 import {BlogService} from '../../providers/blog-service';
 import {NotificationService} from '../../providers/notification-service';
+import {SurveyService} from '../../providers/survey-service';
 import {ScheduleService} from '../../providers/schedule-service';
 import {AboutService} from '../../providers/about-service';
 
@@ -33,6 +34,7 @@ import {DevicesPage} from '../schedule/devices/devices';
         UserService,
         BlogService,
         NotificationService,
+        SurveyService,
         ScheduleService,
         AboutService
     ]
