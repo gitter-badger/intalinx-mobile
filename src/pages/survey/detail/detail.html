@@ -2,7 +2,7 @@
     <ion-navbar>
         <ion-title>{{"app.survey.detail" | translate}}</ion-title>
         <ion-buttons end>
-            <button [hidden]="status=='COMPLETION'" [disabled]="selectedOption=='' || isDisabled==true" (click)="answerSurrvey()">{{initialSelectOption ? ("app.survey.answerSurveyAgain" | translate) : ("app.survey.answerSurvey" | translate) }}</button>
+            <button ion-button [hidden]="status=='COMPLETION'" [disabled]="selectedOption=='' || isDisabled==true" (click)="answerSurrvey()">{{initialSelectOption ? ("app.survey.answerSurveyAgain" | translate) : ("app.survey.answerSurvey" | translate) }}</button>
         </ion-buttons>
     </ion-navbar>
 </ion-header>
