@@ -26,53 +26,52 @@ import {ImageSlidesPage} from '../../../shared/components/image-slides/image-sli
 })
 export class BlogDetailPage implements OnDestroy {
     @ViewChild(Content) pageContent: Content;
-    private community: any;
-    private id: string;
-    private readStatus: string;
-    private newReplyFlag: string;
-    private sendDataForAddComment: any;
-    private title: string;
-    private content: any;
-    private createDate: string;
-    private createUserName: string;
-    private createUserAvatar: string;
-    private status: string;
-    private readCount: string;
-    private isLoadCompleted: boolean;
-    private isScrollToTopButtonVisible: boolean;
+    public community: any;
+    public id: string;
+    public readStatus: string;
+    public newReplyFlag: string;
+    public sendDataForAddComment: any;
+    public title: string;
+    public content: any;
+    public createDate: string;
+    public createUserName: string;
+    public createUserAvatar: string;
+    public status: string;
+    public readCount: string;
+    public isLoadCompleted: boolean;
+    public isScrollToTopButtonVisible: boolean;
 
-    private comments: any;
-    private commentCount: string;
-    private attachFilesForDownload: any;
-    private attachImagesForDisplay: any;
-    private hasAttachFilesForDownload: boolean = false;
+    public comments: any;
+    public commentCount: string;
+    public attachFilesForDownload: any;
+    public attachImagesForDisplay: any;
+    public hasAttachFilesForDownload: boolean = false;
 
-    private pageLoadTime: number;
-    private images: any;
-    private sendDataToImageSlidesPage: any;
-    private sendData: any;
-    private loginID: string;
-    private createUserID: string;
+    public pageLoadTime: number;
+    public images: any;
+    public sendDataToImageSlidesPage: any;
+    public sendData: any;
+    public loginID: string;
+    public createUserID: string;
 
-    clickListener: Function;
+    public clickListener: Function;
 
-    outerDynamicModules = [DynamicComponentModule];
-    outerDynamicContext = {
+    public outerDynamicModules = [DynamicComponentModule];
+    public outerDynamicContext = {
         innerDynamicContext: {},
         innerDynamicTemplate: ``,
         innerDynamicModules: [
             FormsModule
         ]
     };
-    outerDynamicTemplate = `
+    public outerDynamicTemplate = `
         <DynamicComponent [componentContext]='innerDynamicContext' 
                           [componentModules]='innerDynamicModules'
                           [componentTemplate]='innerDynamicTemplate'>         
         </DynamicComponent>
    `;
 
-    dynamicCallback() {
-        debugger
+    dynamicCallback(event) {
         this.clickListener = this.renderer.listen(this.elementRef.nativeElement, 'click', (event) => {
             let currentImage = event.target;
             if (currentImage.parentElement.parentElement.parentElement.className === 'contents selectable') {
@@ -97,7 +96,7 @@ export class BlogDetailPage implements OnDestroy {
         this.clickListener();
     }
 
-    constructor(private elementRef: ElementRef, private renderer: Renderer, private nav: NavController, private params: NavParams, private actionSheetCtrl: ActionSheetController, private userService: UserService, private util: Util, private translate: TranslateService, private blogService: BlogService, private share: ShareService) {
+    constructor(public elementRef: ElementRef, public renderer: Renderer, public nav: NavController, public params: NavParams, public actionSheetCtrl: ActionSheetController, public userService: UserService, public util: Util, public translate: TranslateService, public blogService: BlogService, public share: ShareService) {
         this.loginID = this.userService.getUserID();
         
         this.sendData = this.params.get('sendData');

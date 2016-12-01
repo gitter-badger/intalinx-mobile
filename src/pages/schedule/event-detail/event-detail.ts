@@ -27,52 +27,52 @@ import * as moment from 'moment';
 })
 
 export class EventDetailPage {
-    private sendDataToShowOrDeleteEvent: any;
-    private eventID: string;
-    private selectedDay: string;
-    private isLoadCompleted: boolean;
-    private sendDataToEditEvent: any;
-    private isAllDay: string;
-    private isRepeat: string;
-    private eventStartTime: any;
-    private eventEndTime: any;
-    private startDay: any;
-    private startDateAndWeekDay: any;
-    private startWeekDayMin: any;
-    private startTime: any;
-    private endDay: any;
-    private endDateAndWeekDay: any;
-    private endWeekDayMin: any;
-    private endTime: any;
-    private categoryID: string;
-    private deviceNames: any;
-    private categoryName: string;
-    private title: string;
-    private location: string;
-    private summary: string;
-    private createUserName: string;
-    private createDateTime: string;
-    private updateUserID: string;
-    private updateUserName: string;
-    private updateDateTime: string;
-    private participantNames: any;
-    private repeatType: any;
-    private repeatStartTime: string;
-    private repeatEndTime: string;
-    private repeatTypeName: string;
-    private repeatValueName: string;
-    private visibilityTypeName: string;
+    public sendDataToShowOrDeleteEvent: any;
+    public eventID: string;
+    public selectedDay: string;
+    public isLoadCompleted: boolean;
+    public sendDataToEditEvent: any;
+    public isAllDay: string;
+    public isRepeat: string;
+    public eventStartTime: any;
+    public eventEndTime: any;
+    public startDay: any;
+    public startDateAndWeekDay: any;
+    public startWeekDayMin: any;
+    public startTime: any;
+    public endDay: any;
+    public endDateAndWeekDay: any;
+    public endWeekDayMin: any;
+    public endTime: any;
+    public categoryID: string;
+    public deviceNames: any;
+    public categoryName: string;
+    public title: string;
+    public location: string;
+    public summary: string;
+    public createUserName: string;
+    public createDateTime: string;
+    public updateUserID: string;
+    public updateUserName: string;
+    public updateDateTime: string;
+    public participantNames: any;
+    public repeatType: any;
+    public repeatStartTime: string;
+    public repeatEndTime: string;
+    public repeatTypeName: string;
+    public repeatValueName: string;
+    public visibilityTypeName: string;
 
-    private isAfterEditEvent: boolean;
-    private isAdmin: boolean = false;
-    private isParticiPant: boolean = false;
+    public isAfterEditEvent: boolean;
+    public isAdmin: boolean = false;
+    public isParticiPant: boolean = false;
 
-    constructor(private nav: NavController,
-        private params: NavParams,
-        private actionSheetCtrl: ActionSheetController,
-        private translate: TranslateService,
-        private scheduleService: ScheduleService,
-        private userService: UserService) {
+    constructor(public nav: NavController,
+        public params: NavParams,
+        public actionSheetCtrl: ActionSheetController,
+        public translate: TranslateService,
+        public scheduleService: ScheduleService,
+        public userService: UserService) {
 
         this.sendDataToShowOrDeleteEvent = this.params.get('sendDataToShowOrDeleteEvent');
         this.eventID = this.sendDataToShowOrDeleteEvent.eventID;
@@ -170,8 +170,8 @@ export class EventDetailPage {
             this.translate.get('app.schedule.visibility.public').subscribe(message => {
                 this.visibilityTypeName = message;
             });
-        } else if (visibility === 'private') {
-            this.translate.get('app.schedule.visibility.private').subscribe(message => {
+        } else if (visibility === 'public') {
+            this.translate.get('app.schedule.visibility.public').subscribe(message => {
                 this.visibilityTypeName = message;
             });
         } else if (visibility === 'confidential') {

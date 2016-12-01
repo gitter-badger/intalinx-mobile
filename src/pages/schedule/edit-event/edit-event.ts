@@ -32,46 +32,46 @@ import * as moment from 'moment';
 })
 
 export class EditEventPage {
-    private visibilityPublic: string;
-    private visibilityConfidential: string;
-    private visibilityPrivate: string;
-    private visibilities: any;
-    private repeatEveryDay: string;
-    private repeatEveryWeek: string;
-    private repeatEveryMonth: string;
-    private weeklySelections: any;
-    private monthlySelections: any;
-    private repeatRules: any;
-    private categories: any;
-    private selectedRepeatRules: any;
-    private sendDataToEditEvent: any;
-    private sendDataToAddEvent: any;
-    private receivedData: any;
-    private isNewEvent: boolean;
-    private event: any;
-    private initEvent: any;
-    private participants: any;
-    private startTime: any;
-    private endTime: any;
-    private repeatStartTime: any;
-    private repeatEndTime: any;
-    private devices: any;
-    private minDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MIN');
-    private maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
-    private minuteValues: string = this.appConfig.get('DATETIME_MINUTE_VALUES');
-    private isSavedOrChecked: boolean = false;
-    private hadChangedEndTime: boolean = false;
+    public visibilityPublic: string;
+    public visibilityConfidential: string;
+    public visibilityPrivate: string;
+    public visibilities: any;
+    public repeatEveryDay: string;
+    public repeatEveryWeek: string;
+    public repeatEveryMonth: string;
+    public weeklySelections: any;
+    public monthlySelections: any;
+    public repeatRules: any;
+    public categories: any;
+    public selectedRepeatRules: any;
+    public sendDataToEditEvent: any;
+    public sendDataToAddEvent: any;
+    public receivedData: any;
+    public isNewEvent: boolean;
+    public event: any;
+    public initEvent: any;
+    public participants: any;
+    public startTime: any;
+    public endTime: any;
+    public repeatStartTime: any;
+    public repeatEndTime: any;
+    public devices: any;
+    public minDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MIN');
+    public maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
+    public minuteValues: string = this.appConfig.get('DATETIME_MINUTE_VALUES');
+    public isSavedOrChecked: boolean = false;
+    public hadChangedEndTime: boolean = false;
 
-    constructor(private nav: NavController,
-        private params: NavParams,
-        private alertCtrl: AlertController,
-        private modalCtrl: ModalController,
-        private translate: TranslateService,
-        private scheduleService: ScheduleService,
-        private util: Util,
-        private appConfig: AppConfig,
-        private userService: UserService,
-        private share: ShareService) {
+    constructor(public nav: NavController,
+        public params: NavParams,
+        public alertCtrl: AlertController,
+        public modalCtrl: ModalController,
+        public translate: TranslateService,
+        public scheduleService: ScheduleService,
+        public util: Util,
+        public appConfig: AppConfig,
+        public userService: UserService,
+        public share: ShareService) {
         this.initTranslation();
         this.initData();
     }
@@ -79,10 +79,10 @@ export class EditEventPage {
     initTranslation() {
         this.translate.get(['app.schedule.visibility.public',
             'app.schedule.visibility.confidential',
-            'app.schedule.visibility.private']).subscribe(message => {
+            'app.schedule.visibility.public']).subscribe(message => {
                 this.visibilityPublic = message['app.schedule.visibility.public'];
                 this.visibilityConfidential = message['app.schedule.visibility.confidential'];
-                this.visibilityPrivate = message['app.schedule.visibility.private'];
+                this.visibilityPrivate = message['app.schedule.visibility.public'];
             });
         this.visibilities = [
             {
@@ -94,7 +94,7 @@ export class EditEventPage {
                 description: this.visibilityConfidential
             },
             {
-                value: 'private',
+                value: 'public',
                 description: this.visibilityPrivate
             }
         ];

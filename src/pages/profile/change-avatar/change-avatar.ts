@@ -24,27 +24,27 @@ import {ShareService} from '../../../providers/share-service';
 export class ChangeAvatarPage {
     @ViewChild('fileInput') fileInput: ElementRef;
 
-    private user: any;
-    private isLoadCompleted: boolean;
-    private initAvatar: string;
-    private userAvatar: string;
-    private isSelectChange: boolean;
-    private selectedImageFile: string;
-    private width: number;
-    private height: number;
-    private loading: any;
+    public user: any;
+    public isLoadCompleted: boolean;
+    public initAvatar: string;
+    public userAvatar: string;
+    public isSelectChange: boolean;
+    public selectedImageFile: string;
+    public width: number;
+    public height: number;
+    public loading: any;
 
-    constructor(private nav: NavController,
-        private params: NavParams,
-        private view: ViewController,
-        private loadingCtrl: LoadingController,
-        private toastCtrl: ToastController,
-        private zone: NgZone,
-        private platform: Platform,
-        private userService: UserService,
-        private translate: TranslateService,
-        private share: ShareService,
-        private util: Util) {
+    constructor(public nav: NavController,
+        public params: NavParams,
+        public view: ViewController,
+        public loadingCtrl: LoadingController,
+        public toastCtrl: ToastController,
+        public zone: NgZone,
+        public platform: Platform,
+        public userService: UserService,
+        public translate: TranslateService,
+        public share: ShareService,
+        public util: Util) {
 
         this.user = this.params.get('user');
         this.isLoadCompleted = true;
@@ -62,7 +62,7 @@ export class ChangeAvatarPage {
         this.height = window.innerHeight;
     }
 
-    onFileInputChange() {
+    onFileInputChange(event) {
         this.isLoadCompleted = false;
         this.translate.get(['app.profile.message.loading.avatarLoading']).subscribe(message => {
             let content = message['app.profile.message.loading.avatarLoading'];

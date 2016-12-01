@@ -34,57 +34,57 @@ import {SelectUserPage} from '../select-user/select-user';
 export class ScheduleIndexPage {
     @ViewChild('calendarSlides') slider: Slides;
 
-    private locale: string;
-    private sendDataToShowOrDeleteEvent: any = {
+    public locale: string;
+    public sendDataToShowOrDeleteEvent: any = {
         'selectedDay': '',
         'eventID': '',
         'isRefreshFlag': false
     };
 
-    private sendDataToAddEvent: any = {
+    public sendDataToAddEvent: any = {
         'selectedDay': '',
         'isRefreshFlag': false
     };
-    private userLang: string = this.appConfig.get('USER_LANG');
-    private minDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MIN');
-    private maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
+    public userLang: string = this.appConfig.get('USER_LANG');
+    public minDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MIN');
+    public maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
 
-    private weekdays: any[] = moment.weekdaysMin(true);
-    private defaultNumber: number = 0;
-    private cachedSlidesOnOneSide: number = 1;
+    public weekdays: any[] = moment.weekdaysMin(true);
+    public defaultNumber: number = 0;
+    public cachedSlidesOnOneSide: number = 1;
 
-    private calendarSlideOptions: any;
-    private isFirstDayMonday: boolean;
-    private today: any;
-    private perviousYearMonthText: any;
-    private currentYearMonthText: any;
-    private nextYearMonthText: any;
-    private perviousMonthDaysArray: any;
-    private currentMonthDaysArray: any;
-    private nextMonthDaysArray: any;
-    private perviousMonth: any;
-    private currentMonth: any;
-    private nextMonth: any;
+    public calendarSlideOptions: any;
+    public isFirstDayMonday: boolean;
+    public today: any;
+    public perviousYearMonthText: any;
+    public currentYearMonthText: any;
+    public nextYearMonthText: any;
+    public perviousMonthDaysArray: any;
+    public currentMonthDaysArray: any;
+    public nextMonthDaysArray: any;
+    public perviousMonth: any;
+    public currentMonth: any;
+    public nextMonth: any;
 
-    private selectedDay: any;
-    private myUserID: string;
-    private userID: string;
+    public selectedDay: any;
+    public myUserID: string;
+    public userID: string;
 
-    private selectedOtherUserName: string;
-    private isAdmin: boolean;
+    public selectedOtherUserName: string;
+    public isAdmin: boolean;
 
-    private calendar: any;
+    public calendar: any;
 
-    private moment: any;
+    public moment: any;
 
-    private isHtmlLoadCompleted: boolean;
-    private isEventLoadCompleted: boolean;
-    private specialDays: any;
-    private events: any;
-    private eventsByDays: any = new Map(Array());
-    private specialDaysByDays: any = new Map(Array());
+    public isHtmlLoadCompleted: boolean;
+    public isEventLoadCompleted: boolean;
+    public specialDays: any;
+    public events: any;
+    public eventsByDays: any = new Map(Array());
+    public specialDaysByDays: any = new Map(Array());
 
-    constructor(private nav: NavController, private modalCtrl: ModalController, private translate: TranslateService, private scheduleService: ScheduleService, private userService: UserService, private appConfig: AppConfig) {
+    constructor(public nav: NavController, public modalCtrl: ModalController, public translate: TranslateService, public scheduleService: ScheduleService, public userService: UserService, public appConfig: AppConfig) {
         this.calendarSlideOptions = {
             direction: 'horizontal',
             initialSlide: this.cachedSlidesOnOneSide

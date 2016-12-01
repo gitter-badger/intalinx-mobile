@@ -17,16 +17,16 @@ import {ShareService} from '../../../providers/share-service';
 export class PreviewBlogPage {
     @ViewChild(Content) pageContent: Content;
 
-    private previewBlog: any;
-    private title: string;
-    private content: string;
-    private isLoadCompleted: boolean;
-    private isScrollToTopButtonVisible: boolean;
-    private attachFiles: any;
+    public previewBlog: any;
+    public title: string;
+    public content: string;
+    public isLoadCompleted: boolean;
+    public isScrollToTopButtonVisible: boolean;
+    public attachFiles: any;
 
-    private pageLoadTime: number;
+    public pageLoadTime: number;
 
-    constructor(private nav: NavController, private viewCtrl: ViewController, private params: NavParams, private blogService: BlogService, private share: ShareService) {
+    constructor(public nav: NavController, public viewCtrl: ViewController, public params: NavParams, public blogService: BlogService, public share: ShareService) {
         this.previewBlog = this.params.get('previewBlog');
         this.title = this.previewBlog.title;
         this.content = this.previewBlog.content;

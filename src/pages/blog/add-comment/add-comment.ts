@@ -22,14 +22,14 @@ import {BlogService} from '../../../providers/blog-service';
 })
 export class AddCommentPage {
     @ViewChild('fileInput') fileInput: ElementRef;
-    private pictures: any = new Array();
-    private loading: any;
-    private sendDataForAddComment: any;
-    private id: string;
-    private comment: any;
-    private isDisabled: boolean;
+    public pictures: any = new Array();
+    public loading: any;
+    public sendDataForAddComment: any;
+    public id: string;
+    public comment: any;
+    public isDisabled: boolean;
 
-    constructor(private nav: NavController, private params: NavParams, private zone: NgZone, private loadingCtrl: LoadingController, private translate: TranslateService, private blogService: BlogService, private util: Util) {
+    constructor(public nav: NavController, public params: NavParams, public zone: NgZone, public loadingCtrl: LoadingController, public translate: TranslateService, public blogService: BlogService, public util: Util) {
         this.sendDataForAddComment = this.params.get('sendDataForAddComment');
         this.id = this.sendDataForAddComment.id;
         this.comment = {
@@ -91,7 +91,7 @@ export class AddCommentPage {
         }
     }
 
-    addPicture(): any {
+    addPicture(event): any {
         let a = event.bubbles;
         // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
         let fileInput = (<any>event.currentTarget);

@@ -37,46 +37,46 @@ export class DevicesPage {
 
 
     // if nobody make an action, refresh whole page every 5 minutes.
-    private refreshWholePageInterval: number = 60 * 5;
+    public refreshWholePageInterval: number = 60 * 5;
     // the width of one hour
-    private oneHourWidth: number = 120;
-    private eventHeight: number = 70;
-    private deviceHeight: number = 70;
-    private displayDaysNumber: number = 2;
-    private ganttviewWidth: number;
-    private fixedDateWidth: number;
+    public oneHourWidth: number = 120;
+    public eventHeight: number = 70;
+    public deviceHeight: number = 70;
+    public displayDaysNumber: number = 2;
+    public ganttviewWidth: number;
+    public fixedDateWidth: number;
     // start work at 7:00.
-    private workStartTime: number = 7;
+    public workStartTime: number = 7;
 
     // 
-    private lastActionTime: number = moment().unix();
-    private now: number = moment().unix();
-    private isAdmin: boolean = false;
-    private isLoadCompleted: boolean;
-    private specialDays: any = new Array();
-    private devices: any = new Array();
-    private timeZone: string = 'UTC' + moment().format('Z');
+    public lastActionTime: number = moment().unix();
+    public now: number = moment().unix();
+    public isAdmin: boolean = false;
+    public isLoadCompleted: boolean;
+    public specialDays: any = new Array();
+    public devices: any = new Array();
+    public timeZone: string = 'UTC' + moment().format('Z');
 
-    private displayDates: any;
-    private fromDate: any;
-    private fromDateTime: number;
-    private toDate: any;
-    private toDateTime: number;
-    private showFixedDate: boolean = false;
-    private fixedDate: any;
-    private headerFixed: boolean = false;
-    private isNeedShowNowLine: boolean = false;
-    private nowLineStyle: any;
-    private dateTimes: any = new Array();
-    private minDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MIN');
-    private maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
+    public displayDates: any;
+    public fromDate: any;
+    public fromDateTime: number;
+    public toDate: any;
+    public toDateTime: number;
+    public showFixedDate: boolean = false;
+    public fixedDate: any;
+    public headerFixed: boolean = false;
+    public isNeedShowNowLine: boolean = false;
+    public nowLineStyle: any;
+    public dateTimes: any = new Array();
+    public minDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MIN');
+    public maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
 
-    constructor(private platform: Platform,
-        private util: Util,
-        private share: ShareService,
-        private scheduleService: ScheduleService,
-        private userService: UserService,
-        private appConfig: AppConfig
+    constructor(public platform: Platform,
+        public util: Util,
+        public share: ShareService,
+        public scheduleService: ScheduleService,
+        public userService: UserService,
+        public appConfig: AppConfig
     ) {
 
         this.platform.ready().then(() => {

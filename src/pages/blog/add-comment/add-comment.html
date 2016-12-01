@@ -10,7 +10,7 @@
 </ion-header>
 <ion-content padding class="add-comment">
     <ion-item>
-        <ion-textarea placeholder='{{ "app.blog.comment.content" | translate }}' [(ngModel)]="comment.content" (ngModelChange)="changeContent($event)"></ion-textarea>
+        <ion-textarea placeholder='{{ "app.blog.comment.content" | translate }}' [(ngModel)]="comment.content" (ngModelChange)="changeContent()"></ion-textarea>
     </ion-item>
     <ion-item class="selected-pictures" no-lines>
         <ion-thumbnail *ngFor="let picture of pictures">

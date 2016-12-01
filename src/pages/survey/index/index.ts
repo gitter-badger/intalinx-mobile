@@ -24,16 +24,16 @@ import {SurveyResultPage} from '../result/result';
 export class SurveyIndexPage {
     @ViewChild(Content) pageContent: Content;
 
-    private sendData: any;
-    private isLoadCompleted: boolean;
-    private surveyListForTop: any[] = [];
-    private keyWord: string;
-    private isFirstTimeLoad: boolean;
-    private isShowSearchBar: boolean;
+    public sendData: any;
+    public isLoadCompleted: boolean;
+    public surveyListForTop: any[] = [];
+    public keyWord: string;
+    public isFirstTimeLoad: boolean;
+    public isShowSearchBar: boolean;
 
-    private isScrollToTopButtonVisible: boolean;
+    public isScrollToTopButtonVisible: boolean;
 
-    constructor(private nav: NavController, private surveyService: SurveyService, private share: ShareService) {
+    constructor(public nav: NavController, public surveyService: SurveyService, public share: ShareService) {
         this.sendData = {
             'isRefreshFlag': false
         };

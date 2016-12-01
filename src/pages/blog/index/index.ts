@@ -24,16 +24,15 @@ import {AddBlogPage} from '../add-blog/add-blog';
 export class BlogIndexPage {
     @ViewChild(Content) pageContent: Content;
 
-    private sendData: any;
-    private isLoadCompleted: boolean;
-    private communityListForTop: any[] = [];
-    private keyWord: string;
-    private isFirstTimeLoad: boolean;
-    private isShowSearchBar: boolean;
+    public sendData: any;
+    public isLoadCompleted: boolean;
+    public communityListForTop: any[] = [];
+    public keyWord: string;
+    public isFirstTimeLoad: boolean;
+    public isShowSearchBar: boolean;
+    public isScrollToTopButtonVisible: boolean;
 
-    private isScrollToTopButtonVisible: boolean;
-
-    constructor(private nav: NavController, private blogService: BlogService, private share: ShareService) {
+    constructor(public nav: NavController, public blogService: BlogService, public share: ShareService) {
         this.sendData = {
             'isRefreshFlag': false
         };

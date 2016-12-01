@@ -22,13 +22,20 @@ import {PortalPage} from '../pages/portal/portal';
 export class MyApp {
     @ViewChild(Nav) nav: Nav;
 
+    public menus;
     // make HelloIonicPage the root (or first) page
-    private rootPage: any;
-    private user: any = {
+    public rootPage: any;
+    public user: any = {
         'userAvatar': null
     };
 
-    constructor(private translate: TranslateService, private platform: Platform, private config: Config, private menu: MenuController, private appConfig: AppConfig, private util: Util, private share: ShareService) {
+    constructor(public translate: TranslateService,
+        public platform: Platform,
+        public config: Config,
+        public menu: MenuController,
+        public appConfig: AppConfig,
+        public util: Util,
+        public share: ShareService) {
         this.platform.ready().then(() => {
             this.initializeApp();
         });

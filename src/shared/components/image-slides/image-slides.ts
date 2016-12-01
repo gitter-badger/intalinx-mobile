@@ -12,10 +12,10 @@ import {Util} from '../../../utils/util';
     templateUrl: 'image-slides.html',
 })
 export class ImageSlidesPage {
-    private sendData: any;
-    private images: any;
-    private imageSlideOptions: any;
-    constructor(private nav: NavController, private actionSheetCtrl: ActionSheetController, private toastCtrl: ToastController, private params: NavParams, private util: Util, private translate: TranslateService, private platform: Platform) {
+    public sendData: any;
+    public images: any;
+    public imageSlideOptions: any;
+    constructor(public nav: NavController, public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController, public params: NavParams, public util: Util, public translate: TranslateService, public platform: Platform) {
         this.sendData = this.params.get('sendData');
         this.images = Array.prototype.slice.call(this.sendData.images);
         let currentImage = this.sendData.currentImage;

@@ -18,24 +18,24 @@ import {UserService} from '../../../providers/user-service';
         UserService]
 })
 export class SelectUserPage {
-    private selectedUserCount = 0;
-    private selectedUser: any = new Array();
-    private allUsers: any;
-    private allGroupUsers: any;
-    private orgsWithUsers: any = new Array();
-    private groupsWithUsers: any = new Array();
-    private isSearching: boolean;
-    private foundUserMembers: any;
-    private groupingApproach: string = 'group';
-    private isFirstLoadOrganizationInfo: boolean = true;
-    private searchUserName: string;
+    public selectedUserCount = 0;
+    public selectedUser: any = new Array();
+    public allUsers: any;
+    public allGroupUsers: any;
+    public orgsWithUsers: any = new Array();
+    public groupsWithUsers: any = new Array();
+    public isSearching: boolean;
+    public foundUserMembers: any;
+    public groupingApproach: string = 'group';
+    public isFirstLoadOrganizationInfo: boolean = true;
+    public searchUserName: string;
 
-    constructor(private nav: NavController,
-        private viewCtrl: ViewController,
-        private util: Util,
-        private params: NavParams,
-        private scheduleService: ScheduleService,
-        private userService: UserService) {
+    constructor(public nav: NavController,
+        public viewCtrl: ViewController,
+        public util: Util,
+        public params: NavParams,
+        public scheduleService: ScheduleService,
+        public userService: UserService) {
         this.getGroupListForCurrentUser();
     }
 

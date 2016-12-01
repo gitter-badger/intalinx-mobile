@@ -24,16 +24,16 @@ import {NotificationDetailPage} from '../detail/detail';
 export class NotificationIndexPage {
     @ViewChild(Content) pageContent: Content;
 
-    private notificationListForTop: any;
-    private isLoadCompleted: boolean;
-    private isScrollToTopButtonVisible: boolean;
-    private keyWord: string;
-    private isFirstTimeLoad: boolean;
-    private isShowSearchBar: boolean;
+    public notificationListForTop: any;
+    public isLoadCompleted: boolean;
+    public isScrollToTopButtonVisible: boolean;
+    public keyWord: string;
+    public isFirstTimeLoad: boolean;
+    public isShowSearchBar: boolean;
 
-    constructor(private share: ShareService,
-        private nav: NavController,
-        private notificationService: NotificationService) {
+    constructor(public share: ShareService,
+        public nav: NavController,
+        public notificationService: NotificationService) {
         this.keyWord = null;
         this.getNotificationListForTop();
         this.getNotReadNotificationCountBySelf();

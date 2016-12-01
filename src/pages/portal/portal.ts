@@ -53,7 +53,7 @@ export class PortalPage {
         'devices': DevicesPage
     };
 
-    constructor(private translate: TranslateService, private platform: Platform, private nav: NavController, private appConfig: AppConfig, private util: Util, private share: ShareService, private appsService: AppsService, private aboutService: AboutService, private userService: UserService) {
+    constructor(public translate: TranslateService, public platform: Platform, public nav: NavController, public appConfig: AppConfig, public util: Util, public share: ShareService, public appsService: AppsService, public aboutService: AboutService, public userService: UserService) {
         this.initializeUser().then(() => {
             this.loadApplications();
             this.checkUpdate();

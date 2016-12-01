@@ -29,40 +29,40 @@ import {SelectUsersPage} from '../../../shared/components/select-users/select-us
 })
 export class AddBlogPage {
   @ViewChild('fileInput') fileInput: ElementRef;
-  private loading: any;
-  private sendData: any;
-  private isDisabled: boolean = true;
-  private pictureName: string = 'picture';
-  private pictureCount: number = 0;
-  private allUsersType: string;
-  private selectUsersType: string;
-  private blog: any = {
+  public loading: any;
+  public sendData: any;
+  public isDisabled: boolean = true;
+  public pictureName: string = 'picture';
+  public pictureCount: number = 0;
+  public allUsersType: string;
+  public selectUsersType: string;
+  public blog: any = {
     'title': '',
     'selectedUsers': [],
     'allMemberFlag': 'TRUE',
     'content': ''
   };
-  private picture: any;
-  private pictures: any = new Array();
-  private readLimit = {
+  public picture: any;
+  public pictures: any = new Array();
+  public readLimit = {
     'readLimitType': 'allUsers',
     'readLimitTypeName': ''
   };
-  private sendDataToSelectReadLimitTypePage: any = {
+  public sendDataToSelectReadLimitTypePage: any = {
     'isSelected': false,
     'readLimit': '',
     'selectedUsers': []
   };
 
-  constructor(private nav: NavController,
-    private params: NavParams,
-    private loadingCtrl: LoadingController,
-    private modalCtrl: ModalController,
-    private zone: NgZone,
-    private blogService: BlogService,
-    private translate: TranslateService,
-    private userService: UserService,
-    private util: Util) {
+  constructor(public nav: NavController,
+    public params: NavParams,
+    public loadingCtrl: LoadingController,
+    public modalCtrl: ModalController,
+    public zone: NgZone,
+    public blogService: BlogService,
+    public translate: TranslateService,
+    public userService: UserService,
+    public util: Util) {
 
     this.sendData = this.params.get('sendData');
     this.sendDataToSelectReadLimitTypePage.selectedUsers.push(this.userService.getUser());
@@ -77,7 +77,7 @@ export class AddBlogPage {
     });
   }
 
-  addPicture(): any {
+  addPicture(event): any {
     let a = event.bubbles;
     // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
     let fileInput = (<any>event.currentTarget);
@@ -289,14 +289,14 @@ export class AddBlogPage {
   `
 })
 export class SelectReadLimitTypePage {
-  private allUsersType: string;
-  private selectUsersType: string;
-  private readLimitType: string = '';
-  private readLimitTypeName: string = '';
-  private selectedUsers: any = [];
-  private sendDataToSelectReadLimitTypePage: any;
-  private isFirstTimeEnterPage: boolean = true;
-  constructor(private nav: NavController, private params: NavParams, private modalCtrl: ModalController, private translate: TranslateService, private util: Util) {
+  public allUsersType: string;
+  public selectUsersType: string;
+  public readLimitType: string = '';
+  public readLimitTypeName: string = '';
+  public selectedUsers: any = [];
+  public sendDataToSelectReadLimitTypePage: any;
+  public isFirstTimeEnterPage: boolean = true;
+  constructor(public nav: NavController, public params: NavParams, public modalCtrl: ModalController, public translate: TranslateService, public util: Util) {
     this.sendDataToSelectReadLimitTypePage = this.params.get('sendDataToSelectReadLimitTypePage');
     this.readLimitType = this.sendDataToSelectReadLimitTypePage.readLimit.readLimitType;
     this.selectedUsers = this.sendDataToSelectReadLimitTypePage.selectedUsers;

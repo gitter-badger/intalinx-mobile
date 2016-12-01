@@ -35,7 +35,7 @@
             <ion-label>{{"app.schedule.event.startTime" | translate}}</ion-label>
             <ion-datetime displayFormat="YYYY/MM/DD HH:mm" 
                           [(ngModel)] = "startTime"
-                          (ngModelChange)="changeStartTime($event)"
+                          (ngModelChange)="changeStartTime()"
                           min={{minDisplayDate}} max={{maxDisplayDate}} 
                           minuteValues={{minuteValues}} 
                           doneText='{{"app.action.done" | translate}}' 
@@ -46,7 +46,7 @@
             <ion-label>{{"app.schedule.event.endTime" | translate}}</ion-label>
             <ion-datetime displayFormat="YYYY/MM/DD HH:mm" 
                           [(ngModel)] = "endTime"
-                          (ngModelChange)="changeEndTime($event)"
+                          (ngModelChange)="changeEndTime()"
                           min={{minDisplayDate}} max={{maxDisplayDate}} 
                           minuteValues={{minuteValues}} 
                           doneText='{{"app.action.done" | translate}}' 
@@ -59,7 +59,7 @@
             <ion-label>{{"app.schedule.event.startDate" | translate}}</ion-label>
             <ion-datetime displayFormat="YYYY/MM/DD" 
                           [(ngModel)] = "startTime" 
-                          (ngModelChange)="changeStartDate($event)"
+                          (ngModelChange)="changeStartDate()"
                           min={{minDisplayDate}} max={{maxDisplayDate}} 
                           doneText='{{"app.action.done" | translate}}' 
                           cancelText='{{"app.action.cancel" | translate}}'></ion-datetime>
@@ -69,7 +69,7 @@
             <ion-label>{{"app.schedule.event.endDate" | translate}}</ion-label>
             <ion-datetime displayFormat="YYYY/MM/DD" 
                           [(ngModel)] = "endTime" 
-                          (ngModelChange)="changeEndDate($event)"
+                          (ngModelChange)="changeEndDate()"
                           min={{minDisplayDate}} max={{maxDisplayDate}} 
                           doneText='{{"app.action.done" | translate}}' 
                           cancelText='{{"app.action.cancel" | translate}}'></ion-datetime>
@@ -127,7 +127,7 @@
             <ion-label>{{"app.schedule.event.startTime" | translate}}</ion-label>
             <ion-datetime displayFormat="HH:mm"  
                           [(ngModel)]="startTime"
-                          (ngModelChange)="changeRepeatStartTime($event)"
+                          (ngModelChange)="changeRepeatStartTime()"
                           minuteValues={{minuteValues}} 
                           doneText='{{"app.action.done" | translate}}' 
                           cancelText='{{"app.action.cancel" | translate}}'></ion-datetime>
@@ -137,7 +137,7 @@
             <ion-label>{{"app.schedule.event.endTime" | translate}}</ion-label>
             <ion-datetime displayFormat="HH:mm"  
                           [(ngModel)] = "endTime"
-                          (ngModelChange)="changeRepeatEndTime($event)"
+                          (ngModelChange)="changeRepeatEndTime()"
                           minuteValues={{minuteValues}} 
                           doneText='{{"app.action.done" | translate}}' 
                           cancelText='{{"app.action.cancel" | translate}}'></ion-datetime>

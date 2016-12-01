@@ -21,15 +21,15 @@ import {OptionResultDetailPage} from '../option-result-detail/option-result-deta
     providers: [SurveyService, Util],
 })
 export class SurveyResultPage {
-    private survey: any;
-    private surveyID: string;
-    private title: string;
-    private status: string;
-    private surveyOptionResults: any;
-    private participantTotalCount: number;
-    private isLoadCompleted: boolean = false;
+    public survey: any;
+    public surveyID: string;
+    public title: string;
+    public status: string;
+    public surveyOptionResults: any;
+    public participantTotalCount: number;
+    public isLoadCompleted: boolean = false;
 
-    constructor(private nav: NavController, private params: NavParams, private util: Util, private surveyService: SurveyService) {
+    constructor(public nav: NavController, public params: NavParams, public util: Util, public surveyService: SurveyService) {
         let sendData = this.params.get('sendData');
         this.survey = sendData.survey;
         this.surveyID = this.survey.surveyID;

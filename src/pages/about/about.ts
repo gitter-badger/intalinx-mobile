@@ -19,11 +19,11 @@ import {AboutService} from '../../providers/about-service';
 
 export class AboutPage {
 
-    private version: string = 'latest';
-    private latestVersion: string = 'latest';
-    private upgradeUrl: string = '';
+    public version: string = 'latest';
+    public latestVersion: string = 'latest';
+    public upgradeUrl: string = '';
 
-    constructor(private nav: NavController, private platform: Platform, private util: Util, private aboutService: AboutService, private translate: TranslateService) {
+    constructor(public nav: NavController, public platform: Platform, public util: Util, public aboutService: AboutService, public translate: TranslateService) {
         this.getVersionInfo();
         this.getUpgradeUrl();
     }

@@ -8,10 +8,10 @@
 </ion-header>
 <ion-content class="add-blog">
     <ion-item>
-        <ion-input placeholder='{{ "app.blog.blogTitile" | translate }}' [(ngModel)]="blog.title" (ngModelChange)="changeBlog($event)"></ion-input>
+        <ion-input placeholder='{{ "app.blog.blogTitile" | translate }}' [(ngModel)]="blog.title" (ngModelChange)="changeBlog()"></ion-input>
     </ion-item>
     <ion-item no-lines>
-        <ion-textarea placeholder='{{ "app.blog.blogContent" | translate }}' rows=8 [(ngModel)]="blog.content" (ngModelChange)="changeBlog($event)"></ion-textarea>
+        <ion-textarea placeholder='{{ "app.blog.blogContent" | translate }}' rows=8 [(ngModel)]="blog.content" (ngModelChange)="changeBlog()"></ion-textarea>
     </ion-item>
     <ion-item class="selected-pictures" no-lines>
         <ion-thumbnail *ngFor="let picture of pictures">

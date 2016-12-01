@@ -27,46 +27,46 @@ import {SurveyResultPage} from '../result/result';
 export class SurveyDetailPage implements OnDestroy {
 
     @ViewChild(Content) pageContent: Content;
-    private survey: any;
-    private id: string;
-    private sendData: any;
-    private title: string;
-    private content: any;
-    private createDate: string;
-    private createUserName: string;
-    private createUserAvatar: string;
-    private endDate: string;
-    private status: string;
-    private processStatus: string;
-    private isLoadCompleted: boolean;
-    private isScrollToTopButtonVisible: boolean;
+    public survey: any;
+    public id: string;
+    public sendData: any;
+    public title: string;
+    public content: any;
+    public createDate: string;
+    public createUserName: string;
+    public createUserAvatar: string;
+    public endDate: string;
+    public status: string;
+    public processStatus: string;
+    public isLoadCompleted: boolean;
+    public isScrollToTopButtonVisible: boolean;
 
-    private pageLoadTime: number;
-    private options: any;
-    private images: any;
-    private selectedOption: any = '';
-    private initialSelectOption: any;
-    private isFirstTimeAnswerSurvey: boolean = false;
-    private isDisabled: boolean = true;
+    public pageLoadTime: number;
+    public options: any;
+    public images: any;
+    public selectedOption: any = '';
+    public initialSelectOption: any;
+    public isFirstTimeAnswerSurvey: boolean = false;
+    public isDisabled: boolean = true;
 
-    clickListener: Function;
+    public clickListener: Function;
 
-    outerDynamicModules = [DynamicComponentModule];
-    outerDynamicContext = {
+    public outerDynamicModules = [DynamicComponentModule];
+    public outerDynamicContext = {
         innerDynamicContext: {},
         innerDynamicTemplate: ``,
         innerDynamicModules: [
             FormsModule
         ]
     };
-    outerDynamicTemplate = `
+    public outerDynamicTemplate = `
         <DynamicComponent [componentContext]='innerDynamicContext' 
                           [componentModules]='innerDynamicModules'
                           [componentTemplate]='innerDynamicTemplate'>         
         </DynamicComponent>
    `;
 
-    dynamicCallback() {
+    dynamicCallback(event) {
         this.clickListener = this.renderer.listen(this.elementRef.nativeElement, 'click', (event) => {
             let currentImage = event.target;
             if (currentImage.parentElement.parentElement.parentElement.className === 'contents selectable') {
@@ -84,7 +84,7 @@ export class SurveyDetailPage implements OnDestroy {
         this.clickListener();
     }
 
-    constructor(private elementRef: ElementRef, private renderer: Renderer, private nav: NavController, private params: NavParams, private util: Util, private surveyService: SurveyService, private share: ShareService) {
+    constructor(public elementRef: ElementRef, public renderer: Renderer, public nav: NavController, public params: NavParams, public util: Util, public surveyService: SurveyService, public share: ShareService) {
         this.survey = this.params.get('survey');
         this.id = this.survey.surveyID;
         this.processStatus = this.survey.processStatus;

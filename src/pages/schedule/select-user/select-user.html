@@ -62,7 +62,7 @@
 </ion-content>
 <ion-footer>
     <ion-toolbar class="calendar-bottom-toolbar">
-        <ion-segment class="select-user-bottom-toolbar" [(ngModel)]="groupingApproach" (ionChange)="onSegmentChanged($event)">
+        <ion-segment class="select-user-bottom-toolbar" [(ngModel)]="groupingApproach" (ionChange)="onSegmentChanged()">
             <ion-segment-button class="segment-without-border" value="group">
                 {{ "app.schedule.selectUser.group" | translate }}
             </ion-segment-button>

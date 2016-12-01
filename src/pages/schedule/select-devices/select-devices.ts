@@ -17,14 +17,14 @@ import {ScheduleService} from '../../../providers/schedule-service';
 
 export class SelectDevicesPage {
 
-    private originDevices: any;
-    private selectedDeviceCount: number;
-    private selectedDevices: any[] = new Array();
-    private devices: any;
-    private isSearching: boolean;
-    private foundDevices: any;
+    public originDevices: any;
+    public selectedDeviceCount: number;
+    public selectedDevices: any[] = new Array();
+    public devices: any;
+    public isSearching: boolean;
+    public foundDevices: any;
 
-    constructor(private nav: NavController, private viewCtrl: ViewController, private util: Util, private params: NavParams, private scheduleService: ScheduleService) {
+    constructor(public nav: NavController, public viewCtrl: ViewController, public util: Util, public params: NavParams, public scheduleService: ScheduleService) {
 
         this.originDevices = this.params.get('devices');
         this.getDevices().then(data => {

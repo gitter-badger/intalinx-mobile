@@ -29,44 +29,44 @@ import {ImageSlidesPage} from '../../../shared/components/image-slides/image-sli
 export class NotificationDetailPage implements OnDestroy {
     @ViewChild(Content) pageContent: Content;
 
-    private notification: any;
-    private id: string;
-    private readStatus: string;
+    public notification: any;
+    public id: string;
+    public readStatus: string;
     // The detail data of event.
-    private title: string;
-    private content: any;
-    private createUserId: string;
-    private publishStartDate: string;
-    private createUserAvatar: string;
-    private createUserName: string;
-    private status: string;
-    private readCount: string;
-    private isLoadCompleted: boolean;
-    private isScrollToTopButtonVisible: boolean;
+    public title: string;
+    public content: any;
+    public createUserId: string;
+    public publishStartDate: string;
+    public createUserAvatar: string;
+    public createUserName: string;
+    public status: string;
+    public readCount: string;
+    public isLoadCompleted: boolean;
+    public isScrollToTopButtonVisible: boolean;
     // The number of milliseconds between midnight, January 1, 1970.
-    private pageLoadTime: number;
-    private attachFilesForDownload: any;
-    private attachImagesForDisplay: any;
-    private hasAttachFilesForDownload: boolean = false;
+    public pageLoadTime: number;
+    public attachFilesForDownload: any;
+    public attachImagesForDisplay: any;
+    public hasAttachFilesForDownload: boolean = false;
 
-    clickListener: Function;
+    public clickListener: Function;
 
-    outerDynamicModules = [DynamicComponentModule];
-    outerDynamicContext = {
+    public outerDynamicModules = [DynamicComponentModule];
+    public outerDynamicContext = {
         innerDynamicContext: {},
         innerDynamicTemplate: ``,
         innerDynamicModules: [
             FormsModule
         ]
     };
-    outerDynamicTemplate = `
+    public outerDynamicTemplate = `
         <DynamicComponent [componentContext]='innerDynamicContext' 
                           [componentModules]='innerDynamicModules'
                           [componentTemplate]='innerDynamicTemplate'>         
         </DynamicComponent>
    `;
 
-    dynamicCallback() {
+    dynamicCallback(event) {
         this.clickListener = this.renderer.listen(this.elementRef.nativeElement, 'click', (event) => {
             let currentImage = event.target;
             if (currentImage.parentElement.parentElement.parentElement.className === 'contents selectable') {
@@ -84,13 +84,13 @@ export class NotificationDetailPage implements OnDestroy {
         this.clickListener();
     }
 
-    constructor(private elementRef: ElementRef, 
-        private renderer: Renderer,
-        private nav: NavController,
-        private params: NavParams,
-        private notificationService: NotificationService,
-        private view: ViewController,
-        private share: ShareService) {
+    constructor(public elementRef: ElementRef, 
+        public renderer: Renderer,
+        public nav: NavController,
+        public params: NavParams,
+        public notificationService: NotificationService,
+        public view: ViewController,
+        public share: ShareService) {
         this.notification = this.params.get('notification');
         this.id = this.notification.notificationID;
         this.readStatus = this.notification.readStatus;

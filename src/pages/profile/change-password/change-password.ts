@@ -18,13 +18,13 @@ import {UserService} from '../../../providers/user-service';
     ]
 })
 export class ChangePasswordPage {
-    private user: any;
-    private isDisabled: boolean = true;
+    public user: any;
+    public isDisabled: boolean = true;
 
-    constructor(private nav: NavController,
-        private view: ViewController,
-        private util: Util,
-        private userService: UserService) {
+    constructor(public nav: NavController,
+        public view: ViewController,
+        public util: Util,
+        public userService: UserService) {
 
         this.user = {
             oldPassword: '',
@@ -33,7 +33,7 @@ export class ChangePasswordPage {
         };
     }
 
-    updateProfile() {
+    updateProfile(profileForm) {
         this.isDisabled = true;
         this.userService.updateProfile(this.user).then(data => {
             if (data === true) {

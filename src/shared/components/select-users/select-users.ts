@@ -20,22 +20,22 @@ import {UserService} from '../../../providers/user-service';
     ]
 })
 export class SelectUsersPage {
-    private originUsers: any;
-    private selectedUsers: any = new Array();
-    private selectedUsersCount: number;
-    private allUsers: any;
-    private orgsWithUsers: any = new Array();
-    private isSearching: boolean;
-    private foundUserMembers: any;
-    private title: string;
+    public originUsers: any;
+    public selectedUsers: any = new Array();
+    public selectedUsersCount: number;
+    public allUsers: any;
+    public orgsWithUsers: any = new Array();
+    public isSearching: boolean;
+    public foundUserMembers: any;
+    public title: string;
 
-    constructor(private nav: NavController,
-        private viewCtrl: ViewController,
-        private util: Util,
-        private params: NavParams,
-        private scheduleService: ScheduleService,
-        private blogService: BlogService,
-        private userService: UserService) {
+    constructor(public nav: NavController,
+        public viewCtrl: ViewController,
+        public util: Util,
+        public params: NavParams,
+        public scheduleService: ScheduleService,
+        public blogService: BlogService,
+        public userService: UserService) {
         let sendDataToSelectUsers = this.params.get('sendDataToSelectUsers');
         this.title = sendDataToSelectUsers.title;
         this.originUsers = sendDataToSelectUsers.selectedUsers;
