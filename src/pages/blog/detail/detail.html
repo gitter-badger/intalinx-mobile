@@ -49,7 +49,7 @@
                                 <img src="{{comment.userAvatar}}" />
                             </ion-avatar>
                             <div class="name">{{comment.userName}}</div>
-                            <div class="time">{{comment.createDate}}</div>
+                            <div class="time">{{comment.createDate}}<a class="delete-comment" [hidden]="loginID!=comment.userID" (click)="showDeleteReplyContentConfirmMessage(comment)"><ion-icon name="trash"></ion-icon></a></div>
                         </ion-item>
                     </ion-card-header>
                     <ion-card-content class="comment-content selectable">
