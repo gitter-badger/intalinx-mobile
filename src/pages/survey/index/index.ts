@@ -44,7 +44,7 @@ export class SurveyIndexPage {
         this.isShowSearchBar = false;
     }
 
-    ionViewLoaded(): void {
+    ionViewDidLoad(): void {
         this.isLoadCompleted = false;
     }
 

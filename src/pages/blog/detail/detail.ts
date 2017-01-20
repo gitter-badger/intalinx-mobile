@@ -81,7 +81,7 @@ export class BlogDetailPage implements OnDestroy {
                     'images': images
                 };
                 this.nav.push(ImageSlidesPage, { 'sendData': sendData });
-            } else if (currentImage.parentElement.parentElement.parentElement.className === 'comment-content selectable card-content card-content-md') {
+            } else if (currentImage.parentElement.parentElement.parentElement.className.indexOf("comment-content selectable card-content") >= 0) {
                 let images = currentImage.parentElement.parentElement.parentElement.querySelectorAll('img');
                 let sendData = {
                     'currentImage': currentImage,
