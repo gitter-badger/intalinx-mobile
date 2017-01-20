@@ -92,7 +92,6 @@ export class AddCommentPage {
     }
 
     addPicture(event): any {
-        let a = event.bubbles;
         // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
         let fileInput = (<any>event.currentTarget);
         for (let i = 0; i < fileInput.files.length; i++) {

@@ -1,5 +1,5 @@
 // Third party library.
-import {Component, ViewChild, Directive, HostListener, ViewContainerRef, ElementRef, Renderer, OnDestroy} from '@angular/core';
+import {Component, ViewChild, ElementRef, Renderer, OnDestroy} from '@angular/core';
 import {NavController, NavParams, Content} from 'ionic-angular';
 import {GoogleAnalytics} from 'ionic-native';
 import {FormsModule} from '@angular/forms';

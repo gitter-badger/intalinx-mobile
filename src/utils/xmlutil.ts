@@ -372,7 +372,6 @@ export class XmlUtil {
                 let result = new XMLSelectionList(object, xpathExpression);
                 let xmlDocument = (object.ownerDocument || object);
                 if (namespaces) {
-                    let savedNamespaces = (xmlDocument.__namespaces || null);
                     xmlDocument.__namespaces = namespaces;
                 }
                 let nodeList = xmlDocument.evaluate(xpathExpression, object, this.createNSResolver(xmlDocument),

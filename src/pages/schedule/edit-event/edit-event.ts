@@ -79,10 +79,10 @@ export class EditEventPage {
     initTranslation() {
         this.translate.get(['app.schedule.visibility.public',
             'app.schedule.visibility.confidential',
-            'app.schedule.visibility.public']).subscribe(message => {
+            'app.schedule.visibility.private']).subscribe(message => {
                 this.visibilityPublic = message['app.schedule.visibility.public'];
                 this.visibilityConfidential = message['app.schedule.visibility.confidential'];
-                this.visibilityPrivate = message['app.schedule.visibility.public'];
+                this.visibilityPrivate = message['app.schedule.visibility.private'];
             });
         this.visibilities = [
             {
@@ -94,7 +94,7 @@ export class EditEventPage {
                 description: this.visibilityConfidential
             },
             {
-                value: 'public',
+                value: 'private',
                 description: this.visibilityPrivate
             }
         ];
@@ -240,8 +240,6 @@ export class EditEventPage {
     }
 
     getDevicesByDeviceIDs(deviceIDs) {
-        // this.devices = [];
-        let deviceIDArray = deviceIDs.split(',');
         this.scheduleService.getDeviceListByDeviceIDs(deviceIDs).then((data: any) => {
             this.devices = data;
         });

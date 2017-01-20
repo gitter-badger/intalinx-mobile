@@ -170,8 +170,8 @@ export class EventDetailPage {
             this.translate.get('app.schedule.visibility.public').subscribe(message => {
                 this.visibilityTypeName = message;
             });
-        } else if (visibility === 'public') {
-            this.translate.get('app.schedule.visibility.public').subscribe(message => {
+        } else if (visibility === 'private') {
+            this.translate.get('app.schedule.visibility.private').subscribe(message => {
                 this.visibilityTypeName = message;
             });
         } else if (visibility === 'confidential') {

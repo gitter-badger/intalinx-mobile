@@ -117,7 +117,6 @@ export class SelectUserPage {
             }
             this.selectedUser = '';
             this.selectedUserCount = 0;
-            let isExist = false;
             for (let i = 0; i < this.groupsWithUsers.length; i++) {
                 let groupWithUsers = this.groupsWithUsers[i].users;
                 for (let j = 0; j < groupWithUsers.length; j++) {

@@ -1,8 +1,6 @@
 // Third party library.
 import {Component, ViewChild} from '@angular/core';
 import {NavController, ModalController, Slides} from 'ionic-angular';
-import {NgClass} from '@angular/common';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import * as moment from 'moment';
 import 'moment/locale/ja';
 import 'moment/locale/zh-cn';
@@ -84,7 +82,7 @@ export class ScheduleIndexPage {
     public eventsByDays: any = new Map(Array());
     public specialDaysByDays: any = new Map(Array());
 
-    constructor(public nav: NavController, public modalCtrl: ModalController, public translate: TranslateService, public scheduleService: ScheduleService, public userService: UserService, public appConfig: AppConfig) {
+    constructor(public nav: NavController, public modalCtrl: ModalController, public scheduleService: ScheduleService, public userService: UserService, public appConfig: AppConfig) {
         this.calendarSlideOptions = {
             direction: 'horizontal',
             initialSlide: this.cachedSlidesOnOneSide

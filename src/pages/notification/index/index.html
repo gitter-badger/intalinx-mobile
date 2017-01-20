@@ -34,9 +34,9 @@
     <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
         <ion-infinite-scroll-content loadingSpinner="bubbles"></ion-infinite-scroll-content>
     </ion-infinite-scroll>
+    <ion-fab bottom right #fab>
+        <button ion-fab color="top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToIndexPageTop()">
+            <ion-icon name="arrow-up"></ion-icon>
+        </button>
+    </ion-fab>
 </ion-content>
-<ion-fab bottom right #fab>
-    <button ion-fab color="top" fab fab-right fab-bottom [hidden]="!isScrollToTopButtonVisible" (click)="scrollToIndexPageTop()">
-        <ion-icon name="arrow-up"></ion-icon>
-    </button>
-</ion-fab>

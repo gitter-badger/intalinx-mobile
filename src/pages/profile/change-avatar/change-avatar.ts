@@ -72,7 +72,6 @@ export class ChangeAvatarPage {
             });
             this.loading.present();
         });
-        let a = event.bubbles;
         // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
         let fileInput = (<any>event.currentTarget);
         let file = fileInput.files[0];

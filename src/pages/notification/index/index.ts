@@ -70,7 +70,7 @@ export class NotificationIndexPage {
 
         let isNeedRegistNotExistsReadStatus = false;
         this.notificationService.getNotificationListForTop(position, isNeedRegistNotExistsReadStatus, this.keyWord).then((data: any) => {
-            if (data && data.lenght > 0) {
+            if (data && data.length > 0) {
                 this.notificationListForTop = this.notificationListForTop.concat(data);
             }
             infiniteScroll.complete();

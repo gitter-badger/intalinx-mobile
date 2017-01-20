@@ -2,7 +2,6 @@
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
 import * as moment from 'moment';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 
 // Utils.
 import {Util} from '../utils/util';
@@ -10,7 +9,7 @@ import {Util} from '../utils/util';
 @Injectable()
 export class ScheduleService {
 
-    constructor(private http: Http, private util: Util, private translate: TranslateService) {
+    constructor(private http: Http, private util: Util) {
     }
 
     getUserLocaleSettings(userID: string): any {

@@ -6,7 +6,7 @@
         <ion-title>{{!selectedOtherUserName ? ("app.schedule.title"|translate) : (selectedOtherUserName)}}</ion-title>
     </ion-navbar>
 </ion-header>
-<ion-content class="month-calendar">
+<ion-content no-border class="month-calendar">
     <div class="calendar-top-toolbar">
         <button ion-button icon-only clear class="previous-month" (click)="showPreviousMonth()">
             <ion-icon name="arrow-back"></ion-icon>
@@ -21,7 +21,7 @@
             <ion-icon name="md-add"></ion-icon>
         </button>
     </div>
-    <div no-border-top class="week-names">
+    <div class="week-names">
         <div class="week-days" *ngFor="let weekday of weekdays" [ngClass]="{'weekends': (isFirstDayMonday==false && (weekday==weekdays[0] || weekday==weekdays[6])) || (isFirstDayMonday==true && (weekday==weekdays[5] || weekday==weekdays[6]))}">{{weekday}}</div>
     </div>
     <ion-slides #calendarSlides (ionDidChange)="changeMonth($event)" [options]="calendarSlideOptions">
