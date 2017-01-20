@@ -68,7 +68,6 @@ export class CordysUtil {
                                 if (!hideError) {
                                     let responseText = error.text();
                                     let responseNode = this.xmlUtil.parseXML(responseText);
-                                    let messageCode = this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'MessageCode\']');
                                     this.alertUtil.presentModal(this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'faultstring\']'));
                                 }
                             } else {
@@ -194,8 +193,6 @@ export class CordysUtil {
                     this.xmlUtil.setNodeText(samlRequest, './/saml:NameIdentifier', userId);
 
                     // Remove security node if no wsse username is used 
-                    let headerNode = this.xmlUtil.selectXMLNode(samlRequest, 'SOAP:Envelope/SOAP:Header');
-                    let securityNode = this.xmlUtil.selectXMLNode(samlRequest, './/wsse:Security');
                     if (password == null) password = '';
 
                     this.xmlUtil.setNodeText(samlRequest, './/wsse:Username', userId);

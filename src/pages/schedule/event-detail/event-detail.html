@@ -63,8 +63,8 @@
     </div>
 </ion-content>
 
-<ion-footer [hidden]="!isLoadCompleted || (!isAdmin && !isParticiPant)">
-    <ion-toolbar no-border-bottom position="bottom">
+<ion-footer no-border [hidden]="!isLoadCompleted || (!isAdmin && !isParticiPant)">
+    <ion-toolbar  position="bottom">
         <ion-buttons text-center>
             <button ion-button (click)="deleteEvent()">{{"app.schedule.deleteEvent" | translate}}</button>
         </ion-buttons>

@@ -124,7 +124,6 @@ export class BlogService {
                     community['attachImagesForDisplay'] = [];
                     community['attachFilesForDownload'] = [];
                     let attachFileList = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'attachFileList\']');
-                    let attachFileSrc;
                     for (let i = 0; i < attachFileList.length; i++) {
                         let attachFile = this.util.xml2json(attachFileList[i]).attachFileList;
                         if ((attachFile.attachmentName.toLowerCase().indexOf('.png') > 0
@@ -181,7 +180,6 @@ export class BlogService {
                         replyContent['attachImagesForDisplay'] = [];
                         replyContent['attachFilesForDownload'] = [];
                         let replyContentAttachFileList = replyContent.replyContentAttachFileList;
-                        let attachFileSrc;
                         if (replyContentAttachFileList) {
                             for (let j = 0; j < replyContentAttachFileList.length; j++) {
                                 let attachFile = replyContentAttachFileList[j];

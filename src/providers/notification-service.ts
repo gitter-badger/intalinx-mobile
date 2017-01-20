@@ -1,7 +1,6 @@
 // Third party library.
 import {Injectable} from '@angular/core';
 import {Http} from '@angular/http';
-import {NavController} from 'ionic-angular';
 import {DomSanitizer} from '@angular/platform-browser';
 
 // Config.
@@ -15,7 +14,6 @@ export class NotificationService {
     private userDefaultAvatarImageUrl: string;
 
     constructor(private http: Http,
-        private nav: NavController,
         private domSanitizer: DomSanitizer,
         private appConfig: AppConfig,
         private util: Util) {
@@ -101,7 +99,6 @@ export class NotificationService {
                     notification['attachImagesForDisplay'] = [];
                     notification['attachFilesForDownload'] = [];
                     let attachFileList = this.util.selectXMLNodes(objResponse, './/*[local-name()=\'attachFileList\']');
-                    let attachFileSrc;
                     for (let i = 0; i < attachFileList.length; i++) {
                         let attachFile = this.util.xml2json(attachFileList[i]).attachFileList;
                         if ((attachFile.attachmentName.toLowerCase().indexOf('.png') > 0

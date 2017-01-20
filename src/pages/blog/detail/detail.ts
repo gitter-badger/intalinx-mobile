@@ -1,5 +1,5 @@
 // Third party library.
-import {Component, ViewChild, Directive, HostListener, ViewContainerRef, ElementRef, Renderer, OnDestroy} from '@angular/core';
+import {Component, ViewChild, ElementRef, Renderer, OnDestroy} from '@angular/core';
 import {NavController,ActionSheetController, NavParams, Content} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {GoogleAnalytics} from 'ionic-native';
