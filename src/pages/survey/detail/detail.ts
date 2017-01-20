@@ -168,7 +168,7 @@ export class SurveyDetailPage implements OnDestroy {
         });
     }
 
-    ionViewLoaded(): void {
+    ionViewDidLoad(): void {
         this.pageLoadTime = new Date().getTime();
     }
 
@@ -182,11 +182,15 @@ export class SurveyDetailPage implements OnDestroy {
     }
 
     ionViewWillUnload(): void {
-
         let now = new Date().getTime();
         let pageLoadingTime = now - this.pageLoadTime;
         if (this.processStatus === 'NOT_READ' && pageLoadingTime >= 3000) {
-            this.updateParticipantStatus();
+            let processStatus = 'NOT_PROCESSED';
+            this.updateParticipantStatus(processStatus);
+        }
+        if (this.processStatus === 'PROCESSED_BUT_NOT_READ' && pageLoadingTime >= 3000) {
+            let processStatus = 'PROCESSED';
+            this.updateParticipantStatus(processStatus);
         }
 
         if (this.isFirstTimeAnswerSurvey) {
@@ -197,8 +201,7 @@ export class SurveyDetailPage implements OnDestroy {
         this.isScrollToTopButtonVisible = false;
     }
 
-    updateParticipantStatus(): void {
-        let processStatus = 'NOT_PROCESSED';
+    updateParticipantStatus(processStatus): void {
         this.surveyService.updateParticipantStatus(this.id, processStatus).then((data: string) => {
             if (data === 'true') {
                 this.survey.processStatus = processStatus;
