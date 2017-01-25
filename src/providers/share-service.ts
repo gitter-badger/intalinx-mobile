@@ -24,7 +24,7 @@ export class ShareService {
         this._notificationNewInformationCount = count;
         if (this.platform.is('cordova')) {
             Badge.clear();
-            Badge.set(this._notificationNewInformationCount + this._blogNewInformationCount);
+            Badge.set(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
         }
     }
 
@@ -36,7 +36,7 @@ export class ShareService {
         this._blogNewInformationCount = count;
         if (this.platform.is('cordova')) {
             Badge.clear();
-            Badge.set(this._notificationNewInformationCount + this._blogNewInformationCount);
+            Badge.set(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
         }
     }
 
@@ -48,7 +48,7 @@ export class ShareService {
         this._surveyNewInformationCount = count;
         if (this.platform.is('cordova')) {
             Badge.clear();
-            Badge.set(this._surveyNewInformationCount + this._surveyNewInformationCount);
+            Badge.set(this._surveyNewInformationCount + this._surveyNewInformationCount + this._surveyNewInformationCount);
         }
     }
 
