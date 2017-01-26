@@ -99,7 +99,7 @@ export class BlogIndexPage {
                 refresher.complete();
             }
             if (this.isFirstTimeLoad && data.length > 9) {
-                this.pageContent.scrollTo(0, 46, 0);
+                this.pageContent.scrollTo(0, 46);
                 this.isShowSearchBar = true;
                 this.isFirstTimeLoad = false;
             }
@@ -115,21 +115,17 @@ export class BlogIndexPage {
     }
 
     ngAfterViewInit(): void {
-        this.pageContent.addScrollListener(this.onPageScroll(this));
+        this.pageContent.ionScroll.subscribe(() =>{
+            if (this.pageContent.scrollTop > 200) {
+                this.isScrollToTopButtonVisible = true;
+            } else {
+                this.isScrollToTopButtonVisible = false;
+            }
+        });
     }
 
     scrollToIndexPageTop(): void {
         this.pageContent.scrollToTop();
-    }
-
-    onPageScroll(that): any {
-        return function () {
-            if (this.scrollTop > 200) {
-                that.isScrollToTopButtonVisible = true;
-            } else {
-                that.isScrollToTopButtonVisible = false;
-            }
-        };
     }
 
     addBlog(): void {

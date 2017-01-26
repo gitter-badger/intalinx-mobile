@@ -199,32 +199,32 @@ export class DevicesPage {
     }
 
     ngAfterViewInit(): void {
-        this.pageContent.addScrollListener(this.displayFixedHeader(this));
+        this.pageContent.ionScroll.subscribe(() => {
+            this.displayFixedHeader();
+        });
     }
 
-    displayFixedHeader(that): any {
-        return function () {
-            that.lastActionTime = moment().unix();
-            if (this.scrollTop > that.ganttview.nativeElement.offsetTop) {
-                that.deviceListHeader.nativeElement.style.top = that.pageContent.getContentDimensions().contentTop + 'px';
-                that.deviceListHeader.nativeElement.className = 'device-list-header fixed-header';
-                that.deviceListHeader.nativeElement.style.width = that.deviceList.nativeElement.clientWidth + 'px';
+    displayFixedHeader() {
+        this.lastActionTime = moment().unix();
+        if (this.pageContent.scrollTop > this.ganttview.nativeElement.offsetTop) {
+            this.deviceListHeader.nativeElement.style.top = this.pageContent.getContentDimensions().contentTop + 'px';
+            this.deviceListHeader.nativeElement.className = 'device-list-header fixed-header';
+            this.deviceListHeader.nativeElement.style.width = this.deviceList.nativeElement.clientWidth + 'px';
 
-                that.ganttviewDayTimeHeader.nativeElement.style.top = that.pageContent.getContentDimensions().contentTop + 'px';
-                that.ganttviewDayTimeHeader.nativeElement.style.width = that.ganttviewSlide.nativeElement.clientWidth + 'px';
-                that.ganttviewDayTimeHeader.nativeElement.className = 'ganttview-day-time-header fixed-header';
+            this.ganttviewDayTimeHeader.nativeElement.style.top = this.pageContent.getContentDimensions().contentTop + 'px';
+            this.ganttviewDayTimeHeader.nativeElement.style.width = this.ganttviewSlide.nativeElement.clientWidth + 'px';
+            this.ganttviewDayTimeHeader.nativeElement.className = 'ganttview-day-time-header fixed-header';
 
-                that.ganttviewFixedDate.nativeElement.style.position = 'fixed';
-                that.headerFixed = true;
-            } else {
-                that.deviceListHeader.nativeElement.className = 'device-list-header';
-                that.ganttviewDayTimeHeader.nativeElement.className = 'ganttview-day-time-header';
-                that.ganttviewFixedDate.nativeElement.style.position = 'absolute';
-                that.headerFixed = false;
-            }
+            this.ganttviewFixedDate.nativeElement.style.position = 'fixed';
+            this.headerFixed = true;
+        } else {
+            this.deviceListHeader.nativeElement.className = 'device-list-header';
+            this.ganttviewDayTimeHeader.nativeElement.className = 'ganttview-day-time-header';
+            this.ganttviewFixedDate.nativeElement.style.position = 'absolute';
+            this.headerFixed = false;
+        }
 
-            that.onGanttviewSlideScrollLeft();
-        };
+        this.onGanttviewSlideScrollLeft();
     }
 
     setGanttviewSlideScrollToNow() {

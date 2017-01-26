@@ -146,21 +146,17 @@ export class NotificationDetailPage implements OnDestroy {
     }
 
     ngAfterViewInit(): void {
-        this.pageContent.addScrollListener(this.onPageScroll(this));
+        this.pageContent.ionScroll.subscribe(() =>{
+            if (this.pageContent.scrollTop > 200) {
+                this.isScrollToTopButtonVisible = true;
+            } else {
+                this.isScrollToTopButtonVisible = false;
+            }
+        });
     }
 
     scrollToDetailPageTop(): void {
         this.pageContent.scrollToTop();
-    }
-
-    onPageScroll(that): any {
-        return function () {
-            if (this.scrollTop > 200) {
-                that.isScrollToTopButtonVisible = true;
-            } else {
-                that.isScrollToTopButtonVisible = false;
-            }
-        };
     }
 
     showImageSlides(event): any {
