@@ -48,7 +48,7 @@ export class ShareService {
         this._surveyNewInformationCount = count;
         if (this.platform.is('cordova')) {
             Badge.clear();
-            Badge.set(this._surveyNewInformationCount + this._surveyNewInformationCount + this._surveyNewInformationCount);
+            Badge.set(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
         }
     }
 
