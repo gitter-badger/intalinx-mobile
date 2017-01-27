@@ -44,6 +44,9 @@ export class PortalPage {
     version: string = 'latest';
     latestVersion: string = 'latest';
 
+    public alias: string = "";
+    public msgList:Array<any> = [];
+
     components = {
         'portal': PortalPage,
         'info': InfoPage,
@@ -55,10 +58,30 @@ export class PortalPage {
 
     constructor(public translate: TranslateService, public platform: Platform, public nav: NavController, public appConfig: AppConfig, public util: Util, public share: ShareService, public appsService: AppsService, public aboutService: AboutService, public userService: UserService) {
         this.initializeUser().then(() => {
+            this.initJPush();
+            this.setAlias();
             this.loadApplications();
         });
         if (!this.share.showMenu) {
             this.share.showMenu = this.showMenu(this);
+        }
+    }
+
+    initJPush() {
+        //启动极光推送
+        if ((<any>window).plugins && (<any>window).plugins.jPushPlugin) {
+            (<any>window).plugins.jPushPlugin.init();
+            document.addEventListener("jpush.receiveNotification", () => {
+                this.msgList.push({content:(<any>window).plugins.jPushPlugin.receiveNotification.alert})
+            }, false);
+        }
+    }
+    setAlias() {
+        //设置Alias
+        if (this.alias && this.alias.trim() != '') {
+            (<any>window).plugins.jPushPlugin.setAlias(this.alias);
+        } else {
+            alert('Alias不能为空');
         }
     }
 
@@ -110,6 +133,7 @@ export class PortalPage {
     initializeUser() {
         return new Promise(resolve => {
             this.userService.getUserDetails().then(data => {
+                this.alias = data.userID;
                 this.share.initializeUser(data);
                 resolve();
             });
