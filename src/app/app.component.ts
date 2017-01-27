@@ -69,8 +69,8 @@ export class MyApp {
                     let noHandler = function () {
                         that.initializeApp();
                     };
-                    this.translate.get(['app.message.warning.updateToNewVersion']).subscribe(message => {
-                        this.util.presentConfirmModal(message, 'warning', noHandler);
+                    this.translate.get('app.message.warning.updateToNewVersion').subscribe(message => {
+                        this.util.presentConfirmModal(message, 'warning', okHandler, noHandler);
                     });
                 }
                 
