@@ -4,7 +4,9 @@
             "error": {
                 "title": "エラー",
                 "systemError": "システムエラーが発生しました。大変お迷惑かかりましたが、システム管理者に連絡してください。",
-                "faildToLogin": "ログインが失効しました。"
+                "faildToLogin": "ログインが失効しました。",
+                "faildToDownload": "ダウンロードが失敗しました。",
+                "faildToExtract": "インストールが失敗しました。"
             },
             "info": {
                 "title": "情報",
@@ -12,7 +14,12 @@
             },
             "warning": {
                 "title": "警告",
-                "logout": "ログアウトしますか？"
+                "logout": "ログアウトしますか？",
+                "updateToNewVersion": "最新のバージョンをダウンロードします。よろしいですか。"
+            },
+            "loading": {
+                "downloading": "最新版ダウンロード中 .. ",
+                "extracting": "インストール中 .. "
             }
         },
         "action": {

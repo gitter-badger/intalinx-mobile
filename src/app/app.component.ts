@@ -1,7 +1,8 @@
 import {Component, ViewChild} from '@angular/core';
-import {Platform, Config, MenuController, Nav} from 'ionic-angular';
+import {Platform, Config, MenuController, Nav, LoadingController} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
-import {StatusBar, GoogleAnalytics, ScreenOrientation} from 'ionic-native';
+import {StatusBar, GoogleAnalytics, ScreenOrientation, Network} from 'ionic-native';
+import {Deploy} from '@ionic/cloud-angular';
 
 // Config.
 import {AppConfig} from './app.config';
@@ -22,6 +23,7 @@ import {PortalPage} from '../pages/portal/portal';
 export class MyApp {
     @ViewChild(Nav) nav: Nav;
 
+    public userLang;
     public menus;
     // make HelloIonicPage the root (or first) page
     public rootPage: any;
@@ -31,24 +33,95 @@ export class MyApp {
 
     constructor(public translate: TranslateService,
         public platform: Platform,
+        public deploy: Deploy,
         public config: Config,
         public menu: MenuController,
+        public loadingCtrl: LoadingController,
         public appConfig: AppConfig,
         public util: Util,
         public share: ShareService) {
         this.platform.ready().then(() => {
+            this.initializeTranslate();
+            this.checkUpdate();
+        });
+    }
+
+    checkUpdate(): void {
+        // check latest version from http://pgyer.com/.
+        if (this.platform.is('cordova') && !this.appConfig.get('IS_TABLET')) {
+            this.checkNewVersion();
+        } else {
             this.initializeApp();
+        }
+    }
+
+    checkNewVersion() {
+        this.deploy.check().then((snapshotAvailable: boolean) => {
+            if (snapshotAvailable) {
+                // if wifi
+                if (Network.type === 'wifi') {
+                    this.downloadAndextractApp();
+                } else {
+                    let that = this;
+                    let okHandler = function () {
+                        that.downloadAndextractApp();
+                    };
+                    let noHandler = function () {
+                        that.initializeApp();
+                    };
+                    this.translate.get(['app.message.warning.updateToNewVersion']).subscribe(message => {
+                        this.util.presentConfirmModal(message, 'warning', noHandler);
+                    });
+                }
+                
+            }  else {
+                this.initializeApp();
+            }
+        });
+    }
+
+    downloadAndextractApp() {
+        // let updateLoadingContent = true;
+        this.translate.get(['app.message.loading.downloading', 'app.message.loading.extracting', 'app.message.error.faildToDownload', 'app.message.error.faildToExtract']).subscribe(message => {
+            let content = message['app.message.loading.downloading'] + '0%';
+            let loading = this.loadingCtrl.create({
+                spinner: 'ios',
+                content: content
+            });
+            // loading.onDidDismiss(() => {
+            //     updateLoadingContent = false;
+            // });
+            loading.present();
+            // When snapshotAvailable is true, you can apply the snapshot
+            this.deploy.download({
+                onProgress: p => {
+                    loading.setContent(message['app.message.loading.downloading'] + p + '%');
+                }
+            }).then(() => {
+                // if (updateLoadingContent) {
+                    this.deploy.extract({
+                        onProgress: p => {
+                            loading.setContent(message['app.message.loading.extracting'] + p + '%');
+                        }
+                    }).then( () => {
+                        // if (updateLoadingContent) {
+                            // loading.dismiss();
+                            this.deploy.load();
+                            // this.deploy.channel = 'dev';
+                            // this.deploy.getSnapshots().then((snapshots) => {
+                            //     // snapshots will be an array of snapshot uuids
+                            //     this.deploy.deleteSnapshot(snapshots);
+                            // });
+                        // }
+                    }, (error) => {this.util.presentModal(message['app.message.error.faildToExtract'])});
+                // }
+            }, (error) => {this.util.presentModal(message['app.message.error.faildToDownload'])});
         });
     }
 
     initializeApp() {
-        // initialize translate library
-        let userLang = navigator.language.toLowerCase();
-        this.appConfig.set('USER_LANG', userLang);
-        this.translate.use(userLang);
-
         // set default server.
-        if (userLang.indexOf('zh') >= 0) {
+        if (this.userLang.indexOf('zh') >= 0) {
             this.appConfig.set('BASE_URL', this.appConfig.get('BASE_URL_CHINA'));
             this.appConfig.set('GOOGLE_ANALYTICS_TRACK_ID', this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID_CHINA'));
         } else {
@@ -102,6 +175,13 @@ export class MyApp {
                 resolve(message);
             });
         });
+    }
+
+    initializeTranslate() {
+        // initialize translate library
+        this.userLang = navigator.language.toLowerCase();
+        this.appConfig.set('USER_LANG', this.userLang);
+        this.translate.use(this.userLang);
     }
 
     initializeMenu(that) {

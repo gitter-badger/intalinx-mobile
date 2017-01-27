@@ -4,7 +4,9 @@
             "error": {
                 "title": "error",
                 "systemError": "An error occurred in this system.Please contact the system administrator.",
-                "faildToLogin": "Faild to login."
+                "faildToLogin": "Faild to login.",
+                "faildToDownload": "Faild to Download.",
+                "faildToExtract": "Faild to extract."
             },
             "info": {
                 "title": "info",
@@ -12,7 +14,12 @@
             },
             "warning": {
                 "title": "warning",
-                "logout": "logout?"
+                "logout": "logout?",
+                "updateToNewVersion": "Do you want to download the newest version?"
+            },
+            "loading": {
+                "downloading": "downloading .. ",
+                "extracting": "extracting .. "
             }
         },
         "action": {

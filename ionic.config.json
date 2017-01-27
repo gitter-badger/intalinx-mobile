@@ -1,10 +1,12 @@
 {
-    "name": "intalinx-mobile",
-    "app_id": "",
-    "v2": true,
-    "proxies": [{
-        "path": "/home/InternalSystem/",
-        "proxyUrl": "https://iscsys.intasect.co.jp/home/InternalSystem/",
-        "_proxyUrl": "http://192.168.11.29/home/InternalSystem/"
-    }]
+  "name": "intalinx-mobile",
+  "app_id": "5a060772",
+  "v2": true,
+  "proxies": [
+    {
+      "path": "/home/InternalSystem/",
+      "proxyUrl": "https://iscsys.intasect.co.jp/home/InternalSystem/",
+      "_proxyUrl": "http://192.168.11.29/home/InternalSystem/"
+    }
+  ]
 }

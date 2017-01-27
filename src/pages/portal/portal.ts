@@ -56,27 +56,9 @@ export class PortalPage {
     constructor(public translate: TranslateService, public platform: Platform, public nav: NavController, public appConfig: AppConfig, public util: Util, public share: ShareService, public appsService: AppsService, public aboutService: AboutService, public userService: UserService) {
         this.initializeUser().then(() => {
             this.loadApplications();
-            this.checkUpdate();
         });
         if (!this.share.showMenu) {
             this.share.showMenu = this.showMenu(this);
-        }
-    }
-
-    checkUpdate(): void {
-        // check latest version from http://pgyer.com/.
-        if (this.platform.is('cordova') && !this.appConfig.get('IS_TABLET')) {
-            this.aboutService.getVersion().then(data => {
-                this.version = data;
-                this.aboutService.getLatestVersion().then(data => {
-                    this.latestVersion = data;
-                    if (this.latestVersion !== this.version) {
-                        this.translate.get(['app.message.info.versionTooOld']).subscribe(message => {
-                            this.util.presentModal(message['app.message.info.versionTooOld'], 'info');
-                        });
-                    }
-                });
-            });
         }
     }
 
@@ -146,7 +128,7 @@ export class PortalPage {
                         url = that.appConfig.get('BIZNAVI_URL_CHINA') + samlart;
                     }
                     if (that.platform.is('cordova')) {
-                        InAppBrowser.open(url, '_system');
+                        new InAppBrowser(url, '_system');
                     } else {
                         window.open(url, '_blank');
                     }

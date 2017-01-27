@@ -1,5 +1,6 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
 import { Storage } from '@ionic/storage';
 import { MyApp } from './app.component';
 import {DynamicComponentModule} from 'angular2-dynamic-component/index';
@@ -45,6 +46,12 @@ import { SelectReadLimitTypePage } from '../pages/blog/add-blog/add-blog';
 import { TranslateModule, TranslateLoader, TranslateStaticLoader } from 'ng2-translate/ng2-translate';
 import { Http } from '@angular/http';
 
+const cloudSettings: CloudSettings = {
+    'core': {
+        'app_id': '5a060772'        
+    }
+};
+
 @NgModule({
   declarations: [
     MyApp,
@@ -85,7 +92,8 @@ import { Http } from '@angular/http';
       useFactory: (createTranslateLoader),
       deps: [Http]
     }),
-    DynamicComponentModule
+    DynamicComponentModule,
+    CloudModule.forRoot(cloudSettings)
   ],
   bootstrap: [IonicApp],
   entryComponents: [

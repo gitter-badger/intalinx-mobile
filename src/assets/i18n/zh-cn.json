@@ -4,7 +4,9 @@
             "error": {
                 "title": "错误",
                 "systemError": "系统发生异常，请联系管理员！",
-                "faildToLogin": "无法登陆系统。"
+                "faildToLogin": "无法登陆系统。",
+                "faildToDownload": "下载失败！",
+                "faildToExtract": "安装失败！"
             },
             "info": {
                 "title": "提示",
@@ -12,7 +14,12 @@
             },
             "warning": {
                 "title": "警告",
-                "logout": "确定退出登录?"
+                "logout": "确定退出登录?",
+                "updateToNewVersion": "有新的版本更新，现在下载吗？"
+            },
+            "loading": {
+                "downloading": "正在下载 .. ",
+                "extracting": "正在安装 .. "
             }
         },
         "action": {
