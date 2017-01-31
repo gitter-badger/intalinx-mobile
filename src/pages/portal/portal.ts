@@ -83,8 +83,6 @@ export class PortalPage {
         //设置Alias
         if (this.alias && this.alias.trim() != '') {
             (<any>window).plugins.jPushPlugin.setAlias(this.alias);
-        } else {
-            alert('Alias不能为空');
         }
     }
 
