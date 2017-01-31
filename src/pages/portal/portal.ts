@@ -44,8 +44,7 @@ export class PortalPage {
     version: string = 'latest';
     latestVersion: string = 'latest';
 
-    public alias: string = "";
-    public msgList:Array<any> = [];
+    public alias: string = '';
 
     components = {
         'portal': PortalPage,
@@ -59,7 +58,6 @@ export class PortalPage {
     constructor(public translate: TranslateService, public platform: Platform, public nav: NavController, public appConfig: AppConfig, public util: Util, public share: ShareService, public appsService: AppsService, public aboutService: AboutService, public userService: UserService) {
         this.initializeUser().then(() => {
             this.initJPush();
-            this.setAlias();
             this.loadApplications();
         });
         if (!this.share.showMenu) {
@@ -68,14 +66,21 @@ export class PortalPage {
     }
 
     initJPush() {
-        //启动极光推送
-        if ((<any>window).plugins && (<any>window).plugins.jPushPlugin) {
-            (<any>window).plugins.jPushPlugin.init();
-            document.addEventListener("jpush.receiveNotification", () => {
-                this.msgList.push({content:(<any>window).plugins.jPushPlugin.receiveNotification.alert})
-            }, false);
+        if (this.platform.is('cordova') && !this.appConfig.get('IS_TABLET')) {
+            //启动极光推送
+            if ((<any>window).plugins && (<any>window).plugins.jPushPlugin) {
+                this.setAlias();
+                (<any>window).plugins.jPushPlugin.init(function(ret, err){
+                    if (ret) {
+                        // document.addEventListener("jpush.receiveNotification", (data) => {
+                        //     // alert(data);
+                        // }, false);
+                    }
+                });
+            }
         }
     }
+
     setAlias() {
         //设置Alias
         if (this.alias && this.alias.trim() != '') {
