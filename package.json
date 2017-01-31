@@ -4,7 +4,7 @@
   "homepage": "http://ionicframework.com/",
   "private": true,
   "scripts": {
-    "ionic:build": "ionic-app-scripts build --dev",
+    "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve"
   },
   "dependencies": {

@@ -48,7 +48,7 @@ import { Http } from '@angular/http';
 
 const cloudSettings: CloudSettings = {
     'core': {
-        'app_id': '5a060772'        
+        'app_id': '256ee45e'        
     }
 };
 
