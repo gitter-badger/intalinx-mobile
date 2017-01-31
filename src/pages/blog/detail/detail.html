@@ -53,7 +53,6 @@
                         </ion-item>
                     </ion-card-header>
                     <ion-card-content class="comment-content selectable">
-                        <!--<div [innerContent]="comment.content"></div>-->
                         <template dynamic-component [componentContext]="comment.outerDynamicContext" [componentModules]="comment.outerDynamicModules" [componentTemplate]="comment.outerDynamicTemplate"></template>
                         <img class="comment-image" (click)="showCommentImageSlides($event)" *ngFor="let attachImage of comment.attachImagesForDisplay" [src]="attachImage" />
                     </ion-card-content>

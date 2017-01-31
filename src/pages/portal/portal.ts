@@ -41,12 +41,10 @@ import {DevicesPage} from '../schedule/devices/devices';
 })
 
 export class PortalPage {
-    version: string = 'latest';
-    latestVersion: string = 'latest';
 
     public alias: string = '';
 
-    components = {
+    public components = {
         'portal': PortalPage,
         'info': InfoPage,
         'profile': ProfileIndexPage,
@@ -72,7 +70,7 @@ export class PortalPage {
                 this.setAlias();
                 (<any>window).plugins.jPushPlugin.init(function(ret, err){
                     if (ret) {
-                        // document.addEventListener("jpush.receiveNotification", (data) => {
+                        // document.addEventListener('jpush.receiveNotification', (data) => {
                         //     // alert(data);
                         // }, false);
                     }

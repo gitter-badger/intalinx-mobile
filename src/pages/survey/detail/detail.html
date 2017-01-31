@@ -30,7 +30,6 @@
             </div>
         </ion-item>
         <div class="contents selectable" padding>
-            <!--<dynamic-content [innerContent]="content"></dynamic-content>-->
             <template dynamic-component (dynamicComponentReady)="dynamicCallback($event)" [componentContext]="outerDynamicContext" [componentModules]="outerDynamicModules" [componentTemplate]="outerDynamicTemplate"></template>
         </div>
         <div class="options" *ngFor="let option of options">

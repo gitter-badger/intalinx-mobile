@@ -73,7 +73,6 @@ export class MyApp {
                         this.util.presentConfirmModal(message, 'warning', okHandler, noHandler);
                     });
                 }
-                
             }  else {
                 this.initializeApp();
             }
@@ -81,16 +80,12 @@ export class MyApp {
     }
 
     downloadAndextractApp() {
-        // let updateLoadingContent = true;
         this.translate.get(['app.message.loading.downloading', 'app.message.loading.extracting', 'app.message.error.faildToDownload', 'app.message.error.faildToExtract']).subscribe(message => {
             let content = message['app.message.loading.downloading'] + '0%';
             let loading = this.loadingCtrl.create({
                 spinner: 'ios',
                 content: content
             });
-            // loading.onDidDismiss(() => {
-            //     updateLoadingContent = false;
-            // });
             loading.present();
             // When snapshotAvailable is true, you can apply the snapshot
             this.deploy.download({
@@ -98,24 +93,22 @@ export class MyApp {
                     loading.setContent(message['app.message.loading.downloading'] + p + '%');
                 }
             }).then(() => {
-                // if (updateLoadingContent) {
-                    this.deploy.extract({
-                        onProgress: p => {
-                            loading.setContent(message['app.message.loading.extracting'] + p + '%');
-                        }
-                    }).then( () => {
-                        // if (updateLoadingContent) {
-                            // loading.dismiss();
-                            this.deploy.load();
-                            // this.deploy.channel = 'dev';
-                            // this.deploy.getSnapshots().then((snapshots) => {
-                            //     // snapshots will be an array of snapshot uuids
-                            //     this.deploy.deleteSnapshot(snapshots);
-                            // });
-                        // }
-                    }, (error) => {this.util.presentModal(message['app.message.error.faildToExtract'])});
-                // }
-            }, (error) => {this.util.presentModal(message['app.message.error.faildToDownload'])});
+                this.deploy.extract({
+                    onProgress: p => {
+                        loading.setContent(message['app.message.loading.extracting'] + p + '%');
+                    }
+                }).then( () => {
+                        this.deploy.load();
+                }, (error) => {
+                    loading.dismiss();
+                    this.util.presentModal(message['app.message.error.faildToExtract']);
+                    this.initializeApp();
+                });
+            }, (error) => {
+                loading.dismiss();
+                this.util.presentModal(message['app.message.error.faildToDownload']);
+                this.initializeApp();
+            });
         });
     }
 

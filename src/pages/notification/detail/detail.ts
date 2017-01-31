@@ -12,7 +12,6 @@ import {Util} from '../../../utils/util';
 import {ShareService} from '../../../providers/share-service';
 
 // Pages.
-// import {InnerContent} from '../../../shared/components/innercontent/innercontent';
 import {ImageSlidesPage} from '../../../shared/components/image-slides/image-slides';
 
 @Component({
@@ -22,8 +21,6 @@ import {ImageSlidesPage} from '../../../shared/components/image-slides/image-sli
         NotificationService,
         Util
     ]
-    // ,
-    // directives: [InnerContent]
 })
 
 export class NotificationDetailPage implements OnDestroy {
@@ -101,7 +98,6 @@ export class NotificationDetailPage implements OnDestroy {
     getNotificationDetailByNotificationID(): void {
         this.notificationService.getNotificationDetailByNotificationID(this.id).then((data: any) => {
             this.title = data.title;
-            // this.content = [data.content, [Img]];
             this.outerDynamicContext.innerDynamicTemplate = data.content;
             this.createUserId = data.createUser;
             this.publishStartDate = data.publishStartDate;

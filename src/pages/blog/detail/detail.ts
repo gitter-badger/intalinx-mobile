@@ -16,7 +16,6 @@ import {UserService} from '../../../providers/user-service';
 
 // Pages.
 import {AddCommentPage} from '../add-comment/add-comment';
-// import {InnerContent} from '../../../shared/components/innercontent/innercontent';
 import {ImageSlidesPage} from '../../../shared/components/image-slides/image-slides';
 
 @Component({

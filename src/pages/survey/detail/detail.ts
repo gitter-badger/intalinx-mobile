@@ -13,7 +13,6 @@ import {SurveyService} from '../../../providers/survey-service';
 import {ShareService} from '../../../providers/share-service';
 
 // Pages.
-//import {InnerContent} from '../../../shared/components/innercontent/innercontent';
 import {ImageSlidesPage} from '../../../shared/components/image-slides/image-slides';
 import {SurveyResultPage} from '../result/result';
 
@@ -21,8 +20,6 @@ import {SurveyResultPage} from '../result/result';
     selector: 'page-survey-detail',
     templateUrl: 'detail.html',
     providers: [SurveyService, Util]
-    //,
-    //directives: [InnerContent]
 })
 export class SurveyDetailPage implements OnDestroy {
 
