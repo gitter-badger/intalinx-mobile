@@ -24,7 +24,7 @@
     <div class="week-names">
         <div class="week-days" *ngFor="let weekday of weekdays" [ngClass]="{'weekends': (isFirstDayMonday==false && (weekday==weekdays[0] || weekday==weekdays[6])) || (isFirstDayMonday==true && (weekday==weekdays[5] || weekday==weekdays[6]))}">{{weekday}}</div>
     </div>
-    <ion-slides #calendarSlides (ionDidChange)="changeMonth($event)" [options]="calendarSlideOptions">
+    <ion-slides #calendarSlides (ionSlideDidChange)="changeMonth($event)" direction="horizontal">
         <ion-slide class="calendar">
             <div class="days">
                 <div class="day" *ngFor="let day of perviousMonthDaysArray">

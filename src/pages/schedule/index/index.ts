@@ -51,7 +51,6 @@ export class ScheduleIndexPage {
     public defaultNumber: number = 0;
     public cachedSlidesOnOneSide: number = 1;
 
-    public calendarSlideOptions: any;
     public isFirstDayMonday: boolean;
     public today: any;
     public perviousYearMonthText: any;
@@ -83,10 +82,7 @@ export class ScheduleIndexPage {
     public specialDaysByDays: any = new Map(Array());
 
     constructor(public nav: NavController, public modalCtrl: ModalController, public scheduleService: ScheduleService, public userService: UserService, public appConfig: AppConfig) {
-        this.calendarSlideOptions = {
-            direction: 'horizontal',
-            initialSlide: this.cachedSlidesOnOneSide
-        };
+        
         this.weekdays = moment.weekdaysMin(false);
         // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
         if (this.userLang === 'ja' || this.userLang === 'ja-jp') {
@@ -98,7 +94,7 @@ export class ScheduleIndexPage {
             this.isFirstDayMonday = false;
         }
         this.today = moment().format('YYYY/MM/D');
-        this.currentMonth = moment(this.today).date(1);
+        this.currentMonth = moment().date(1);
         this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
         this.nextMonth = moment(this.currentMonth).add(1, 'months');
         this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
@@ -258,10 +254,11 @@ export class ScheduleIndexPage {
 
         this.moment = moment().format('HH:mm');
         this.isHtmlLoadCompleted = true;
+        
         this.searchEventsAndSpecialDaysByDisplayedMonth();
 
         // Workaround to make it work: no animation
-        if (this.slider && this.slider.getSlider()) {
+        if (this.slider && this.slider.length() > 0){
             this.slider.slideTo(1, 0);
         }
     }
