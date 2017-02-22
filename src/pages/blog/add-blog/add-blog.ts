@@ -3,6 +3,7 @@ import {ViewChild, Component, NgZone, ElementRef} from '@angular/core';
 import {NavController, ModalController, LoadingController, NavParams} from 'ionic-angular';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {GoogleAnalytics} from 'ionic-native';
+
 /// <reference path="./exif-ts/exif.d.ts" />
 import * as EXIF from 'exif-ts/exif';
 
@@ -79,6 +80,7 @@ export class AddBlogPage {
 
   addPicture(event): any {
     // There we used the (<any>param) to change the type of EventTarget to any. This should be re-discussion.
+    
     let fileInput = (<any>event.currentTarget);
     for (let i = 0; i < fileInput.files.length; i++) {
       let file = fileInput.files[i];

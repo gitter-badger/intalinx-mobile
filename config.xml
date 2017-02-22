@@ -107,4 +107,8 @@
   <plugin name="cordova-plugin-splashscreen" spec="~3.2.2"/>
   <plugin name="ionic-plugin-keyboard" spec="~2.2.1"/>
   <plugin name="ionic-plugin-deploy" spec="~0.6.5"/>
+  <plugin name="cordova-plugin-camera" spec="~1.2.0">
+    <variable name="CAMERA_USAGE_DESCRIPTION" value="This app needs access to your Camera."/>
+    <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="This app needs access to your Photo Library."/>
+  </plugin>
 </widget>
