@@ -1,9 +1,10 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { BrowserModule } from '@angular/platform-browser';
 import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
-import { Storage } from '@ionic/storage';
+import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
-import {DynamicComponentModule} from 'angular2-dynamic-component/index';
+import { DynamicComponentModule } from 'angular2-dynamic-component/index';
 
 import { Util } from '../utils/util';
 import { CordysUtil } from '../utils/cordysutil';
@@ -43,13 +44,19 @@ import { OptionResultDetailPage } from '../pages/survey/option-result-detail/opt
 import { SurveyResultPage } from '../pages/survey/result/result';
 import { SelectReadLimitTypePage } from '../pages/blog/add-blog/add-blog';
 
-import { TranslateModule, TranslateLoader, TranslateStaticLoader } from 'ng2-translate/ng2-translate';
-import { Http } from '@angular/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpModule, Http } from '@angular/http';
+
+
+export function createTranslateLoader(http: Http) {
+  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
+}
 
 const cloudSettings: CloudSettings = {
-    'core': {
-        'app_id': '256ee45e'        
-    }
+  'core': {
+    'app_id': '256ee45e'
+  }
 };
 
 @NgModule({
@@ -84,13 +91,21 @@ const cloudSettings: CloudSettings = {
     SelectReadLimitTypePage
   ],
   imports: [
+    BrowserModule,
+    HttpModule,
     IonicModule.forRoot(MyApp, {
       tabsHideOnSubPages: true
     }),
+    IonicStorageModule.forRoot({
+      name: '__intalinx_mobile',
+         driverOrder: ['indexeddb', 'sqlite', 'websql']
+    }),
     TranslateModule.forRoot({
-      provide: TranslateLoader,
-      useFactory: (createTranslateLoader),
-      deps: [Http]
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (createTranslateLoader),
+        deps: [Http]
+      }
     }),
     DynamicComponentModule,
     CloudModule.forRoot(cloudSettings)
@@ -142,6 +157,3 @@ const cloudSettings: CloudSettings = {
 })
 export class AppModule { }
 
-export function createTranslateLoader(http: Http) {
-  return new TranslateStaticLoader(http, 'assets/i18n', '.json');
-}

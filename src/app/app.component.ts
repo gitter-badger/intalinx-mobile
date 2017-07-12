@@ -1,20 +1,20 @@
-import {Component, ViewChild} from '@angular/core';
-import {Platform, Config, MenuController, Nav, LoadingController} from 'ionic-angular';
-import {TranslateService} from 'ng2-translate/ng2-translate';
-import {StatusBar, GoogleAnalytics, ScreenOrientation, Network} from 'ionic-native';
-import {Deploy} from '@ionic/cloud-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Platform, Config, MenuController, Nav, LoadingController } from 'ionic-angular';
+import { TranslateService } from '@ngx-translate/core';
+import { StatusBar, GoogleAnalytics, ScreenOrientation, Network } from 'ionic-native';
+import { Deploy } from '@ionic/cloud-angular';
 
 // Config.
-import {AppConfig} from './app.config';
+import { AppConfig } from './app.config';
 
 // Services.
-import {ShareService} from '../providers/share-service';
+import { ShareService } from '../providers/share-service';
 
-import {Util} from '../utils/util';
+import { Util } from '../utils/util';
 
 // Pages.
-import {LoginPage} from '../pages/login/login';
-import {PortalPage} from '../pages/portal/portal';
+import { LoginPage } from '../pages/login/login';
+import { PortalPage } from '../pages/portal/portal';
 
 @Component({
     selector: 'page-app',
@@ -73,7 +73,7 @@ export class MyApp {
                         this.util.presentConfirmModal(message, 'warning', okHandler, noHandler);
                     });
                 }
-            }  else {
+            } else {
                 this.initializeApp();
             }
         });
@@ -97,8 +97,8 @@ export class MyApp {
                     onProgress: p => {
                         loading.setContent(message['app.message.loading.extracting'] + p + '%');
                     }
-                }).then( () => {
-                        this.deploy.load();
+                }).then(() => {
+                    this.deploy.load();
                 }, (error) => {
                     loading.dismiss();
                     this.util.presentModal(message['app.message.error.faildToExtract']);

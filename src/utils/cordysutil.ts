@@ -13,7 +13,7 @@ import {StorageUtil} from './storageutil';
 
 // Services.
 import {ShareService} from '../providers/share-service';
-import {TranslateService} from 'ng2-translate/ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class CordysUtil {
@@ -162,7 +162,7 @@ export class CordysUtil {
         }
     }
 
-    authenticate(userId, password) {
+    authenticate(userId, password): Promise<boolean> {
         if (!userId || !password) {
             return Promise.resolve(false);
         } else {
@@ -247,23 +247,27 @@ export class CordysUtil {
     }
 
     loggedOn(): Promise<boolean> {
-        return this.getSAMLart().then((samlart: string) => {
-            let isLoggedOn = false;
-            isLoggedOn = (samlart !== null && samlart !== '' && samlart !== 'null');
-            if (!isLoggedOn) {
-                return this.isAutoLogin().then((isAutoLogin: boolean) => {
-                    if (isAutoLogin) {
-                        return Promise.all([this.getLoginID(), this.getPassword(), this.getServer()]).then((values: any) => {
-                            return this.authenticate(values[0], values[1]);
-                        });
-                    } else {
-                        return Promise.resolve(false);
-                    }
-                });
-            } else {
-                return Promise.resolve(true);
-            }
-        });
+        return new Promise((resolve, reject) => {
+            this.getSAMLart().then((samlart: string) => {
+                let isLoggedOn = false;
+                isLoggedOn = (samlart !== null && samlart !== '' && samlart !== 'null');
+                if (!isLoggedOn) {
+                    this.isAutoLogin().then((isAutoLogin: boolean) => {
+                        if (isAutoLogin) {
+                            Promise.all([this.getLoginID(), this.getPassword(), this.getServer()]).then((values: any) => {
+                                return this.authenticate(values[0], values[1]);
+                            });
+                        } else {
+                            return Promise.resolve(false);
+                        }
+                    });
+                } else {
+                    return Promise.resolve(true);
+                }
+            }).then((result: boolean) => {
+                resolve(result);
+            });
+        });    
     }
 
     logout() {
@@ -288,14 +292,16 @@ export class CordysUtil {
         return this.storageUtil.remove(this.appConfig.get('AUTO_LOGIN_STORAGE_NAME'));
     }
 
-    isAutoLogin() {
-        return this.storageUtil.get(this.appConfig.get('AUTO_LOGIN_STORAGE_NAME')).then((result: string) => {
-            if (result === 'true') {
-                return Promise.resolve(true);
-            } else {
-                return Promise.resolve(false);
-            }
-        });
+    isAutoLogin(): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            this.storageUtil.get(this.appConfig.get('AUTO_LOGIN_STORAGE_NAME')).then((result: string) => {
+                if (result === 'true') {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            });
+        });    
     }
 
     setLoginID(value) {
@@ -345,14 +351,16 @@ export class CordysUtil {
     }
 
     getSAMLart(): Promise<string> {
-        return this.hasSAMLart().then((result: boolean) => {
-            if (result) {
-                return this.storageUtil.get(this.appConfig.get('SAML_ARTIFACT_STORAGE_NAME')).then((samlArtifact: any) => {
-                    return String(samlArtifact);
-                });
-            } else {
-                return null;
-            }
+        return new Promise((resolve, reject) => {
+            this.hasSAMLart().then((result: boolean) => {
+                if (result) {
+                    this.storageUtil.get(this.appConfig.get('SAML_ARTIFACT_STORAGE_NAME')).then((samlArtifact: any) => {
+                        resolve(samlArtifact);
+                    });
+                } else {
+                    resolve(null);
+                }
+            });
         });
     }
 
@@ -372,9 +380,9 @@ export class CordysUtil {
         return this.getSAMLartExpireDate().then((expireDate: any) => {
             if (!expireDate || new Date(expireDate) < new Date()) {
                 this.removeSAMLart();
-                return false;
+                return Promise.resolve(false);
             } else {
-                return true;
+                return Promise.resolve(true);
             }
         });
     }

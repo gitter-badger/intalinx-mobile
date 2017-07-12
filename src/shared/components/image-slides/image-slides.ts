@@ -2,7 +2,7 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams, ActionSheetController, ToastController, Platform} from 'ionic-angular';
 import {Base64ToGallery} from 'ionic-native';
-import {TranslateService} from 'ng2-translate/ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -14,24 +14,18 @@ import {Util} from '../../../utils/util';
 export class ImageSlidesPage {
     public sendData: any;
     public images: any;
-    public imageSlideOptions: any;
+    public index = 0;
     constructor(public nav: NavController, public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController, public params: NavParams, public util: Util, public translate: TranslateService, public platform: Platform) {
         this.sendData = this.params.get('sendData');
         this.images = Array.prototype.slice.call(this.sendData.images);
         let currentImage = this.sendData.currentImage;
-        let index = 0;
+        
         for (let i = 0; i < this.images.length; i++) {
             if (this.images[i].src === currentImage.src) {
-                index = i;
+                this.index = i;
             }
         }
         let hasPluralPages = this.images.length > 1 ? true : false;
-        this.imageSlideOptions = {
-            initialSlide: index,
-            loop: false,
-            direction: 'horizontal',
-            pager: hasPluralPages
-        };
     }
 
     backToBlogDetail() {

@@ -1,9 +1,9 @@
 // Third party library.
 import {Component} from '@angular/core';
 import {NavController, NavParams} from 'ionic-angular';
-import 'intl';
-import 'intl/locale-data/jsonp/ja';
-import 'intl/locale-data/jsonp/zh';
+// import 'intl';
+// import 'intl/locale-data/jsonp/ja';
+// import 'intl/locale-data/jsonp/zh';
 
 // Utils.
 import {Util} from '../../../utils/util';

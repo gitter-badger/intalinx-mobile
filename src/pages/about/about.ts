@@ -1,7 +1,7 @@
 // Third party library.
 import {Component} from '@angular/core';
 import {Platform, NavController} from 'ionic-angular';
-import {TranslateService} from 'ng2-translate/ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 
 // Utils.
 import {Util} from '../../utils/util';

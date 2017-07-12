@@ -1,7 +1,7 @@
 // Third party library.
 import {Component, ViewChild, ElementRef, Renderer, OnDestroy} from '@angular/core';
 import {NavController,ActionSheetController, NavParams, Content} from 'ionic-angular';
-import {TranslateService} from 'ng2-translate/ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 import {GoogleAnalytics} from 'ionic-native';
 import {FormsModule} from '@angular/forms';
 import {DynamicComponentModule} from 'angular2-dynamic-component/index';

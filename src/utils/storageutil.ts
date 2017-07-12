@@ -1,9 +1,9 @@
 // Third party library.
-import {Injectable} from '@angular/core';
-import {Storage} from '@ionic/storage';
+import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
 
 // Config.
-import {AppConfig} from '../app/app.config';
+import { AppConfig } from '../app/app.config';
 
 @Injectable()
 export class StorageUtil {

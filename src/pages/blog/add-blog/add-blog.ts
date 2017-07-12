@@ -1,7 +1,7 @@
 // Third party library.
 import {ViewChild, Component, NgZone, ElementRef} from '@angular/core';
 import {NavController, ModalController, LoadingController, NavParams} from 'ionic-angular';
-import {TranslateService} from 'ng2-translate/ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 import {GoogleAnalytics} from 'ionic-native';
 
 /// <reference path="./exif-ts/exif.d.ts" />
