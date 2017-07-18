@@ -1,27 +1,25 @@
 // Third party library.
-import {Component, ViewChild, ElementRef, Renderer, OnDestroy} from '@angular/core';
-import {NavController, NavParams, Content} from 'ionic-angular';
-import {GoogleAnalytics} from 'ionic-native';
-import {FormsModule} from '@angular/forms';
-import {DynamicComponentModule} from 'angular2-dynamic-component/index';
+import { Component, ViewChild, ElementRef, Renderer } from '@angular/core';
+import { NavController, NavParams, Content } from 'ionic-angular';
+import { GoogleAnalytics } from 'ionic-native';
 
 // Utils.
-import {Util} from '../../../utils/util';
+import { Util } from '../../../utils/util';
 
 // Services.
-import {SurveyService} from '../../../providers/survey-service';
-import {ShareService} from '../../../providers/share-service';
+import { SurveyService } from '../../../providers/survey-service';
+import { ShareService } from '../../../providers/share-service';
 
 // Pages.
-import {ImageSlidesPage} from '../../../shared/components/image-slides/image-slides';
-import {SurveyResultPage} from '../result/result';
+import { ImageSlidesPage } from '../../../shared/components/image-slides/image-slides';
+import { SurveyResultPage } from '../result/result';
 
 @Component({
     selector: 'page-survey-detail',
     templateUrl: 'detail.html',
     providers: [SurveyService, Util]
 })
-export class SurveyDetailPage implements OnDestroy {
+export class SurveyDetailPage {
 
     @ViewChild(Content) pageContent: Content;
     public survey: any;
@@ -46,40 +44,6 @@ export class SurveyDetailPage implements OnDestroy {
     public isFirstTimeAnswerSurvey: boolean = false;
     public isDisabled: boolean = true;
 
-    public clickListener: Function;
-
-    public outerDynamicModules = [DynamicComponentModule];
-    public outerDynamicContext = {
-        innerDynamicContext: {},
-        innerDynamicTemplate: ``,
-        innerDynamicModules: [
-            FormsModule
-        ]
-    };
-    public outerDynamicTemplate = `
-        <DynamicComponent [componentContext]='innerDynamicContext' 
-                          [componentModules]='innerDynamicModules'
-                          [componentTemplate]='innerDynamicTemplate'>         
-        </DynamicComponent>
-   `;
-
-    dynamicCallback(event) {
-        this.clickListener = this.renderer.listen(this.elementRef.nativeElement, 'click', (event) => {
-            let currentImage = event.target;
-            if (currentImage.parentElement.parentElement.parentElement.className === 'contents selectable') {
-                let images = currentImage.ownerDocument.querySelectorAll('.contents img');
-                let sendData = {
-                    'currentImage': currentImage,
-                    'images': images
-                };
-                this.nav.push(ImageSlidesPage, { 'sendData': sendData });
-            }
-        })
-    }
-
-    ngOnDestroy() {
-        this.clickListener();
-    }
 
     constructor(public elementRef: ElementRef, public renderer: Renderer, public nav: NavController, public params: NavParams, public util: Util, public surveyService: SurveyService, public share: ShareService) {
         this.survey = this.params.get('survey');
@@ -98,7 +62,6 @@ export class SurveyDetailPage implements OnDestroy {
             if (isFristTimeRefresh) {
                 this.title = data.title;
                 // this.content = [data.content, [Img]];
-                this.outerDynamicContext.innerDynamicTemplate = data.content;
                 this.createDate = data.createDate;
                 this.createUserName = data.createUserName;
                 this.createUserAvatar = data.createUserAvatar;
@@ -213,7 +176,7 @@ export class SurveyDetailPage implements OnDestroy {
     }
 
     ngAfterViewInit(): void {
-        this.pageContent.ionScroll.subscribe(() =>{
+        this.pageContent.ionScroll.subscribe(() => {
             if (this.pageContent.scrollTop > 200) {
                 this.isScrollToTopButtonVisible = true;
             } else {

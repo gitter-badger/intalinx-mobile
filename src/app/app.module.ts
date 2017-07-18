@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
 import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
-import { DynamicComponentModule } from 'angular2-dynamic-component/index';
 
 import { Util } from '../utils/util';
 import { CordysUtil } from '../utils/cordysutil';
@@ -107,7 +106,6 @@ const cloudSettings: CloudSettings = {
         deps: [Http]
       }
     }),
-    DynamicComponentModule,
     CloudModule.forRoot(cloudSettings)
   ],
   bootstrap: [IonicApp],

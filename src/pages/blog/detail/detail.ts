@@ -1,30 +1,30 @@
 // Third party library.
-import {Component, ViewChild, ElementRef, Renderer, OnDestroy} from '@angular/core';
-import {NavController,ActionSheetController, NavParams, Content} from 'ionic-angular';
+import { Component, ViewChild, ElementRef, Renderer, AfterViewChecked } from '@angular/core';
+import { NavController, ActionSheetController, NavParams, Content } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
-import {GoogleAnalytics} from 'ionic-native';
-import {FormsModule} from '@angular/forms';
-import {DynamicComponentModule} from 'angular2-dynamic-component/index';
+import { GoogleAnalytics } from 'ionic-native';
+import { DomSanitizer } from '@angular/platform-browser';
 
 // Utils.
-import {Util} from '../../../utils/util';
+import { Util } from '../../../utils/util';
 
 // Services.
-import {BlogService} from '../../../providers/blog-service';
-import {ShareService} from '../../../providers/share-service';
-import {UserService} from '../../../providers/user-service';
+import { BlogService } from '../../../providers/blog-service';
+import { ShareService } from '../../../providers/share-service';
+import { UserService } from '../../../providers/user-service';
 
 // Pages.
-import {AddCommentPage} from '../add-comment/add-comment';
-import {ImageSlidesPage} from '../../../shared/components/image-slides/image-slides';
+import { AddCommentPage } from '../add-comment/add-comment';
+import { ImageSlidesPage } from '../../../shared/components/image-slides/image-slides';
 
 @Component({
     selector: 'page-blog-detail',
     templateUrl: 'detail.html',
-    providers: [UserService,BlogService, Util]
+    providers: [UserService, BlogService, Util]
 })
-export class BlogDetailPage implements OnDestroy {
+export class BlogDetailPage implements AfterViewChecked {
     @ViewChild(Content) pageContent: Content;
+    @ViewChild('#content') contentElement: ElementRef;
     public community: any;
     public id: string;
     public readStatus: string;
@@ -47,57 +47,26 @@ export class BlogDetailPage implements OnDestroy {
     public hasAttachFilesForDownload: boolean = false;
 
     public pageLoadTime: number;
+    public imageClickEventBinded = false;
     public images: any;
-    public sendDataToImageSlidesPage: any;
     public sendData: any;
     public loginID: string;
     public createUserID: string;
 
-    public clickListener: Function;
-
-    public outerDynamicModules = [DynamicComponentModule];
-    public outerDynamicContext = {
-        innerDynamicContext: {},
-        innerDynamicTemplate: ``,
-        innerDynamicModules: [
-            FormsModule
-        ]
-    };
-    public outerDynamicTemplate = `
-        <DynamicComponent [componentContext]='innerDynamicContext' 
-                          [componentModules]='innerDynamicModules'
-                          [componentTemplate]='innerDynamicTemplate'>         
-        </DynamicComponent>
-   `;
-
-    dynamicCallback(event) {
-        this.clickListener = this.renderer.listen(this.elementRef.nativeElement, 'click', (event) => {
-            let currentImage = event.target;
-            if (currentImage.parentElement.parentElement.parentElement.className === 'contents selectable') {
-                let images = currentImage.ownerDocument.querySelectorAll('.contents img');
-                let sendData = {
-                    'currentImage': currentImage,
-                    'images': images
-                };
-                this.nav.push(ImageSlidesPage, { 'sendData': sendData });
-            } else if (currentImage.parentElement.parentElement.parentElement.className.indexOf("comment-content selectable card-content") >= 0) {
-                let images = currentImage.parentElement.parentElement.parentElement.querySelectorAll('img');
-                let sendData = {
-                    'currentImage': currentImage,
-                    'images': images
-                };
-                this.nav.push(ImageSlidesPage, { 'sendData': sendData });
-            }
-        })
-    }
-
-    ngOnDestroy() {
-        this.clickListener();
-    }
-
-    constructor(public elementRef: ElementRef, public renderer: Renderer, public nav: NavController, public params: NavParams, public actionSheetCtrl: ActionSheetController, public userService: UserService, public util: Util, public translate: TranslateService, public blogService: BlogService, public share: ShareService) {
+    constructor(
+        public elementRef: ElementRef,
+        public renderer: Renderer,
+        public domSanitizer: DomSanitizer,
+        public nav: NavController,
+        public params: NavParams,
+        public actionSheetCtrl: ActionSheetController,
+        public userService: UserService,
+        public util: Util,
+        public translate: TranslateService,
+        public blogService: BlogService,
+        public share: ShareService) {
         this.loginID = this.userService.getUserID();
-        
+
         this.sendData = this.params.get('sendData');
         this.community = this.sendData.community;
         this.id = this.community.communityID;
@@ -113,6 +82,20 @@ export class BlogDetailPage implements OnDestroy {
         this.getReplyContentListByCommunityID();
     }
 
+    ngAfterViewChecked() {
+        if (!this.imageClickEventBinded) {
+            this.imageClickEventBinded = true;
+            console.log('ngAfterViewChecked');
+            const content = this.elementRef.nativeElement.querySelectorAll('.contents');
+            const that = this;
+            this.renderer.listen(content, 'click', (event) => {
+                console.log(event.currentTarget);
+                that.showImageSlides(event);
+            }); 
+            
+        }
+    }
+
     addComment(): void {
         this.nav.push(AddCommentPage, { 'sendDataForAddComment': this.sendDataForAddComment });
     }
@@ -120,8 +103,8 @@ export class BlogDetailPage implements OnDestroy {
     getCommunityDetailByCommunityID(): void {
         this.blogService.getCommunityDetailByCommunityID(this.id).then((data: any) => {
             this.title = data.title;
-            // this.content = [data.content, [Img]];
-            this.outerDynamicContext.innerDynamicTemplate = data.content;
+            this.content = this.domSanitizer.bypassSecurityTrustHtml(data.content);
+            // this.outerDynamicContext.innerDynamicTemplate = data.content;
             this.createDate = data.createDate;
             this.createUserID = data.createUser;
             this.createUserName = data.createUserName;
@@ -146,18 +129,18 @@ export class BlogDetailPage implements OnDestroy {
         this.blogService.getReplyContentListByCommunityID(this.id, position).then((data: any) => {
             if (data) {
                 this.comments = data.replyContents;
-                for (let i = 0; i < data.replyContents.length; i++) {
-                    // data.replyContents[i].content = [data.replyContents[i].content, [Img]];
-                    data.replyContents[i]['outerDynamicModules'] = this.outerDynamicModules;
-                    data.replyContents[i]['outerDynamicTemplate'] = this.outerDynamicTemplate;
-                    data.replyContents[i]['outerDynamicContext'] = {
-                        innerDynamicContext: {},
-                        innerDynamicTemplate: data.replyContents[i].content,
-                        innerDynamicModules: [
-                            FormsModule
-                        ]
-                    }; 
-                }
+                // for (let i = 0; i < data.replyContents.length; i++) {
+                //     // data.replyContents[i].content = [data.replyContents[i].content, [Img]];
+                //     data.replyContents[i]['outerDynamicModules'] = this.outerDynamicModules;
+                //     data.replyContents[i]['outerDynamicTemplate'] = this.outerDynamicTemplate;
+                //     data.replyContents[i]['outerDynamicContext'] = {
+                //         innerDynamicContext: {},
+                //         innerDynamicTemplate: data.replyContents[i].content,
+                //         innerDynamicModules: [
+                //             FormsModule
+                //         ]
+                //     }; 
+                // }
                 this.commentCount = data.cursor.maxRows;
             }
         });
@@ -173,18 +156,18 @@ export class BlogDetailPage implements OnDestroy {
 
         this.blogService.getReplyContentListByCommunityID(this.id, position).then((data: any) => {
             if (data && data.replyContents[0]) {
-                for (let i = 0; i < data.replyContents.length; i++) {
-                    // data.replyContents[i].content = [data.replyContents[i].content, [Img]];
-                    data.replyContents[i]['outerDynamicModules'] = this.outerDynamicModules;
-                    data.replyContents[i]['outerDynamicTemplate'] = this.outerDynamicTemplate;
-                    data.replyContents[i]['outerDynamicContext'] = {
-                        innerDynamicContext: {},
-                        innerDynamicTemplate: data.replyContents[i].content,
-                        innerDynamicModules: [
-                            FormsModule
-                        ]
-                    };
-                }
+                // for (let i = 0; i < data.replyContents.length; i++) {
+                //     // data.replyContents[i].content = [data.replyContents[i].content, [Img]];
+                //     data.replyContents[i]['outerDynamicModules'] = this.outerDynamicModules;
+                //     data.replyContents[i]['outerDynamicTemplate'] = this.outerDynamicTemplate;
+                //     data.replyContents[i]['outerDynamicContext'] = {
+                //         innerDynamicContext: {},
+                //         innerDynamicTemplate: data.replyContents[i].content,
+                //         innerDynamicModules: [
+                //             FormsModule
+                //         ]
+                //     };
+                // }
                 this.comments = this.comments.concat(data.replyContents);
             }
             infiniteScroll.complete();
@@ -245,7 +228,7 @@ export class BlogDetailPage implements OnDestroy {
     }
 
     ngAfterViewInit(): void {
-        this.pageContent.ionScroll.subscribe(() =>{
+        this.pageContent.ionScroll.subscribe(() => {
             if (this.pageContent.scrollTop > 200) {
                 this.isScrollToTopButtonVisible = true;
             } else {
@@ -278,7 +261,7 @@ export class BlogDetailPage implements OnDestroy {
         this.nav.push(ImageSlidesPage, { 'sendData': sendDataForAddComment });
     }
 
-    
+
     showDeleteReplyContentConfirmMessage(comment) {
         this.translate.get('app.blog.message.warning.deleteReplyContent').subscribe(message => {
             let content = message;
@@ -360,6 +343,6 @@ export class BlogDetailPage implements OnDestroy {
     }
 
     showEditBlogPage() {
-        
+
     }
 }

@@ -1,30 +1,30 @@
 // Third party library.
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import {Platform, NavController} from 'ionic-angular';
-import {InAppBrowser} from 'ionic-native';
+import { Platform, NavController } from 'ionic-angular';
+import { InAppBrowser } from 'ionic-native';
 
 // Utils.
-import {Util} from '../../utils/util';
+import { Util } from '../../utils/util';
 
 // Config.
-import {AppConfig} from '../../app/app.config';
+import { AppConfig } from '../../app/app.config';
 
 // Services.
-import {ShareService} from '../../providers/share-service';
-import {AppsService} from '../../providers/apps-service';
-import {UserService} from '../../providers/user-service';
-import {BlogService} from '../../providers/blog-service';
-import {NotificationService} from '../../providers/notification-service';
-import {SurveyService} from '../../providers/survey-service';
-import {ScheduleService} from '../../providers/schedule-service';
-import {AboutService} from '../../providers/about-service';
+import { ShareService } from '../../providers/share-service';
+import { AppsService } from '../../providers/apps-service';
+import { UserService } from '../../providers/user-service';
+import { BlogService } from '../../providers/blog-service';
+import { NotificationService } from '../../providers/notification-service';
+import { SurveyService } from '../../providers/survey-service';
+import { ScheduleService } from '../../providers/schedule-service';
+import { AboutService } from '../../providers/about-service';
 
-import {InfoPage} from '../info/info';
-import {ProfileIndexPage} from '../profile/index/index';
-import {ScheduleIndexPage} from '../schedule/index/index';
-import {AboutPage} from '../about/about';
-import {DevicesPage} from '../schedule/devices/devices';
+import { InfoPage } from '../info/info';
+import { ProfileIndexPage } from '../profile/index/index';
+import { ScheduleIndexPage } from '../schedule/index/index';
+import { AboutPage } from '../about/about';
+import { DevicesPage } from '../schedule/devices/devices';
 
 @Component({
     selector: 'page-portal',
@@ -54,36 +54,41 @@ export class PortalPage {
     };
 
     constructor(public translate: TranslateService, public platform: Platform, public nav: NavController, public appConfig: AppConfig, public util: Util, public share: ShareService, public appsService: AppsService, public aboutService: AboutService, public userService: UserService) {
+        console.log('constructor')
         this.initializeUser().then(() => {
-            this.initJPush();
-            this.loadApplications();
+            console.log('initializeUser completed');
+            this.initJPush().then(() => {
+                console.log('initJPush');
+                this.loadApplications();
+            });
         });
         if (!this.share.showMenu) {
             this.share.showMenu = this.showMenu(this);
         }
     }
 
-    initJPush() {
+    initJPush(): Promise<void> {
         if (this.platform.is('cordova') && !this.appConfig.get('IS_TABLET')) {
             //启动极光推送
             if ((<any>window).plugins && (<any>window).plugins.jPushPlugin) {
-                this.setAlias();
-                (<any>window).plugins.jPushPlugin.init(function(ret, err){
-                    if (ret) {
-                        // document.addEventListener('jpush.receiveNotification', (data) => {
-                        //     // alert(data);
-                        // }, false);
-                    }
-                });
+                console.log('启动极光推送');
+                (<any>window).plugins.jPushPlugin.init();
+                return this.setAlias();
             }
         }
+        return Promise.resolve();
     }
 
-    setAlias() {
-        //设置Alias
-        if (this.alias && this.alias.trim() != '') {
-            (<any>window).plugins.jPushPlugin.setAlias(this.alias);
-        }
+    setAlias(): Promise<void> {
+        const that = this;
+        return new Promise<void>((resolve, reject) => {
+            console.log('设置alias' + that.alias);
+            //设置Alias
+            if (that.alias && that.alias.trim() != '') {
+                (<any>window).plugins.jPushPlugin.setAlias(that.alias);
+            }
+            resolve();
+        });
     }
 
     loadApplications() {
@@ -133,7 +138,9 @@ export class PortalPage {
 
     initializeUser() {
         return new Promise(resolve => {
+            console.log('initializeUser');
             this.userService.getUserDetails().then(data => {
+                console.log('userService');
                 this.alias = data.userID;
                 this.share.initializeUser(data);
                 resolve();

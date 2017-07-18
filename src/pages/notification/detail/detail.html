@@ -25,7 +25,9 @@
             </button>
         </ion-item>
         <div class="contents selectable" padding>
-            <template dynamic-component (dynamicComponentReady)="dynamicCallback($event)" [componentContext]="outerDynamicContext" [componentModules]="outerDynamicModules" [componentTemplate]="outerDynamicTemplate"></template>
+            <ng-template>
+                {{content}}
+            </ng-template>
             <img (click)="showImageSlides($event)" *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage" />
         </div>
         <div padding-left class="attachment" flex-sm="100" *ngFor="let attachFile of attachFilesForDownload">

@@ -1,29 +1,26 @@
 // Third party library.
-import {Component, ViewChild, ElementRef, Renderer, OnDestroy} from '@angular/core';
-import {NavController, NavParams, ViewController, Content} from 'ionic-angular';
-import {NotificationService} from '../../../providers/notification-service';
-import {FormsModule} from '@angular/forms';
-import {DynamicComponentModule} from 'angular2-dynamic-component/index';
+import { Component, ViewChild, ElementRef, Renderer, ComponentFactoryResolver, AfterViewChecked } from '@angular/core';
+import { NavController, NavParams, ViewController, Content } from 'ionic-angular';
+import { NotificationService } from '../../../providers/notification-service';
 
 // Utils.
-import {Util} from '../../../utils/util';
+import { Util } from '../../../utils/util';
 
 // Services.
-import {ShareService} from '../../../providers/share-service';
+import { ShareService } from '../../../providers/share-service';
 
 // Pages.
-import {ImageSlidesPage} from '../../../shared/components/image-slides/image-slides';
+import { ImageSlidesPage } from '../../../shared/components/image-slides/image-slides';
 
 @Component({
     selector: 'page-notification-detail',
     templateUrl: 'detail.html',
     providers: [
-        NotificationService,
-        Util
+        NotificationService
     ]
 })
 
-export class NotificationDetailPage implements OnDestroy {
+export class NotificationDetailPage implements AfterViewChecked {
     @ViewChild(Content) pageContent: Content;
 
     public notification: any;
@@ -46,43 +43,9 @@ export class NotificationDetailPage implements OnDestroy {
     public attachImagesForDisplay: any;
     public hasAttachFilesForDownload: boolean = false;
 
-    public clickListener: Function;
-
-    public outerDynamicModules = [DynamicComponentModule];
-    public outerDynamicContext = {
-        innerDynamicContext: {},
-        innerDynamicTemplate: ``,
-        innerDynamicModules: [
-            FormsModule
-        ]
-    };
-    public outerDynamicTemplate = `
-        <DynamicComponent [componentContext]='innerDynamicContext' 
-                          [componentModules]='innerDynamicModules'
-                          [componentTemplate]='innerDynamicTemplate'>         
-        </DynamicComponent>
-   `;
-
-    dynamicCallback(event) {
-        this.clickListener = this.renderer.listen(this.elementRef.nativeElement, 'click', (event) => {
-            let currentImage = event.target;
-            if (currentImage.parentElement.parentElement.parentElement.className === 'contents selectable') {
-                let images = currentImage.ownerDocument.querySelectorAll('.contents img');
-                let sendData = {
-                    'currentImage': currentImage,
-                    'images': images
-                };
-                this.nav.push(ImageSlidesPage, { 'sendData': sendData });
-            }
-        })
-    }
-
-    ngOnDestroy() {
-        this.clickListener();
-    }
-
-    constructor(public elementRef: ElementRef, 
+    constructor(public elementRef: ElementRef,
         public renderer: Renderer,
+        public componentFactoryResolver: ComponentFactoryResolver,
         public nav: NavController,
         public params: NavParams,
         public notificationService: NotificationService,
@@ -98,7 +61,7 @@ export class NotificationDetailPage implements OnDestroy {
     getNotificationDetailByNotificationID(): void {
         this.notificationService.getNotificationDetailByNotificationID(this.id).then((data: any) => {
             this.title = data.title;
-            this.outerDynamicContext.innerDynamicTemplate = data.content;
+            this.content = data.content;
             this.createUserId = data.createUser;
             this.publishStartDate = data.publishStartDate;
             this.createUserAvatar = data.createUserAvatar;
@@ -142,13 +105,24 @@ export class NotificationDetailPage implements OnDestroy {
     }
 
     ngAfterViewInit(): void {
-        this.pageContent.ionScroll.subscribe(() =>{
+        this.pageContent.ionScroll.subscribe(() => {
             if (this.pageContent.scrollTop > 200) {
                 this.isScrollToTopButtonVisible = true;
             } else {
                 this.isScrollToTopButtonVisible = false;
             }
         });
+
+    }
+
+    ngAfterViewChecked() {
+        const images = this.elementRef.nativeElement.querySelectorAll('.contents img');
+        const that = this;
+        for (let i = 0; i < images.length; i++) {
+            this.renderer.listen(images, 'click', (event) => {
+                that.showImageSlides(event);
+            });
+        }
     }
 
     scrollToDetailPageTop(): void {
@@ -157,7 +131,7 @@ export class NotificationDetailPage implements OnDestroy {
 
     showImageSlides(event): any {
         let currentImage = event.currentTarget;
-        let images = document.querySelectorAll('.contents img');
+        let images = this.elementRef.nativeElement.querySelectorAll('.contents img');
         let sendData = {
             'currentImage': currentImage,
             'images': images
