@@ -3,7 +3,7 @@
     <name>IntaLinx Mobile</name>
     <description>Mobile version for IntaLinx.</description>
     <author email="tian.zhihui@intasect.co.jp" href="http://www.intasect.com/">Zhihui Tian from Intasect</author>
-    <content original-src="index.html" src="http://192.168.11.3:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />

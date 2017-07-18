@@ -45,12 +45,10 @@ export class AboutService {
     getUpgradeUrl(): any {
         return new Promise<string>(resolve => {
             let url = '';
-            if (this.platform.is('android')) {
-                url = this.appConfig.get('PGYER_ANDROID_URL');
-            } else if (this.platform.is('ios')) {
-                url = this.appConfig.get('PGYER_IOS_URL');
+            if (this.appConfig.get('BASE_URL') === this.appConfig.get('BASE_URL_JAPAN')) {
+                url = this.appConfig.get('DOWNLOAD_URL_JAPAN');
             } else {
-                // parameters += '&aKey=' + this.app.config.get('PGYER').IOS.aKey;
+                url = this.appConfig.get('DOWNLOAD_URL_CHINA');
             }
             resolve(url);
         });

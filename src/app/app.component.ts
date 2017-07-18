@@ -122,10 +122,8 @@ export class MyApp {
             this.appConfig.set('GOOGLE_ANALYTICS_TRACK_ID', this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID_JAPAN'));
         }
         this.util.isAutoLogin().then((isAutoLogin: boolean) => {
-            console.log("111111" + isAutoLogin);
             if (isAutoLogin) {
                 this.util.getServer().then((server: string) => {
-                    console.log("222222222222" + server);
                     this.appConfig.set('BASE_URL', server);
                 });
             }

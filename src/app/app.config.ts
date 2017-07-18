@@ -4,10 +4,8 @@ import {Injectable} from '@angular/core';
 export class AppConfig {
     private config: any = {
         'IS_TABLET': false,
-        'BASE_URL': 'http://192.168.11.29/home/InternalSystem/',
-        'BASE_URL_JAPAN': 'http://192.168.11.29/home/InternalSystem/',
-        // 'BASE_URL': 'https://iscsys-staging.intasect.co.jp/home/InternalSystem/',
-        // 'BASE_URL_JAPAN': 'https://iscsys-staging.intasect.co.jp/home/InternalSystem/',
+        'BASE_URL': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
+        'BASE_URL_JAPAN': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
         'BASE_URL_CHINA': 'http://www.intalinx.cn/home/intalinxcloud/',
         'BIZNAVI_URL_JAPAN': 'https://iscsys.intasect.co.jp/biznavi/#/login?SAMLart=',
         'BIZNAVI_URL_CHINA': 'http://www.intalinx.cn/biznavi/#/login?SAMLart=',
@@ -22,8 +20,8 @@ export class AppConfig {
         'PASSWORD_STORAGE_NAME': 'password',
         'SERVER_STORAGE_NAME': 'server',
         'USER_DEFAULT_AVATAR_IMAGE_URL': 'assets/img/default',
-        'PGYER_ANDROID_URL' : 'https://intasect.github.io',
-        'PGYER_IOS_URL' : 'https://intasect.github.io',
+        'DOWNLOAD_URL_JAPAN' : 'https://intasect.github.io',
+        'DOWNLOAD_URL_CHINA' : 'https://intalinx.oschina.io',
         'USER_LANG': 'en-US',
         'GOOGLE_ANALYTICS_TRACK_ID': 'UA-81438804-1',
         'GOOGLE_ANALYTICS_TRACK_ID_JAPAN': 'UA-81438804-1',
