@@ -33,9 +33,8 @@
 
         </ion-item>
         <div class="contents selectable" padding>
-            <div #content [innerHTML]="content"></div>
-            <!-- <template dynamic-component (dynamicComponentReady)="dynamicCallback($event)" [componentContext]="outerDynamicContext" [componentModules]="outerDynamicModules" [componentTemplate]="outerDynamicTemplate"></template> -->
-            <img (click)="showImageSlides($event)" *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage" />
+            <div [innerHTML]="content"></div>
+            <img  *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage" />
         </div>
         <div padding-left class="attachment" flex-sm="100" *ngFor="let attachFile of attachFilesForDownload">
             <span>{{attachFile.attachmentName}}</span><span class="file-size">{{attachFile.attachmentSize}}</span>
@@ -54,8 +53,8 @@
                         </ion-item>
                     </ion-card-header>
                     <ion-card-content class="comment-content selectable">
-                        <!-- <template dynamic-component [componentContext]="comment.outerDynamicContext" [componentModules]="comment.outerDynamicModules" [componentTemplate]="comment.outerDynamicTemplate"></template> -->
-                        <img class="comment-image" (click)="showCommentImageSlides($event)" *ngFor="let attachImage of comment.attachImagesForDisplay" [src]="attachImage" />
+                        <div [innerHTML]="comment.content"></div>
+                        <img class="comment-image" *ngFor="let attachImage of comment.attachImagesForDisplay" [src]="attachImage" />
                     </ion-card-content>
                     <div padding-left class="attachment" flex-sm="100" *ngFor="let attachFile of comment.attachFilesForDownload">
                         <span>{{attachFile.replyContentAttachmentName}}</span><span class="file-size">{{attachFile.replyContentAttachmentSize}}</span>

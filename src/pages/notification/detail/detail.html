@@ -25,10 +25,8 @@
             </button>
         </ion-item>
         <div class="contents selectable" padding>
-            <ng-template>
-                {{content}}
-            </ng-template>
-            <img (click)="showImageSlides($event)" *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage" />
+            <div [innerHTML]="content"></div>
+            <img *ngFor="let attachImage of attachImagesForDisplay" [src]="attachImage" />
         </div>
         <div padding-left class="attachment" flex-sm="100" *ngFor="let attachFile of attachFilesForDownload">
             <span>{{attachFile.attachmentName}}</span><span class="file-size">{{attachFile.attachmentSize}}</span>

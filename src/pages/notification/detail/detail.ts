@@ -1,16 +1,11 @@
 // Third party library.
-import { Component, ViewChild, ElementRef, Renderer, ComponentFactoryResolver, AfterViewChecked } from '@angular/core';
+import { Component, ViewChild, ComponentFactoryResolver } from '@angular/core';
 import { NavController, NavParams, ViewController, Content } from 'ionic-angular';
 import { NotificationService } from '../../../providers/notification-service';
-
-// Utils.
-import { Util } from '../../../utils/util';
+import { DomSanitizer } from '@angular/platform-browser';
 
 // Services.
 import { ShareService } from '../../../providers/share-service';
-
-// Pages.
-import { ImageSlidesPage } from '../../../shared/components/image-slides/image-slides';
 
 @Component({
     selector: 'page-notification-detail',
@@ -20,7 +15,7 @@ import { ImageSlidesPage } from '../../../shared/components/image-slides/image-s
     ]
 })
 
-export class NotificationDetailPage implements AfterViewChecked {
+export class NotificationDetailPage {
     @ViewChild(Content) pageContent: Content;
 
     public notification: any;
@@ -43,8 +38,8 @@ export class NotificationDetailPage implements AfterViewChecked {
     public attachImagesForDisplay: any;
     public hasAttachFilesForDownload: boolean = false;
 
-    constructor(public elementRef: ElementRef,
-        public renderer: Renderer,
+    constructor(
+        public domSanitizer: DomSanitizer,
         public componentFactoryResolver: ComponentFactoryResolver,
         public nav: NavController,
         public params: NavParams,
@@ -61,7 +56,7 @@ export class NotificationDetailPage implements AfterViewChecked {
     getNotificationDetailByNotificationID(): void {
         this.notificationService.getNotificationDetailByNotificationID(this.id).then((data: any) => {
             this.title = data.title;
-            this.content = data.content;
+            this.content = this.domSanitizer.bypassSecurityTrustHtml(data.content);
             this.createUserId = data.createUser;
             this.publishStartDate = data.publishStartDate;
             this.createUserAvatar = data.createUserAvatar;
@@ -115,27 +110,7 @@ export class NotificationDetailPage implements AfterViewChecked {
 
     }
 
-    ngAfterViewChecked() {
-        const images = this.elementRef.nativeElement.querySelectorAll('.contents img');
-        const that = this;
-        for (let i = 0; i < images.length; i++) {
-            this.renderer.listen(images, 'click', (event) => {
-                that.showImageSlides(event);
-            });
-        }
-    }
-
     scrollToDetailPageTop(): void {
         this.pageContent.scrollToTop();
-    }
-
-    showImageSlides(event): any {
-        let currentImage = event.currentTarget;
-        let images = this.elementRef.nativeElement.querySelectorAll('.contents img');
-        let sendData = {
-            'currentImage': currentImage,
-            'images': images
-        };
-        this.nav.push(ImageSlidesPage, { 'sendData': sendData });
     }
 }

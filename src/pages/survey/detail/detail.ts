@@ -1,8 +1,8 @@
 // Third party library.
-import { Component, ViewChild, ElementRef, Renderer } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, Content } from 'ionic-angular';
 import { GoogleAnalytics } from 'ionic-native';
-
+import { DomSanitizer } from '@angular/platform-browser';
 // Utils.
 import { Util } from '../../../utils/util';
 
@@ -11,7 +11,6 @@ import { SurveyService } from '../../../providers/survey-service';
 import { ShareService } from '../../../providers/share-service';
 
 // Pages.
-import { ImageSlidesPage } from '../../../shared/components/image-slides/image-slides';
 import { SurveyResultPage } from '../result/result';
 
 @Component({
@@ -45,7 +44,7 @@ export class SurveyDetailPage {
     public isDisabled: boolean = true;
 
 
-    constructor(public elementRef: ElementRef, public renderer: Renderer, public nav: NavController, public params: NavParams, public util: Util, public surveyService: SurveyService, public share: ShareService) {
+    constructor(public domSanitizer: DomSanitizer, public nav: NavController, public params: NavParams, public util: Util, public surveyService: SurveyService, public share: ShareService) {
         this.survey = this.params.get('survey');
         this.id = this.survey.surveyID;
         this.processStatus = this.survey.processStatus;
@@ -61,7 +60,7 @@ export class SurveyDetailPage {
         this.surveyService.getSurveyDetailBySurveyID(this.id).then((data: any) => {
             if (isFristTimeRefresh) {
                 this.title = data.title;
-                // this.content = [data.content, [Img]];
+                this.content = this.domSanitizer.bypassSecurityTrustHtml(data.content);
                 this.createDate = data.createDate;
                 this.createUserName = data.createUserName;
                 this.createUserAvatar = data.createUserAvatar;
@@ -188,25 +187,4 @@ export class SurveyDetailPage {
     scrollToDetailPageTop(): void {
         this.pageContent.scrollToTop();
     }
-
-    showImageSlides(event): any {
-        let currentImage = event.currentTarget;
-        let images = document.querySelectorAll('.contents img');
-        let sendData = {
-            'currentImage': currentImage,
-            'images': images
-        };
-        this.nav.push(ImageSlidesPage, { 'sendData': sendData });
-    }
-
-    showCommentImageSlides(event): any {
-        let currentImage = event.currentTarget;
-        let images = currentImage.parentElement.querySelectorAll('img');
-        let sendData = {
-            'currentImage': currentImage,
-            'images': images
-        };
-        this.nav.push(ImageSlidesPage, { 'sendData': sendData });
-    }
-
 }

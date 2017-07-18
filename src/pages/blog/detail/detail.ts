@@ -1,5 +1,5 @@
 // Third party library.
-import { Component, ViewChild, ElementRef, Renderer, AfterViewChecked } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { NavController, ActionSheetController, NavParams, Content } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
 import { GoogleAnalytics } from 'ionic-native';
@@ -15,16 +15,14 @@ import { UserService } from '../../../providers/user-service';
 
 // Pages.
 import { AddCommentPage } from '../add-comment/add-comment';
-import { ImageSlidesPage } from '../../../shared/components/image-slides/image-slides';
 
 @Component({
     selector: 'page-blog-detail',
     templateUrl: 'detail.html',
     providers: [UserService, BlogService, Util]
 })
-export class BlogDetailPage implements AfterViewChecked {
+export class BlogDetailPage {
     @ViewChild(Content) pageContent: Content;
-    @ViewChild('#content') contentElement: ElementRef;
     public community: any;
     public id: string;
     public readStatus: string;
@@ -54,8 +52,6 @@ export class BlogDetailPage implements AfterViewChecked {
     public createUserID: string;
 
     constructor(
-        public elementRef: ElementRef,
-        public renderer: Renderer,
         public domSanitizer: DomSanitizer,
         public nav: NavController,
         public params: NavParams,
@@ -83,17 +79,7 @@ export class BlogDetailPage implements AfterViewChecked {
     }
 
     ngAfterViewChecked() {
-        if (!this.imageClickEventBinded) {
-            this.imageClickEventBinded = true;
-            console.log('ngAfterViewChecked');
-            const content = this.elementRef.nativeElement.querySelectorAll('.contents');
-            const that = this;
-            this.renderer.listen(content, 'click', (event) => {
-                console.log(event.currentTarget);
-                that.showImageSlides(event);
-            }); 
-            
-        }
+
     }
 
     addComment(): void {
@@ -104,7 +90,6 @@ export class BlogDetailPage implements AfterViewChecked {
         this.blogService.getCommunityDetailByCommunityID(this.id).then((data: any) => {
             this.title = data.title;
             this.content = this.domSanitizer.bypassSecurityTrustHtml(data.content);
-            // this.outerDynamicContext.innerDynamicTemplate = data.content;
             this.createDate = data.createDate;
             this.createUserID = data.createUser;
             this.createUserName = data.createUserName;
@@ -129,18 +114,6 @@ export class BlogDetailPage implements AfterViewChecked {
         this.blogService.getReplyContentListByCommunityID(this.id, position).then((data: any) => {
             if (data) {
                 this.comments = data.replyContents;
-                // for (let i = 0; i < data.replyContents.length; i++) {
-                //     // data.replyContents[i].content = [data.replyContents[i].content, [Img]];
-                //     data.replyContents[i]['outerDynamicModules'] = this.outerDynamicModules;
-                //     data.replyContents[i]['outerDynamicTemplate'] = this.outerDynamicTemplate;
-                //     data.replyContents[i]['outerDynamicContext'] = {
-                //         innerDynamicContext: {},
-                //         innerDynamicTemplate: data.replyContents[i].content,
-                //         innerDynamicModules: [
-                //             FormsModule
-                //         ]
-                //     }; 
-                // }
                 this.commentCount = data.cursor.maxRows;
             }
         });
@@ -156,18 +129,6 @@ export class BlogDetailPage implements AfterViewChecked {
 
         this.blogService.getReplyContentListByCommunityID(this.id, position).then((data: any) => {
             if (data && data.replyContents[0]) {
-                // for (let i = 0; i < data.replyContents.length; i++) {
-                //     // data.replyContents[i].content = [data.replyContents[i].content, [Img]];
-                //     data.replyContents[i]['outerDynamicModules'] = this.outerDynamicModules;
-                //     data.replyContents[i]['outerDynamicTemplate'] = this.outerDynamicTemplate;
-                //     data.replyContents[i]['outerDynamicContext'] = {
-                //         innerDynamicContext: {},
-                //         innerDynamicTemplate: data.replyContents[i].content,
-                //         innerDynamicModules: [
-                //             FormsModule
-                //         ]
-                //     };
-                // }
                 this.comments = this.comments.concat(data.replyContents);
             }
             infiniteScroll.complete();
@@ -240,27 +201,6 @@ export class BlogDetailPage implements AfterViewChecked {
     scrollToDetailPageTop(): void {
         this.pageContent.scrollToTop();
     }
-
-    showImageSlides(event): any {
-        let currentImage = event.currentTarget;
-        let images = document.querySelectorAll('.contents img');
-        let sendDataForAddComment = {
-            'currentImage': currentImage,
-            'images': images
-        };
-        this.nav.push(ImageSlidesPage, { 'sendData': sendDataForAddComment });
-    }
-
-    showCommentImageSlides(event): any {
-        let currentImage = event.currentTarget;
-        let images = currentImage.parentElement.querySelectorAll('img');
-        let sendDataForAddComment = {
-            'currentImage': currentImage,
-            'images': images
-        };
-        this.nav.push(ImageSlidesPage, { 'sendData': sendDataForAddComment });
-    }
-
 
     showDeleteReplyContentConfirmMessage(comment) {
         this.translate.get('app.blog.message.warning.deleteReplyContent').subscribe(message => {
