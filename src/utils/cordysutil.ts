@@ -294,8 +294,8 @@ export class CordysUtil {
 
     isAutoLogin(): Promise<boolean> {
         return new Promise((resolve, reject) => {
-            this.storageUtil.get(this.appConfig.get('AUTO_LOGIN_STORAGE_NAME')).then((result: string) => {
-                if (result === 'true') {
+            this.storageUtil.get(this.appConfig.get('AUTO_LOGIN_STORAGE_NAME')).then((result: boolean) => {
+                if (result) {
                     resolve(true);
                 } else {
                     resolve(false);
