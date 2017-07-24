@@ -2,7 +2,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, ActionSheetController, NavParams, Content } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
-import { GoogleAnalytics } from 'ionic-native';
 import { DomSanitizer } from '@angular/platform-browser';
 
 // Utils.
@@ -217,7 +216,7 @@ export class BlogDetailPage {
     deleteReplyContent(comment) {
         this.blogService.deleteReplyContent(comment).then(data => {
             if (data) {
-                GoogleAnalytics.trackEvent('Schedule', 'delete', 'comment');
+                this.util.googleAnalyticsTrackEvent('Schedule', 'delete', 'comment');
                 this.getReplyContentListByCommunityID();
             }
         });
@@ -275,7 +274,7 @@ export class BlogDetailPage {
     deleteCommunity() {
         this.blogService.deleteCommunity(this.id).then(data => {
             if (data) {
-                GoogleAnalytics.trackEvent('Blog', 'delete', 'blog');
+                this.util.googleAnalyticsTrackEvent('Blog', 'delete', 'blog');
                 this.sendData.isRefreshFlag = true;
                 this.nav.pop();
             }

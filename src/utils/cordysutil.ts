@@ -247,14 +247,13 @@ export class CordysUtil {
     }
 
     loggedOn(): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            this.getSAMLart().then((samlart: string) => {
+        return this.getSAMLart().then((samlart: string) => {
                 let isLoggedOn = false;
                 isLoggedOn = (samlart !== null && samlart !== '' && samlart !== 'null');
                 if (!isLoggedOn) {
-                    this.isAutoLogin().then((isAutoLogin: boolean) => {
+                    return this.isAutoLogin().then((isAutoLogin: boolean) => {
                         if (isAutoLogin) {
-                            Promise.all([this.getLoginID(), this.getPassword(), this.getServer()]).then((values: any) => {
+                           return Promise.all([this.getLoginID(), this.getPassword(), this.getServer()]).then((values: any) => {
                                 return this.authenticate(values[0], values[1]);
                             });
                         } else {
@@ -264,10 +263,7 @@ export class CordysUtil {
                 } else {
                     return Promise.resolve(true);
                 }
-            }).then((result: boolean) => {
-                resolve(result);
             });
-        });    
     }
 
     logout() {

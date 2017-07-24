@@ -43,6 +43,7 @@ import { OptionResultDetailPage } from '../pages/survey/option-result-detail/opt
 import { SurveyResultPage } from '../pages/survey/result/result';
 import { SelectReadLimitTypePage } from '../pages/blog/add-blog/add-blog';
 
+import { GoogleAnalytics } from '@ionic-native/google-analytics'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpModule, Http } from '@angular/http';
@@ -150,6 +151,7 @@ const cloudSettings: CloudSettings = {
     DateUtil,
     StorageUtil,
     AppConfig,
+    GoogleAnalytics,
     SurveyService
   ]
 })

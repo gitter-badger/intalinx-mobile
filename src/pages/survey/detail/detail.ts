@@ -1,7 +1,6 @@
 // Third party library.
 import { Component, ViewChild } from '@angular/core';
 import { NavController, NavParams, Content } from 'ionic-angular';
-import { GoogleAnalytics } from 'ionic-native';
 import { DomSanitizer } from '@angular/platform-browser';
 // Utils.
 import { Util } from '../../../utils/util';
@@ -110,7 +109,7 @@ export class SurveyDetailPage {
                     this.isFirstTimeAnswerSurvey = true;
                 }
                 this.sendData.isRefreshFlag = true;
-                GoogleAnalytics.trackEvent('Survey', 'answer', 'survey');
+                this.util.googleAnalyticsTrackEvent('Survey', 'answer', 'survey');
                 this.pushToSurveyResultPage();
             }
         });

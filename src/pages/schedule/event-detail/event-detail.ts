@@ -2,7 +2,6 @@
 import {Component} from '@angular/core';
 import {ActionSheetController, NavController, NavParams} from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
-import {GoogleAnalytics} from 'ionic-native';
 
 // Utils.
 import {Util} from '../../../utils/util';
@@ -70,6 +69,7 @@ export class EventDetailPage {
     constructor(public nav: NavController,
         public params: NavParams,
         public actionSheetCtrl: ActionSheetController,
+        public util: Util,
         public translate: TranslateService,
         public scheduleService: ScheduleService,
         public userService: UserService) {
@@ -269,7 +269,7 @@ export class EventDetailPage {
                 this.sendDataToShowOrDeleteEvent.isRefreshFlag = true;
                 setTimeout(() => {
                     this.nav.pop();
-                    GoogleAnalytics.trackEvent('Schedule', 'delete', 'event');
+                    this.util.googleAnalyticsTrackEvent('Schedule', 'delete', 'event');
                 }, 500);
             }
         });

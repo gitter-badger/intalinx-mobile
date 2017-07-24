@@ -2,7 +2,7 @@
 import {Component, ViewChild, NgZone, ElementRef} from '@angular/core';
 import {NavController, NavParams, LoadingController} from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
-import {GoogleAnalytics} from 'ionic-native';
+
 /// <reference path="./exif-ts/exif.d.ts" />
 import * as EXIF from 'exif-ts/exif';
 
@@ -60,7 +60,7 @@ export class AddCommentPage {
                 setTimeout(() => {
                     this.nav.pop();
                 }, 500);
-                GoogleAnalytics.trackEvent('Blog', 'add', 'comment');
+                this.util.googleAnalyticsTrackEvent('Blog', 'add', 'comment');
             } else {
                 this.isDisabled = null;
             }

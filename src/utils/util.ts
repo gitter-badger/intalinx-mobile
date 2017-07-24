@@ -1,28 +1,29 @@
 // Third party library.
-import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import 'moment/locale/ja';
 import 'moment/locale/zh-cn';
-
+import { Platform, Config } from 'ionic-angular';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 // Config.
-import {AppConfig} from '../app/app.config';
+import { AppConfig } from '../app/app.config';
 
 // Utils.
-import {AlertUtil} from './alertutil';
-import {CordysUtil} from './cordysutil';
-import {XmlUtil} from './xmlutil';
-import {DateUtil} from './dateutil';
-import {StorageUtil} from './storageutil';
+import { AlertUtil } from './alertutil';
+import { CordysUtil } from './cordysutil';
+import { XmlUtil } from './xmlutil';
+import { DateUtil } from './dateutil';
+import { StorageUtil } from './storageutil';
 
 // Services.
-import {ShareService} from '../providers/share-service';
+import { ShareService } from '../providers/share-service';
 
 @Injectable()
 export class Util {
 
-    constructor(private http: Http, private translate: TranslateService, private appConfig: AppConfig, private cordysUtil: CordysUtil, private dateUtil: DateUtil, private xmlUtil: XmlUtil, private storageUtil: StorageUtil, private alertUtil: AlertUtil, private share: ShareService) {
+    constructor(private http: Http, private translate: TranslateService, private appConfig: AppConfig, private cordysUtil: CordysUtil, private dateUtil: DateUtil, private xmlUtil: XmlUtil, private storageUtil: StorageUtil, private alertUtil: AlertUtil, private share: ShareService, public platform: Platform, public config: Config, public ga : GoogleAnalytics) {
         let lang = this.appConfig.get('USER_LANG').toLowerCase();
         moment.locale(lang);
     }
@@ -268,5 +269,25 @@ export class Util {
 
     hasSAMLart(): Promise<boolean> {
         return this.cordysUtil.hasSAMLart();
+    }
+
+    googleAnalyticsTrackEvent(category: string, action: string, label?: string) {
+        if (this.platform.is('cordova')) {
+            if (this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')) {
+                this.ga.startTrackerWithId(this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')).then(() => {
+                    this.ga.trackEvent(category,action,label).then(() => { });
+                });
+            }
+        }
+    }
+
+   googleAnalyticsTrackView(viewName: string) {
+        if (this.platform.is('cordova')) {
+            if (this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')) {
+                this.ga.startTrackerWithId(this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')).then(() => {
+                    this.ga.trackView(viewName).then(() => { });
+                });
+            }
+        }
     }
 }

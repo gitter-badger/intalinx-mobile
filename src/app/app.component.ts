@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, Config, MenuController, Nav, LoadingController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
-import { StatusBar, GoogleAnalytics, ScreenOrientation, Network } from 'ionic-native';
+import { StatusBar, ScreenOrientation, Network } from 'ionic-native';
 import { Deploy } from '@ionic/cloud-angular';
 
 // Config.
@@ -129,20 +129,20 @@ export class MyApp {
             }
         });
 
+      this.share.nav = this.nav;
         if (this.platform.is('cordova')) {
             // Okay, so the platform is ready and our plugins are available.
             // Here you can do any higher level native things you might need.
             StatusBar.backgroundColorByHexString('#7B1FA2');
 
-            // Google Analytics
-            if (typeof GoogleAnalytics !== undefined && this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')) {
-                GoogleAnalytics.startTrackerWithId(this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID'));
-            }
             if (this.appConfig.get('IS_TABLET')) {
                 if (typeof ScreenOrientation !== undefined) {
                     ScreenOrientation.lockOrientation('landscape');
                 }
             }
+            this.share.nav.viewDidEnter.subscribe((args) => {
+                this.util.googleAnalyticsTrackView(args.component.name);
+            });
         }
 
         this.user.userAvatar = this.appConfig.get('USER_DEFAULT_AVATAR_IMAGE_URL');
@@ -153,11 +153,7 @@ export class MyApp {
         this.share.initializeMenu = this.initializeMenu(this);
         this.share.initializeUser = this.initializeUser(this);
         this.share.redirectLoginPage = this.redirectLoginPage(this, LoginPage);
-        this.share.nav = this.nav;
         this.share.platform = this.platform;
-        this.share.nav.viewDidEnter.subscribe((args) => {
-            GoogleAnalytics.trackView(args.component.name);
-        });
 
         // auto login.
         this.util.loggedOn().then((isLoggedOn: boolean) => {

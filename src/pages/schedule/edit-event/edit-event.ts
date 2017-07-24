@@ -2,7 +2,6 @@
 import {Component} from '@angular/core';
 import {NavController, AlertController, ModalController, NavParams} from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
-import {GoogleAnalytics} from 'ionic-native';
 
 // Config.
 import {AppConfig} from '../../../app/app.config';
@@ -533,7 +532,7 @@ export class EditEventPage {
                 this.isSavedOrChecked = true;
                 this.sendDataToAddEvent.isRefreshFlag = true;
                 this.nav.pop();
-                GoogleAnalytics.trackEvent('Schedule', 'add', 'event');
+                this.util.googleAnalyticsTrackEvent('Schedule', 'add', 'event');
             } else {
                 this.showError(data);
             }
@@ -555,7 +554,7 @@ export class EditEventPage {
                 this.isSavedOrChecked = true;
                 this.sendDataToEditEvent.isRefreshFlag = true;
                 this.nav.pop();
-                GoogleAnalytics.trackEvent('Schedule', 'update', 'event');
+                this.util.googleAnalyticsTrackEvent('Schedule', 'update', 'event');
             } else {
                 this.showError(data);
             }
