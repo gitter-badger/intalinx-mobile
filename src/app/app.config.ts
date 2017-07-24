@@ -4,8 +4,8 @@ import {Injectable} from '@angular/core';
 export class AppConfig {
     private config: any = {
         'IS_TABLET': false,
-        'BASE_URL': 'http://192.168.11.29/home/jin/',
-        'BASE_URL_JAPAN': 'http://192.168.11.29/home/jin/',
+        'BASE_URL': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
+        'BASE_URL_JAPAN': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
         'BASE_URL_CHINA': 'http://www.intalinx.cn/home/intalinxcloud/',
         'BIZNAVI_URL_JAPAN': 'https://iscsys.intasect.co.jp/biznavi/#/login?SAMLart=',
         'BIZNAVI_URL_CHINA': 'http://www.intalinx.cn/biznavi/#/login?SAMLart=',
