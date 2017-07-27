@@ -1,9 +1,12 @@
 import {Badge} from 'ionic-native';
 import {Platform} from 'ionic-angular';
+// Utils.
+import {Util} from '../utils/util';
 
 export class ShareService {
 
     public platform: Platform;
+    public util : Util;
     private _notificationNewInformationCount: number = 0;
     private _blogNewInformationCount: number = 0;
     private _surveyNewInformationCount: number = 0;
@@ -25,6 +28,7 @@ export class ShareService {
         if (this.platform.is('cordova')) {
             Badge.clear();
             Badge.set(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
+            this.util.setJPushBadge(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
         }
     }
 
@@ -37,6 +41,7 @@ export class ShareService {
         if (this.platform.is('cordova')) {
             Badge.clear();
             Badge.set(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
+            this.util.setJPushBadge(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
         }
     }
 
@@ -49,6 +54,7 @@ export class ShareService {
         if (this.platform.is('cordova')) {
             Badge.clear();
             Badge.set(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
+            this.util.setJPushBadge(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
         }
     }
 

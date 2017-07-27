@@ -129,7 +129,7 @@ export class MyApp {
             }
         });
 
-      this.share.nav = this.nav;
+        this.share.nav = this.nav;
         if (this.platform.is('cordova')) {
             // Okay, so the platform is ready and our plugins are available.
             // Here you can do any higher level native things you might need.
@@ -140,9 +140,6 @@ export class MyApp {
                     ScreenOrientation.lockOrientation('landscape');
                 }
             }
-            this.share.nav.viewDidEnter.subscribe((args) => {
-                this.util.googleAnalyticsTrackView(args.component.name);
-            });
         }
 
         this.user.userAvatar = this.appConfig.get('USER_DEFAULT_AVATAR_IMAGE_URL');
@@ -154,6 +151,11 @@ export class MyApp {
         this.share.initializeUser = this.initializeUser(this);
         this.share.redirectLoginPage = this.redirectLoginPage(this, LoginPage);
         this.share.platform = this.platform;
+        this.share.util = this.util;
+        this.util.googleAnalyticsStartTrackerWithId();
+        this.share.nav.viewDidEnter.subscribe((args) => {
+            this.util.googleAnalyticsTrackView(args.component.name);
+        });
 
         // auto login.
         this.util.loggedOn().then((isLoggedOn: boolean) => {

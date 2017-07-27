@@ -118,7 +118,7 @@
     <plugin name="cordova.plugins.diagnostic" spec="^3.6.5" />
     <plugin name="ionic-plugin-deploy" spec="^0.6.7" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
-    <plugin name="jpush-phonegap-plugin" spec="^3.2.2">
+    <plugin name="jpush-phonegap-plugin" spec="^3.2.3">
         <variable name="APP_KEY" value="d6207a0e1ebe5abd6ede4e37" />
     </plugin>
 </widget>

@@ -10,6 +10,9 @@ import {BlogService} from './blog-service';
 import {NotificationService} from './notification-service';
 import {SurveyService} from './survey-service';
 
+// Utils.
+import {Util} from '../utils/util';
+
 @Injectable()
 export class AppsService {
 
@@ -18,7 +21,8 @@ export class AppsService {
         private share: ShareService,
         private blogService: BlogService,
         private notificationService: NotificationService,
-        private surveyService: SurveyService) {
+        private surveyService: SurveyService,
+        private util: Util) {
 
     }
 
@@ -28,6 +32,7 @@ export class AppsService {
             if (this.platform.is('cordova')) {
                 // Clear badge.
                 Badge.clear();
+                this.util.setJPushBadge(0);
             }
 
             // We're using Angular Http provider to request the data,

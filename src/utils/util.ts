@@ -271,22 +271,32 @@ export class Util {
         return this.cordysUtil.hasSAMLart();
     }
 
+    googleAnalyticsStartTrackerWithId() {
+      if (this.platform.is('cordova')) {
+            if (this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')) {
+                this.ga.startTrackerWithId(this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')).then(() => {});
+            }
+        }
+    }
+
+
     googleAnalyticsTrackEvent(category: string, action: string, label?: string) {
         if (this.platform.is('cordova')) {
-            if (this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')) {
-                this.ga.startTrackerWithId(this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')).then(() => {
-                    this.ga.trackEvent(category,action,label).then(() => { });
-                });
-            }
+          this.ga.trackEvent(category,action,label).then(() => {}).catch(() => {});
         }
     }
 
    googleAnalyticsTrackView(viewName: string) {
         if (this.platform.is('cordova')) {
-            if (this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')) {
-                this.ga.startTrackerWithId(this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID')).then(() => {
-                    this.ga.trackView(viewName).then(() => { });
-                });
+         this.ga.trackView(viewName).then(() => { }).catch(() => {});
+        }
+    }
+
+   setJPushBadge(badge: number) {
+        if (this.platform.is('cordova') && !this.appConfig.get('IS_TABLET')) {
+            //启动极光推送
+            if ((<any>window).plugins && (<any>window).plugins.jPushPlugin) {
+                (<any>window).plugins.jPushPlugin.setBadge(badge)
             }
         }
     }
