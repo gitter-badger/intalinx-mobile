@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Platform, NavController } from 'ionic-angular';
-import { InAppBrowser } from 'ionic-native';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 
 // Utils.
 import { Util } from '../../utils/util';
@@ -53,7 +53,7 @@ export class PortalPage {
         'devices': DevicesPage
     };
 
-    constructor(public translate: TranslateService, public platform: Platform, public nav: NavController, public appConfig: AppConfig, public util: Util, public share: ShareService, public appsService: AppsService, public aboutService: AboutService, public userService: UserService) {
+    constructor(public translate: TranslateService, public platform: Platform, private iab: InAppBrowser, public nav: NavController, public appConfig: AppConfig, public util: Util, public share: ShareService, public appsService: AppsService, public aboutService: AboutService, public userService: UserService) {
         console.log('constructor')
         this.initializeUser().then(() => {
             console.log('initializeUser completed');
@@ -160,7 +160,7 @@ export class PortalPage {
                         url = that.appConfig.get('BIZNAVI_URL_CHINA') + samlart;
                     }
                     if (that.platform.is('cordova')) {
-                        new InAppBrowser(url, '_system');
+                        this.iab.create(url, '_system');
                     } else {
                         window.open(url, '_blank');
                     }

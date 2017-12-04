@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, Config, MenuController, Nav, LoadingController } from 'ionic-angular';
 import { TranslateService } from '@ngx-translate/core';
-import { StatusBar, ScreenOrientation, Network } from 'ionic-native';
-import { Deploy } from '@ionic/cloud-angular';
+import { StatusBar } from '@ionic-native/status-bar';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
+// import { Deploy } from '@ionic/cloud-angular';
 
 // Config.
 import { AppConfig } from './app.config';
@@ -33,7 +34,8 @@ export class MyApp {
 
     constructor(public translate: TranslateService,
         public platform: Platform,
-        public deploy: Deploy,
+        public statusBar: StatusBar,
+        private screenOrientation: ScreenOrientation,
         public config: Config,
         public menu: MenuController,
         public loadingCtrl: LoadingController,
@@ -48,69 +50,69 @@ export class MyApp {
 
     checkUpdate(): void {
         // check latest version from http://pgyer.com/.
-        if (this.platform.is('cordova') && !this.appConfig.get('IS_TABLET')) {
-            this.checkNewVersion();
-        } else {
+        // if (this.platform.is('cordova') && !this.appConfig.get('IS_TABLET')) {
+        //     this.checkNewVersion();
+        // } else {
             this.initializeApp();
-        }
+        // }
     }
 
-    checkNewVersion() {
-        this.deploy.check().then((snapshotAvailable: boolean) => {
-            if (snapshotAvailable) {
-                // if wifi
-                if (Network.type === 'wifi') {
-                    this.downloadAndextractApp();
-                } else {
-                    let that = this;
-                    let okHandler = function () {
-                        that.downloadAndextractApp();
-                    };
-                    let noHandler = function () {
-                        that.initializeApp();
-                    };
-                    this.translate.get('app.message.warning.updateToNewVersion').subscribe(message => {
-                        this.util.presentConfirmModal(message, 'warning', okHandler, noHandler);
-                    });
-                }
-            } else {
-                this.initializeApp();
-            }
-        });
-    }
+    // checkNewVersion() {
+    //     this.deploy.check().then((snapshotAvailable: boolean) => {
+    //         if (snapshotAvailable) {
+    //             // if wifi
+    //             if (Network.type === 'wifi') {
+    //                 this.downloadAndextractApp();
+    //             } else {
+    //                 let that = this;
+    //                 let okHandler = function () {
+    //                     that.downloadAndextractApp();
+    //                 };
+    //                 let noHandler = function () {
+    //                     that.initializeApp();
+    //                 };
+    //                 this.translate.get('app.message.warning.updateToNewVersion').subscribe(message => {
+    //                     this.util.presentConfirmModal(message, 'warning', okHandler, noHandler);
+    //                 });
+    //             }
+    //         } else {
+    //             this.initializeApp();
+    //         }
+    //     });
+    // }
 
-    downloadAndextractApp() {
-        this.translate.get(['app.message.loading.downloading', 'app.message.loading.extracting', 'app.message.error.faildToDownload', 'app.message.error.faildToExtract']).subscribe(message => {
-            let content = message['app.message.loading.downloading'] + '0%';
-            let loading = this.loadingCtrl.create({
-                spinner: 'ios',
-                content: content
-            });
-            loading.present();
-            // When snapshotAvailable is true, you can apply the snapshot
-            this.deploy.download({
-                onProgress: p => {
-                    loading.setContent(message['app.message.loading.downloading'] + p + '%');
-                }
-            }).then(() => {
-                this.deploy.extract({
-                    onProgress: p => {
-                        loading.setContent(message['app.message.loading.extracting'] + p + '%');
-                    }
-                }).then(() => {
-                    this.deploy.load();
-                }, (error) => {
-                    loading.dismiss();
-                    this.util.presentModal(message['app.message.error.faildToExtract']);
-                    this.initializeApp();
-                });
-            }, (error) => {
-                loading.dismiss();
-                this.util.presentModal(message['app.message.error.faildToDownload']);
-                this.initializeApp();
-            });
-        });
-    }
+    // downloadAndextractApp() {
+    //     this.translate.get(['app.message.loading.downloading', 'app.message.loading.extracting', 'app.message.error.faildToDownload', 'app.message.error.faildToExtract']).subscribe(message => {
+    //         let content = message['app.message.loading.downloading'] + '0%';
+    //         let loading = this.loadingCtrl.create({
+    //             spinner: 'ios',
+    //             content: content
+    //         });
+    //         loading.present();
+    //         // When snapshotAvailable is true, you can apply the snapshot
+    //         this.deploy.download({
+    //             onProgress: p => {
+    //                 loading.setContent(message['app.message.loading.downloading'] + p + '%');
+    //             }
+    //         }).then(() => {
+    //             this.deploy.extract({
+    //                 onProgress: p => {
+    //                     loading.setContent(message['app.message.loading.extracting'] + p + '%');
+    //                 }
+    //             }).then(() => {
+    //                 this.deploy.load();
+    //             }, (error) => {
+    //                 loading.dismiss();
+    //                 this.util.presentModal(message['app.message.error.faildToExtract']);
+    //                 this.initializeApp();
+    //             });
+    //         }, (error) => {
+    //             loading.dismiss();
+    //             this.util.presentModal(message['app.message.error.faildToDownload']);
+    //             this.initializeApp();
+    //         });
+    //     });
+    // }
 
     initializeApp() {
         // set default server.
@@ -133,12 +135,10 @@ export class MyApp {
         if (this.platform.is('cordova')) {
             // Okay, so the platform is ready and our plugins are available.
             // Here you can do any higher level native things you might need.
-            StatusBar.backgroundColorByHexString('#7B1FA2');
+            this.statusBar.backgroundColorByHexString('#7B1FA2');
 
             if (this.appConfig.get('IS_TABLET')) {
-                if (typeof ScreenOrientation !== undefined) {
-                    ScreenOrientation.lockOrientation('landscape');
-                }
+                this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.LANDSCAPE);
             }
         }
 

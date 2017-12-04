@@ -1,6 +1,6 @@
 // Third party library.
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import 'moment/locale/ja';
@@ -23,7 +23,7 @@ import { ShareService } from '../providers/share-service';
 @Injectable()
 export class Util {
 
-    constructor(private http: Http, private translate: TranslateService, private appConfig: AppConfig, private cordysUtil: CordysUtil, private dateUtil: DateUtil, private xmlUtil: XmlUtil, private storageUtil: StorageUtil, private alertUtil: AlertUtil, private share: ShareService, public platform: Platform, public config: Config, public ga : GoogleAnalytics) {
+    constructor(private http: HttpClient, private translate: TranslateService, private appConfig: AppConfig, private cordysUtil: CordysUtil, private dateUtil: DateUtil, private xmlUtil: XmlUtil, private storageUtil: StorageUtil, private alertUtil: AlertUtil, private share: ShareService, public platform: Platform, public config: Config, public ga : GoogleAnalytics) {
         let lang = this.appConfig.get('USER_LANG').toLowerCase();
         moment.locale(lang);
     }

@@ -1,4 +1,4 @@
-import {Badge} from 'ionic-native';
+import { Badge } from '@ionic-native/badge';
 import {Platform} from 'ionic-angular';
 // Utils.
 import {Util} from '../utils/util';
@@ -19,15 +19,15 @@ export class ShareService {
     public nav: any;
     public user: any;
 
-    constructor() {
+    constructor(private badge: Badge) {
 
     }
 
     set notificationNewInformationCount(count: number) {
         this._notificationNewInformationCount = count;
         if (this.platform.is('cordova')) {
-            Badge.clear();
-            Badge.set(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
+            this.badge.clear();
+            this.badge.set(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
             this.util.setJPushBadge(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
         }
     }
@@ -39,8 +39,8 @@ export class ShareService {
     set blogNewInformationCount(count: number) {
         this._blogNewInformationCount = count;
         if (this.platform.is('cordova')) {
-            Badge.clear();
-            Badge.set(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
+            this.badge.clear();
+            this.badge.set(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
             this.util.setJPushBadge(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
         }
     }
@@ -52,8 +52,8 @@ export class ShareService {
     set surveyNewInformationCount(count: number) {
         this._surveyNewInformationCount = count;
         if (this.platform.is('cordova')) {
-            Badge.clear();
-            Badge.set(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
+            this.badge.clear();
+            this.badge.set(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
             this.util.setJPushBadge(this._notificationNewInformationCount + this._blogNewInformationCount + this._surveyNewInformationCount);
         }
     }

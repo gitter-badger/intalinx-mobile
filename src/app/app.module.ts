@@ -1,7 +1,7 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { BrowserModule } from '@angular/platform-browser';
-import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+// import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
 import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
 
@@ -43,21 +43,24 @@ import { OptionResultDetailPage } from '../pages/survey/option-result-detail/opt
 import { SurveyResultPage } from '../pages/survey/result/result';
 import { SelectReadLimitTypePage } from '../pages/blog/add-blog/add-blog';
 
+import { Badge } from '@ionic-native/badge';
+import { StatusBar } from '@ionic-native/status-bar';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { GoogleAnalytics } from '@ionic-native/google-analytics'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { HttpModule, Http } from '@angular/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
-
-export function createTranslateLoader(http: Http) {
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
 
-const cloudSettings: CloudSettings = {
-  'core': {
-    'app_id': '256ee45e'
-  }
-};
+// const cloudSettings: CloudSettings = {
+//   'core': {
+//     'app_id': '256ee45e'
+//   }
+// };
 
 @NgModule({
   declarations: [
@@ -92,7 +95,7 @@ const cloudSettings: CloudSettings = {
   ],
   imports: [
     BrowserModule,
-    HttpModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp, {
       tabsHideOnSubPages: true
     }),
@@ -102,12 +105,12 @@ const cloudSettings: CloudSettings = {
     }),
     TranslateModule.forRoot({
       loader: {
-        provide: TranslateLoader,
-        useFactory: (createTranslateLoader),
-        deps: [Http]
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
       }
-    }),
-    CloudModule.forRoot(cloudSettings)
+    })
+    // CloudModule.forRoot(cloudSettings)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -143,7 +146,11 @@ const cloudSettings: CloudSettings = {
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Storage,
-    ShareService,
+    {
+      provide: ShareService,
+      useClass: ShareService,
+      deps: [Badge]
+    },
     Util,
     CordysUtil,
     XmlUtil,
@@ -151,6 +158,9 @@ const cloudSettings: CloudSettings = {
     DateUtil,
     StorageUtil,
     AppConfig,
+    Badge,
+    StatusBar,
+    ScreenOrientation,
     GoogleAnalytics,
     SurveyService
   ]

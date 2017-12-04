@@ -2,7 +2,7 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
 import * as moment from 'moment';
 import {Platform, Content} from 'ionic-angular';
-import {Brightness} from 'ionic-native';
+import { Brightness } from '@ionic-native/brightness';
 
 // Config.
 import {AppConfig} from '../../../app/app.config';
@@ -72,6 +72,7 @@ export class DevicesPage {
     public maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
 
     constructor(public platform: Platform,
+        private brightness: Brightness,
         public util: Util,
         public share: ShareService,
         public scheduleService: ScheduleService,
@@ -81,8 +82,8 @@ export class DevicesPage {
 
         this.platform.ready().then(() => {
             if (typeof Brightness !== undefined) {
-                Brightness.setBrightness(1);
-                Brightness.setKeepScreenOn(true);
+                this.brightness.setBrightness(1);
+                this.brightness.setKeepScreenOn(true);
             }
         });
 

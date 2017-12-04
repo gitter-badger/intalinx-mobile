@@ -1,7 +1,7 @@
 // Third party library.
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
-import {Badge} from 'ionic-native';
+import { HttpClient } from '@angular/common/http';
+import { Badge } from '@ionic-native/badge';
 import {Platform} from 'ionic-angular';
 
 // Services.
@@ -16,7 +16,8 @@ import {Util} from '../utils/util';
 @Injectable()
 export class AppsService {
 
-    constructor(private http: Http,
+    constructor(private http: HttpClient,
+        private badge: Badge,
         private platform: Platform,
         private share: ShareService,
         private blogService: BlogService,
@@ -31,7 +32,7 @@ export class AppsService {
         return new Promise(resolve => {
             if (this.platform.is('cordova')) {
                 // Clear badge.
-                Badge.clear();
+                this.badge.clear();
                 this.util.setJPushBadge(0);
             }
 

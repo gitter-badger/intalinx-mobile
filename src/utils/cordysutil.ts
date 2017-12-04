@@ -1,6 +1,6 @@
 // Third party library.
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 // Config.
 import {AppConfig} from '../app/app.config';
@@ -32,7 +32,7 @@ export class CordysUtil {
         ARTIFACT_UNBOUND_MESSAGE_CODE: 'Cordys.WebGateway.Messages.WG_Artifact_Unbound'
     };
 
-    constructor(private http: Http, private translate: TranslateService, private appConfig: AppConfig, private xmlUtil: XmlUtil, private alertUtil: AlertUtil, private dateUtil: DateUtil, private storageUtil: StorageUtil, private share: ShareService) {
+    constructor(private http: HttpClient, private translate: TranslateService, private appConfig: AppConfig, private xmlUtil: XmlUtil, private alertUtil: AlertUtil, private dateUtil: DateUtil, private storageUtil: StorageUtil, private share: ShareService) {
     }
 
     getRequestXml(url: string) {

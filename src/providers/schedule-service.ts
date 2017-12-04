@@ -1,6 +1,6 @@
 // Third party library.
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import * as moment from 'moment';
 
 // Utils.
@@ -9,7 +9,7 @@ import {Util} from '../utils/util';
 @Injectable()
 export class ScheduleService {
 
-    constructor(private http: Http, private util: Util) {
+    constructor(private http: HttpClient, private util: Util) {
     }
 
     getUserLocaleSettings(userID: string): any {

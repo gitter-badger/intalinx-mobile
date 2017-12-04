@@ -8,5 +8,8 @@
       "_proxyUrl": "http://192.168.11.29/home/InternalSystem/"
     }
   ],
+  "integrations": {
+    "cordova": {}
+  },
   "type": "ionic-angular"
 }

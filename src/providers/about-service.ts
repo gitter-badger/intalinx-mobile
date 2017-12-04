@@ -1,8 +1,8 @@
 // Third party library.
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import {Platform} from 'ionic-angular';
-import {AppVersion} from 'ionic-native';
+import { AppVersion } from '@ionic-native/app-version';
 
 // Config.
 import {AppConfig} from '../app/app.config';
@@ -13,11 +13,11 @@ import {Util} from '../utils/util';
 @Injectable()
 export class AboutService {
 
-    constructor(private http: Http, private platform: Platform, private util: Util, private appConfig: AppConfig) {
+    constructor(private http: HttpClient, private platform: Platform, private appVersion: AppVersion, private util: Util, private appConfig: AppConfig) {
     }
 
     getVersion(): any {
-        return AppVersion.getVersionNumber();
+        return this.appVersion.getVersionNumber();
     }
 
     getLatestVersion(): any {
