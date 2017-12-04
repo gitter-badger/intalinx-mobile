@@ -94,7 +94,7 @@ export class ScheduleIndexPage {
             this.isFirstDayMonday = false;
         }
         this.today = moment().format('YYYY/MM/D');
-        this.currentMonth = moment().date(1);
+        this.currentMonth = moment(this.today).date(1);
         this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
         this.nextMonth = moment(this.currentMonth).add(1, 'months');
         this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
