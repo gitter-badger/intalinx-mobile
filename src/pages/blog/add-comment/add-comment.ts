@@ -29,7 +29,7 @@ export class AddCommentPage {
     public comment: any;
     public isDisabled: boolean;
 
-    constructor(public nav: NavController, public params: NavParams, public zone: NgZone, public loadingCtrl: LoadingController, public translate: TranslateService, public blogService: BlogService, public util: Util) {
+    constructor(private nav: NavController, private params: NavParams, private zone: NgZone, private loadingCtrl: LoadingController, private translate: TranslateService, private blogService: BlogService, private util: Util) {
         this.sendDataForAddComment = this.params.get('sendDataForAddComment');
         this.id = this.sendDataForAddComment.id;
         this.comment = {

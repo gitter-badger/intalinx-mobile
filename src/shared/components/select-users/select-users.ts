@@ -29,13 +29,13 @@ export class SelectUsersPage {
     public foundUserMembers: any;
     public title: string;
 
-    constructor(public nav: NavController,
-        public viewCtrl: ViewController,
-        public util: Util,
-        public params: NavParams,
-        public scheduleService: ScheduleService,
-        public blogService: BlogService,
-        public userService: UserService) {
+    constructor(private nav: NavController,
+        private viewCtrl: ViewController,
+        private util: Util,
+        private params: NavParams,
+        private scheduleService: ScheduleService,
+        private blogService: BlogService,
+        private userService: UserService) {
         let sendDataToSelectUsers = this.params.get('sendDataToSelectUsers');
         this.title = sendDataToSelectUsers.title;
         this.originUsers = sendDataToSelectUsers.selectedUsers;

@@ -53,7 +53,7 @@ export class PortalPage {
         'devices': DevicesPage
     };
 
-    constructor(public translate: TranslateService, public platform: Platform, private iab: InAppBrowser, public nav: NavController, public appConfig: AppConfig, public util: Util, public share: ShareService, public appsService: AppsService, public aboutService: AboutService, public userService: UserService) {
+    constructor(private translate: TranslateService, private platform: Platform, private iab: InAppBrowser, private nav: NavController, private appConfig: AppConfig, private util: Util, private share: ShareService, private appsService: AppsService, private aboutService: AboutService, private userService: UserService) {
         console.log('constructor')
         this.initializeUser().then(() => {
             console.log('initializeUser completed');

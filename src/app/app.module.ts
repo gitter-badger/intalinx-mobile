@@ -44,6 +44,8 @@ import { SurveyResultPage } from '../pages/survey/result/result';
 import { SelectReadLimitTypePage } from '../pages/blog/add-blog/add-blog';
 
 import { Badge } from '@ionic-native/badge';
+import { AppVersion } from '@ionic-native/app-version';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { StatusBar } from '@ionic-native/status-bar';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { GoogleAnalytics } from '@ionic-native/google-analytics'
@@ -160,6 +162,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppConfig,
     Badge,
     StatusBar,
+    AppVersion,
+    InAppBrowser,
     ScreenOrientation,
     GoogleAnalytics,
     SurveyService

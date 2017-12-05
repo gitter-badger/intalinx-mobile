@@ -32,7 +32,7 @@ export class BlogIndexPage {
     public isShowSearchBar: boolean;
     public isScrollToTopButtonVisible: boolean;
 
-    constructor(public nav: NavController, public blogService: BlogService, public share: ShareService) {
+    constructor(private nav: NavController, private blogService: BlogService, private share: ShareService) {
         this.sendData = {
             'isRefreshFlag': false
         };

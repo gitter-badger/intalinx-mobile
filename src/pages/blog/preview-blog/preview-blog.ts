@@ -26,7 +26,7 @@ export class PreviewBlogPage {
 
     public pageLoadTime: number;
 
-    constructor(public nav: NavController, public viewCtrl: ViewController, public params: NavParams, public blogService: BlogService, public share: ShareService) {
+    constructor(private nav: NavController, private viewCtrl: ViewController, private params: NavParams, private blogService: BlogService, private share: ShareService) {
         this.previewBlog = this.params.get('previewBlog');
         this.title = this.previewBlog.title;
         this.content = this.previewBlog.content;

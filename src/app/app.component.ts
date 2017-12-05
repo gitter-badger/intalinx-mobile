@@ -32,16 +32,16 @@ export class MyApp {
         'userAvatar': null
     };
 
-    constructor(public translate: TranslateService,
-        public platform: Platform,
-        public statusBar: StatusBar,
+    constructor(private translate: TranslateService,
+        private platform: Platform,
+        private statusBar: StatusBar,
         private screenOrientation: ScreenOrientation,
-        public config: Config,
-        public menu: MenuController,
-        public loadingCtrl: LoadingController,
-        public appConfig: AppConfig,
-        public util: Util,
-        public share: ShareService) {
+        private config: Config,
+        private menu: MenuController,
+        private loadingCtrl: LoadingController,
+        private appConfig: AppConfig,
+        private util: Util,
+        private share: ShareService) {
         this.platform.ready().then(() => {
             this.initializeTranslate();
             this.checkUpdate();

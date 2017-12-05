@@ -23,7 +23,7 @@ import { ShareService } from '../providers/share-service';
 @Injectable()
 export class Util {
 
-    constructor(private http: HttpClient, private translate: TranslateService, private appConfig: AppConfig, private cordysUtil: CordysUtil, private dateUtil: DateUtil, private xmlUtil: XmlUtil, private storageUtil: StorageUtil, private alertUtil: AlertUtil, private share: ShareService, public platform: Platform, public config: Config, public ga : GoogleAnalytics) {
+    constructor(private http: HttpClient, private translate: TranslateService, private appConfig: AppConfig, private cordysUtil: CordysUtil, private dateUtil: DateUtil, private xmlUtil: XmlUtil, private storageUtil: StorageUtil, private alertUtil: AlertUtil, private share: ShareService, private platform: Platform, private config: Config, private ga : GoogleAnalytics) {
         let lang = this.appConfig.get('USER_LANG').toLowerCase();
         moment.locale(lang);
     }

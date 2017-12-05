@@ -31,9 +31,9 @@ export class NotificationIndexPage {
     public isFirstTimeLoad: boolean;
     public isShowSearchBar: boolean;
 
-    constructor(public share: ShareService,
-        public nav: NavController,
-        public notificationService: NotificationService) {
+    constructor(private share: ShareService,
+        private nav: NavController,
+        private notificationService: NotificationService) {
         this.keyWord = null;
         this.getNotificationListForTop();
         this.getNotReadNotificationCountBySelf();

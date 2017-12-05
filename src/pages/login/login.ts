@@ -45,7 +45,7 @@ export class LoginPage {
 
     isDisabled: boolean = true;
 
-    constructor(public nav: NavController, public appConfig: AppConfig, public userService: UserService, public translate: TranslateService, public util: Util) {
+    constructor(private nav: NavController, private appConfig: AppConfig, private userService: UserService, private translate: TranslateService, private util: Util) {
         // set default server.
         this.translate.get(['app.login.iscsys', 'app.login.intalinx_cn']).subscribe(message => {
             this.servers.forEach(element => {

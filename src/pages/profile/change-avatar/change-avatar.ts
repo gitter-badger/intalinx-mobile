@@ -34,17 +34,17 @@ export class ChangeAvatarPage {
     public height: number;
     public loading: any;
 
-    constructor(public nav: NavController,
-        public params: NavParams,
-        public view: ViewController,
-        public loadingCtrl: LoadingController,
-        public toastCtrl: ToastController,
-        public zone: NgZone,
-        public platform: Platform,
-        public userService: UserService,
-        public translate: TranslateService,
-        public share: ShareService,
-        public util: Util) {
+    constructor(private nav: NavController,
+        private params: NavParams,
+        private view: ViewController,
+        private loadingCtrl: LoadingController,
+        private toastCtrl: ToastController,
+        private zone: NgZone,
+        private platform: Platform,
+        private userService: UserService,
+        private translate: TranslateService,
+        private share: ShareService,
+        private util: Util) {
 
         this.user = this.params.get('user');
         this.isLoadCompleted = true;

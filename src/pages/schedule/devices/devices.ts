@@ -71,13 +71,13 @@ export class DevicesPage {
     public minDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MIN');
     public maxDisplayDate: string = this.appConfig.get('DATETIME_YEAR_MONTH_DAY_MAX');
 
-    constructor(public platform: Platform,
+    constructor(private platform: Platform,
         private brightness: Brightness,
-        public util: Util,
-        public share: ShareService,
-        public scheduleService: ScheduleService,
-        public userService: UserService,
-        public appConfig: AppConfig
+        private util: Util,
+        private share: ShareService,
+        private scheduleService: ScheduleService,
+        private userService: UserService,
+        private appConfig: AppConfig
     ) {
 
         this.platform.ready().then(() => {

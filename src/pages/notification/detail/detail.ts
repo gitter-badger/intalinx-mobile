@@ -39,13 +39,13 @@ export class NotificationDetailPage {
     public hasAttachFilesForDownload: boolean = false;
 
     constructor(
-        public domSanitizer: DomSanitizer,
-        public componentFactoryResolver: ComponentFactoryResolver,
-        public nav: NavController,
-        public params: NavParams,
-        public notificationService: NotificationService,
-        public view: ViewController,
-        public share: ShareService) {
+        private domSanitizer: DomSanitizer,
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private nav: NavController,
+        private params: NavParams,
+        private notificationService: NotificationService,
+        private view: ViewController,
+        private share: ShareService) {
         this.notification = this.params.get('notification');
         this.id = this.notification.notificationID;
         this.readStatus = this.notification.readStatus;

@@ -23,7 +23,7 @@ export class AboutPage {
     public latestVersion: string = 'latest';
     public upgradeUrl: string = '';
 
-    constructor(public nav: NavController, public platform: Platform, public util: Util, public aboutService: AboutService, public translate: TranslateService) {
+    constructor(private nav: NavController, private platform: Platform, private util: Util, private aboutService: AboutService, private translate: TranslateService) {
         this.getVersionInfo();
         this.getUpgradeUrl();
     }

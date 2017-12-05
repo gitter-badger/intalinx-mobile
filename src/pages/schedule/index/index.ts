@@ -81,7 +81,7 @@ export class ScheduleIndexPage {
     public eventsByDays: any = new Map(Array());
     public specialDaysByDays: any = new Map(Array());
 
-    constructor(public nav: NavController, public modalCtrl: ModalController, public scheduleService: ScheduleService, public userService: UserService, public appConfig: AppConfig) {
+    constructor(private nav: NavController, private modalCtrl: ModalController, private scheduleService: ScheduleService, private userService: UserService, private appConfig: AppConfig) {
         
         this.weekdays = moment.weekdaysMin(false);
         // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.

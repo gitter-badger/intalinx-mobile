@@ -51,15 +51,15 @@ export class BlogDetailPage {
     public createUserID: string;
 
     constructor(
-        public domSanitizer: DomSanitizer,
-        public nav: NavController,
-        public params: NavParams,
-        public actionSheetCtrl: ActionSheetController,
-        public userService: UserService,
-        public util: Util,
-        public translate: TranslateService,
-        public blogService: BlogService,
-        public share: ShareService) {
+        private domSanitizer: DomSanitizer,
+        private nav: NavController,
+        private params: NavParams,
+        private actionSheetCtrl: ActionSheetController,
+        private userService: UserService,
+        private util: Util,
+        private translate: TranslateService,
+        private blogService: BlogService,
+        private share: ShareService) {
         this.loginID = this.userService.getUserID();
 
         this.sendData = this.params.get('sendData');

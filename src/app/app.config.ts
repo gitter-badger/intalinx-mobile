@@ -4,8 +4,8 @@ import {Injectable} from '@angular/core';
 export class AppConfig {
     private config: any = {
         'IS_TABLET': false,
-        'BASE_URL': 'https://iscsys-staging.intasect.co.jp/home/InternalSystem/',
-        'BASE_URL_JAPAN': 'https://iscsys-staging.intasect.co.jp/home/InternalSystem/',
+        'BASE_URL': 'http://192.168.11.29/home/MyCal/',
+        'BASE_URL_JAPAN': 'http://192.168.11.29/home/MyCal/',
         'BASE_URL_CHINA': 'http://www.intalinx.cn/home/intalinxcloud/',
         'BIZNAVI_URL_JAPAN': 'https://iscsys.intasect.co.jp/biznavi/#/login?SAMLart=',
         'BIZNAVI_URL_CHINA': 'http://www.intalinx.cn/biznavi/#/login?SAMLart=',
@@ -23,9 +23,9 @@ export class AppConfig {
         'DOWNLOAD_URL_JAPAN' : 'https://intasect.github.io',
         'DOWNLOAD_URL_CHINA' : 'https://intalinx.oschina.io',
         'USER_LANG': 'en-US',
-        'GOOGLE_ANALYTICS_TRACK_ID': 'UA-81438804-1',
-        'GOOGLE_ANALYTICS_TRACK_ID_JAPAN': 'UA-81438804-1',
-        'GOOGLE_ANALYTICS_TRACK_ID_CHINA': 'UA-81699991-1',
+        'GOOGLE_ANALYTICS_TRACK_ID': 'UA-110555720-1',
+        'GOOGLE_ANALYTICS_TRACK_ID_JAPAN': 'UA-110555720-1',
+        'GOOGLE_ANALYTICS_TRACK_ID_CHINA': 'UA-110555720-1',
         'DATETIME_YEAR_MONTH_DAY_MIN': '2014-01-01',
         'DATETIME_YEAR_MONTH_DAY_MAX': '2020-12-31',
         'DATETIME_MINUTE_VALUES': '00, 15, 30, 45'

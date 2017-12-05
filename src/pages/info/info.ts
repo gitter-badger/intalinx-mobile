@@ -17,7 +17,7 @@ export class InfoPage {
   notificationIndex = NotificationIndexPage;
   surveyIndex = SurveyIndexPage;
 
-  constructor(public navCtrl: NavController, public share: ShareService) { }
+  constructor(private navCtrl: NavController, private share: ShareService) { }
 
   ionViewDidLoad() {
 

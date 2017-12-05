@@ -33,9 +33,8 @@ export class AboutService {
             // })
             let url = 'https://intasect.github.io/version.json';
             this.http.get(url)
-                .map(res => res.json())
                 .subscribe(data => {
-                    resolve(data.version);
+                    resolve(data['version']);
                 }, error => {
                     this.util.presentSystemErrorModal();
                 });

@@ -8,7 +8,7 @@ import {NavController, NavParams} from 'ionic-angular';
 export class OptionResultDetailPage {
   public surveyOptionResult: any;
 
-  constructor(public navCtrl: NavController, public params: NavParams) {
+  constructor(private navCtrl: NavController, private params: NavParams) {
     this.surveyOptionResult = this.params.get('surveyOptionResult');
   }
 }

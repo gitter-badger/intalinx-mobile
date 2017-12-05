@@ -1,6 +1,6 @@
 // Third party library.
 import {Injectable} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 // Config.
 import {AppConfig} from '../app/app.config';
@@ -37,8 +37,7 @@ export class CordysUtil {
 
     getRequestXml(url: string) {
         return new Promise(resolve => {
-            this.http.get(url)
-                .map(res => res.text())
+            this.http.get(url, { headers: new HttpHeaders({ 'Accept': 'application/xml' }), responseType: 'text' })
                 .subscribe(data => {
                     resolve(data);
                 });
@@ -59,8 +58,7 @@ export class CordysUtil {
         return new Promise((resolve, reject) => {
             if (useAnonymous) {
                 this.getCallCordysWebserviceURL(useAnonymous).then((url: string) => {
-                    this.http.post(url, request)
-                        .map(res => res.text())
+                    this.http.post(url, request, { headers: new HttpHeaders({ 'Accept': 'application/xml' }), responseType: 'text' })
                         .subscribe(data => {
                             resolve(data);
                         }, error => {
@@ -87,8 +85,7 @@ export class CordysUtil {
                 }).then(() => {
                     return this.getCallCordysWebserviceURL(useAnonymous);
                 }).then((url: string) => {
-                    this.http.post(url, request)
-                        .map(res => res.text())
+                    this.http.post(url, request, { headers: new HttpHeaders({ 'Accept': 'application/xml' }), responseType: 'text' })
                         .subscribe(data => {
                             resolve(data);
                         }, error => {
@@ -138,8 +135,7 @@ export class CordysUtil {
 
     callCordysWebserviceWithUrl(url, request) {
         return new Promise(resolve => {
-            this.http.post(url, request)
-                .map(res => res.text())
+            this.http.post(url, request, { headers: new HttpHeaders({ 'Accept': 'application/xml' }), responseType: 'text' })
                 .subscribe(data => {
                     resolve(data);
                 }, error => {
