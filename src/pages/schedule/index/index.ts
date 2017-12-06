@@ -119,8 +119,8 @@ export class ScheduleIndexPage {
 
     changeCalendar(event) {
         let yearMonth = moment({
-            y: event.year.value,
-            M: event.month.value - 1,
+            y: event.year,
+            M: event.month - 1,
 
         });
         // selected month
