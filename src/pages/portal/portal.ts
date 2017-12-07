@@ -1,6 +1,5 @@
 // Third party library.
 import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { Platform, NavController } from 'ionic-angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 
@@ -18,7 +17,6 @@ import { BlogService } from '../../providers/blog-service';
 import { NotificationService } from '../../providers/notification-service';
 import { SurveyService } from '../../providers/survey-service';
 import { ScheduleService } from '../../providers/schedule-service';
-import { AboutService } from '../../providers/about-service';
 
 import { InfoPage } from '../info/info';
 import { ProfileIndexPage } from '../profile/index/index';
@@ -35,8 +33,7 @@ import { DevicesPage } from '../schedule/devices/devices';
         BlogService,
         NotificationService,
         SurveyService,
-        ScheduleService,
-        AboutService
+        ScheduleService
     ]
 })
 
@@ -53,7 +50,15 @@ export class PortalPage {
         'devices': DevicesPage
     };
 
-    constructor(private translate: TranslateService, private platform: Platform, private iab: InAppBrowser, private nav: NavController, private appConfig: AppConfig, private util: Util, private share: ShareService, private appsService: AppsService, private aboutService: AboutService, private userService: UserService) {
+    constructor(
+        private platform: Platform,
+        private iab: InAppBrowser,
+        private nav: NavController,
+        private appConfig: AppConfig,
+        private util: Util,
+        private share: ShareService,
+        private appsService: AppsService,
+        private userService: UserService) {
         console.log('constructor')
         this.initializeUser().then(() => {
             console.log('initializeUser completed');
@@ -160,7 +165,7 @@ export class PortalPage {
                         url = that.appConfig.get('BIZNAVI_URL_CHINA') + samlart;
                     }
                     if (that.platform.is('cordova')) {
-                        this.iab.create(url, '_system');
+                        that.iab.create(url, '_system');
                     } else {
                         window.open(url, '_blank');
                     }
