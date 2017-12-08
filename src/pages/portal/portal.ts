@@ -75,11 +75,12 @@ export class PortalPage {
     initJPush(): Promise<void> {
         if (this.platform.is('cordova') && !this.appConfig.get('IS_TABLET')) {
             //启动极光推送
-            if ((<any>window).plugins && (<any>window).plugins.jPushPlugin) {
-                console.log('启动极光推送');
-                (<any>window).plugins.jPushPlugin.init();
-                return this.setAlias();
-            }
+            // 禁用极光
+            // if ((<any>window).plugins && (<any>window).plugins.jPushPlugin) {
+            //     console.log('启动极光推送');
+            //     (<any>window).plugins.jPushPlugin.init();
+            //     return this.setAlias();
+            // }
         }
         return Promise.resolve();
     }
@@ -160,12 +161,28 @@ export class PortalPage {
                     // sso for biznavi.
                     let baseURL = that.appConfig.get('BASE_URL');
                     let baseURLChina = that.appConfig.get('BASE_URL_CHINA');
-                    let url = that.appConfig.get('BIZNAVI_URL_JAPAN') + samlart;
+                    let url = that.appConfig.get('BIZNAVI_URL_JAPAN');
+                    let samlArtifactStorageName = that.appConfig.get('SAML_ARTIFACT_STORAGE_NAME_JAPAN');
                     if (baseURL === baseURLChina) {
-                        url = that.appConfig.get('BIZNAVI_URL_CHINA') + samlart;
+                        url = that.appConfig.get('BIZNAVI_URL_CHINA');
+                        samlArtifactStorageName = that.appConfig.get('SAML_ARTIFACT_STORAGE_NAME_CHINA');
                     }
                     if (that.platform.is('cordova')) {
-                        that.iab.create(url, '_system');
+                        let browser = that.iab.create(url, '_blank', 'location=no,closebuttoncaption=X');
+                        browser.on('loadstop').subscribe(event => {
+                            let scriptHack = `
+                              document.cookie = "${samlArtifactStorageName} = ${samlart}";
+                            `
+                            // browser.executeScript({code: "setTimeout(function(){window.endLogon = function(submitForm){ with(submitForm) {submit;}; return true; } }, 2000);"});
+                            browser.executeScript({ code: scriptHack });
+                        });
+                        browser.on('loadstart').subscribe(event => {
+                            let scriptHack = `
+                              document.cookie = "${samlArtifactStorageName} = ${samlart}";
+                            `
+                            // browser.executeScript({code: "setTimeout(function(){window.endLogon = function(submitForm){ with(submitForm) {submit;}; return true; } }, 2000);"});
+                            browser.executeScript({ code: scriptHack });
+                        });
                     } else {
                         window.open(url, '_blank');
                     }
