@@ -2,7 +2,6 @@ page-app {
     ion-navbar {
         .bar-button-default {
             color: $primary-color-text;
-            padding: 6px;
         }
         .bar-button-default:hover:not(.disable-hover) {
             color: $primary-color-light;

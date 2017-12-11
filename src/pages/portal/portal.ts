@@ -2,6 +2,7 @@
 import { Component } from '@angular/core';
 import { Platform, NavController } from 'ionic-angular';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { TranslateService } from '@ngx-translate/core';
 
 // Utils.
 import { Util } from '../../utils/util';
@@ -57,6 +58,7 @@ export class PortalPage {
         private appConfig: AppConfig,
         private util: Util,
         private share: ShareService,
+        private translate: TranslateService,
         private appsService: AppsService,
         private userService: UserService) {
         console.log('constructor')
@@ -70,6 +72,21 @@ export class PortalPage {
         if (!this.share.showMenu) {
             this.share.showMenu = this.showMenu(this);
         }
+    }
+
+    checkVersion() {
+        if (this.appConfig.get('IS_TABLET')) {
+            
+        }
+        this.translate.get('app.message.warning.updateToNewVersion').subscribe(message => {
+            this.util.presentConfirmModal(message, 'warning',
+            () => {
+
+            }, 
+            () => {
+
+            });
+        });
     }
 
     initJPush(): Promise<void> {

@@ -4,8 +4,10 @@ import {Injectable} from '@angular/core';
 export class AppConfig {
     private config: any = {
         'IS_TABLET': false,
-        'BASE_URL': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
-        'BASE_URL_JAPAN': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
+        'IS_JAPAN_SERVER': true,
+        'IS_CHINA_SERVER': false,
+        'BASE_URL': 'https://iscsys-staging.intasect.co.jp/home/InternalSystem/',
+        'BASE_URL_JAPAN': 'https://iscsys-staging.intasect.co.jp/home/InternalSystem/',
         'BASE_URL_CHINA': 'http://www.intalinx.cn/home/intalinxcloud/',
         'BIZNAVI_URL_JAPAN': 'https://iscsys.intasect.co.jp/biznavi/#/todo/1',
         'BIZNAVI_URL_CHINA': 'http://www.intalinx.cn/biznavi/#/todo/1',
@@ -21,6 +23,8 @@ export class AppConfig {
         'PASSWORD_STORAGE_NAME': 'password',
         'SERVER_STORAGE_NAME': 'server',
         'USER_DEFAULT_AVATAR_IMAGE_URL': 'assets/img/default',
+        'VERSION_URL_JAPAN' : 'https://intasect.github.io/version.json',
+        'VERSION_URL_CHINA' : 'https://intalinx.oschina.io/version.json',
         'DOWNLOAD_URL_JAPAN' : 'https://intasect.github.io',
         'DOWNLOAD_URL_CHINA' : 'https://intalinx.oschina.io',
         'USER_LANG': 'en-US',
@@ -31,10 +35,10 @@ export class AppConfig {
         'DATETIME_YEAR_MONTH_DAY_MAX': '2020-12-31',
         'DATETIME_MINUTE_VALUES': '00, 15, 30, 45'
     };
-    get(key: string): string {
+    get(key: string): any {
         return this.config[key];
     }
-    set(key: string, value: string): void {
+    set(key: string, value: any): void {
         this.config[key] = value;
     }
 }

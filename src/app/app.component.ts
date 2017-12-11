@@ -44,75 +44,9 @@ export class MyApp {
         private share: ShareService) {
         this.platform.ready().then(() => {
             this.initializeTranslate();
-            this.checkUpdate();
+            this.initializeApp();
         });
     }
-
-    checkUpdate(): void {
-        // check latest version from http://pgyer.com/.
-        // if (this.platform.is('cordova') && !this.appConfig.get('IS_TABLET')) {
-        //     this.checkNewVersion();
-        // } else {
-            this.initializeApp();
-        // }
-    }
-
-    // checkNewVersion() {
-    //     this.deploy.check().then((snapshotAvailable: boolean) => {
-    //         if (snapshotAvailable) {
-    //             // if wifi
-    //             if (Network.type === 'wifi') {
-    //                 this.downloadAndextractApp();
-    //             } else {
-    //                 let that = this;
-    //                 let okHandler = function () {
-    //                     that.downloadAndextractApp();
-    //                 };
-    //                 let noHandler = function () {
-    //                     that.initializeApp();
-    //                 };
-    //                 this.translate.get('app.message.warning.updateToNewVersion').subscribe(message => {
-    //                     this.util.presentConfirmModal(message, 'warning', okHandler, noHandler);
-    //                 });
-    //             }
-    //         } else {
-    //             this.initializeApp();
-    //         }
-    //     });
-    // }
-
-    // downloadAndextractApp() {
-    //     this.translate.get(['app.message.loading.downloading', 'app.message.loading.extracting', 'app.message.error.faildToDownload', 'app.message.error.faildToExtract']).subscribe(message => {
-    //         let content = message['app.message.loading.downloading'] + '0%';
-    //         let loading = this.loadingCtrl.create({
-    //             spinner: 'ios',
-    //             content: content
-    //         });
-    //         loading.present();
-    //         // When snapshotAvailable is true, you can apply the snapshot
-    //         this.deploy.download({
-    //             onProgress: p => {
-    //                 loading.setContent(message['app.message.loading.downloading'] + p + '%');
-    //             }
-    //         }).then(() => {
-    //             this.deploy.extract({
-    //                 onProgress: p => {
-    //                     loading.setContent(message['app.message.loading.extracting'] + p + '%');
-    //                 }
-    //             }).then(() => {
-    //                 this.deploy.load();
-    //             }, (error) => {
-    //                 loading.dismiss();
-    //                 this.util.presentModal(message['app.message.error.faildToExtract']);
-    //                 this.initializeApp();
-    //             });
-    //         }, (error) => {
-    //             loading.dismiss();
-    //             this.util.presentModal(message['app.message.error.faildToDownload']);
-    //             this.initializeApp();
-    //         });
-    //     });
-    // }
 
     initializeApp() {
         // set default server.
