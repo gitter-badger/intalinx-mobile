@@ -15,7 +15,7 @@
             "warning": {
                 "title": "警告",
                 "logout": "ログアウトしますか？",
-                "updateToNewVersion": "最新のバージョンをダウンロードします。よろしいですか。"
+                "updateToNewVersion": "最新のバージョンはリリースされました。更新しますか？"
             },
             "loading": {
                 "downloading": "最新版ダウンロード中 .. ",

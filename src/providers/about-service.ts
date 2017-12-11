@@ -31,7 +31,11 @@ export class AboutService {
             //this.http.post(url, parameters, {
             //    headers: headers
             // })
-            let url = 'https://intasect.github.io/version.json';
+            let url = this.appConfig.get('VERSION_URL_JAPAN');
+            if (this.appConfig.get('IS_CHINA_SERVER')) {
+                url = this.appConfig.get('VERSION_URL_CHINA');
+            }
+            
             this.http.get(url)
                 .subscribe(data => {
                     resolve(data['version']);
@@ -41,12 +45,10 @@ export class AboutService {
         });
     }
 
-    getUpgradeUrl(): any {
+    getUpgradeUrl(): Promise<string> {
         return new Promise<string>(resolve => {
-            let url = '';
-            if (this.appConfig.get('BASE_URL') === this.appConfig.get('BASE_URL_JAPAN')) {
-                url = this.appConfig.get('DOWNLOAD_URL_JAPAN');
-            } else {
+            let url = this.appConfig.get('DOWNLOAD_URL_JAPAN');
+            if (this.appConfig.get('IS_CHINA_SERVER')) {
                 url = this.appConfig.get('DOWNLOAD_URL_CHINA');
             }
             resolve(url);

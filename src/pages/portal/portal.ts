@@ -15,6 +15,7 @@ import { ShareService } from '../../providers/share-service';
 import { AppsService } from '../../providers/apps-service';
 import { UserService } from '../../providers/user-service';
 import { BlogService } from '../../providers/blog-service';
+import { AboutService } from '../../providers/about-service';
 import { NotificationService } from '../../providers/notification-service';
 import { SurveyService } from '../../providers/survey-service';
 import { ScheduleService } from '../../providers/schedule-service';
@@ -34,7 +35,8 @@ import { DevicesPage } from '../schedule/devices/devices';
         BlogService,
         NotificationService,
         SurveyService,
-        ScheduleService
+        ScheduleService,
+        AboutService
     ]
 })
 
@@ -59,6 +61,7 @@ export class PortalPage {
         private util: Util,
         private share: ShareService,
         private translate: TranslateService,
+        private aboutService: AboutService,
         private appsService: AppsService,
         private userService: UserService) {
         console.log('constructor')
@@ -67,25 +70,26 @@ export class PortalPage {
             this.initJPush().then(() => {
                 console.log('initJPush');
                 this.loadApplications();
+                this.checkVersion();
             });
         });
+        
         if (!this.share.showMenu) {
             this.share.showMenu = this.showMenu(this);
         }
     }
 
     checkVersion() {
-        if (this.appConfig.get('IS_TABLET')) {
-            
-        }
-        this.translate.get('app.message.warning.updateToNewVersion').subscribe(message => {
-            this.util.presentConfirmModal(message, 'warning',
-            () => {
-
-            }, 
-            () => {
-
-            });
+        Promise.all([this.aboutService.getVersion(), this.aboutService.getLatestVersion()]).then(([version, latestVersion])=>{
+            if (version !== latestVersion) {
+                this.translate.get('app.message.warning.updateToNewVersion').subscribe(message => {
+                    this.util.presentConfirmModal(message, 'warning', ()=>{
+                        this.aboutService.getUpgradeUrl().then((url)=>{
+                            let browser = this.iab.create(url, '_system');
+                        });
+                    }, ()=>{});
+                });
+            }
         });
     }
 
