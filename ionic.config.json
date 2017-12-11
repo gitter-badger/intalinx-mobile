@@ -2,7 +2,9 @@
   "name": "intalinx-mobile",
   "app_id": "0d12c3fe",
   "integrations": {
-    "cordova": {}
+    "cordova": {
+      
+    }
   },
   "type": "ionic-angular"
 }
