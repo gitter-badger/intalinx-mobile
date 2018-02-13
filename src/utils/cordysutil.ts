@@ -64,7 +64,7 @@ export class CordysUtil {
                         }, error => {
                             if (error.status === 500 && error.type === 2) {
                                 if (!hideError) {
-                                    let responseText = error.text();
+                                    let responseText = error.error;
                                     let responseNode = this.xmlUtil.parseXML(responseText);
                                     this.alertUtil.presentModal(this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'faultstring\']'));
                                 }
@@ -90,7 +90,7 @@ export class CordysUtil {
                             resolve(data);
                         }, error => {
                             if (error.status === 500 && error.type === 2) {
-                                let responseText = error.text();
+                                let responseText = error.error;
                                 let responseNode = this.xmlUtil.parseXML(responseText);
                                 let messageCode = this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'MessageCode\']');
                                 // when samlart became invalid

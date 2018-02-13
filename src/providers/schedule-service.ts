@@ -468,8 +468,7 @@ export class ScheduleService {
                     let returnData = this.util.xml2json(returnObject).addEvent.addEvent;
                     resolve(returnData);
                 }, err => {
-
-                    let errResponse = this.util.parseXml(err.text());
+                    let errResponse = this.util.parseXml(err.error);
 
                     let faultCode = this.util.getNodeText(errResponse, './/*[local-name()=\'faultcode\']');
                     let faultString = this.util.getNodeText(errResponse, './/*[local-name()=\'faultstring\']');
@@ -539,7 +538,7 @@ export class ScheduleService {
                     resolve(returnData);
                 }, err => {
 
-                    let errResponse = this.util.parseXml(err.text());
+                    let errResponse = this.util.parseXml(err.error);
 
                     let faultCode = this.util.getNodeText(errResponse, './/*[local-name()=\'faultcode\']');
                     let faultString = this.util.getNodeText(errResponse, './/*[local-name()=\'faultstring\']');
