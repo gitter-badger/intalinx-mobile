@@ -54,15 +54,15 @@ export class AddBlogPage {
     'selectedUsers': []
   };
 
-  constructor(public nav: NavController,
-    public params: NavParams,
-    public loadingCtrl: LoadingController,
-    public modalCtrl: ModalController,
-    public zone: NgZone,
-    public blogService: BlogService,
-    public translate: TranslateService,
-    public userService: UserService,
-    public util: Util) {
+  constructor(private nav: NavController,
+    private params: NavParams,
+    private loadingCtrl: LoadingController,
+    private modalCtrl: ModalController,
+    private zone: NgZone,
+    private blogService: BlogService,
+    private translate: TranslateService,
+    private userService: UserService,
+    private util: Util) {
 
     this.sendData = this.params.get('sendData');
     this.sendDataToSelectReadLimitTypePage.selectedUsers.push(this.userService.getUser());

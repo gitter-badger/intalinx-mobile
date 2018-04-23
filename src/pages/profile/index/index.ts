@@ -28,12 +28,12 @@ export class ProfileIndexPage {
     public user: any;
     public isLoadCompleted: boolean;
 
-    constructor(public nav: NavController,
-        public view: ViewController,
-        public platform: Platform,
-        public appConfig: AppConfig,
-        public userService: UserService,
-        public share: ShareService) {
+    constructor(private nav: NavController,
+        private view: ViewController,
+        private platform: Platform,
+        private appConfig: AppConfig,
+        private userService: UserService,
+        private share: ShareService) {
         this.userDefaultAvatarImageUrl = this.appConfig.get('USER_DEFAULT_AVATAR_IMAGE_URL');
 
         this.user = {

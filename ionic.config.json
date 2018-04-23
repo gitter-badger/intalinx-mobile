@@ -1,6 +1,6 @@
 {
   "name": "intalinx-mobile",
-  "app_id": "256ee45e",
+  "app_id": "0d12c3fe",
   "proxies": [
     {
       "path": "/home/InternalSystem/",
@@ -8,5 +8,8 @@
       "_proxyUrl": "http://192.168.11.29/home/InternalSystem/"
     }
   ],
+  "integrations": {
+    "cordova": {}
+  },
   "type": "ionic-angular"
 }

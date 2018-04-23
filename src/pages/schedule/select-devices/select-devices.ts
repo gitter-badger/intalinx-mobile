@@ -24,7 +24,7 @@ export class SelectDevicesPage {
     public isSearching: boolean;
     public foundDevices: any;
 
-    constructor(public nav: NavController, public viewCtrl: ViewController, public util: Util, public params: NavParams, public scheduleService: ScheduleService) {
+    constructor(private nav: NavController, private viewCtrl: ViewController, private util: Util, private params: NavParams, private scheduleService: ScheduleService) {
 
         this.originDevices = this.params.get('devices');
         this.getDevices().then(data => {

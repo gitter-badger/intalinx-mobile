@@ -66,13 +66,13 @@ export class EventDetailPage {
     public isAdmin: boolean = false;
     public isParticiPant: boolean = false;
 
-    constructor(public nav: NavController,
-        public params: NavParams,
-        public actionSheetCtrl: ActionSheetController,
-        public util: Util,
-        public translate: TranslateService,
-        public scheduleService: ScheduleService,
-        public userService: UserService) {
+    constructor(private nav: NavController,
+        private params: NavParams,
+        private actionSheetCtrl: ActionSheetController,
+        private util: Util,
+        private translate: TranslateService,
+        private scheduleService: ScheduleService,
+        private userService: UserService) {
 
         this.sendDataToShowOrDeleteEvent = this.params.get('sendDataToShowOrDeleteEvent');
         this.eventID = this.sendDataToShowOrDeleteEvent.eventID;

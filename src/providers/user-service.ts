@@ -54,7 +54,7 @@ export class UserService {
                     this.util.callCordysWebservice(req, true).then(data => {
                         resolve(true);
                     }, err => {
-                        let errResponse = this.util.parseXml(err.text());
+                        let errResponse = this.util.parseXml(err.error);
                         let errMsg = this.util.getNodeText(errResponse, './/*[local-name()=\'faultstring\']');
                         if (this.appConfig.get('USER_LANG').toLowerCase() === 'zh-cn' && errMsg.indexOf('does not match the current password') >= 0) {
                             this.translate.get('app.profile.message.error.mismatchCurrentPassword').subscribe(message => {

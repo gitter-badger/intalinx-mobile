@@ -1,8 +1,8 @@
 // Third party library.
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import {Platform} from 'ionic-angular';
-import {AppVersion} from 'ionic-native';
+import { AppVersion } from '@ionic-native/app-version';
 
 // Config.
 import {AppConfig} from '../app/app.config';
@@ -13,11 +13,11 @@ import {Util} from '../utils/util';
 @Injectable()
 export class AboutService {
 
-    constructor(private http: Http, private platform: Platform, private util: Util, private appConfig: AppConfig) {
+    constructor(private http: HttpClient, private platform: Platform, private appVersion: AppVersion, private util: Util, private appConfig: AppConfig) {
     }
 
     getVersion(): any {
-        return AppVersion.getVersionNumber();
+        return this.appVersion.getVersionNumber();
     }
 
     getLatestVersion(): any {
@@ -31,23 +31,24 @@ export class AboutService {
             //this.http.post(url, parameters, {
             //    headers: headers
             // })
-            let url = 'https://intasect.github.io/version.json';
+            let url = this.appConfig.get('VERSION_URL_JAPAN');
+            if (this.appConfig.get('IS_CHINA_SERVER')) {
+                url = this.appConfig.get('VERSION_URL_CHINA');
+            }
+            
             this.http.get(url)
-                .map(res => res.json())
                 .subscribe(data => {
-                    resolve(data.version);
+                    resolve(data['version']);
                 }, error => {
                     this.util.presentSystemErrorModal();
                 });
         });
     }
 
-    getUpgradeUrl(): any {
+    getUpgradeUrl(): Promise<string> {
         return new Promise<string>(resolve => {
-            let url = '';
-            if (this.appConfig.get('BASE_URL') === this.appConfig.get('BASE_URL_JAPAN')) {
-                url = this.appConfig.get('DOWNLOAD_URL_JAPAN');
-            } else {
+            let url = this.appConfig.get('DOWNLOAD_URL_JAPAN');
+            if (this.appConfig.get('IS_CHINA_SERVER')) {
                 url = this.appConfig.get('DOWNLOAD_URL_CHINA');
             }
             resolve(url);

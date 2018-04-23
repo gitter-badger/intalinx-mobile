@@ -1,6 +1,6 @@
 // Third party library.
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import {DomSanitizer} from '@angular/platform-browser';
 
 // Config.
@@ -13,7 +13,7 @@ import {Util} from '../utils/util';
 export class NotificationService {
     private userDefaultAvatarImageUrl: string;
 
-    constructor(private http: Http,
+    constructor(private http: HttpClient,
         private domSanitizer: DomSanitizer,
         private appConfig: AppConfig,
         private util: Util) {

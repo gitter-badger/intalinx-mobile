@@ -1,8 +1,8 @@
 // Third party library.
 import { Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { Platform, NavController } from 'ionic-angular';
-import { InAppBrowser } from 'ionic-native';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { TranslateService } from '@ngx-translate/core';
 
 // Utils.
 import { Util } from '../../utils/util';
@@ -15,10 +15,10 @@ import { ShareService } from '../../providers/share-service';
 import { AppsService } from '../../providers/apps-service';
 import { UserService } from '../../providers/user-service';
 import { BlogService } from '../../providers/blog-service';
+import { AboutService } from '../../providers/about-service';
 import { NotificationService } from '../../providers/notification-service';
 import { SurveyService } from '../../providers/survey-service';
 import { ScheduleService } from '../../providers/schedule-service';
-import { AboutService } from '../../providers/about-service';
 
 import { InfoPage } from '../info/info';
 import { ProfileIndexPage } from '../profile/index/index';
@@ -53,18 +53,44 @@ export class PortalPage {
         'devices': DevicesPage
     };
 
-    constructor(public translate: TranslateService, public platform: Platform, public nav: NavController, public appConfig: AppConfig, public util: Util, public share: ShareService, public appsService: AppsService, public aboutService: AboutService, public userService: UserService) {
+    constructor(
+        private platform: Platform,
+        private iab: InAppBrowser,
+        private nav: NavController,
+        private appConfig: AppConfig,
+        private util: Util,
+        private share: ShareService,
+        private translate: TranslateService,
+        private aboutService: AboutService,
+        private appsService: AppsService,
+        private userService: UserService) {
         console.log('constructor')
         this.initializeUser().then(() => {
             console.log('initializeUser completed');
             this.initJPush().then(() => {
                 console.log('initJPush');
                 this.loadApplications();
+                this.checkVersion();
             });
         });
+        
         if (!this.share.showMenu) {
             this.share.showMenu = this.showMenu(this);
         }
+    }
+
+    checkVersion() {
+        Promise.all([this.aboutService.getVersion(), this.aboutService.getLatestVersion()]).then(([version, latestVersion])=>{
+            if (version !== latestVersion) {
+                this.translate.get('app.message.warning.updateToNewVersion').subscribe(message => {
+                    this.util.presentConfirmModal(message, 'warning', ()=>{
+                        this.aboutService.getUpgradeUrl().then((url)=>{
+                            let browser = this.iab.create(url, '_system');
+                        });
+                    }, ()=>{});
+                });
+            }
+        });
     }
 
     initJPush(): Promise<void> {
@@ -155,12 +181,26 @@ export class PortalPage {
                     // sso for biznavi.
                     let baseURL = that.appConfig.get('BASE_URL');
                     let baseURLChina = that.appConfig.get('BASE_URL_CHINA');
-                    let url = that.appConfig.get('BIZNAVI_URL_JAPAN') + samlart;
+                    let url = that.appConfig.get('BIZNAVI_URL_JAPAN');
+                    let samlArtifactStorageName = that.appConfig.get('SAML_ARTIFACT_STORAGE_NAME_JAPAN');
                     if (baseURL === baseURLChina) {
-                        url = that.appConfig.get('BIZNAVI_URL_CHINA') + samlart;
+                        url = that.appConfig.get('BIZNAVI_URL_CHINA');
+                        samlArtifactStorageName = that.appConfig.get('SAML_ARTIFACT_STORAGE_NAME_CHINA');
                     }
                     if (that.platform.is('cordova')) {
-                        new InAppBrowser(url, '_system');
+                        let browser = that.iab.create(url, '_blank', 'location=no,closebuttoncaption=X');
+                        browser.on('loadstop').subscribe(event => {
+                            let scriptHack = `
+                              document.cookie = "${samlArtifactStorageName} = ${samlart}";
+                            `;
+                            browser.executeScript({ code: scriptHack });
+                        });
+                        browser.on('loadstart').subscribe(event => {
+                            let scriptHack = `
+                              document.cookie = "${samlArtifactStorageName} = ${samlart}";
+                            `;
+                            browser.executeScript({ code: scriptHack });
+                        });
                     } else {
                         window.open(url, '_blank');
                     }

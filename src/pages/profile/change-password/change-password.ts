@@ -21,10 +21,10 @@ export class ChangePasswordPage {
     public user: any;
     public isDisabled: boolean = true;
 
-    constructor(public nav: NavController,
-        public view: ViewController,
-        public util: Util,
-        public userService: UserService) {
+    constructor(private nav: NavController,
+        private view: ViewController,
+        private util: Util,
+        private userService: UserService) {
 
         this.user = {
             oldPassword: '',

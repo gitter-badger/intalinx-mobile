@@ -1,6 +1,6 @@
 // Third party library.
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import * as moment from 'moment';
 
 // Utils.
@@ -9,7 +9,7 @@ import {Util} from '../utils/util';
 @Injectable()
 export class ScheduleService {
 
-    constructor(private http: Http, private util: Util) {
+    constructor(private http: HttpClient, private util: Util) {
     }
 
     getUserLocaleSettings(userID: string): any {
@@ -468,8 +468,7 @@ export class ScheduleService {
                     let returnData = this.util.xml2json(returnObject).addEvent.addEvent;
                     resolve(returnData);
                 }, err => {
-
-                    let errResponse = this.util.parseXml(err.text());
+                    let errResponse = this.util.parseXml(err.error);
 
                     let faultCode = this.util.getNodeText(errResponse, './/*[local-name()=\'faultcode\']');
                     let faultString = this.util.getNodeText(errResponse, './/*[local-name()=\'faultstring\']');
@@ -539,7 +538,7 @@ export class ScheduleService {
                     resolve(returnData);
                 }, err => {
 
-                    let errResponse = this.util.parseXml(err.text());
+                    let errResponse = this.util.parseXml(err.error);
 
                     let faultCode = this.util.getNodeText(errResponse, './/*[local-name()=\'faultcode\']');
                     let faultString = this.util.getNodeText(errResponse, './/*[local-name()=\'faultstring\']');

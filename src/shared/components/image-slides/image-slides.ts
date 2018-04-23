@@ -19,7 +19,7 @@ export class ImageSlidesPage {
     public images: any;
     public index = 0;
     public hasPluralPages = false;
-    constructor(public nav: NavController, public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController, public params: NavParams, public util: Util, public translate: TranslateService, public platform: Platform, private base64ToGallery: Base64ToGallery) {
+    constructor(private nav: NavController, private actionSheetCtrl: ActionSheetController, private toastCtrl: ToastController, private params: NavParams, private util: Util, private translate: TranslateService, private platform: Platform, private base64ToGallery: Base64ToGallery) {
         this.sendData = this.params.get('sendData');
         this.images = Array.prototype.slice.call(this.sendData.images);
         let currentImage = this.sendData.currentImage;

@@ -81,7 +81,7 @@ export class ScheduleIndexPage {
     public eventsByDays: any = new Map(Array());
     public specialDaysByDays: any = new Map(Array());
 
-    constructor(public nav: NavController, public modalCtrl: ModalController, public scheduleService: ScheduleService, public userService: UserService, public appConfig: AppConfig) {
+    constructor(private nav: NavController, private modalCtrl: ModalController, private scheduleService: ScheduleService, private userService: UserService, private appConfig: AppConfig) {
         
         this.weekdays = moment.weekdaysMin(false);
         // In Japan,the first day of the week is Monday. In China and England, the first day of the week is Sunday.
@@ -94,7 +94,7 @@ export class ScheduleIndexPage {
             this.isFirstDayMonday = false;
         }
         this.today = moment().format('YYYY/MM/D');
-        this.currentMonth = moment().date(1);
+        this.currentMonth = moment(this.today).date(1);
         this.perviousMonth = moment(this.currentMonth).subtract(1, 'months');
         this.nextMonth = moment(this.currentMonth).add(1, 'months');
         this.currentYearMonthText = moment(this.currentMonth).format('YYYY-MM');
@@ -119,8 +119,8 @@ export class ScheduleIndexPage {
 
     changeCalendar(event) {
         let yearMonth = moment({
-            y: event.year.value,
-            M: event.month.value - 1,
+            y: event.year,
+            M: event.month - 1,
 
         });
         // selected month

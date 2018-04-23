@@ -43,7 +43,7 @@ export class SurveyDetailPage {
     public isDisabled: boolean = true;
 
 
-    constructor(public domSanitizer: DomSanitizer, public nav: NavController, public params: NavParams, public util: Util, public surveyService: SurveyService, public share: ShareService) {
+    constructor(private domSanitizer: DomSanitizer, private nav: NavController, private params: NavParams, private util: Util, private surveyService: SurveyService, private share: ShareService) {
         this.survey = this.params.get('survey');
         this.id = this.survey.surveyID;
         this.processStatus = this.survey.processStatus;

@@ -61,16 +61,16 @@ export class EditEventPage {
     public isSavedOrChecked: boolean = false;
     public hadChangedEndTime: boolean = false;
 
-    constructor(public nav: NavController,
-        public params: NavParams,
-        public alertCtrl: AlertController,
-        public modalCtrl: ModalController,
-        public translate: TranslateService,
-        public scheduleService: ScheduleService,
-        public util: Util,
-        public appConfig: AppConfig,
-        public userService: UserService,
-        public share: ShareService) {
+    constructor(private nav: NavController,
+        private params: NavParams,
+        private alertCtrl: AlertController,
+        private modalCtrl: ModalController,
+        private translate: TranslateService,
+        private scheduleService: ScheduleService,
+        private util: Util,
+        private appConfig: AppConfig,
+        private userService: UserService,
+        private share: ShareService) {
         this.initTranslation();
         this.initData();
     }

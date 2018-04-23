@@ -29,7 +29,7 @@ export class SurveyResultPage {
     public participantTotalCount: number;
     public isLoadCompleted: boolean = false;
 
-    constructor(public nav: NavController, public params: NavParams, public util: Util, public surveyService: SurveyService) {
+    constructor(private nav: NavController, private params: NavParams, private util: Util, private surveyService: SurveyService) {
         let sendData = this.params.get('sendData');
         this.survey = sendData.survey;
         this.surveyID = this.survey.surveyID;

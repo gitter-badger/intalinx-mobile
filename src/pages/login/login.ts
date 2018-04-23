@@ -45,7 +45,7 @@ export class LoginPage {
 
     isDisabled: boolean = true;
 
-    constructor(public nav: NavController, public appConfig: AppConfig, public userService: UserService, public translate: TranslateService, public util: Util) {
+    constructor(private nav: NavController, private appConfig: AppConfig, private userService: UserService, private translate: TranslateService, private util: Util) {
         // set default server.
         this.translate.get(['app.login.iscsys', 'app.login.intalinx_cn']).subscribe(message => {
             this.servers.forEach(element => {
@@ -78,7 +78,13 @@ export class LoginPage {
 
     login(loginForm) {
         this.isDisabled = true;
-        this.appConfig.set('BASE_URL', this.user.server);
+        let baseURL = this.user.server;
+        this.appConfig.set('BASE_URL', baseURL);
+        let baseURLChina = this.appConfig.get('BASE_URL_CHINA');
+        if (baseURL === baseURLChina) {
+            this.appConfig.set('IS_JAPAN_SERVER', false);
+            this.appConfig.set('IS_CHINA_SERVER', true);
+        }
         this.userService.authenticate(this.user.loginID, this.user.password).then(authenticationResult => {
             if (authenticationResult) {
                 if (this.user.autoLogin) {

@@ -1,6 +1,6 @@
 // Third party library.
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 // Config.
 import {AppConfig} from '../app/app.config';
@@ -32,13 +32,12 @@ export class CordysUtil {
         ARTIFACT_UNBOUND_MESSAGE_CODE: 'Cordys.WebGateway.Messages.WG_Artifact_Unbound'
     };
 
-    constructor(private http: Http, private translate: TranslateService, private appConfig: AppConfig, private xmlUtil: XmlUtil, private alertUtil: AlertUtil, private dateUtil: DateUtil, private storageUtil: StorageUtil, private share: ShareService) {
+    constructor(private http: HttpClient, private translate: TranslateService, private appConfig: AppConfig, private xmlUtil: XmlUtil, private alertUtil: AlertUtil, private dateUtil: DateUtil, private storageUtil: StorageUtil, private share: ShareService) {
     }
 
     getRequestXml(url: string) {
         return new Promise(resolve => {
-            this.http.get(url)
-                .map(res => res.text())
+            this.http.get(url, { headers: new HttpHeaders({ 'Accept': 'application/xml' }), responseType: 'text' })
                 .subscribe(data => {
                     resolve(data);
                 });
@@ -59,14 +58,13 @@ export class CordysUtil {
         return new Promise((resolve, reject) => {
             if (useAnonymous) {
                 this.getCallCordysWebserviceURL(useAnonymous).then((url: string) => {
-                    this.http.post(url, request)
-                        .map(res => res.text())
+                    this.http.post(url, request, { headers: new HttpHeaders({ 'Accept': 'application/xml' }), responseType: 'text' })
                         .subscribe(data => {
                             resolve(data);
                         }, error => {
                             if (error.status === 500 && error.type === 2) {
                                 if (!hideError) {
-                                    let responseText = error.text();
+                                    let responseText = error.error;
                                     let responseNode = this.xmlUtil.parseXML(responseText);
                                     this.alertUtil.presentModal(this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'faultstring\']'));
                                 }
@@ -87,13 +85,12 @@ export class CordysUtil {
                 }).then(() => {
                     return this.getCallCordysWebserviceURL(useAnonymous);
                 }).then((url: string) => {
-                    this.http.post(url, request)
-                        .map(res => res.text())
+                    this.http.post(url, request, { headers: new HttpHeaders({ 'Accept': 'application/xml' }), responseType: 'text' })
                         .subscribe(data => {
                             resolve(data);
                         }, error => {
                             if (error.status === 500 && error.type === 2) {
-                                let responseText = error.text();
+                                let responseText = error.error;
                                 let responseNode = this.xmlUtil.parseXML(responseText);
                                 let messageCode = this.xmlUtil.getNodeText(responseNode, './/*[local-name()=\'MessageCode\']');
                                 // when samlart became invalid
@@ -138,8 +135,7 @@ export class CordysUtil {
 
     callCordysWebserviceWithUrl(url, request) {
         return new Promise(resolve => {
-            this.http.post(url, request)
-                .map(res => res.text())
+            this.http.post(url, request, { headers: new HttpHeaders({ 'Accept': 'application/xml' }), responseType: 'text' })
                 .subscribe(data => {
                     resolve(data);
                 }, error => {

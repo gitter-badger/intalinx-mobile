@@ -33,7 +33,7 @@ export class SurveyIndexPage {
 
     public isScrollToTopButtonVisible: boolean;
 
-    constructor(public nav: NavController, public surveyService: SurveyService, public share: ShareService) {
+    constructor(private nav: NavController, private surveyService: SurveyService, private share: ShareService) {
         this.sendData = {
             'isRefreshFlag': false
         };

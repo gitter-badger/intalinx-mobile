@@ -59,22 +59,22 @@
                 <ion-list [hidden]="isEventLoadCompleted==false">
                     <ion-item *ngFor="let specialDay of specialDays">
                         <ion-row>
-                            <ion-col text-right width-20 class="border-right-solid" [ngClass]="{'border-right-green': specialDay.type=='JP',
+                            <ion-col text-right col-3 class="border-right-solid" [ngClass]="{'border-right-green': specialDay.type=='JP',
                                     'border-right-red': specialDay.type=='CN',
                                     'border-right-primary': specialDay.type=='US'}">
                                 <ion-row>{{ "app.schedule.index.allDay" | translate }}</ion-row>
                             </ion-col>
-                            <ion-col width-70>{{specialDay.specialDayName}}</ion-col>
+                            <ion-col col-9>{{specialDay.specialDayName}}</ion-col>
                         </ion-row>
                     </ion-item>
                     <ion-item *ngFor="let event of events" (click)="openEventDetail(event)">
                         <ion-row [ngClass]="{'event-in-past-time': selectedDay==today&&event.isAllDay!='true'&&moment>event.endTime}">
-                            <ion-col width-20 class="border-right-solid border-right-default">
+                            <ion-col col-3 class="border-right-solid border-right-default">
                                 <ion-row [hidden]="event.isAllDay!='true'">{{ "app.schedule.index.allDay" | translate }}</ion-row>
                                 <ion-row [hidden]="event.isAllDay=='true'">{{event.startTime}}</ion-row>
                                 <ion-row [hidden]="event.isAllDay=='true'">{{event.endTime}}</ion-row>
                             </ion-col>
-                            <ion-col class="event-title" width-80>{{(event.visibility === 'public' || isAdmin || event.isSelf == 'true') ? event.title : ( "app.schedule.visibility.invisible" | translate)}}</ion-col>
+                            <ion-col col-9 class="event-title">{{(event.visibility === 'public' || isAdmin || event.isSelf == 'true') ? event.title : ( "app.schedule.visibility.invisible" | translate)}}</ion-col>
                         </ion-row>
                     </ion-item>
                 </ion-list>

@@ -8,7 +8,7 @@ import { AppConfig } from '../app/app.config';
 @Injectable()
 export class StorageUtil {
 
-    constructor(public appConfig: AppConfig, public storage: Storage) {
+    constructor(private appConfig: AppConfig, private storage: Storage) {
 
     }
 
