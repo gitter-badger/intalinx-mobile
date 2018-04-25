@@ -33,5 +33,10 @@
         "titleIcon": "information-circle",
         "title": "app.about.title",
         "componentsId": "about"
+    },
+    {
+        "titleIcon": "people",
+        "title": "app.addressBook.title",
+        "componentsId": "personalInfo"
     }
 ]

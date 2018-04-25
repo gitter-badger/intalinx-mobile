@@ -25,6 +25,8 @@ import { ProfileIndexPage } from '../profile/index/index';
 import { ScheduleIndexPage } from '../schedule/index/index';
 import { AboutPage } from '../about/about';
 import { DevicesPage } from '../schedule/devices/devices';
+import { addressBookPage } from '../addressbook/index/index';
+
 
 @Component({
     selector: 'page-portal',
@@ -50,7 +52,8 @@ export class PortalPage {
         'profile': ProfileIndexPage,
         'schedule': ScheduleIndexPage,
         'about': AboutPage,
-        'devices': DevicesPage
+        'devices': DevicesPage,
+        'personalInfo':addressBookPage
     };
 
     constructor(

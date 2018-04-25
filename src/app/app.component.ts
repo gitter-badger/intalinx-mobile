@@ -51,6 +51,7 @@ export class MyApp {
     initializeApp() {
         // set default server.
         if (this.userLang.indexOf('zh') >= 0) {
+           
             this.appConfig.set('BASE_URL', this.appConfig.get('BASE_URL_CHINA'));
             this.appConfig.set('GOOGLE_ANALYTICS_TRACK_ID', this.appConfig.get('GOOGLE_ANALYTICS_TRACK_ID_CHINA'));
         } else {

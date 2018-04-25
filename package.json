@@ -23,6 +23,7 @@
         "@ionic-native/badge": "^4.4.2",
         "@ionic-native/base64-to-gallery": "^4.4.2",
         "@ionic-native/brightness": "^4.4.2",
+        "@ionic-native/contacts": "^4.7.0",
         "@ionic-native/core": "4.4.0",
         "@ionic-native/google-analytics": "^4.4.2",
         "@ionic-native/in-app-browser": "^4.4.2",
@@ -40,8 +41,10 @@
         "cordova-plugin-app-version": "^0.1.9",
         "cordova-plugin-badge": "^0.7.4",
         "cordova-plugin-brightness": "^0.1.5",
+        "cordova-plugin-contacts": "^3.0.1",
         "cordova-plugin-device": "^1.1.7",
         "cordova-plugin-google-analytics": "^1.8.3",
+        "cordova-plugin-hotspot": "^1.2.10",
         "cordova-plugin-inappbrowser": "^1.7.2",
         "cordova-plugin-ionic": "^2.0.4",
         "cordova-plugin-jcore": "^1.1.12",
@@ -52,10 +55,12 @@
         "core-js": "^2.5.2",
         "exif-ts": "2.1.1",
         "ionic-angular": "3.9.2",
+        "ionic-native": "^2.9.0",
         "ionic-plugin-keyboard": "~2.2.1",
         "ionicons": "3.0.0",
         "jpush-phonegap-plugin": "^3.3.2",
         "moment": "2.14.x",
+        "ng2-translate": "^5.0.0",
         "rxjs": "5.5.2",
         "sw-toolbox": "3.6.0",
         "zone.js": "0.8.18"
@@ -91,7 +96,9 @@
                 "UPDATE_METHOD": "background",
                 "UPDATE_API": "https://api.ionicjs.com",
                 "MAX_STORE": "2"
-            }
+            },
+            "cordova-plugin-contacts": {},
+            "cordova-plugin-hotspot": {}
         },
         "platforms": [
             "ios"

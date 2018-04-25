@@ -8,7 +8,8 @@ export class AppConfig {
         'IS_CHINA_SERVER': false,
         'BASE_URL': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
         'BASE_URL_JAPAN': 'https://iscsys.intasect.co.jp/home/InternalSystem/',
-        'BASE_URL_CHINA': 'http://www.intalinx.cn/home/intalinxcloud/',
+        'BASE_URL_CHINA': 'http://test.intalinx.cn/home/intalinxcloud/', 
+       /*  'BASE_URL_CHINA': 'http://192.168.50.68/home/AddressBook/', */
         'BIZNAVI_URL_JAPAN': 'https://iscsys.intasect.co.jp/biznavi/#/todo/1',
         'BIZNAVI_URL_CHINA': 'http://www.intalinx.cn/biznavi/#/todo/1',
         'DOWNLOAD_GATEWAY_URL': 'com.eibus.web.tools.download.Download.wcp',

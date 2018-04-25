@@ -111,4 +111,7 @@
     </plugin>
     <plugin name="cordova-plugin-google-analytics" spec="^1.8.3" />
     <engine name="ios" spec="4.5.4" />
+    <plugin name="cordova-plugin-contacts" spec="^3.0.1" />
+    <plugin name="cordova-plugin-hotspot" spec="^1.2.10" />
+    <engine name="android" spec="~6.1.2" />
 </widget>

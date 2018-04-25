@@ -42,6 +42,9 @@ import { SurveyIndexPage } from '../pages/survey/index/index';
 import { OptionResultDetailPage } from '../pages/survey/option-result-detail/option-result-detail';
 import { SurveyResultPage } from '../pages/survey/result/result';
 import { SelectReadLimitTypePage } from '../pages/blog/add-blog/add-blog';
+import { addressBookPage } from '../pages/addressbook/index/index';
+import { AddressBookDetailPage } from '../pages/addressbook/detail/detail';
+
 
 import { Badge } from '@ionic-native/badge';
 import { AppVersion } from '@ionic-native/app-version';
@@ -49,7 +52,8 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { StatusBar } from '@ionic-native/status-bar';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { GoogleAnalytics } from '@ionic-native/google-analytics'
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader} from '@ngx-translate/core';
+
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 
@@ -93,7 +97,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     SurveyIndexPage,
     OptionResultDetailPage,
     SurveyResultPage,
-    SelectReadLimitTypePage
+    SelectReadLimitTypePage,
+    addressBookPage,
+    AddressBookDetailPage
+
   ],
   imports: [
     BrowserModule,
@@ -105,6 +112,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       name: '__intalinx_mobile',
          driverOrder: ['indexeddb', 'sqlite', 'websql']
     }),
+ 
     TranslateModule.forRoot({
       loader: {
           provide: TranslateLoader,
@@ -143,7 +151,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     SurveyIndexPage,
     OptionResultDetailPage,
     SurveyResultPage,
-    SelectReadLimitTypePage
+    SelectReadLimitTypePage,
+    addressBookPage,
+    AddressBookDetailPage
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },

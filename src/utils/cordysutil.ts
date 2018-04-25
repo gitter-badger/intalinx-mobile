@@ -55,8 +55,10 @@ export class CordysUtil {
     }
 
     callCordysWebservice(request: any, hideError: boolean = false, useAnonymous: boolean = false) {
+      
         return new Promise((resolve, reject) => {
             if (useAnonymous) {
+             
                 this.getCallCordysWebserviceURL(useAnonymous).then((url: string) => {
                     this.http.post(url, request, { headers: new HttpHeaders({ 'Accept': 'application/xml' }), responseType: 'text' })
                         .subscribe(data => {
@@ -145,6 +147,7 @@ export class CordysUtil {
     }
 
     getCallCordysWebserviceURL(useAnonymous?: boolean) {
+      
         let url = this.appConfig.get('BASE_URL') + this.appConfig.get('GATEWAY_URL');
         if (!useAnonymous) {
             return this.getSAMLart().then((samlart: string) => {

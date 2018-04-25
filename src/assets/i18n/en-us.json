@@ -253,6 +253,9 @@
         },
         "biznavi": {
             "title": "BizNavi"
+        },
+        "addressBook":{
+            "title":"addressBook"
         }
     }
 }

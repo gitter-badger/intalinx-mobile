@@ -253,6 +253,13 @@
         },
         "biznavi": {
             "title": "业务Navi"
+        },
+        "addressBook": {
+            "title": "通讯录",
+            "detail": "详细信息",
+            "list-title":"公司内部通讯录",
+            "saveError":"通讯录保存失败。",
+            "saveSuccess":"通讯录保存成功。"
         }
     }
 }
